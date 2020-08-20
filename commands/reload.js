@@ -25,7 +25,7 @@ module.exports.run = async (bot, message, args) => {
             const reloadCommand = require(`./${command.help.name}.js`);
             bot.commands.set(reloadCommand.help.name, reloadCommand);
 
-            return message.reply(`🍵 The command \`${command.help.name}\` has been reloaded!`)
+            return message.reply(`The command \`${command.help.name}\` has been reloaded!`)
                 .then(message => message.delete({ timeout: 10000 })).catch(() => { return });
 
         } catch (error) {
@@ -37,7 +37,7 @@ module.exports.run = async (bot, message, args) => {
         try {
             const loadCommand = require(`./${commandName}.js`);
             bot.commands.set(loadCommand.help.name, loadCommand);
-            return message.channel.send(`🍵 The command \`${commandName}\` has been loaded, ${message.author}!`)
+            return message.channel.send(`The command \`${commandName}\` has been loaded, ${message.author}!`)
                 .then(message => message.delete({ timeout: 10000 })).catch(() => { return });
         }
         catch (error) {

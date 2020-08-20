@@ -4,13 +4,13 @@ const fs = require('fs');
 
 const { google } = require('googleapis');
 const keys = require('../Laezaria-Bot-292d692ec77c.json');
-const spreadsheetIdd = '1RzKbm9O48toMejzl7bXl06OzNk_d4P3YpcyhwsKqYrc';
+const spreadsheetIdd = '1PPcesBQS6hONX_c5OouNdXTlxzch4iGiqoHzoq-S3ho';
 
 module.exports.help = {
-    name: "certupdate",
-    description: "Updates certification database.",
+    name: "kek",
+    description: "kek",
     type: "administrator",
-    usage: `**${config.BotPrefix}certupdate**`
+    usage: `kek`
 };
 
 module.exports.run = async (bot, message) => {
@@ -18,7 +18,7 @@ module.exports.run = async (bot, message) => {
     //                                        certupdate                                        //
     //////////////////////////////////////////////////////////////////////////////////////////////
     accessSpreadsheet();
-    return message.channel.send(`${TEAemoji()} Certification database has been updated!`)
+    return message.channel.send(`${TEAemoji()} Database has been updated!`)
         .then(message => message.delete({ timeout: 10000 }))
         .catch(() => { return });
 }
@@ -46,7 +46,7 @@ function accessSpreadsheet() {
 
         let data = await gsapi.spreadsheets.values.get({
             spreadsheetId: spreadsheetIdd,
-            range: 'cert!A1:D500'
+            range: 'Club list!A4:U500'
         }).catch(error => errorLog(`test.js:1 gsrun()\nGoogle Service backend error.`, error));
 
         // console.log(data.data.values);
@@ -56,14 +56,20 @@ function accessSpreadsheet() {
         var jsonObj = {};
         // console.log('▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬');
         for (let i = 0; i < TEA.length; i++) {
-            var newGuild = TEA[i][0];
-            var newOwner = TEA[i][3];
-            // jsonObj[newGuild] = { "name": newName, "owner": newOwner, "ownerID": newOwnerID };
-            jsonObj[newGuild] = { "owner": newOwner }
+            if (TEA[i][0]) {
+                console.error(TEA[i][0])
+                var newGuild = TEA[i][0]; // Server Discord ID
+                var newName = TEA[i][1]; // Club Name
+                var newDescription = TEA[i][6]; // Club Description
+                var newRequirements = TEA[i][11]; // Club Language and requirements
+                var newDiscordLink = TEA[i][14]; // Club Invite Link
+                var newRepresentative = TEA[i][18]; // Club Representative
+                jsonObj[newGuild] = { "name": newName, "description": newDescription, "requirements": newRequirements, "link": newDiscordLink, "representative": newRepresentative }
+            }
         }
         // console.log('▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬');
-        // console.log(jsonObj);
-        fs.writeFileSync("./certification.json", JSON.stringify(jsonObj), "utf8")
+        console.log(jsonObj);
+        fs.writeFileSync("./test.json", JSON.stringify(jsonObj), "utf8")
     }
 }
 

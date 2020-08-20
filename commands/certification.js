@@ -12,7 +12,7 @@ module.exports.run = async (bot, message, args) => {
     //////////////////////////////////////////////////////////////////////////////////////////////
     //                                           cert                                           //
     //////////////////////////////////////////////////////////////////////////////////////////////
-    const cert = fs.readFileSync("./cert.json", "utf8");
+    const cert = fs.readFileSync("./certification.json", "utf8");
     const certification = JSON.parse(cert);
 
     const TEAemoji = bot.guilds.cache.get(config.TEAserverID).emojis.cache.find(emoji => emoji.name === 'TEA');
