@@ -36,7 +36,7 @@ module.exports.run = async (bot, message) => {
         if (!primaryGuildChannelFetch) return message.reply(`${TEAemoji()} I can't fetch the global message!\nMake sure bot has **READ_MESSAGES** set as **TRUE** on the ${primaryGuildChannel} channel.`)
             .then(message => message.delete({ timeout: 15000 })).catch(() => { return });
 
-        if (!primaryGuildChannelFetch.size) return message.reply(`${TEAemoji()} ${primaryGuildChannel} looks empty to me.\nSend an embed message using **carl.gg/dashboard** to the ${primaryGuildChannel} channel and try again.`)
+        if (!primaryGuildChannelFetch.size) return message.reply(`${TEAemoji()} ${primaryGuildChannel} looks empty to me.\nSend an embed message using <https://carl.gg/dashboard/${message.guild.id}/botsettings> to the ${primaryGuildChannel} channel and try again.`)
             .then(message => message.delete({ timeout: 15000 })).catch(() => { return });
 
         const primaryMessage = primaryGuildChannelFetch.first();
