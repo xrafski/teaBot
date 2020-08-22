@@ -33,17 +33,15 @@ module.exports.run = async (bot, message, args) => {
                 .then(helpMessage => messageRemoverWithReact(helpMessage, message.author));
         }
 
-
-
         if (getCommand(args[0])) {
             return message.channel.send(`Help for the **${config.BotPrefix}${args[0]}** command:\nAccess Level: __${getCommand(args[0]).help.type}__\nDescription: ${getCommand(args[0]).help.description}\n\nUsage: ${getCommand(args[0]).help.usage}`)
                 .then(helpMessage => messageRemoverWithReact(helpMessage, message.author));
         }
     }
 
-    let adminCommands = await getCommands().filter(command => command.help.type.includes('administrator')).map(command => `**${command.help.name}**    ${command.help.description}`).join('\n');
-    let publicCommands = await getCommands().filter(command => command.help.type.includes('public')).map(command => `**${command.help.name}**    ${command.help.description}`).join('\n');
-    let disabledCommands = await getCommands().filter(command => command.help.type.includes('disabled')).map(command => `**${command.help.name}**    ${command.help.description}`).join('\n');
+    let adminCommands = await getCommands().filter(command => command.help.type.includes('administrator')).map(command => `**${command.help.name}** • ${command.help.description}`).join('\n');
+    let publicCommands = await getCommands().filter(command => command.help.type.includes('public')).map(command => `**${command.help.name}** • ${command.help.description}`).join('\n');
+    let disabledCommands = await getCommands().filter(command => command.help.type.includes('disabled')).map(command => `**${command.help.name}** • ${command.help.description}`).join('\n');
 
     if (!adminCommands) adminCommands = 'There is no administrator commands.';
     if (!publicCommands) publicCommands = 'There is no public commands.';

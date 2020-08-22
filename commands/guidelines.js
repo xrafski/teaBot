@@ -4,14 +4,14 @@ const fs = require('fs');
 
 module.exports.help = {
     name: "guidelines",
-    description: "Auto-update guidelines on all servers at once.",
+    description: "Manually updates guidelines on all servers at once.",
     type: "administrator",
-    usage: `Send an embed message to the guidelines channel using **carl.gg/dashboard** and then type **${config.BotPrefix}updateguidelines** to update guidelines on all servers at once.`
+    usage: `Send an embed message to the guidelines channel using **<https://carl.gg/>** and then type **${config.BotPrefix}guidelines** to update guidelines for TEA members.`
 };
 
 module.exports.run = async (bot, message) => {
     //////////////////////////////////////////////////////////////////////////////////////////////
-    //                                     updateguidelines                                     //
+    //                                        guidelines                                        //
     //////////////////////////////////////////////////////////////////////////////////////////////
 
     // load certification file and parse to JSON object
@@ -43,14 +43,14 @@ module.exports.run = async (bot, message) => {
         if (!primaryMessage.embeds[0]) return message.reply(`${TEAemoji()} The bot only supports embeds.\nIt looks like your global message set on the ${primaryGuildChannel} channel is plain text.`)
             .then(message => message.delete({ timeout: 15000 })).catch(() => { return });
 
-        console.warn(`Global guidelines update (${bot.guilds.cache.size} guilds)`);
+        console.warn(`Manual guidelines update (${Math.round(bot.guilds.cache.size - 1)} guilds)`);
         // forEach to send/update guidelines
         bot.guilds.cache.forEach((guild) => {
             if (guild.id === config.TEAserverID) return;
             const channel = guild.channels.cache.find(ch => ch.name === config.GuidelinesChannelName);
 
             if (certification[guild.id]) {
-                if (channel) return updateGuildelines(guild, channel, primaryMessage.embeds[0]);
+                if (channel) return updateGuidelines(guild, channel, primaryMessage.embeds[0]);
                 else return console.error(`🔴 '${guild.name}' (${guild.owner.user.tag}) - No #${config.GuidelinesChannelName} channel found.`);
             } else return;
         });
@@ -63,7 +63,7 @@ module.exports.run = async (bot, message) => {
 
     //////////////////////////////////////////////////////////////////////////////////////////////
 
-    async function updateGuildelines(guild, channel, primaryMessage) {
+    async function updateGuidelines(guild, channel, primaryMessage) {
 
         if (!channel.permissionsFor(guild.me).has('READ_MESSAGE_HISTORY') || !channel.permissionsFor(guild.me).has('SEND_MESSAGES') || !channel.permissionsFor(guild.me).has('EMBED_LINKS'))
             return console.error(`⭕ '${guild.name}' (${guild.owner.user.tag}) - The bot has READ_MESSAGE_HISTORY or SEND_MESSAGES or EMBED_LINKS set as FALSE on the #${channel.name} channel.`);
@@ -82,7 +82,7 @@ module.exports.run = async (bot, message) => {
                         .then(() => channel.send(primaryMessage))
                         .catch(error => console.error(`Error to send a message on the '${guild.name}'!\n`, error));
                 }
-                if (lastMessage.embeds[0].footer.text != primaryMessage.footer.text) {
+                if (lastMessage.embeds[0].footer.text != primaryMessage.footer.text) { // if message embed and footer text is different
                     // console.log(`📝 '${guild.name}' Guideline message has a different footer - Going to edit and update it.`);
                     return lastMessage.edit(primaryMessage)
                         .catch(error => console.error(`Error to edit the message on the '${guild.name}'`, error));

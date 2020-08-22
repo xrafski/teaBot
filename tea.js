@@ -8,7 +8,7 @@ const bot = new Discord.Client({ partials: ['MESSAGE', 'REACTION'] });
 // define current bot version
 const BotVersion = '1.1';
 
-// define icon image url for embedse
+// define icon image url for embeds
 const TEAlogo = 'https://skillez.eu/images/discord/teabanner.png'
 
 // Load commands and events
@@ -60,7 +60,7 @@ module.exports = {
 		if (!bot.users.cache.get(config.BotOwnerID)) return console.warn(`tea.js:1 errorLog() ❌ The bot Owner is UNDEFINED (probably wrong userID in: config.BotOwnerID)`);
 		bot.users.cache.get(config.BotOwnerID).send(`❌ an issue occurred with the **${bot.user.username}** application!` + "```" + text + "```" + error)
 			.then(() => console.error(`${text}`, error))
-			.catch(() => { console.warn(`tea.js:2 errorLog() ❌ Owner has DMs disabled.`) });
+			.catch((error) => { console.warn(`tea.js:2 errorLog() ❌ Owner has DMs disabled.`, error) });
 	},
 
 	getCommand: function (commandName) {
@@ -78,15 +78,7 @@ module.exports = {
 	},
 
 	messageRemoverWithReact: async function (message, author) {
-
-		try {
-			await message.react('❌').catch(() => { return });
-		} catch (error) {
-			if (!bot.users.cache.get(config.BotOwnerID)) return console.warn(`tea.js:1 messageRemoverWithReact() ❌ The bot Owner is UNDEFINED (probably wrong userID in: config.BotOwnerID)`);
-			bot.users.cache.get(config.BotOwnerID).send(`❌ an issue occurred with the **${bot.user.username}** application!` + "```" + `tea.js:2 messageRemoverWithReact()\nError to add reactions probably missing ADD_REACTION/READ_MESSAGE_HISTORY or wrong emojis.` + "```" + error)
-				.then(() => console.error(`tea.js:2 messageRemoverWithReact()\nError to add reactions probably missing ADD_REACTION/READ_MESSAGE_HISTORY or wrong emojis.`, error))
-				.catch(() => { console.warn(`tea.js:3 messageRemoverWithReact() ❌ Owner has DMs disabled.`) });
-		}
+		await message.react('❌').catch(() => { return });
 
 		const emojiFilter = (reaction, user) => {
 			return ['❌'].includes(reaction.emoji.name) && !user.bot && author === user;
@@ -95,9 +87,7 @@ module.exports = {
 		message.awaitReactions(emojiFilter, { max: 1, time: 60000 })
 			.then(collected => {
 				const reaction = collected.first();
-
 				if (reaction.emoji.name === '❌') return message.delete().catch(() => { return });
-
 			})
 			.catch(error => {
 				if (error.message === "Cannot read property 'emoji' of undefined") return message.delete().catch(() => { return });
@@ -105,7 +95,7 @@ module.exports = {
 				if (!bot.users.cache.get(config.BotOwnerID)) return console.warn(`tea.js:4 messageRemoverWithReact() ❌ The bot Owner is UNDEFINED (probably wrong userID in: config.BotOwnerID)`);
 				bot.users.cache.get(config.BotOwnerID).send(`❌ an issue occurred with the **${bot.user.username}** application!` + "```" + `tea.js:5 messageRemoverWithReact()` + "```" + error)
 					.then(() => console.error(`tea.js:5 messageRemoverWithReact().`, error))
-					.catch(() => { console.warn(`tea.js:6 messageRemoverWithReact() ❌ Owner has DMs disabled.`) });
+					.catch((error) => { console.warn(`tea.js:6 messageRemoverWithReact() ❌ Owner has DMs disabled.`, error) });
 			});
 	},
 
@@ -140,21 +130,21 @@ module.exports = {
 					if (!bot.users.cache.get(config.BotOwnerID)) return console.warn(`tea.js:2 sendEmbedLog() ❌ The bot Owner is UNDEFINED (probably wrong userID in: config.BotOwnerID)`);
 					bot.users.cache.get(config.BotOwnerID).send(`❌ an issue occurred with the **${bot.user.username}** application!` + "```" + `tea.js:3 sendEmbedLog()\nChannel 'logChannel' not found.` + "```" + error)
 						.then(() => console.error(`tea.js:3 sendEmbedLog()\nChannel 'logChannel' not found.`, error))
-						.catch(() => { console.warn(`tea.js:4 sendEmbedLog() ❌ Owner has DMs disabled.`) });
+						.catch((error) => { console.warn(`tea.js:4 sendEmbedLog() ❌ Owner has DMs disabled.`, error) });
 					return;
 				}
 				case "Missing Permissions": {
 					if (!bot.users.cache.get(config.BotOwnerID)) return console.warn(`tea.js:5 sendEmbedLog() ❌ The bot Owner is UNDEFINED (probably wrong userID in: config.BotOwnerID)`);
 					bot.users.cache.get(config.BotOwnerID).send(`❌ an issue occurred with the **${bot.user.username}** application!` + "```" + `tea.js:6 sendEmbedLog()\nProbably: MANAGE_WEBHOOKS.` + "```" + error)
 						.then(() => console.error(`tea.js:6 sendEmbedLog()\nProbably: MANAGE_WEBHOOKS.`, error))
-						.catch(() => { console.warn(`tea.js:7 sendEmbedLog() ❌ Owner has DMs disabled.`) });
+						.catch((error) => { console.warn(`tea.js:7 sendEmbedLog() ❌ Owner has DMs disabled.`, error) });
 					return;
 				}
 				default: {
 					if (!bot.users.cache.get(config.BotOwnerID)) return console.warn(`tea.js:8 sendEmbedLog() ❌ The bot Owner is UNDEFINED (probably wrong userID in: config.BotOwnerID)`);
 					bot.users.cache.get(config.BotOwnerID).send(`❌ an issue occurred with the **${bot.user.username}** application!` + "```" + `tea.js:9 sendEmbedLog()\nError trying to send a webhook.` + "```" + error)
 						.then(() => console.error(`tea.js:9 sendEmbedLog()\nError trying to send a webhook.`, error))
-						.catch(() => { console.warn(`tea.js:10 sendEmbedLog() ❌ Owner has DMs disabled.`) });
+						.catch((error) => { console.warn(`tea.js:10 sendEmbedLog() ❌ Owner has DMs disabled.`, error) });
 					return;
 				}
 			}
@@ -170,7 +160,7 @@ module.exports = {
 				console.error(`tea.js:1 ❌ removeUserLastMessage() issue occurred`, error);
 				if (!bot.users.cache.get(config.BotOwnerID)) return console.warn(`tea.js:2 removeUserLastMessage() ❌ The bot Owner is UNDEFINED (probably wrong userID in: config.BotOwnerID)`);
 				bot.users.cache.get(config.BotOwnerID).send(`❌ an issue occurred with the **${bot.user.username}** application!` + "```tea.js:1 ❌ removeUserLastMessage() issue occurred```" + error)
-					.catch(() => { console.warn(`tea.js:3 removeUserLastMessage() ❌ Owner has DMs disabled.`) });
+					.catch((error) => { console.warn(`tea.js:3 removeUserLastMessage() ❌ Owner has DMs disabled.`, error) });
 			});
 	}
 }
