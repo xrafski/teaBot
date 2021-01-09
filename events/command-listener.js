@@ -7,7 +7,7 @@ const config = require("../bot-settings.json");
 
 bot.on("message", async message => {
     if (message.author.bot) return;
-    if (message.channel.type === "dm") return;
+    // if (message.channel.type === "dm") return;
     if (!message.content.startsWith(config.BotPrefix)) return;
 
     const args = message.content.slice(config.BotPrefix.length).trim().split(/ +/g);
@@ -19,13 +19,23 @@ bot.on("message", async message => {
 
         switch (cmdFile.help.type) {
             case "administrator": {
-                if (message.guild.id === config.TEAserverID && message.member.hasPermission("ADMINISTRATOR")) return cmdFile.run(bot, message, args);
-                else return message.reply(`You don't have access to run **${config.BotPrefix}${cmdFile.help.name}** command!`)
-                .then(message => { message.delete({ timeout: 10000 }).catch(() => { return; }) });
+                if (message.channel.type != "dm") {
+                    if (message.guild.id === config.TEAserverID && message.member.hasPermission("ADMINISTRATOR")) return cmdFile.run(bot, message, args);
+                    else return message.reply(`You don't have access to run **${config.BotPrefix}${cmdFile.help.name}**!`)
+                        .then(message => { message.delete({ timeout: 10000 }).catch(() => { return; }) });
+                } else return message.channel.send(`**${config.BotPrefix}${cmdFile.help.name}** is not available on DM!`);
             }
-            case "public": return cmdFile.run(bot, message, args);
-            case "disabled": return message.reply(`**${config.BotPrefix}${cmdFile.help.name}** command is currently **disabled**!`)
+            case "dm": if (message.channel.type === "dm") return cmdFile.run(bot, message, args);
+            else return message.channel.send(`**${config.BotPrefix}${cmdFile.help.name}** is only available via direct message.`)
                 .then(message => { message.delete({ timeout: 10000 }).catch(() => { return; }) });
+
+            case "public": if (message.channel.type != "dm") return cmdFile.run(bot, message, args)
+            else return message.channel.send(`**${config.BotPrefix}${cmdFile.help.name}** is not available on DM!`)
+                .then(message => { message.delete({ timeout: 10000 }).catch(() => { return; }) });
+
+            case "disabled": if (message.channel.type != "dm") return message.reply(`**${config.BotPrefix}${cmdFile.help.name}** is currently **disabled**!`)
+                .then(message => { message.delete({ timeout: 10000 }).catch(() => { return; }) });
+
             default: return errorLog(`command-listener.js:1 command switch() default - no type was found for the ${cmdFile.help.name} command.`);
         }
     }

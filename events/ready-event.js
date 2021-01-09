@@ -9,15 +9,13 @@ bot.login(config.BotToken);
 bot.on('ready', () => {
     console.info(`\n▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬\nTEA Bot (${bot.user.tag}) has logged in!\nVersion: ${BotVersion}\n▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬`);
 
-    bot.guilds.cache.forEach(guild => {
-        guild.members.fetch().catch(error => { errorLog(`ready-event.js:1 ready Event() Error to cache members of '${guild.name}'.`, error) })
-    });
-
     // Set the bot user's presence
     bot.user.setPresence({ activity: { name: ' ', type: 'WATCHING' }, status: 'idle' })
         .then(() => {
             setInterval(() => {
-                bot.user.setPresence({ activity: { name: `${bot.users.cache.size} users 👮‍♂️`, type: 'WATCHING' }, status: 'online' })
-            }, 1800000);
-        }).catch(error => errorLog(`ready-event.js:2 ready Event()\nError to set the bot activity.`, error));
+                let amountOfPeople = 0;
+                bot.guilds.cache.forEach(guild => amountOfPeople = amountOfPeople + guild.memberCount);
+                bot.user.setPresence({ activity: { name: `${amountOfPeople} users 👮‍♂️`, type: 'WATCHING' }, status: 'online' });
+            }, 3600000);
+        }).catch(error => errorLog(`ready-event.js:1 ready Event()\nError to set the bot activity.`, error));
 });

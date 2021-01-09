@@ -6,10 +6,24 @@ require('console-stamp')(console, 'dd/mm/yyyy - HH:MM:ss');
 const bot = new Discord.Client({ partials: ['MESSAGE', 'REACTION'] });
 
 // define current bot version
-const BotVersion = '1.1';
+const BotVersion = 'pre.alpha6';
 
 // define icon image url for embeds
 const TEAlogo = 'https://skillez.eu/images/discord/teabanner.png'
+
+const emojiCharacters = {
+	a: '🇦', b: '🇧', c: '🇨', d: '🇩',
+	e: '🇪', f: '🇫', g: '🇬', h: '🇭',
+	i: '🇮', j: '🇯', k: '🇰', l: '🇱',
+	m: '🇲', n: '🇳', o: '🇴', p: '🇵',
+	q: '🇶', r: '🇷', s: '🇸', t: '🇹',
+	u: '🇺', v: '🇻', w: '🇼', x: '🇽',
+	y: '🇾', z: '🇿', 0: '0⃣', 1: '1⃣',
+	2: '2⃣', 3: '3⃣', 4: '4⃣', 5: '5⃣',
+	6: '6⃣', 7: '7⃣', 8: '8⃣', 9: '9⃣',
+	10: '🔟', '#': '#⃣', '*': '*⃣',
+	'!': '❗', '?': '❓', 'i': 'ℹ️',
+};
 
 // Load commands and events
 bot.commands = new Discord.Collection();
@@ -47,6 +61,7 @@ module.exports = {
 	Discord: Discord, // discord module
 	TEAlogo: TEAlogo, // defines icon image url for embeds
 	BotVersion: BotVersion, // defines current bot version
+	emojiCharacters: emojiCharacters, // defines some discord emojis
 
 	ownerDM: function (message) {
 		let Owner = bot.users.cache.get(config.BotOwnerID);
@@ -71,10 +86,41 @@ module.exports = {
 		return bot.commands;
 	},
 
+	botReply: function (text, message, time, deleteStatus) {
+		if (deleteStatus) {
+			return message.channel.send(text)
+				.then(message => { if (message && message.deletable) message.delete({ timeout: time }).catch(() => { }); });
+		} else return message.channel.send(text);
+	},
+
+	embedMessage: function (text, user) {
+		if (!user) {
+			// Send an embed message without footer
+			const embed_message = new Discord.MessageEmbed()
+				.setDescription(text)
+				.setColor('#0095ff')
+			return embed_message;
+		} else {
+			// Send an embed message with footer
+			const embed_message = new Discord.MessageEmbed()
+				.setDescription(text)
+				.setColor('#0095ff')
+				.setFooter(user.tag, user.displayAvatarURL())
+			return embed_message;
+		}
+	},
+
 	TEAemoji: function () {
 		let TEAemoji = bot.guilds.cache.get(config.TEAserverID).emojis.cache.find(emoji => emoji.name === 'TEA');
 		if (TEAemoji) return TEAemoji;
 		else return TEAemoji = '';
+	},
+
+	getEmoji: function (serverID, emojiName) {
+		let getEmoji = bot.guilds.cache.get(serverID).emojis.cache.find(emoji => emoji.name === emojiName);
+		if (getEmoji) return getEmoji;
+		// else return getEmoji = '🐛';
+		else return undefined;
 	},
 
 	messageRemoverWithReact: async function (message, author) {
