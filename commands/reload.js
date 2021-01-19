@@ -1,4 +1,4 @@
-const { errorLog } = require('../tea');
+const { errorLog } = require('../teaBot');
 const config = require("../bot-settings.json");
 
 module.exports.help = {

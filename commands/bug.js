@@ -1,5 +1,5 @@
 const config = require("../bot-settings.json");
-const { TEAemoji, TEAlogo, Discord, errorLog } = require("../tea");
+const { TEAemoji, TEAlogo, Discord, errorLog } = require('../teaBot');
 
 module.exports.help = {
     name: "bug",
@@ -24,10 +24,11 @@ module.exports.run = async (bot, message) => {
     let qObserved = 'None';
     let qRepro = 'None';
     let qMedia = 'None';
+    let qNote = 'None';
 
     const filter = m => m.author.id === message.author.id;
     const questionResponseTime = 1500000;
-    
+
     nicknameQuestion(); // 1st question about the bug report.
 
     //////////////////////////////////////////////////////////////////////////////////////////////
@@ -62,8 +63,11 @@ module.exports.run = async (bot, message) => {
         return `${date.getUTCDate()} ${MonthAsString(date.getUTCMonth())} ${date.getUTCFullYear()} • ${formatAMPM(date)} UTC`;
     }
 
-    function nicknameQuestion() {
-        return message.reply(`${message.author} ${TEAemoji()} Type \`cancel\` to exit.\n\n**Character Details**\n\`\`\`Please provide your in-game name.\`\`\``)
+    function nicknameQuestion(additionalText) {
+        if (!additionalText) additionalText = '';
+        else additionalText = `**${additionalText}**`;
+
+        return message.reply(`${additionalText}\n${message.author} ${TEAemoji()} Type \`cancel\` to exit.\n\n**Character Details**\n\`\`\`Please provide your in-game name.\`\`\``)
             .then(Question => {
                 message.channel.awaitMessages(filter, { max: 1, time: questionResponseTime })
                     .then(Answer => {
@@ -73,11 +77,11 @@ module.exports.run = async (bot, message) => {
                         else if (Answer.first().content.toLowerCase() === 'exit' || Answer.first().content.toLowerCase() === 'cancel')
                             return message.channel.send(`❌ Cancelled`);
 
-                        else if (Answer.first().content.length < 1)
-                            return message.channel.send(`❌ nickname is too short.`).then(() => nicknameQuestion());
+                        else if (Answer.first().content.length < 3)
+                            return nicknameQuestion('❌ Nickname is too short [3 characters].');
 
                         else if (Answer.first().content.length > 20)
-                            return message.channel.send(`❌ character is too long (20).`).then(() => nicknameQuestion());
+                            return nicknameQuestion('❌ Nickname is too long [20 characters].');
 
                         else {
                             qNickname = Answer.first().content;
@@ -92,8 +96,11 @@ module.exports.run = async (bot, message) => {
             });
     }
 
-    function platformQuestion() {
-        return message.reply(`${message.author} ${TEAemoji()} Type \`cancel\` to exit.\n\n**Platform**\n\`\`\`Please, specify the platform you play on (PC, Xbox, PS4 NA, PS4 EU).\`\`\``)
+    function platformQuestion(additionalText) {
+        if (!additionalText) additionalText = '';
+        else additionalText = `**${additionalText}**`;
+
+        return message.reply(`${additionalText}\n${message.author} ${TEAemoji()} Type \`cancel\` to exit.\n\n**Platform**\n\`\`\`Please, specify the platform you play on (PC, Xbox, PS4 NA, PS4 EU).\`\`\``)
             .then(Question => {
                 message.channel.awaitMessages(filter, { max: 1, time: questionResponseTime })
                     .then(Answer => {
@@ -104,10 +111,10 @@ module.exports.run = async (bot, message) => {
                             return message.channel.send(`❌ Cancelled`);
 
                         else if (Answer.first().content.length < 1)
-                            return message.channel.send(`❌ platform answer is too short.`).then(() => platformQuestion());
+                            return platformQuestion('❌ Platform answer is too short.');
 
                         else if (Answer.first().content.length > 50)
-                            return message.channel.send(`❌ platform answer is too long (50).`).then(() => platformQuestion());
+                            return platformQuestion('❌ Platform answer is too long [50 characters].');
 
                         else {
                             qPlatform = Answer.first().content;
@@ -121,8 +128,11 @@ module.exports.run = async (bot, message) => {
             });
     }
 
-    function characterQuestion() {
-        return message.reply(`${message.author} ${TEAemoji()} Type \`cancel\` to exit.\n\n**Character Details**\n\`\`\`Please provide your basic in-game details.\ncharacter/level/power rank/mastery etc.\`\`\``)
+    function characterQuestion(additionalText) {
+        if (!additionalText) additionalText = '';
+        else additionalText = `**${additionalText}**`;
+
+        return message.reply(`${additionalText}\n${message.author} ${TEAemoji()} Type \`cancel\` to exit.\n\n**Character Details**\n\`\`\`Please provide your basic in-game details.\ncharacter/level/power rank/mastery etc.\`\`\``)
             .then(Question => {
                 message.channel.awaitMessages(filter, { max: 1, time: questionResponseTime })
                     .then(Answer => {
@@ -133,10 +143,10 @@ module.exports.run = async (bot, message) => {
                             return message.channel.send(`❌ Cancelled`);
 
                         else if (Answer.first().content.length < 1)
-                            return message.channel.send(`❌ character details are too short.`).then(() => characterQuestion());
+                            return characterQuestion('❌ Character details are too short.');
 
-                        else if (Answer.first().content.length > 200)
-                            return message.channel.send(`❌ character details are too long (200).`).then(() => characterQuestion());
+                        else if (Answer.first().content.length > 250)
+                            return characterQuestion('❌ Character details are too long [250 characters].');
 
                         else {
                             qCharacter = Answer.first().content;
@@ -150,8 +160,11 @@ module.exports.run = async (bot, message) => {
             });
     }
 
-    function dateQuestion() {
-        return message.reply(`${message.author} ${TEAemoji()} Type \`cancel\` to exit.\n\n**Time and Date**\n\`\`\`When did this happen? Give as specific a timeframe as possible (please include timezone).\nIf it's always bugged, that's helpful too, so you can just say that.\`\`\``)
+    function dateQuestion(additionalText) {
+        if (!additionalText) additionalText = '';
+        else additionalText = `**${additionalText}**`;
+
+        return message.reply(`${additionalText}\n${message.author} ${TEAemoji()} Type \`cancel\` to exit.\n\n**Time and Date**\n\`\`\`When did this happen? Give as specific a timeframe as possible (please include timezone).\nIf it's always bugged, that's helpful too, so you can just say that.\`\`\``)
             .then(Question => {
                 message.channel.awaitMessages(filter, { max: 1, time: questionResponseTime })
                     .then(Answer => {
@@ -162,10 +175,10 @@ module.exports.run = async (bot, message) => {
                             return message.channel.send(`❌ Cancelled`);
 
                         else if (Answer.first().content.length < 1)
-                            return message.channel.send(`❌ date is too short.`).then(() => dateQuestion());
+                            return dateQuestion('❌ Date is too short.');
 
-                        else if (Answer.first().content.length > 100)
-                            return message.channel.send(`❌ date is too long (100).`).then(() => dateQuestion());
+                        else if (Answer.first().content.length > 250)
+                            return dateQuestion('❌ Date is too long [250 characters].');
 
                         else {
                             qDate = Answer.first().content;
@@ -179,8 +192,11 @@ module.exports.run = async (bot, message) => {
             });
     }
 
-    function contextQuestion() {
-        return message.reply(`${message.author} ${TEAemoji()} Type \`cancel\` to exit.\n\n**Context**\n\`\`\`Where did you find this bug? Was it in a specific biome? Which? A specific lair? Which?\nIf the bug is with a costume, which specific costume?\nThe more details you provide, the more quickly we'll be able to replicate the issue.\`\`\``)
+    function contextQuestion(additionalText) {
+        if (!additionalText) additionalText = '';
+        else additionalText = `**${additionalText}**`;
+
+        return message.reply(`${additionalText}\n${message.author} ${TEAemoji()} Type \`cancel\` to exit.\n\n**Context**\n\`\`\`Where did you find this bug? Was it in a specific biome? Which? A specific lair? Which?\nIf the bug is with a costume, which specific costume?\nThe more details you provide, the more quickly we'll be able to replicate the issue.\`\`\``)
             .then(Question => {
                 message.channel.awaitMessages(filter, { max: 1, time: questionResponseTime })
                     .then(Answer => {
@@ -191,10 +207,10 @@ module.exports.run = async (bot, message) => {
                             return message.channel.send(`❌ Cancelled`);
 
                         else if (Answer.first().content.length < 1)
-                            return message.channel.send(`❌ context is too short.`).then(() => contextQuestion());
+                            return contextQuestion('❌ Context is too short.');
 
-                        else if (Answer.first().content.length > 1024)
-                            return message.channel.send(`❌ context is too long (1024).`).then(() => contextQuestion());
+                        else if (Answer.first().content.length > 1000)
+                            return contextQuestion('❌ Context is too long [1000 characters].');
 
                         else {
                             qContext = Answer.first().content;
@@ -208,8 +224,11 @@ module.exports.run = async (bot, message) => {
             });
     }
 
-    function gameQuestion() {
-        return message.reply(`${message.author} ${TEAemoji()} Type \`cancel\` to exit.\n\n**Game Details**\n\`\`\`What are the name(s) of any involved quest/badges/item/clubs?\nPlease attempt to provide exact names as shown in-game or type none.\`\`\``)
+    function gameQuestion(additionalText) {
+        if (!additionalText) additionalText = '';
+        else additionalText = `**${additionalText}**`;
+
+        return message.reply(`${additionalText}\n${message.author} ${TEAemoji()} Type \`cancel\` to exit.\n\n**Game Details**\n\`\`\`What are the name(s) of any involved quest/badges/item/clubs?\nPlease attempt to provide exact names as shown in-game or type none.\`\`\``)
             .then(Question => {
                 message.channel.awaitMessages(filter, { max: 1, time: questionResponseTime })
                     .then(Answer => {
@@ -220,10 +239,10 @@ module.exports.run = async (bot, message) => {
                             return message.channel.send(`❌ Cancelled`);
 
                         else if (Answer.first().content.length < 1)
-                            return message.channel.send(`❌ game details are too short.`).then(() => gameQuestion());
+                            return gameQuestion('❌ Game details are too short.');
 
-                        else if (Answer.first().content.length > 100)
-                            return message.channel.send(`❌ game details are too long (100).`).then(() => gameQuestion());
+                        else if (Answer.first().content.length > 500)
+                            return gameQuestion('❌ Game details are too long [500 characters].');
 
                         else {
                             qGame = Answer.first().content;
@@ -237,8 +256,11 @@ module.exports.run = async (bot, message) => {
             });
     }
 
-    function expectedQuestion() {
-        return message.reply(`${message.author} ${TEAemoji()} Type \`cancel\` to exit.\n\n**Expected**\n\`\`\`What did you expect to happen?\nExample: I summoned my mount and expected to spawn Slow Sebastion.\`\`\``)
+    function expectedQuestion(additionalText) {
+        if (!additionalText) additionalText = '';
+        else additionalText = `**${additionalText}**`;
+
+        return message.reply(`${additionalText}\n${message.author} ${TEAemoji()} Type \`cancel\` to exit.\n\n**Expected**\n\`\`\`What did you expect to happen?\nExample: I summoned my mount and expected to spawn Slow Sebastion.\`\`\``)
             .then(Question => {
                 message.channel.awaitMessages(filter, { max: 1, time: questionResponseTime })
                     .then(Answer => {
@@ -249,10 +271,10 @@ module.exports.run = async (bot, message) => {
                             return message.channel.send(`❌ Cancelled`);
 
                         else if (Answer.first().content.length < 1)
-                            return message.channel.send(`❌ expected answer is too short.`).then(() => expectedQuestion());
+                            return expectedQuestion('❌ Expected answer is too short.');
 
-                        else if (Answer.first().content.length > 1024)
-                            return message.channel.send(`❌ expected answer is too long (1024).`).then(() => expectedQuestion());
+                        else if (Answer.first().content.length > 1000)
+                            return expectedQuestion('❌ Expected answer is too long [1000 characters].');
 
                         else {
                             qExpected = Answer.first().content;
@@ -266,8 +288,11 @@ module.exports.run = async (bot, message) => {
             });
     }
 
-    function observedQuestion() {
-        return message.reply(`${message.author} ${TEAemoji()} Type \`cancel\` to exit.\n\n**Observed**\n\`\`\`What happened instead?\nExample: My character threw a bomb.\`\`\``)
+    function observedQuestion(additionalText) {
+        if (!additionalText) additionalText = '';
+        else additionalText = `**${additionalText}**`;
+
+        return message.reply(`${additionalText}\n${message.author} ${TEAemoji()} Type \`cancel\` to exit.\n\n**Observed**\n\`\`\`What happened instead?\nExample: My character threw a bomb.\`\`\``)
             .then(Question => {
                 message.channel.awaitMessages(filter, { max: 1, time: questionResponseTime })
                     .then(Answer => {
@@ -278,10 +303,10 @@ module.exports.run = async (bot, message) => {
                             return message.channel.send(`❌ Cancelled`);
 
                         else if (Answer.first().content.length < 1)
-                            return message.channel.send(`❌ observed answer is too short.`).then(() => observedQuestion());
+                            return observedQuestion('❌ Observed answer is too short.');
 
-                        else if (Answer.first().content.length > 1024)
-                            return message.channel.send(`❌ observed answer too long (1024).`).then(() => observedQuestion());
+                        else if (Answer.first().content.length > 1000)
+                            return observedQuestion('❌ Observed answer too long [1000 characters].');
 
                         else {
                             qObserved = Answer.first().content;
@@ -295,8 +320,11 @@ module.exports.run = async (bot, message) => {
             });
     }
 
-    function reproductionQuestion() {
-        return message.reply(`${message.author} ${TEAemoji()} Type \`cancel\` to exit.\n\n**Reproduction Steps**\n\`\`\`Most importantly, if possible, please include a list of specific steps we can take to reproduce this issue on our end. \nThese steps need to be something we can reproduce on a new character, not isolated to your character only.\`\`\``)
+    function reproductionQuestion(additionalText) {
+        if (!additionalText) additionalText = '';
+        else additionalText = `**${additionalText}**`;
+
+        return message.reply(`${additionalText}\n${message.author} ${TEAemoji()} Type \`cancel\` to exit.\n\n**Reproduction Steps**\n\`\`\`Most importantly, if possible, please include a list of specific steps we can take to reproduce this issue on our end. \nThese steps need to be something we can reproduce on a new character, not isolated to your character only.\`\`\``)
             .then(Question => {
                 message.channel.awaitMessages(filter, { max: 1, time: questionResponseTime })
                     .then(Answer => {
@@ -307,10 +335,10 @@ module.exports.run = async (bot, message) => {
                             return message.channel.send(`❌ Cancelled`);
 
                         else if (Answer.first().content.length < 1)
-                            return message.channel.send(`❌ reproduction steps answer is too short.`).then(() => reproductionQuestion());
+                            return reproductionQuestion('❌ Reproduction steps answer is too short.');
 
-                        else if (Answer.first().content.length > 1024)
-                            return message.channel.send(`❌ reproduction steps answer is too long (1024).`).then(() => reproductionQuestion());
+                        else if (Answer.first().content.length > 1000)
+                            return reproductionQuestion('❌ Reproduction steps answer is too long [1000 characters].');
 
                         else {
                             qRepro = Answer.first().content;
@@ -324,8 +352,11 @@ module.exports.run = async (bot, message) => {
             });
     }
 
-    function mediaQuestion() {
-        return message.reply(`${message.author} ${TEAemoji()} Type \`cancel\` to exit.\n\n**Image/Video Documentation**\n\`\`\`Often the most useful information we can get for bugs will be screenshots or video documentation of the bug occurring.\nThese can be uploaded to 3rd party websites (youtube/imgur) and you just have to include the link to them or type none if you don't have any.\`\`\``)
+    function mediaQuestion(additionalText) {
+        if (!additionalText) additionalText = '';
+        else additionalText = `**${additionalText}**`;
+
+        return message.reply(`${additionalText}\n${message.author} ${TEAemoji()} Type \`cancel\` to exit.\n\n**Image/Video Documentation**\n\`\`\`Often the most useful information we can get for bugs will be screenshots or video documentation of the bug occurring.\nThese can be uploaded to 3rd party websites (youtube/imgur) and you just have to include the link to them or type none if you don't have any.\`\`\``)
             .then(Question => {
                 message.channel.awaitMessages(filter, { max: 1, time: questionResponseTime })
                     .then(Answer => {
@@ -336,13 +367,45 @@ module.exports.run = async (bot, message) => {
                             return message.channel.send(`❌ Cancelled`);
 
                         else if (Answer.first().content.length < 1)
-                            return message.channel.send(`❌ media are too short.`).then(() => mediaQuestion());
+                            return mediaQuestion('❌ Media are too short.');
 
-                        else if (Answer.first().content.length > 1024)
-                            return message.channel.send(`❌ media are too long (1024).`).then(() => mediaQuestion());
+                        else if (Answer.first().content.length > 1000)
+                            return mediaQuestion('❌ Media are too long [1000 characters].');
 
                         else {
                             qMedia = Answer.first().content;
+                            return noteQuestion();
+                        }
+
+                    }).catch(error => {
+                        if (error.message === "Cannot read property 'content' of undefined") return message.channel.send(`❌ There was no message within the time limit (${Math.round(questionResponseTime / 60000)}mins)! - Cancelled.`);
+                        else return;
+                    });
+            });
+    }
+
+    function noteQuestion(additionalText) {
+        if (!additionalText) additionalText = '';
+        else additionalText = `**${additionalText}**`;
+
+        return message.reply(`${additionalText}\n${message.author} ${TEAemoji()} Type \`cancel\` to exit.\n\n**Note**\n\`\`\`Now you can insert a note. It might be your idea to fix this bug or anything else.\nYou can also type 'none' to proceed without this note.\`\`\``)
+            .then(Question => {
+                message.channel.awaitMessages(filter, { max: 1, time: questionResponseTime })
+                    .then(Answer => {
+                        Question.delete().catch(() => { return });
+                        if (Answer.first().content.startsWith(config.BotPrefix)) return;
+
+                        else if (Answer.first().content.toLowerCase() === 'exit' || Answer.first().content.toLowerCase() === 'cancel')
+                            return message.channel.send(`❌ Cancelled`);
+
+                        else if (Answer.first().content.length < 1)
+                            return noteQuestion('❌ Note is too short.');
+
+                        else if (Answer.first().content.length > 1000)
+                            return noteQuestion('❌ Note is too long [1000 characters].');
+
+                        else {
+                            qNote = Answer.first().content;
                             return postToMods(message);
                         }
 
@@ -354,7 +417,7 @@ module.exports.run = async (bot, message) => {
     }
 
     function postToMods(dmMessage) { // to make everything good with the command: SEND_MESSAGES / READ_MESSAGES / READ_MESSAGE_HISTORY / EMBED_LINKS
-        const TEAchannel = bot.guilds.cache.get(config.HidenBugServerID).channels.cache.get(config.bugQueueChannelID);
+        const TEAchannel = bot.guilds.cache.get(config.report.hidenBugServerID).channels.cache.get(config.report.bugQueueChannelID);
 
         if (TEAchannel) {
             //define the embed: tip embed message summary
@@ -371,7 +434,8 @@ module.exports.run = async (bot, message) => {
                     { name: 'Expected', value: qExpected, inline: false },
                     { name: 'Observed', value: qObserved, inline: false },
                     { name: 'Reproduction Steps', value: qRepro, inline: false },
-                    { name: 'Image/Video Documentation', value: qMedia, inline: false }
+                    { name: 'Image/Video Documentation', value: qMedia, inline: false },
+                    { name: 'Note', value: qNote, inline: false }
                 )
                 .setThumbnail(qRequester.displayAvatarURL())
                 .setFooter('React with ✅ below to move to the appropriate category')
@@ -384,7 +448,7 @@ module.exports.run = async (bot, message) => {
                 .catch(error => { errorLog(`bug.js:1 postToMods() Error in the function - probably missing permissions (SEND_MESSAGES/READ_MESSAGES/READ_MESSAGE_HISTORY/EMBED_LINKS)`, error); })
         } else {
             dmMessage.channel.send(`${TEAemoji()} Error to send bug report, try again later...`);
-            errorLog(`bug.js:2 postToMods() TEA bug queue chat channel is missing - maybe wrong channel ID in 'bugQueueChannelID' conf file: ${config.bugQueueChannelID}\n-------------------------------------------------`);
+            errorLog(`bug.js:2 postToMods() TEA bug queue chat channel is missing - maybe wrong channel ID in 'bugQueueChannelID' conf file: ${config.report.bugQueueChannelID}\n-------------------------------------------------`);
         }
     }
 

@@ -1,5 +1,5 @@
 const config = require("../bot-settings.json");
-const { TEAemoji, TEAlogo, Discord, errorLog } = require("../tea");
+const { TEAemoji, TEAlogo, Discord, errorLog } = require('../teaBot');
 
 module.exports.help = {
     name: "tip",
@@ -295,7 +295,7 @@ module.exports.run = async (bot, message) => {
     }
 
     function postToMods(dmMessage) {
-        const TEAchannel = bot.guilds.cache.get(config.TEAserverID).channels.cache.get(config.TEAofficialChannel);
+        const TEAchannel = bot.guilds.cache.get(config.TEAserverID).channels.cache.get(config.other.officialChannelID);
 
         if (TEAchannel) {
             //define the embed: tip embed message summary
@@ -327,7 +327,7 @@ module.exports.run = async (bot, message) => {
                 })
         } else {
             dmMessage.channel.send(`${TEAemoji()} Error to send tip, try again later...`);
-            errorLog(`tip.js:2 postToMods() TEA official chat channel is missing - maybe wrong channel ID in 'TEAofficialChannel' conf file: ${config.TEAofficialChannel}\n-------------------------------------------------\nUser tip summary:\nqUser: ${qUser}\nqDescription: ${qDescription}\nqDate: ${qDate}\nqServer: ${qServer}\nqWorld: ${qWorld}\nqProof: ${qProof}\nqNote: ${qNote}\nqRequester: ${qRequester} - ${qRequester.tag} - ${qRequester.id}`);
+            errorLog(`tip.js:2 postToMods() TEA official chat channel is missing - maybe wrong channel ID in 'TEAofficialChannel' conf file: ${config.other.officialChannelID}\n-------------------------------------------------\nUser tip summary:\nqUser: ${qUser}\nqDescription: ${qDescription}\nqDate: ${qDate}\nqServer: ${qServer}\nqWorld: ${qWorld}\nqProof: ${qProof}\nqNote: ${qNote}\nqRequester: ${qRequester} - ${qRequester.tag} - ${qRequester.id}`);
         }
     }
 

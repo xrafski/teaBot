@@ -1,5 +1,5 @@
 const config = require("../bot-settings.json");
-const { bot } = require("../tea");
+const { bot } = require('../teaBot');
 const fs = require('fs');
 
 bot.on('ready', () => {
@@ -16,7 +16,7 @@ async function checkGuidelines() {
 
     // define channel where embed is stored
     const pGuild = bot.guilds.cache.get(config.TEAserverID)
-    const primaryGuildChannel = pGuild.channels.cache.find(ch => ch.name === config.GuidelinesChannelName);
+    const primaryGuildChannel = pGuild.channels.cache.find(ch => ch.name === config.other.guidelinesChannelName);
 
     // when primaryGuildChannel is not found
     if (!primaryGuildChannel) return;
@@ -33,7 +33,7 @@ async function checkGuidelines() {
         // forEach to send/update guidelines
         bot.guilds.cache.forEach((guild) => {
             if (guild.id === config.TEAserverID) return;
-            const channel = guild.channels.cache.find(ch => ch.name === config.GuidelinesChannelName);
+            const channel = guild.channels.cache.find(ch => ch.name === config.other.guidelinesChannelName);
 
             if (certification[guild.id]) {
                 if (channel) return updateGuidelines(guild, channel, primaryMessage.embeds[0]);

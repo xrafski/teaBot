@@ -1,4 +1,4 @@
-const { bot, TEAemoji, errorLog, botReply, embedMessage, Discord, TEAlogo, emojiCharacters } = require('../tea');
+const { bot, TEAemoji, errorLog, botReply, embedMessage, Discord, TEAlogo, emojiCharacters } = require('../teaBot');
 const config = require("../bot-settings.json");
 
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -6,9 +6,9 @@ const config = require("../bot-settings.json");
 //////////////////////////////////////////////////////////////////////////////////////////////
 
 bot.on('messageReactionAdd', async (reaction, user) => {
-    if (reaction.message.channel.id === config.bugQueueChannelID || reaction.message.channel.id === config.bugGraphicalChannelID || reaction.message.channel.id === config.bugUIChannelID
-        || reaction.message.channel.id === config.bugCombatChannelID || reaction.message.channel.id === config.bugBuildingChannelID || reaction.message.channel.id === config.bugCriticalChannelID
-        || reaction.message.channel.id === config.bugMiscalculationChannelID || reaction.message.channel.id === config.bugInsufficientDataChannelID) {
+    if (reaction.message.channel.id === config.report.bugQueueChannelID || reaction.message.channel.id === config.report.bugGraphicalChannelID || reaction.message.channel.id === config.report.bugUIChannelID
+        || reaction.message.channel.id === config.report.bugCombatChannelID || reaction.message.channel.id === config.report.bugBuildingChannelID || reaction.message.channel.id === config.report.bugCriticalChannelID
+        || reaction.message.channel.id === config.report.bugMiscalculationChannelID || reaction.message.channel.id === config.report.bugInsufficientDataChannelID) {
         if (user.id === bot.user.id) return;
 
         return reaction.message.fetch()
@@ -25,7 +25,7 @@ bot.on('messageReactionAdd', async (reaction, user) => {
             const menuEmbed = new Discord.MessageEmbed()
                 .setColor('#0095ff')
                 .setAuthor('Reaction Menu', TEAlogo)
-                .setDescription(`${user} You have reacted on this **[report message](${message.url})**.\nPlease react under this message to move to the appropriate category.\n\nLegend:\n❌ • Exit\n${emojiCharacters[1]} • <#${config.bugGraphicalChannelID}>\n${emojiCharacters[2]} • <#${config.bugUIChannelID}>\n${emojiCharacters[3]} • <#${config.bugCombatChannelID}>\n${emojiCharacters[4]} • <#${config.bugBuildingChannelID}>\n${emojiCharacters[5]} • <#${config.bugCriticalChannelID}>\n${emojiCharacters[6]} • <#${config.bugMiscalculationChannelID}>\n${emojiCharacters[7]} • <#${config.bugInsufficientDataChannelID}>`)
+                .setDescription(`${user} You have reacted on this **[report message](${message.url})**.\nPlease react under this message to move to the appropriate category.\n\nLegend:\n❌ • Exit\n${emojiCharacters[1]} • <#${config.report.bugGraphicalChannelID}>\n${emojiCharacters[2]} • <#${config.report.bugUIChannelID}>\n${emojiCharacters[3]} • <#${config.report.bugCombatChannelID}>\n${emojiCharacters[4]} • <#${config.report.bugBuildingChannelID}>\n${emojiCharacters[5]} • <#${config.report.bugCriticalChannelID}>\n${emojiCharacters[6]} • <#${config.report.bugMiscalculationChannelID}>\n${emojiCharacters[7]} • <#${config.report.bugInsufficientDataChannelID}>`)
             return botReply(menuEmbed, message, 0, false)
                 .then(async msg => {
 
@@ -41,13 +41,13 @@ bot.on('messageReactionAdd', async (reaction, user) => {
 
                                 switch (reaction.emoji.name) {
                                     case '❌': return;
-                                    case emojiCharacters[1]: return moveTheReport(config.bugGraphicalChannelID, 'graphical');
-                                    case emojiCharacters[2]: return moveTheReport(config.bugUIChannelID, 'ui');
-                                    case emojiCharacters[3]: return moveTheReport(config.bugCombatChannelID, 'combat');
-                                    case emojiCharacters[4]: return moveTheReport(config.bugBuildingChannelID, 'building');
-                                    case emojiCharacters[5]: return moveTheReport(config.bugCriticalChannelID, 'critical');
-                                    case emojiCharacters[6]: return moveTheReport(config.bugMiscalculationChannelID, 'miscalculations');
-                                    case emojiCharacters[7]: return moveTheReport(config.bugInsufficientDataChannelID, 'insufficient_data');
+                                    case emojiCharacters[1]: return moveTheReport(config.report.bugGraphicalChannelID, 'graphical');
+                                    case emojiCharacters[2]: return moveTheReport(config.report.bugUIChannelID, 'ui');
+                                    case emojiCharacters[3]: return moveTheReport(config.report.bugCombatChannelID, 'combat');
+                                    case emojiCharacters[4]: return moveTheReport(config.report.bugBuildingChannelID, 'building');
+                                    case emojiCharacters[5]: return moveTheReport(config.report.bugCriticalChannelID, 'critical');
+                                    case emojiCharacters[6]: return moveTheReport(config.report.bugMiscalculationChannelID, 'miscalculations');
+                                    case emojiCharacters[7]: return moveTheReport(config.report.bugInsufficientDataChannelID, 'insufficient_data');
                                     default: return;
                                 }
                             })
@@ -74,7 +74,7 @@ bot.on('messageReactionAdd', async (reaction, user) => {
         }
 
         function moveTheReport(channelID, type) {
-            const BUGchannel = bot.guilds.cache.get(config.HidenBugServerID).channels.cache.get(channelID);
+            const BUGchannel = bot.guilds.cache.get(config.report.hidenBugServerID).channels.cache.get(channelID);
 
             if (BUGchannel) {
                 if (reaction.message.channel === BUGchannel) return botReply(embedMessage(`${user} ${TEAemoji()} You can't move the report because it's already here!`), reaction.message, 10000, true);

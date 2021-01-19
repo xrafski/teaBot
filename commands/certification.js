@@ -4,7 +4,7 @@ const fs = require('fs');
 module.exports.help = {
     name: "certification",
     description: "Shows if the guild is a certified TEA member.",
-    type: "public",
+    type: "disabled",
     usage: `**${config.BotPrefix}certification** owner(optional)`
 };
 

@@ -1,4 +1,4 @@
-const { bot, Discord, TEAlogo, sendEmbedLog, errorLog } = require('../tea');
+const { bot, Discord, TEAlogo, sendEmbedLog, errorLog } = require('../teaBot');
 const { google } = require('googleapis');
 const config = require("../bot-settings.json");
 const keys = require('../Laezaria-Bot-292d692ec77c.json');
@@ -10,7 +10,7 @@ const keys = require('../Laezaria-Bot-292d692ec77c.json');
 bot.on('ready', () => {
     // Check TEA spreadsheet for a new responses every 45mins (Reports/Appeals)
     setInterval(() => {
-        checkTEAspreadsheet();
+        // checkTEAspreadsheet(); // PLACEHOLDER
     }, 60000 * 45);
 
     //////////////////////////////////////////////////////////////////////////////////////////////
@@ -34,7 +34,7 @@ bot.on('ready', () => {
             const gsapi = google.sheets({ version: 'v4', auth: cl })
 
             let reportS = await gsapi.spreadsheets.values.get({
-                spreadsheetId: config.spreadsheetIdentifier,
+                spreadsheetId: config.formAppealReport.spreadsheetIdentifier,
                 range: 'Reports!A1:F10'
             }).catch(error => errorLog(`tea-google-form.js:1 reportgsrun()\nSomething wrong with google sheet service.`, error));
 
@@ -67,18 +67,18 @@ bot.on('ready', () => {
                 .setFooter(`• ${reportsheet[1][0]} ${reportsheet[0][0]}`)
                 .setThumbnail(TEAlogo)
 
-            await sendEmbedLog(embed_reports_sheet_information, config.TEAreportChannel, 'TEA - Report')
+            await sendEmbedLog(embed_reports_sheet_information, config.formAppealReport.TEAreportChannel, 'TEA - Report')
 
             // Remove 1st row if not empty
             await gsapi.spreadsheets.batchUpdate(
                 {
-                    spreadsheetId: config.spreadsheetIdentifier,
+                    spreadsheetId: config.formAppealReport.spreadsheetIdentifier,
                     requestBody: {
                         requests: [
                             {
                                 deleteDimension: {
                                     range: {
-                                        sheetId: config.reportsheetIdentifier,
+                                        sheetId: config.formAppealReport.reportsheetIdentifier,
                                         startIndex: 1,
                                         endIndex: 2,
                                         dimension: "ROWS"
@@ -97,7 +97,7 @@ bot.on('ready', () => {
             const gsapi = google.sheets({ version: 'v4', auth: cl })
 
             let appealS = await gsapi.spreadsheets.values.get({
-                spreadsheetId: config.spreadsheetIdentifier,
+                spreadsheetId: config.formAppealReport.spreadsheetIdentifier,
                 range: 'Appeals!A1:F10'
             }).catch(error => errorLog(`tea-google-form.js:1 appealgsrun()\nSomething wrong with google sheet service.`, error));
 
@@ -118,18 +118,18 @@ bot.on('ready', () => {
                 .setFooter(`• ${appealsheet[1][0]} ${appealsheet[0][0]}`)
                 .setThumbnail(TEAlogo)
 
-            await sendEmbedLog(embed_appeals_sheet_information, config.TEAappealChannel, 'TEA - Appeal')
+            await sendEmbedLog(embed_appeals_sheet_information, config.formAppealReport.TEAappealChannel, 'TEA - Appeal')
 
             // Remove 1st row if not empty
             await gsapi.spreadsheets.batchUpdate(
                 {
-                    spreadsheetId: config.spreadsheetIdentifier,
+                    spreadsheetId: config.formAppealReport.spreadsheetIdentifier,
                     requestBody: {
                         requests: [
                             {
                                 deleteDimension: {
                                     range: {
-                                        sheetId: config.appealsheetIdentifier,
+                                        sheetId: config.formAppealReport.appealsheetIdentifier,
                                         startIndex: 1,
                                         endIndex: 2,
                                         dimension: "ROWS"

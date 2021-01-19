@@ -1,4 +1,4 @@
-const { bot, removeUserLastMessage, errorLog } = require('../tea');
+const { bot, removeUserLastMessage, errorLog } = require('../teaBot');
 const config = require("../bot-settings.json");
 
 //////////////////////////////////////////////////////////////////////////////////////////////

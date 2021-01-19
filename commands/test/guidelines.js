@@ -43,7 +43,7 @@ module.exports.run = async (bot, message, args) => {
         if (!TEAmember) return message.reply(`PLACEHOLDER - You are not in TEA server.`)
             .then(message => message.delete({ timeout: 10000 })).catch(() => { return; });
 
-        const TEArepresentative = TEAmember.roles.cache.some(role => role.id === config.TEArepresentativeRoleID);
+        const TEArepresentative = TEAmember.roles.cache.some(role => role.id === config.other.representativeRoleID);
         if (!TEArepresentative) return message.reply(`PLACEHOLDER - You are not TEA Representative.`)
             .then(message => message.delete({ timeout: 10000 })).catch(() => { return; });
 

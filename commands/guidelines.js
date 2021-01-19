@@ -1,11 +1,11 @@
 const config = require("../bot-settings.json");
-const { TEAemoji } = require("../tea");
+const { TEAemoji } = require('../teaBot');
 const fs = require('fs');
 
 module.exports.help = {
     name: "guidelines",
     description: "Manually updates guidelines on all servers at once.",
-    type: "administrator",
+    type: "disabled",
     usage: `Send an embed message to the guidelines channel using **<https://carl.gg/>** and then type **${config.BotPrefix}guidelines** to update guidelines for TEA members.`
 };
 
@@ -19,10 +19,10 @@ module.exports.run = async (bot, message) => {
     const certification = JSON.parse(cert);
 
     // define channel where embed is stored
-    const primaryGuildChannel = await message.guild.channels.cache.find(ch => ch.name === config.GuidelinesChannelName);
+    const primaryGuildChannel = await message.guild.channels.cache.find(ch => ch.name === config.other.guidelinesChannelName);
 
     // when primaryGuildChannel is not found
-    if (!primaryGuildChannel) return message.reply(`${TEAemoji()} I can't find the channel with a global message to send!\nMake sure the channel has a proper name: **${config.GuidelinesChannelName}**`)
+    if (!primaryGuildChannel) return message.reply(`${TEAemoji()} I can't find the channel with a global message to send!\nMake sure the channel has a proper name: **${config.other.guidelinesChannelName}**`)
         .then(message => message.delete({ timeout: 15000 })).catch(() => { return });
 
     // if command sent in the primaryGuildChannel
@@ -47,11 +47,11 @@ module.exports.run = async (bot, message) => {
         // forEach to send/update guidelines
         bot.guilds.cache.forEach((guild) => {
             if (guild.id === config.TEAserverID) return;
-            const channel = guild.channels.cache.find(ch => ch.name === config.GuidelinesChannelName);
+            const channel = guild.channels.cache.find(ch => ch.name === config.other.guidelinesChannelName);
 
             if (certification[guild.id]) {
                 if (channel) return updateGuidelines(guild, channel, primaryMessage.embeds[0]);
-                else return console.error(`🔴 '${guild.name}' (${guild.owner.user.tag}) - No #${config.GuidelinesChannelName} channel found.`);
+                else return console.error(`🔴 '${guild.name}' (${guild.owner.user.tag}) - No #${config.other.guidelinesChannelName} channel found.`);
             } else return;
         });
 

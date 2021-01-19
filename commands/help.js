@@ -1,4 +1,4 @@
-const { Discord, getCommands, getCommand, TEAlogo, messageRemoverWithReact } = require('../tea');
+const { Discord, getCommands, getCommand, TEAlogo, messageRemoverWithReact } = require('../teaBot');
 const config = require("../bot-settings.json");
 
 module.exports.help = {
@@ -23,7 +23,7 @@ module.exports.run = async (bot, message, args) => {
                 .setAuthor(`Guidelines help`, TEAlogo)
                 .setDescription(`Follow the instructions below to ensure that the guidelines work.`)
                 .addFields(
-                    { name: 'Create a new channel for guidelines:', value: `Channel name has to match '**${config.GuidelinesChannelName}**' (feel free to copy).`, inline: false },
+                    { name: 'Create a new channel for guidelines:', value: `Channel name has to match '**${config.other.guidelinesChannelName}**' (feel free to copy).`, inline: false },
                     { name: `Set the following channel permissions for the bot:`, value: `✅ Read Messages\n✅ Send Messages\n✅ Embed Links\n✅ Read Message History`, inline: false },
                     { name: '‏‏‎ ‎', value: `That's it, within a day you should receive a new message from the bot with the latest guidelines.`, inline: false },
                 )

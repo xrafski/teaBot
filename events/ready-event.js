@@ -1,4 +1,4 @@
-const { bot, BotVersion, errorLog } = require('../tea');
+const { bot, BotVersion, errorLog } = require('../teaBot');
 const config = require("../bot-settings.json");
 bot.login(config.BotToken);
 
