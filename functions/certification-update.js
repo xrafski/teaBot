@@ -15,18 +15,22 @@ const pool = mysql.createPool({
 });
 
 pool.on('acquire', function (connection) {
-    console.debug('certification-update.js:1 - Connection %d acquired', connection.threadId);
+    // console.debug('certification-update.js:1 - Connection %d acquired', connection.threadId);
+    console.debug(`%c⧭ certification-update.js:1 - Connection ${connection.threadId} acquired`, 'color: #ffffff');
 });
 
 pool.on('release', function (connection) {
-    console.debug('certification-update.js:2 - Connection %d released', connection.threadId);
+    // console.debug('certification-update.js:2 - Connection %d released', connection.threadId);
+    console.debug(`%c⧭ certification-update.js:2 - Connection ${connection.threadId} released`, 'color: #ffffff');
 });
 
 pool.on('enqueue', function () {
-    console.error('certification-update.js:3 - Waiting for available connection slot');
+    // console.debug('certification-update.js:3 - Waiting for available connection slot!');
+    console.debug('%c⧭ certification-update.js:3 - Waiting for available connection slot!', 'color: #ff1100');
 });
 
 function certificationUpdate() {
+    const timer = process.hrtime();
     return new Promise((resolve, reject) => {
         const spreadsheet = new google.auth.JWT(
             keys.client_email,
@@ -72,12 +76,12 @@ function certificationUpdate() {
             });
 
             // Test Servers (DeleteMe)
-            // JSONobj.push(['551785335638589451', 'Test Server [Primary]', null, null, null, null, null]);
-            // JSONobj.push(['739519144344551497', 'Test Server #1', null, null, null, null, null]);
-            // JSONobj.push(['740996597424586852', 'Test Server #2', null, null, null, null, null]);
-            // JSONobj.push(['741573084469002274', 'Test Server #3', null, null, null, null, null]);
-            // JSONobj.push(['741573155642015744', 'Test Server #4', null, null, null, null, null]);
-            // JSONobj.push(['741573211203960853', 'Test Server #5', null, null, null, null, null]);
+            JSONobj.push(['551785335638589451', 'Test Server [Primary]', null, null, null, null, null]);
+            JSONobj.push(['739519144344551497', 'Test Server #1', null, null, null, null, null]);
+            JSONobj.push(['740996597424586852', 'Test Server #2', null, null, null, null, null]);
+            JSONobj.push(['741573084469002274', 'Test Server #3', null, null, null, null, null]);
+            JSONobj.push(['741573155642015744', 'Test Server #4', null, null, null, null, null]);
+            JSONobj.push(['741573211203960853', 'Test Server #5', null, null, null, null, null]);
 
             // Additional records for hidden TEA servers.
             JSONobj = [...JSONobj, ['790711561537716226', 'Trove Bug Reports (HIDDEN)', null, null, null, null, null]];
@@ -85,7 +89,7 @@ function certificationUpdate() {
             pool.getConnection(function (error, connection) {
                 if (error) {
                     reject(error);
-                    return console.error(`certification-update.js:1 certificationUpdate() ❌ MySQL login error: '${error.code}'`);
+                    return; console.error(`certification-update.js:1 certificationUpdate() ❌ MySQL login error: '${error.code}'`);
                 }
                 runQuery(connection);
             })
@@ -93,24 +97,26 @@ function certificationUpdate() {
 
             function runQuery(connection) {
                 // Use the connection to TRUNCATE the current table data
-                connection.query('TRUNCATE club_roster', function (error, results, fields) {
+                connection.query('TRUNCATE certification_table', function (error, results, fields) {
                     if (error) {
                         connection.release();
                         reject(error);
-                        return console.error(`certification-update.js:2 certificationUpdate() ❌ TRUNCATE query error: '${error.code}'`);
+                        return; console.error(`certification-update.js:2 certificationUpdate() ❌ TRUNCATE query error: '${error.code}'`);
                     }
 
                     // Run another query to put data into cleared table
-                    connection.query('INSERT INTO club_roster (guildDiscordID, guildName, guildJoinworld, guildDescription, guildRequirements, guildDiscordLink, guildRepresentative) VALUES ?', [JSONobj], function (error, results, fields) {
+                    connection.query('INSERT INTO certification_table (guildDiscordID, guildName, guildJoinworld, guildDescription, guildRequirements, guildDiscordLink, guildRepresentative) VALUES ?', [JSONobj], function (error, results, fields) {
                         if (error) {
                             connection.release();
                             reject(error);
-                            return console.error(`certification-update.js:3 certificationUpdate() ❌ INSERT query error: '${error.code}'`);
+                            return; console.error(`certification-update.js:3 certificationUpdate() ❌ INSERT query error: '${error.code}'`);
                         }
 
                         // if all was good relase the connection and resolve function
                         connection.release();
-                        resolve('👉 All good!');
+                        const timeDiff = process.hrtime(timer);
+                        // const timeInMs = (timeDiff[0]* 1000000000 + timeDiff[1]) / 1000000; // convert first to ns then to ms
+                        resolve(`👉 Certification has been updated with ${results.warningCount} warning/s in ${timeDiff[0]}.${timeDiff[1].toString().slice(0,3)}s.`);
                     })
                 })
             }

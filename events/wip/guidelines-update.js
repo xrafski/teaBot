@@ -1,11 +1,11 @@
-const config = require("../bot-settings.json");
-const { bot } = require('../teaBot');
+const config = require("../../bot-settings.json");
+const { bot } = require('../../teaBot');
 const fs = require('fs');
 
 bot.on('ready', () => {
-    setInterval(() => { // Update guidelines on all TEA members (every 24 hours).
-        checkGuidelines();
-    }, 3600000 * 24);
+    // setInterval(() => { // Update guidelines on all TEA members (every 24 hours).
+    //     checkGuidelines();
+    // }, 3600000 * 24);
 });
 
 async function checkGuidelines() {

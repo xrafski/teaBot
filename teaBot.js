@@ -6,7 +6,7 @@ require('console-stamp')(console, 'dd/mm/yyyy - HH:MM:ss');
 const bot = new Discord.Client({ partials: ['MESSAGE', 'REACTION'] });
 
 // define current bot version
-const BotVersion = 'pre.alpha7';
+const BotVersion = 'pre.alpha8';
 
 // define icon image url for embeds
 const TEAlogo = 'https://skillez.eu/images/discord/teabanner.png'
@@ -86,11 +86,63 @@ module.exports = {
 		return bot.commands;
 	},
 
-	botReply: function (text, message, time, deleteStatus) {
-		if (deleteStatus) {
-			return message.channel.send(text)
+	// botReply: function (text, message, time, deleteStatus) {
+	// 	if (deleteStatus) {
+	// 		return message.channel.send(text)
+	// 			.then(message => { if (message && message.deletable) message.delete({ timeout: time }).catch(() => { }); });
+	// 	} else return message.channel.send(text);
+	// },
+
+	botReply: function (text, message, time, deleteStatus, attachFile, embedImage) {
+		if (embedImage) {
+			if (deleteStatus) {
+				if (text) {
+					const imageFileSplit = embedImage.split('/').slice(-1).toString();
+					const embed_message = new Discord.MessageEmbed()
+						.setColor('RANDOM')
+						.attachFiles([embedImage])
+						.setImage(`attachment://${imageFileSplit}`)
+					return message.reply(text, embed_message)
+						.then(message => { if (message && message.deletable) message.delete({ timeout: time }).catch(() => { }); });
+				} else {
+					const imageFileSplit = embedImage.split('/').slice(-1).toString();
+					const embed_message = new Discord.MessageEmbed()
+						.setColor('RANDOM')
+						.attachFiles([embedImage])
+						.setImage(`attachment://${imageFileSplit}`)
+					return message.reply(embed_message)
+						.then(message => { if (message && message.deletable) message.delete({ timeout: time }).catch(() => { }); });
+				}
+			}
+			else if (text) {
+				const imageFileSplit = embedImage.split('/').slice(-1).toString();
+				const embed_message = new Discord.MessageEmbed()
+					.setColor('RANDOM')
+					.attachFiles([embedImage])
+					.setImage(`attachment://${imageFileSplit}`)
+				return message.reply(text, embed_message);
+			} else {
+				const imageFileSplit = embedImage.split('/').slice(-1).toString();
+				const embed_message = new Discord.MessageEmbed()
+					.setColor('RANDOM')
+					.attachFiles([embedImage])
+					.setImage(`attachment://${imageFileSplit}`)
+				return message.reply(embed_message);
+			}
+		}
+		else if (attachFile) {
+			// Create the attachment using MessageAttachment
+			const attachment = new Discord.MessageAttachment(attachFile);
+
+			if (deleteStatus) {
+				return message.reply(text, attachment)
+					.then(message => { if (message && message.deletable) message.delete({ timeout: time }).catch(() => { }); });
+			} else return message.reply(text, attachment);
+		}
+		else if (deleteStatus) {
+			return message.reply(text,)
 				.then(message => { if (message && message.deletable) message.delete({ timeout: time }).catch(() => { }); });
-		} else return message.channel.send(text);
+		} else return message.reply(text);
 	},
 
 	embedMessage: function (text, user) {
@@ -119,8 +171,8 @@ module.exports = {
 	getEmoji: function (serverID, emojiName) {
 		let getEmoji = bot.guilds.cache.get(serverID).emojis.cache.find(emoji => emoji.name === emojiName);
 		if (getEmoji) return getEmoji;
-		// else return getEmoji = '🐛';
-		else return undefined;
+		else return getEmoji = '🐛';
+		// else return undefined;
 	},
 
 	messageRemoverWithReact: async function (message, author) {

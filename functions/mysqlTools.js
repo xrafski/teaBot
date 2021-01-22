@@ -4,7 +4,7 @@
 const config = require("../bot-settings.json");
 const mysql = require('mysql');
 const pool = mysql.createPool({
-  connectionLimit: 10,
+  connectionLimit: 25,
   host: config.mysql.host,
   user: config.mysql.user,
   password: config.mysql.password,

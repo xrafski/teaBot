@@ -1,2 +1,2 @@
 # teaBot
-Discord bot for TEA pre.alpha7
+Discord bot for TEA pre.alpha8

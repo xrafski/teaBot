@@ -2,24 +2,22 @@ const { bot, errorLog } = require('../teaBot');
 const cron = require('node-cron');
 const certification = require('../functions/certification-update');
 
-
-
 bot.on('ready', () => {
-    cron.schedule('0 * * * *', () => { // https://crontab.guru/examples.html // DEBUG EVERY HOUR DeleteMe
+    cron.schedule('0 10 * * *', () => { // https://crontab.guru/examples.html // Daily at 10AM CEST
         const lastUpdate = new Date(Date.now()).toUTCString();
-        console.error('Daily Audo Certification Update:', lastUpdate);
+        console.log(`%c⧭ Certification Update [Daily] ${lastUpdate}`, 'color: #24ff24',);
         certification.certUpdate()
             .then(console.debug)
-            .catch(error => { });
+            .catch(error => console.error(`auto-certification-update.js:1 ${error.message}`));
     });
 
-    // setTimeout(() => {
-    //     const lastUpdate = new Date(Date.now()).toUTCString();
-    //     console.error('Daily Audo Certification Update:', lastUpdate);
-    //     certification.certUpdate()
-    //         .then(console.debug)
-    //         .catch(error => { });
-    // }, 5000);
+    setTimeout(() => {
+        const lastUpdate = new Date(Date.now()).toUTCString(); // at bot startup
+        console.log(`%c⧭ Certification Update [Bot startup] ${lastUpdate}`, 'color: #24ff24',);
+        certification.certUpdate()
+            .then(console.debug)
+            .catch(error => console.error(`auto-certification-update.js:2 ${error.message}`));
+    }, 10000);
 
     //////////////////////////////////////////////////////////////////////////////////////////////
 
