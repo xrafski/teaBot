@@ -3,7 +3,7 @@ const { TEAemoji } = require('../teaBot');
 
 module.exports.help = {
     name: "uptime",
-    description: "Shows the current uptime of the bot.",
+    description: "Current uptime of the bot.",
     type: "public",
     usage: `**${config.BotPrefix}uptime**`
 };

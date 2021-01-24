@@ -1,49 +1,25 @@
-const { errorLog } = require('../teaBot');
+const { botReply, getCommand } = require('../teaBot');
 const config = require("../bot-settings.json");
 
 module.exports.help = {
     name: "reload",
-    description: "Reload or load a new commands.",
+    description: "Reload a command.",
     type: "administrator",
-    usage: `**${config.BotPrefix}command load/reload commandName**\n${config.BotPrefix}reload help\n${config.BotPrefix}load help`
+    usage: `**${config.BotPrefix}reload** commandName`
 };
 
 module.exports.run = async (bot, message, args) => {
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    //                                    reload commandName                                    //
-    //////////////////////////////////////////////////////////////////////////////////////////////
-
-    if (!args.length) return message.reply(`Wrong command format, type **${config.BotPrefix}help ${module.exports.help.name}** to see usage and examples!`)
-        .then(message => message.delete({ timeout: 10000 })).catch(() => { return });
+    if (!args.length) return botReply(`Wrong command format, type **${config.BotPrefix}help ${module.exports.help.name}** to see usage and examples!`, message, 10000, true, false, false);
 
     const commandName = args[0].toLowerCase();
-    const command = bot.commands.get(commandName);
+    const command = getCommand(commandName);
 
     if (command) {
         delete require.cache[require.resolve(`./${command.help.name}.js`)];
         try {
             const reloadCommand = require(`./${command.help.name}.js`);
             bot.commands.set(reloadCommand.help.name, reloadCommand);
-
-            return message.reply(`The command \`${command.help.name}\` has been reloaded!`)
-                .then(message => message.delete({ timeout: 10000 })).catch(() => { return });
-
-        } catch (error) {
-            errorLog(`reload.js:1 Error while reloading a command`, error);
-            message.channel.send(`There was an error while reloading a command \`${command.help.name}\`:\n\`${error.message}\``)
-                .then(message => message.delete({ timeout: 20000 })).catch(() => { return });
-        }
-    } else {
-        try {
-            const loadCommand = require(`./${commandName}.js`);
-            bot.commands.set(loadCommand.help.name, loadCommand);
-            return message.channel.send(`The command \`${commandName}\` has been loaded, ${message.author}!`)
-                .then(message => message.delete({ timeout: 10000 })).catch(() => { return });
-        }
-        catch (error) {
-            message.reply(`There is no \`${commandName}\` command and cannot be reloaded!`)
-                .then(message => message.delete({ timeout: 10000 })).catch(() => { return });
-        }
-    }
-
+            return botReply(`The command \`${command.help.name}\` has been reloaded!`, message, 10000, true, false, false);
+        } catch (error) { return botReply(`There was an error while reloading a command \`${command.help.name}\`:\n\`${error.message}\``, message, 20000, true, false, false); }
+    } else return botReply(`There is no \`${commandName}\` command and cannot be reloaded!`, message, 10000, true, false, false);
 }

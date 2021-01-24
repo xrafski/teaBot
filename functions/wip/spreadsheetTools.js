@@ -1,9 +1,9 @@
 // spreadsheetTools.js
 // ================================
 
-const config = require("../bot-settings.json");
+const config = require("../../bot-settings.json");
 const { google } = require('googleapis');
-const keys = require('../Laezaria-Bot-292d692ec77c.json');
+const keys = require('../../Laezaria-Bot-292d692ec77c.json');
 
 function clubRosterData() {
     return new Promise((resolve, reject) => {
@@ -50,16 +50,8 @@ function clubRosterData() {
                 JSONobj.push([guildDiscordID, guildName, guildJoinworld, guildDescription, guildRequirements, guildDiscordLink, guildRepresentative]);
             });
 
-            // Test Servers (DeleteMe)
-            // JSONobj.push(['551785335638589451', 'Test Server [Primary]', null, null, null, null, null]);
-            // JSONobj.push(['739519144344551497', 'Test Server #1', null, null, null, null, null]);
-            // JSONobj.push(['740996597424586852', 'Test Server #2', null, null, null, null, null]);
-            // JSONobj.push(['741573084469002274', 'Test Server #3', null, null, null, null, null]);
-            // JSONobj.push(['741573155642015744', 'Test Server #4', null, null, null, null, null]);
-            // JSONobj.push(['741573211203960853', 'Test Server #5', null, null, null, null, null]);
-
             // Additional records for hidden TEA servers.
-            JSONobj = [...JSONobj, ['790711561537716226', 'Trove Bug Reports (HIDDEN)', null, null, null, null, null]];
+            JSONobj = JSONobj.concat(config.certification.hiddenServers);
 
             // If all above was done then resolve the promise with the filtered spreadsheet data.
             return resolve(JSONobj);

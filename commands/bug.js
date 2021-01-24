@@ -3,16 +3,12 @@ const { TEAemoji, TEAlogo, Discord, errorLog } = require('../teaBot');
 
 module.exports.help = {
     name: "bug",
-    description: "Allows people to report trove game bugs.",
+    description: "Report trove game bugs.",
     type: "dm",
-    usage: `**${config.BotPrefix}bug** on direct message`
+    usage: `**${config.BotPrefix}bug** on direct message with the bot.`
 };
 
 module.exports.run = async (bot, message) => {
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    //                                            tip                                           //
-    //////////////////////////////////////////////////////////////////////////////////////////////
-
     let qRequester;
     let qNickname = 'None';
     let qPlatform = 'None';
@@ -467,5 +463,4 @@ qRepro: ${qRepro}
 qMedia: ${qMedia}
 qRequester: ${qRequester} - ${qRequester.tag} - ${qRequester.id}`);
     }
-
 }

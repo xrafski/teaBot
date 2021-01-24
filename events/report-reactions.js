@@ -1,14 +1,10 @@
 const { bot, TEAemoji, errorLog, botReply, embedMessage, Discord, TEAlogo, emojiCharacters } = require('../teaBot');
 const config = require("../bot-settings.json");
 
-//////////////////////////////////////////////////////////////////////////////////////////////
-//                                   TIP REACTION HANDLER                                   //
-//////////////////////////////////////////////////////////////////////////////////////////////
-
 bot.on('messageReactionAdd', async (reaction, user) => {
-    if (reaction.message.channel.id === config.report.bugQueueChannelID || reaction.message.channel.id === config.report.bugGraphicalChannelID || reaction.message.channel.id === config.report.bugUIChannelID
-        || reaction.message.channel.id === config.report.bugCombatChannelID || reaction.message.channel.id === config.report.bugBuildingChannelID || reaction.message.channel.id === config.report.bugCriticalChannelID
-        || reaction.message.channel.id === config.report.bugMiscalculationChannelID || reaction.message.channel.id === config.report.bugInsufficientDataChannelID) {
+
+    const channelArray = [config.report.bugQueueChannelID, config.report.bugGraphicalChannelID, config.report.bugCombatChannelID, config.report.bugUIChannelID, config.report.bugBuildingChannelID, config.report.bugCriticalChannelID, config.report.bugMiscalculationChannelID, config.report.bugInsufficientDataChannelID];
+    if (channelArray.includes(reaction.message.channel.id)) {
         if (user.id === bot.user.id) return;
 
         return reaction.message.fetch()
@@ -83,8 +79,7 @@ bot.on('messageReactionAdd', async (reaction, user) => {
                         if (message) {
                             reaction.message.delete().catch(() => { });
                             botReply(embedMessage(`${user} ${TEAemoji()} [Report](${message.url}) has been moved to ${BUGchannel}!`), reaction.message, 10000, true, false, false);
-                        }
-                        else return;
+                        } else return;
                     })
                     .catch(error => { errorLog(`tip-reactions.js:1 moveTheReport() Error in the function - probably missing permissions (READ_MESSAGES/READ_MESSAGE_HISTORY/ADD_REACTIONS)`, error); })
 
@@ -92,12 +87,6 @@ bot.on('messageReactionAdd', async (reaction, user) => {
                 botReply(embedMessage(`${user} ${TEAemoji()} Error to move report, try again later...`), reaction.message, 10000, true, false, false);
                 errorLog(`tip-reactions.js:2 moveTheReport() ${type} channel is missing read permissions or maybe wrong channel ID in conf file.`);
             }
-        }
-
-        function autoReportReplyReset(message) {
-            const embedContent = message.embeds[0];
-            const replyConfirmation = new Discord.MessageEmbed(embedContent).setDescription('');
-            message.edit(replyConfirmation)
         }
 
         function confirmationMenu(message, reactUser) {
@@ -143,29 +132,32 @@ bot.on('messageReactionAdd', async (reaction, user) => {
         function autoReportReply(message) {
             const embedContent = message.embeds[0];
             const requesterID = message.embeds[0].title.split(' ').slice(-1).toString().replace(/\D/g, '');
-            // console.debug(requesterID);
 
             bot.users.fetch(requesterID)
                 .then(requester => {
-                    // console.debug(requester);
                     requester.send(embedMessage(`Unfortunately, ${TEAemoji()} **TEA** is unable to utilize this information.\nPlease contact customer support [here](https://support.gamigo.com/hc/en-us "gamigo Group Support Center").`))
                         .then(messageSent => {
                             if (messageSent) {
                                 const replyConfirmation = new Discord.MessageEmbed(embedContent).setDescription(`💬 Auto-Reply has been sent`);
-                                message.edit(replyConfirmation).catch(error => console.debug(`Error to edit the report message #1`, error));
+                                message.edit(replyConfirmation).catch(error => console.debug(`Error to edit the report message #1`, error.message));
                             } else console.debug(`messageSent is undefined aka DM is not sent - ${message.url}`);
                         })
                         .catch(error => {
-                            // console.debug(`Error to send a direct message`, error);
                             const errorReply = new Discord.MessageEmbed(embedContent).setDescription(`💬 Auto-Reply has failed successfully!\n❌ ${error.message}`);
-                            message.edit(errorReply).catch(error => console.debug(`Error to edit the report message #2`, error));
+                            message.edit(errorReply).catch(error => console.debug(`Error to edit the report message #2`, error.message));
                         });
                 })
                 .catch(error => {
                     // console.debug(`Error to fetch the user`, error);
                     const errorReply = new Discord.MessageEmbed(embedContent).setDescription(`💬 Auto-Reply has failed successfully!\n❌ ${error.message}`);
-                    message.edit(errorReply).catch(error => console.debug(`Error to edit the report message #3`, error));
+                    message.edit(errorReply).catch(error => console.debug(`Error to edit the report message #3`, error.message));
                 });
+        }
+
+        function autoReportReplyReset(message) {
+            const embedContent = message.embeds[0];
+            const replyConfirmation = new Discord.MessageEmbed(embedContent).setDescription('');
+            message.edit(replyConfirmation)
         }
 
     } else return;

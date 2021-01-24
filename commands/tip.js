@@ -3,9 +3,9 @@ const { TEAemoji, TEAlogo, Discord, errorLog } = require('../teaBot');
 
 module.exports.help = {
     name: "tip",
-    description: "Allows people to report players privately.",
+    description: "Report players privately.",
     type: "disabled",
-    usage: `**${config.BotPrefix}tip**`
+    usage: `**${config.BotPrefix}tip** on direct message with the bot.`
 };
 
 module.exports.run = async (bot, message) => {

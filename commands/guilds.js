@@ -1,20 +1,13 @@
 const config = require("../bot-settings.json");
-const { TEAemoji } = require('../teaBot');
+const { getEmoji, botReply } = require('../teaBot');
 
 module.exports.help = {
     name: "guilds",
-    description: "Displays amount of guilds the bot has joined.",
+    description: "Amount of guilds the bot is in.",
     type: "public",
     usage: `**${config.BotPrefix}guilds**`
 };
 
 module.exports.run = async (bot, message) => {
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    //                                         guilds                                           //
-    //////////////////////////////////////////////////////////////////////////////////////////////
-
-    const guildsNumber = Math.round(bot.guilds.cache.size - 1);
-    // const memberCount = bot.users.cache.size;
-    return message.channel.send(`${TEAemoji()} TEA bot is watching **${guildsNumber}** guilds.`)
-        .then(message => message.delete({ timeout: 20000 })).catch(() => { return });
+    return botReply(`${getEmoji(config.TEAserverID, 'TEA')} TEA is watching **${Math.round(bot.guilds.cache.size)}** guilds.`, message, 15000, true, false, false);
 }

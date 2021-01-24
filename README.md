@@ -1,2 +1,2 @@
 # teaBot
-Discord bot for TEA pre.alpha8
+Private discord bot for Trove Ethics Alliance

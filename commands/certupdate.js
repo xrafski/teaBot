@@ -1,21 +1,22 @@
 const config = require("../bot-settings.json");
-const { certUpdate } = require("../functions/certification-update");
+const { certUpdate } = require('../functions/update-certification');
+const { botReply, getEmoji, embedMessage } = require("../teaBot");
 
 module.exports.help = {
     name: "certupdate",
-    description: "work in progress",
-    type: "disabled",
+    description: "Manual certification database update",
+    type: "administrator",
     usage: `**${config.BotPrefix}certupdate**`
 };
 
 module.exports.run = async (bot, message, args) => {
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    //                                          uptime                                          //
-    //////////////////////////////////////////////////////////////////////////////////////////////
-
-    console.debug(`tea!certupdate command`);
-
     certUpdate()
-        .then(xxx => console.debug('✅ tea!certupdate', xxx))
-        .catch(error => console.error('🔴 tea!certupdate ❌ ERROR 🔴\n', error));
+        .then(results => {
+            console.debug(`✅ tea!certupdate used by '${message.author.tag}'`, results);
+            return botReply(embedMessage(`${getEmoji(config.TEAserverID, 'TEA')} ${results}`, message.author), message, 10000, true, false, false);
+        })
+        .catch(error => {
+            console.error(`🔴 tea!certupdate used by '${message.author.tag}' ❌ ${error.message}`)
+            return botReply(embedMessage(`${getEmoji(config.TEAserverID, 'TEA')} 👉 ERROR to update certification:\n🔴 **${error.code}**`, message.author), message, 20000, true, false, false);
+        });
 }

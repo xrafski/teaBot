@@ -12,15 +12,15 @@ const pool = mysql.createPool({
 });
 
 pool.on('acquire', function (connection) {
-  console.log('mysqlTools.js - Connection %d acquired', connection.threadId);
+  console.debug('mysqlTools.js - Connection %d acquired', connection.threadId);
 });
 
 pool.on('release', function (connection) {
-  console.log('mysqlTools.js - Connection %d released', connection.threadId);
+  console.debug('mysqlTools.js - Connection %d released', connection.threadId);
 });
 
 pool.on('enqueue', function () {
-  console.log('mysqlTools.js - Waiting for available connection slot');
+  console.debug('mysqlTools.js - Waiting for available connection slot');
 });
 
 function mysqlQuery(sqlQuery) {

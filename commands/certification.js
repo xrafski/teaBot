@@ -4,18 +4,15 @@ const { getEmoji, botReply, embedMessage, TEAlogo, Discord } = require("../teaBo
 
 module.exports.help = {
     name: "certification",
-    description: "Shows if the guild is a certified TEA member.",
+    description: "Check if the club is certified TEA member.",
     type: "public",
     usage: `**${config.BotPrefix}certification** details(optional)`
 };
 
 module.exports.run = async (bot, message, args) => {
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    //                                           cert                                           //
-    //////////////////////////////////////////////////////////////////////////////////////////////
 
     if (args[0] === 'details') {
-        return mysqlQuery(`SELECT * FROM certification_table WHERE guildDiscordID=${message.guild.id}`)
+        return mysqlQuery(`SELECT * FROM ${config.mysql.cert_table_name} WHERE guildDiscordID=${message.guild.id}`)
             .then(results => {
                 if (results.length === 0) return printResultsMessage(undefined);
 
@@ -35,7 +32,7 @@ module.exports.run = async (bot, message, args) => {
             })
             .catch(error => console.error(`certification.js:1 mysqlQuery error`, error));
     } else {
-        return mysqlQuery(`SELECT * FROM certification_table WHERE guildDiscordID=${message.guild.id}`)
+        return mysqlQuery(`SELECT * FROM ${config.mysql.cert_table_name} WHERE guildDiscordID=${message.guild.id}`)
             .then(results => {
                 if (results.length != 0) return printResultsMessage(results[0].guildDiscordID);
                 else return printResultsMessage(undefined);
