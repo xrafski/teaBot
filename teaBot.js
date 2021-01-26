@@ -6,7 +6,7 @@ require('console-stamp')(console, 'dd/mm/yyyy - HH:MM:ss');
 const bot = new Discord.Client({ partials: ['MESSAGE', 'REACTION'] });
 
 // define current bot version
-const BotVersion = 'pre.alpha13';
+const BotVersion = 'pre.alpha14';
 
 // define icon image url for embeds
 const TEAlogo = 'https://skillez.eu/images/discord/teabanner.png'
@@ -79,11 +79,8 @@ module.exports = {
 	},
 
 	getCommand: function (commandName) {
-		return bot.commands.get(commandName);
-	},
-
-	getCommands: function () {
-		return bot.commands;
+		if(commandName) return bot.commands.get(commandName);
+		else return bot.commands;
 	},
 
 	botReply: function (text, message, time, attachFile, embedImage) {
