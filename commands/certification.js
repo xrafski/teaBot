@@ -28,16 +28,24 @@ module.exports.run = async (bot, message, args) => {
                     .setThumbnail(message.guild.iconURL())
                     .setFooter('Contact TEA Spreadsheet Manager if data is outdated!')
                     .setTimestamp()
-                botReply(embed_certification_details, message, 30000, false, false, false);
+                botReply(embed_certification_details, message, 30000, true, false, false);
             })
-            .catch(error => console.error(`certification.js:1 mysqlQuery error`, error));
+            .catch(error => {
+                console.error(`certification.js:1 mysqlQuery error ${error}`);
+                botReply('❌ Database error, try again later.', message, 10000, true, false, false);
+            });
+
+
     } else {
         return mysqlQuery(`SELECT * FROM ${config.mysql.cert_table_name} WHERE guildDiscordID=${message.guild.id}`)
             .then(results => {
                 if (results.length != 0) return printResultsMessage(results[0].guildDiscordID);
                 else return printResultsMessage(undefined);
             })
-            .catch(error => console.error(`certification.js:1 mysqlQuery error: ${error.code}`));
+            .catch(error => {
+                console.error(`certification.js:2 mysqlQuery error ${error}`);
+                botReply('❌ Database error, try again later.', message, 10000, true, false, false);
+            });
     }
 
     function printResultsMessage(guildID) {

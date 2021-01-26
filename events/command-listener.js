@@ -16,7 +16,7 @@ bot.on("message", async message => {
             case "administrator": {
                 if (message.channel.type != "dm") {
                     if (message.guild.id === config.TEAserverID && message.member.hasPermission("ADMINISTRATOR")) return cmdFile.run(bot, message, args);
-                    else botReply(`You don't have access to run **${config.BotPrefix}${cmdFile.help.name}**!`, message, 10000, true, false, false);
+                    else return botReply(`You don't have access to run **${config.BotPrefix}${cmdFile.help.name}**!`, message, 10000, true, false, false);
                 } else return botReply(`**${config.BotPrefix}${cmdFile.help.name}** is not available on DM!`, message, 0, false, false, false);
             }
             case "dm": if (message.channel.type === "dm") return cmdFile.run(bot, message, args);

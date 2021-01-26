@@ -1,4 +1,4 @@
-const { bot, Discord, TEAlogo, sendEmbedLog, errorLog } = require('../teaBot');
+const { bot, Discord, TEAlogo, sendEmbedLog } = require('../teaBot');
 const cron = require('node-cron');
 const { google } = require('googleapis');
 const config = require("../bot-settings.json");
@@ -7,7 +7,9 @@ const keys = require('../Laezaria-Bot-292d692ec77c.json');
 bot.on('ready', () => { // https://crontab.guru/examples.html
     // Check TEA spreadsheet for new responses “At minute 30 past every 3rd hour.” (Reports/Appeals)
     cron.schedule('30 */3 * * *', () => {
-        checkTEAspreadsheet();
+        const lastUpdate = new Date(Date.now()).toUTCString();
+        console.log(`%c⧭ Checking appeal/report spreadsheet [cron] ${lastUpdate}`, 'color: #b657ff',);
+        return checkTEAspreadsheet();
     });
 
     //////////////////////////////////////////////////////////////////////////////////////////////
@@ -21,7 +23,7 @@ bot.on('ready', () => { // https://crontab.guru/examples.html
         );
 
         spreadsheet.authorize(function (error, tokens) {
-            if (error) return console.error(error);
+            if (error) return console.error(`tea-google-form.js:1 checkTEAspreadsheet() Login to google sheet service ${error}`);
             reportgsrun(spreadsheet);
             appealgsrun(spreadsheet);
         });
@@ -29,11 +31,13 @@ bot.on('ready', () => { // https://crontab.guru/examples.html
         async function reportgsrun(cl) {
             const gsapi = google.sheets({ version: 'v4', auth: cl })
 
-            let reportS = await gsapi.spreadsheets.values.get({
+            const reportS = await gsapi.spreadsheets.values.get({
                 spreadsheetId: config.formAppealReport.spreadsheetIdentifier,
                 range: 'Reports!A1:F10'
-            }).catch(error => errorLog(`tea-google-form.js:1 reportgsrun()\nSomething wrong with google sheet service.`, error));
+            })
+                .catch(error => console.error(`tea-google-form.js:1 reportgsrun() ❌ Error to get data from the spreadsheet ${error}`));
 
+            if (!reportS) return;
             const reportsheet = reportS.data.values;
             if (!reportsheet[1]) return;
 
@@ -50,8 +54,7 @@ bot.on('ready', () => { // https://crontab.guru/examples.html
                 )
                 .setFooter(`• ${reportsheet[1][0]} ${reportsheet[0][0]}`)
                 .setThumbnail(TEAlogo)
-
-            await sendEmbedLog(embed_reports_sheet_information, config.formAppealReport.TEAreportChannel, 'TEA - Report')
+            sendEmbedLog(embed_reports_sheet_information, config.formAppealReport.TEAreportChannel, 'TEA - Report');
 
             // Remove 1st row if not empty
             await gsapi.spreadsheets.batchUpdate(
@@ -73,20 +76,21 @@ bot.on('ready', () => { // https://crontab.guru/examples.html
                     }
                 },
                 function (err, response) {
-                    if (err) { errorLog(`tea-google-form.js:2 reportgsrun()\nSomething wrong with google sheet service.`, error); }
+                    if (err) return console.error(`tea-google-form.js:2 reportgsrun() ❌ Error to batchUpdate the spreadsheet ${err}`);
                 });
         }
 
         async function appealgsrun(cl) {
             const gsapi = google.sheets({ version: 'v4', auth: cl })
 
-            let appealS = await gsapi.spreadsheets.values.get({
+            const appealS = await gsapi.spreadsheets.values.get({
                 spreadsheetId: config.formAppealReport.spreadsheetIdentifier,
                 range: 'Appeals!A1:F10'
-            }).catch(error => errorLog(`tea-google-form.js:1 appealgsrun()\nSomething wrong with google sheet service.`, error));
+            })
+                .catch(error => console.error(`tea-google-form.js:1 appealgsrun() ❌ Error to get data from the spreadsheet ${error}`));
 
+            if (!appealS) return;
             const appealsheet = appealS.data.values;
-
             if (!appealsheet[1]) return;
 
             // define the embed: appeal information from the "Appeals" sheet
@@ -100,8 +104,7 @@ bot.on('ready', () => { // https://crontab.guru/examples.html
                 )
                 .setFooter(`• ${appealsheet[1][0]} ${appealsheet[0][0]}`)
                 .setThumbnail(TEAlogo)
-
-            await sendEmbedLog(embed_appeals_sheet_information, config.formAppealReport.TEAappealChannel, 'TEA - Appeal')
+            sendEmbedLog(embed_appeals_sheet_information, config.formAppealReport.TEAappealChannel, 'TEA - Appeal');
 
             // Remove 1st row if not empty
             await gsapi.spreadsheets.batchUpdate(
@@ -123,7 +126,7 @@ bot.on('ready', () => { // https://crontab.guru/examples.html
                     }
                 },
                 function (err, response) {
-                    if (err) { errorLog(`tea-google-form.js:2 appealgsrun()\nSomething wrong with google sheet service.`, error); }
+                    if (err) return console.error(`tea-google-form.js:2 appealgsrun() ❌ Error to batchUpdate the spreadsheet ${err}`);
                 });
         }
     }

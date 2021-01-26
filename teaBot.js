@@ -6,7 +6,7 @@ require('console-stamp')(console, 'dd/mm/yyyy - HH:MM:ss');
 const bot = new Discord.Client({ partials: ['MESSAGE', 'REACTION'] });
 
 // define current bot version
-const BotVersion = 'pre.alpha10';
+const BotVersion = 'pre.alpha11';
 
 // define icon image url for embeds
 const TEAlogo = 'https://skillez.eu/images/discord/teabanner.png'
@@ -197,55 +197,34 @@ module.exports = {
 			});
 	},
 
-	sendEmbedLog: async function (embedMessage, channelID, webHookName) {
-		// Send a webhook message and create one if missing (no need to provide webhookID in the config file)
-		try {
-			var logChannel = bot.channels.cache.get(channelID);
-			const webhooks = await logChannel.fetchWebhooks();
-			const botwebhook = await webhooks.find(webhook => webhook.owner === bot.user && webhook.name === webHookName);
 
-			await botwebhook.send(embedMessage);
+	sendEmbedLog: function (embedMessage, channelID, webHookName) {
+		const logChannel = bot.channels.cache.get(channelID);
+		if (!logChannel) return console.error(`teaBot.js:1 sendEmbedLog() provided channelID(${channelID}) doesn't exist.`);
+		else {
 
-			// await botwebhook.send('Webhook test', {
-			//     username: 'username',
-			//     avatarURL: 'https://skillez.eu',
-			//     embeds: [embedMessage],
-			// });
+			logChannel.fetchWebhooks()
+				.then(hooks => {
+					const existingHook = hooks.find(hook => hook.owner === bot.user && hook.name === webHookName);
 
-		} catch (error) {
+					if (!existingHook) {
+						return logChannel.createWebhook(webHookName, {
+							avatar: 'https://skillez.eu/images/discord/teaicon.png',
+							reason: 'Webhook required to send log messages'
+						})
+							.then(hook => {
+								console.debug(`✅ A new webhook '${webHookName}' has been created in the #${logChannel.name} channel.`);
 
-			switch (error.message) {
-				case "Cannot read property 'send' of undefined": {
-					return logChannel.createWebhook(webHookName, {
-						avatar: 'https://skillez.eu/images/discord/teaicon.png',
-					})
-						.then(webhook => {
-							webhook.send(embedMessage);
-							return console.info(`teaBot.js:1 sendEmbedLog() Created webhook: '${webhook.name}' for the #${logChannel.name} channel.`);
-						});
-				}
-				case "Cannot read property 'fetchWebhooks' of undefined": {
-					if (!bot.users.cache.get(config.BotOwnerID)) return console.warn(`teaBot.js:2 sendEmbedLog() ❌ The bot Owner is UNDEFINED (probably wrong userID in: config.BotOwnerID)`);
-					bot.users.cache.get(config.BotOwnerID).send(`❌ an issue occurred with the **${bot.user.username}** application!` + "```" + `teaBot.js:3 sendEmbedLog()\nChannel 'logChannel' not found.` + "```" + error)
-						.then(() => console.error(`teaBot.js:3 sendEmbedLog()\nChannel 'logChannel' not found.`, error))
-						.catch((error) => { console.warn(`teaBot.js:4 sendEmbedLog() ❌ Owner has DMs disabled.`, error) });
-					return;
-				}
-				case "Missing Permissions": {
-					if (!bot.users.cache.get(config.BotOwnerID)) return console.warn(`teaBot.js:5 sendEmbedLog() ❌ The bot Owner is UNDEFINED (probably wrong userID in: config.BotOwnerID)`);
-					bot.users.cache.get(config.BotOwnerID).send(`❌ an issue occurred with the **${bot.user.username}** application!` + "```" + `teaBot.js:6 sendEmbedLog()\nProbably: MANAGE_WEBHOOKS.` + "```" + error)
-						.then(() => console.error(`teaBot.js:6 sendEmbedLog()\nProbably: MANAGE_WEBHOOKS.`, error))
-						.catch((error) => { console.warn(`teaBot.js:7 sendEmbedLog() ❌ Owner has DMs disabled.`, error) });
-					return;
-				}
-				default: {
-					if (!bot.users.cache.get(config.BotOwnerID)) return console.warn(`teaBot.js:8 sendEmbedLog() ❌ The bot Owner is UNDEFINED (probably wrong userID in: config.BotOwnerID)`);
-					bot.users.cache.get(config.BotOwnerID).send(`❌ an issue occurred with the **${bot.user.username}** application!` + "```" + `teaBot.js:9 sendEmbedLog()\nError trying to send a webhook.` + "```" + error)
-						.then(() => console.error(`teaBot.js:9 sendEmbedLog()\nError trying to send a webhook.`, error))
-						.catch((error) => { console.warn(`teaBot.js:10 sendEmbedLog() ❌ Owner has DMs disabled.`, error) });
-					return;
-				}
-			}
+								hook.send(embedMessage)
+									.catch(error => console.error(`teaBot.js:2 sendEmbedLog() Error to send webhook message ${error}`));
+							})
+							.catch(error => console.error(`teaBot.js:3 sendEmbedLog() Error to create a webhook ${error}`));
+					} else {
+						existingHook.send(embedMessage)
+							.catch(error => console.error(`teaBot.js:2 sendEmbedLog() Error to send webhook message ${error}`));
+					}
+				})
+				.catch(error => console.error(`teaBot.js:4 sendEmbedLog() Error to fetch webhooks for #${logChannel.name} channel ${error}`));
 		}
 	},
 
