@@ -24,10 +24,7 @@ pool.on('enqueue', function () {
 });
 
 function mysqlQuery(sqlQuery) {
-  // create promise with resolve and reject
   return new Promise((resolve, reject) => {
-    // Use the connection
-    // const sqlQuery = `SELECT * FROM \`${tableName}\``;
     pool.query(sqlQuery, function (error, results, fields) {
       if (error) return reject(error);
       return resolve(results);
@@ -36,9 +33,7 @@ function mysqlQuery(sqlQuery) {
 }
 
 function mysqlQueryArray(sqlQuery, arrayObject) {
-  // create promise with resolve and reject
   return new Promise((resolve, reject) => {
-    // Use the connection
     pool.query(sqlQuery, [arrayObject], function (error, results, fields) {
       if (error) return reject(error);
       return resolve(results);

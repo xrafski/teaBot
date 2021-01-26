@@ -6,7 +6,7 @@ require('console-stamp')(console, 'dd/mm/yyyy - HH:MM:ss');
 const bot = new Discord.Client({ partials: ['MESSAGE', 'REACTION'] });
 
 // define current bot version
-const BotVersion = 'pre.alpha14';
+const BotVersion = 'pre.alpha15';
 
 // define icon image url for embeds
 const TEAlogo = 'https://skillez.eu/images/discord/teabanner.png'
@@ -64,29 +64,35 @@ module.exports = {
 	emojiCharacters: emojiCharacters, // defines some discord emojis
 
 	ownerDM: function (message) {
-		let Owner = bot.users.cache.get(config.BotOwnerID);
-		Owner.send(message).catch(() => { return; });
+		message = message || 'Message is not provided';
+		const ownerObj = bot.users.cache.get(config.BotOwnerID);
+		if (ownerObj) {
+			ownerObj.send(message)
+				.catch(error => console.error(`teaBot.js:1 ownerDM() Error to send owner DM ${error}`));
+		} else return console.error(`teaBot.js:2 ownerDM() Bot owner is undefined probably wrong uID in config.BotOwnerID`);
 	},
 
 	errorLog: function (text, error) {
-		if (!error) error = '';
-		if (!text) text = 'Text is not provided';
+		error = error || 'No error provided';
+		text = text || 'No text provided';
+		console.error(`${text} ${error}`);
 
-		if (!bot.users.cache.get(config.BotOwnerID)) return console.warn(`teaBot.js:1 errorLog() ❌ The bot Owner is UNDEFINED (probably wrong userID in: config.BotOwnerID)`);
-		bot.users.cache.get(config.BotOwnerID).send(`❌ an issue occurred with the **${bot.user.username}** application!` + "```" + text + "```" + error)
-			.then(() => console.error(`${text}`, error))
-			.catch((error) => { console.warn(`teaBot.js:2 errorLog() ❌ Owner has DMs disabled.`, error) });
+		const ownerObj = bot.users.cache.get(config.BotOwnerID);
+		if (ownerObj) {
+			ownerObj.send(`❌ an issue occured with the ${bot.user.username} application!\n👉 **${text}**\n\`\`\`${error}\`\`\``)
+				.catch(error => console.error(`teaBot.js:1 errorLog() Error to send owner DM ${error}`));
+		} else return console.error(`teaBot.js:2 errorLog() Bot owner is undefined probably wrong uID in config.BotOwnerID`);
 	},
 
 	getCommand: function (commandName) {
-		if(commandName) return bot.commands.get(commandName);
-		else return bot.commands;
+		if (commandName) return bot.commands.get(commandName);
+		else return bot.commands; // return all commands if argument is not provided.
 	},
 
 	botReply: function (text, message, time, attachFile, embedImage) {
+		if (!message) return console.error(`teaBot.js:1 botReply() message object is not provided`);
 		const attachmentFile = (attachFile ? new Discord.MessageAttachment(attachFile) : undefined);
 		const imageFileSplit = (embedImage ? embedImage.split('/').slice(-1).toString() : undefined);
-		if(!message) return console.error(`teaBot.js:1 botReply() message object is not provided`);
 
 		if (time) { // check if time is provided
 			if (text) { // check if function has text provided
@@ -234,7 +240,7 @@ module.exports = {
 	},
 
 	messageRemoverWithReact: async function (message, author) {
-		await message.react('❌').catch(() => { return });
+		await message.react('❌').catch(error => console.error(`teaBot.js:1 messageRemoverWithReact() Error to add reaction ${error}`));
 
 		const emojiFilter = (reaction, user) => {
 			return ['❌'].includes(reaction.emoji.name) && !user.bot && author === user;
@@ -243,15 +249,13 @@ module.exports = {
 		message.awaitReactions(emojiFilter, { max: 1, time: 60000 })
 			.then(collected => {
 				const reaction = collected.first();
-				if (reaction.emoji.name === '❌') return message.delete().catch(() => { return });
+				if (reaction.emoji.name === '❌')
+					if (message.deletable) return message.delete().catch(error => console.error(`teaBot.js:2 messageRemoverWithReact() ${error}`));
 			})
 			.catch(error => {
-				if (error.message === "Cannot read property 'emoji' of undefined") return message.delete().catch(() => { return });
-
-				if (!bot.users.cache.get(config.BotOwnerID)) return console.warn(`teaBot.js:4 messageRemoverWithReact() ❌ The bot Owner is UNDEFINED (probably wrong userID in: config.BotOwnerID)`);
-				bot.users.cache.get(config.BotOwnerID).send(`❌ an issue occurred with the **${bot.user.username}** application!` + "```" + `teaBot.js:5 messageRemoverWithReact()` + "```" + error)
-					.then(() => console.error(`teaBot.js:5 messageRemoverWithReact().`, error))
-					.catch((error) => { console.warn(`teaBot.js:6 messageRemoverWithReact() ❌ Owner has DMs disabled.`, error) });
+				if (message.deletable) message.delete().catch(error => console.error(`teaBot.js:3 messageRemoverWithReact() ${error}`));
+				if (error.message === "Cannot read property 'emoji' of undefined") return;
+				else console.error(`teaBot.js:4 messageRemoverWithReact() ${error}`);
 			});
 	},
 
