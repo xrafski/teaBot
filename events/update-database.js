@@ -8,7 +8,7 @@ bot.on('ready', () => {  // https://crontab.guru/examples.html
         const lastUpdate = new Date(Date.now()).toUTCString();
         console.log(`%c⧭ Certification Update [Daily] ${lastUpdate}`, 'color: #24ff24',);
         certification.certUpdate()
-            .then(results => console.debug(`✅ update-database.js:1 ${results}`))
+            .then(results => console.debug(`✅ update-database.js:1 👉 Certification has been updated: ${results}`))
             .catch(error => console.error(`update-database.js:2 ${error.message}`));
     });
 
@@ -16,9 +16,9 @@ bot.on('ready', () => {  // https://crontab.guru/examples.html
         const lastUpdate = new Date(Date.now()).toUTCString(); // at bot startup
         console.log(`%c⧭ Certification Update [Bot startup] ${lastUpdate}`, 'color: #24ff24',);
         certification.certUpdate()
-            .then(results => console.debug(`✅ update-database.js:4 ${results}`))
+            .then(results => console.debug(`✅ update-database.js:4 👉 Certification has been updated: ${results}`))
             .catch(error => console.error(`update-database.js:5 ${error.message}`));
-    }, 60000);
+    }, 10000);
 
     //////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -26,7 +26,7 @@ bot.on('ready', () => {  // https://crontab.guru/examples.html
         const lastUpdate = new Date(Date.now()).toUTCString();
         console.log(`%c⧭ Thread Database Update [Daily] ${lastUpdate}`, 'color: #24ff24',);
         certification.certUpdate()
-            .then(results => console.debug(`✅ update-database.js:6 ${results}`))
+            .then(results => console.debug(`✅ update-database.js:6 👉 Thread database has been updated: ${results}`))
             .catch(error => console.error(`update-database.js:7 ${error.message}`));
     });
 
@@ -34,7 +34,7 @@ bot.on('ready', () => {  // https://crontab.guru/examples.html
         const lastUpdate = new Date(Date.now()).toUTCString();
         console.log(`%c⧭ Tread Database Update [Bot startup] ${lastUpdate}`, 'color: #daff61',);
         blacklist.treadUpdate()
-            .then(results => console.debug(`✅ update-database.js:8 ${results}`))
+            .then(results => console.debug(`✅ update-database.js:8 👉 Thread database has been updated: ${results}`))
             .catch(error => console.error(`update-database.js:9 ${error.message}`));
-    }, 60000 * 2);
+    }, 10000 * 2);
 });

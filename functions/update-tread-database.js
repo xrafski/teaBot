@@ -5,7 +5,7 @@ const config = require("../bot-settings.json");
 const { google } = require('googleapis');
 const keys = require('../Laezaria-Bot-292d692ec77c.json');
 
-const mysql = require('mysql');
+const mysql = require('mysql2');
 const pool = mysql.createPool({
     connectionLimit: 1,
     host: config.mysql.host,
@@ -86,7 +86,7 @@ function treadUpdate() {
                 // Use the connection to TRUNCATE the current table data
                 connection.query(`TRUNCATE ${config.mysql.tread_table_name}`, function (error, results, fields) {
                     if (error) {
-                        connection.release();
+                        pool.releaseConnection(connection);
                         reject(error);
                         return; console.error(`update-tread-database.js.js:2 treadUpdate() ❌ TRUNCATE query error: '${error.code}'`);
                     }
@@ -94,15 +94,16 @@ function treadUpdate() {
                     // Run another query to put data into cleared table
                     connection.query(`INSERT INTO ${config.mysql.tread_table_name} (name, warning, lastKnownName, reason, status, evidence, alternateAccounts, discordID, notes, privateWorld) VALUES ?`, [JSONobj], function (error, results, fields) {
                         if (error) {
-                            connection.release();
+                            pool.releaseConnection(connection);
                             reject(error);
                             return; console.error(`update-tread-database.js.js:3 treadUpdate() ❌ INSERT query error: '${error.code}'`);
                         }
 
                         // if all was good relase the connection and resolve function
-                        connection.release();
+                        pool.releaseConnection(connection);
                         const timeDiff = process.hrtime(timer);
-                        resolve(`👉 Thread database has been updated with ${results.warningCount} warning/s in ${timeDiff[0]}.${timeDiff[1].toString().slice(0, 3)}s.`);
+                        // resolve(`👉 Thread database has been updated: '${results.info}' in ${timeDiff[0]}.${timeDiff[1].toString().slice(0, 3)}s.`);
+                        resolve(`'${results.info}' in ${timeDiff[0]}.${timeDiff[1].toString().slice(0, 3)}s.`);
                     })
                 })
             }

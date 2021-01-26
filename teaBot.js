@@ -6,7 +6,7 @@ require('console-stamp')(console, 'dd/mm/yyyy - HH:MM:ss');
 const bot = new Discord.Client({ partials: ['MESSAGE', 'REACTION'] });
 
 // define current bot version
-const BotVersion = 'pre.alpha9';
+const BotVersion = 'pre.alpha10';
 
 // define icon image url for embeds
 const TEAlogo = 'https://skillez.eu/images/discord/teabanner.png'
@@ -249,16 +249,13 @@ module.exports = {
 		}
 	},
 
-	removeUserLastMessage: function (Member) {
-		if (Member.lastMessage === null) return;
+	removeUserLastMessage: function (Member, details) {
+		if (!Member.lastMessage) return;
 		Member.lastMessage.channel.messages.fetch(Member.lastMessage.id)
 			.then(MemberLastMessage => {
-				if (MemberLastMessage.deletable) MemberLastMessage.delete({ timeout: 750 }).catch(() => { return; });
-			}).catch((error) => {
-				console.error(`teaBot.js:1 ❌ removeUserLastMessage() issue occurred`, error);
-				if (!bot.users.cache.get(config.BotOwnerID)) return console.warn(`teaBot.js:2 removeUserLastMessage() ❌ The bot Owner is UNDEFINED (probably wrong userID in: config.BotOwnerID)`);
-				bot.users.cache.get(config.BotOwnerID).send(`❌ an issue occurred with the **${bot.user.username}** application!` + "```teaBot.js:1 ❌ removeUserLastMessage() issue occurred```" + error)
-					.catch((error) => { console.warn(`teaBot.js:3 removeUserLastMessage() ❌ Owner has DMs disabled.`, error) });
-			});
+				if (MemberLastMessage.deletable) MemberLastMessage.delete({ timeout: 2000 })
+					.catch(error => console.error(`teaBot.js:1 removeUserLastMessage() ${details} ${error}`));
+			})
+			.catch(error => console.error(`teaBot.js:2 removeUserLastMessage() ${details} ${error}`));
 	}
 }

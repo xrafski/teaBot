@@ -10,7 +10,7 @@ bot.on("message", async message => {
 
     const cmdFile = bot.commands.get(command);
     if (cmdFile) {
-        removeUserLastMessage(message.author);
+        removeUserLastMessage(message.author, `'${message.content}' sent by '${message.author.tag}'`);
 
         switch (cmdFile.help.type) {
             case "administrator": {

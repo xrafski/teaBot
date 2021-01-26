@@ -5,7 +5,7 @@ const config = require("../bot-settings.json");
 const { google } = require('googleapis');
 const keys = require('../Laezaria-Bot-292d692ec77c.json');
 
-const mysql = require('mysql');
+const mysql = require('mysql2');
 const pool = mysql.createPool({
     connectionLimit: 1,
     host: config.mysql.host,
@@ -86,7 +86,7 @@ function certificationUpdate() {
                 // Use the connection to TRUNCATE the current table data
                 connection.query(`TRUNCATE ${config.mysql.cert_table_name}`, function (error, results, fields) {
                     if (error) {
-                        connection.release();
+                        pool.releaseConnection(connection);
                         reject(error);
                         return; console.error(`update-certification.js:2 certificationUpdate() ❌ TRUNCATE query error: '${error.code}'`);
                     }
@@ -94,16 +94,17 @@ function certificationUpdate() {
                     // Run another query to put data into cleared table
                     connection.query(`INSERT INTO ${config.mysql.cert_table_name} (guildDiscordID, guildName, guildJoinworld, guildDescription, guildRequirements, guildDiscordLink, guildRepresentative) VALUES ?`, [JSONobj], function (error, results, fields) {
                         if (error) {
-                            connection.release();
+                            pool.releaseConnection(connection);
                             reject(error);
                             return; console.error(`update-certification.js:3 certificationUpdate() ❌ INSERT query error: '${error.code}'`);
                         }
 
                         // if all was good relase the connection and resolve function
-                        connection.release();
+                        pool.releaseConnection(connection);
                         const timeDiff = process.hrtime(timer);
                         // const timeInMs = (timeDiff[0]* 1000000000 + timeDiff[1]) / 1000000; // convert first to ns then to ms
-                        resolve(`👉 Certification has been updated with ${results.warningCount} warning/s in ${timeDiff[0]}.${timeDiff[1].toString().slice(0, 3)}s.`);
+                        // resolve(`👉 Certification has been updated: '${results.info}' in ${timeDiff[0]}.${timeDiff[1].toString().slice(0, 3)}s.`);
+                        resolve(`'${results.info}' in ${timeDiff[0]}.${timeDiff[1].toString().slice(0, 3)}s.`);
                     })
                 })
             }
