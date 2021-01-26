@@ -9,7 +9,7 @@ module.exports.help = {
 };
 
 module.exports.run = async (bot, message, args) => {
-    if (!args.length) return botReply(`Wrong command format, type **${config.BotPrefix}help ${module.exports.help.name}** to see usage and examples!`, message, 10000, true, false, false);
+    if (!args.length) return botReply(`Wrong command format, type **${config.BotPrefix}help ${module.exports.help.name}** to see usage and examples!`, message, 10000);
 
     const commandName = args[0].toLowerCase();
     const command = getCommand(commandName);
@@ -19,7 +19,7 @@ module.exports.run = async (bot, message, args) => {
         try {
             const reloadCommand = require(`./${command.help.name}.js`);
             bot.commands.set(reloadCommand.help.name, reloadCommand);
-            return botReply(`The command \`${command.help.name}\` has been reloaded!`, message, 10000, true, false, false);
-        } catch (error) { return botReply(`There was an error while reloading a command \`${command.help.name}\`:\n\`${error.message}\``, message, 20000, true, false, false); }
-    } else return botReply(`There is no \`${commandName}\` command and cannot be reloaded!`, message, 10000, true, false, false);
+            return botReply(`Command \`${command.help.name}\` has been reloaded!`, message, 10000);
+        } catch (error) { return botReply(`There was an error while reloading a command \`${command.help.name}\`:\n\`${error.message}\``, message, 20000); }
+    } else return botReply(`There is no \`${commandName}\` command and cannot be reloaded!`, message, 10000);
 }

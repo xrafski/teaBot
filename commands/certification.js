@@ -28,11 +28,11 @@ module.exports.run = async (bot, message, args) => {
                     .setThumbnail(message.guild.iconURL())
                     .setFooter('Contact TEA Spreadsheet Manager if data is outdated!')
                     .setTimestamp()
-                botReply(embed_certification_details, message, 30000, true, false, false);
+                botReply(embed_certification_details, message, 30000);
             })
             .catch(error => {
                 console.error(`certification.js:1 mysqlQuery error ${error}`);
-                botReply('❌ Database error, try again later.', message, 10000, true, false, false);
+                botReply('❌ Database error, try again later.', message, 10000);
             });
 
 
@@ -44,7 +44,7 @@ module.exports.run = async (bot, message, args) => {
             })
             .catch(error => {
                 console.error(`certification.js:2 mysqlQuery error ${error}`);
-                botReply('❌ Database error, try again later.', message, 10000, true, false, false);
+                botReply('❌ Database error, try again later.', message, 10000);
             });
     }
 
@@ -53,9 +53,9 @@ module.exports.run = async (bot, message, args) => {
         const TEAverified = getEmoji(config.TEAserverID, 'verified');
 
         switch (guildID) {
-            case config.TEAserverID: return botReply(embedMessage(`${TEAverified} **${message.guild.name}** is a primary server of the ${TEAemoji} Trove Ethics Alliance.`, message.author), message, 15000, true, false, false);
-            case undefined: return botReply(embedMessage(`❌ This club is not a certified member of the ${TEAemoji} **Trove Ethics Alliance**`, message.author), message, 15000, true, false, false);
-            default: return botReply(embedMessage(`${TEAverified} **${message.guild.name}** is a certified member of the ${TEAemoji} Trove Ethics Alliance.`, message.author), message, 15000, true, false, false)
+            case config.TEAserverID: return botReply(embedMessage(`${TEAverified} **${message.guild.name}** is a primary server of the ${TEAemoji} Trove Ethics Alliance.`, message.author), message, 15000);
+            case undefined: return botReply(embedMessage(`❌ This club is not a certified member of the ${TEAemoji} **Trove Ethics Alliance**`, message.author), message, 15000);
+            default: return botReply(embedMessage(`${TEAverified} **${message.guild.name}** is a certified member of the ${TEAemoji} Trove Ethics Alliance.`, message.author), message, 15000)
         }
     }
 }

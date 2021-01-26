@@ -9,5 +9,5 @@ module.exports.help = {
 };
 
 module.exports.run = async (bot, message) => {
-    return botReply(`${getEmoji(config.TEAserverID, 'TEA')} TEA is watching **${Math.round(bot.guilds.cache.size)}** guilds.`, message, 15000, true, false, false);
+    return botReply(`${getEmoji(config.TEAserverID, 'TEA')} TEA is watching **${Math.round(bot.guilds.cache.size)}** guilds.`, message, 15000);
 }

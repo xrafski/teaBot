@@ -13,10 +13,10 @@ module.exports.run = async (bot, message, args) => {
     certUpdate()
         .then(results => {
             console.debug(`✅ tea!certupdate used by '${message.author.tag}'`, results);
-            return botReply(embedMessage(`${getEmoji(config.TEAserverID, 'TEA')} 👉 Certification has been updated!\n${results}`, message.author), message, 10000, true, false, false);
+            return botReply(embedMessage(`${getEmoji(config.TEAserverID, 'TEA')} 👉 Certification has been updated!\n${results}`, message.author), message, 10000);
         })
         .catch(error => {
             console.error(`🔴 tea!certupdate used by '${message.author.tag}' ❌ ${error.message}`)
-            return botReply(embedMessage(`${getEmoji(config.TEAserverID, 'TEA')} 👉 ERROR to update certification:\n🔴 **${error.code}**`, message.author), message, 20000, true, false, false);
+            return botReply(embedMessage(`${getEmoji(config.TEAserverID, 'TEA')} 👉 ERROR to update certification:\n🔴 **${error.code}**`, message.author), message, 20000);
         });
 }

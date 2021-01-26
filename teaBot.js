@@ -6,7 +6,7 @@ require('console-stamp')(console, 'dd/mm/yyyy - HH:MM:ss');
 const bot = new Discord.Client({ partials: ['MESSAGE', 'REACTION'] });
 
 // define current bot version
-const BotVersion = 'pre.alpha11';
+const BotVersion = 'pre.alpha12';
 
 // define icon image url for embeds
 const TEAlogo = 'https://skillez.eu/images/discord/teabanner.png'
@@ -86,65 +86,132 @@ module.exports = {
 		return bot.commands;
 	},
 
-	// botReply: function (text, message, time, deleteStatus) {
-	// 	if (deleteStatus) {
-	// 		return message.channel.send(text)
-	// 			.then(message => { if (message && message.deletable) message.delete({ timeout: time }).catch(() => { }); });
-	// 	} else return message.channel.send(text);
-	// },
+	botReply: function (text, message, time, attachFile, embedImage) {
+		const attachmentFile = (attachFile ? new Discord.MessageAttachment(attachFile) : undefined);
+		const imageFileSplit = (embedImage ? embedImage.split('/').slice(-1).toString() : undefined);
+		if(!message) return console.error(`teaBot.js:1 botReply() message object is not provided`);
 
-	botReply: function (text, message, time, deleteStatus, attachFile, embedImage) {
-		if (embedImage) {
-			if (deleteStatus) {
-				if (text) {
-					const imageFileSplit = embedImage.split('/').slice(-1).toString();
+		if (time) { // check if time is provided
+			if (text) { // check if function has text provided
+				if (imageFileSplit && attachmentFile) {
+					const embed_message = new Discord.MessageEmbed()
+						.setColor('RANDOM')
+						.attachFiles([embedImage])
+						.setImage(`attachment://${imageFileSplit}`)
+						.attachFiles([attachmentFile])
+					return message.reply(text, embed_message)
+						.then(msg => {
+							if (msg.deletable) msg.delete({ timeout: time })
+								.catch(error => console.error(`teaBot.js:2 botReply() ${error}`))
+						})
+						.catch(error => console.error(`teaBot.js:3 botReply() ${error}`));
+				} else if (imageFileSplit) {
 					const embed_message = new Discord.MessageEmbed()
 						.setColor('RANDOM')
 						.attachFiles([embedImage])
 						.setImage(`attachment://${imageFileSplit}`)
 					return message.reply(text, embed_message)
-						.then(message => { if (message && message.deletable) message.delete({ timeout: time }).catch(() => { }); });
+						.then(msg => {
+							if (msg.deletable) msg.delete({ timeout: time })
+								.catch(error => console.error(`teaBot.js:4 botReply() ${error}`))
+						})
+						.catch(error => console.error(`teaBot.js:5 botReply() ${error}`));
+				} else if (attachmentFile) {
+					return message.reply(text, attachmentFile)
+						.then(msg => {
+							if (msg.deletable) msg.delete({ timeout: time })
+								.catch(error => console.error(`teaBot.js:6 botReply() ${error}`))
+						})
+						.catch(error => console.error(`teaBot.js:7 botReply() ${error}`));
 				} else {
-					const imageFileSplit = embedImage.split('/').slice(-1).toString();
+					return message.reply(text)
+						.then(msg => {
+							if (msg.deletable) msg.delete({ timeout: time })
+								.catch(error => console.error(`teaBot.js:8 botReply() ${error}`))
+						})
+						.catch(error => console.error(`teaBot.js:9 botReply() ${error}`));
+				}
+			} else { // if without text
+				if (imageFileSplit && attachmentFile) {
+					const embed_message = new Discord.MessageEmbed()
+						.setColor('RANDOM')
+						.attachFiles([embedImage])
+						.setImage(`attachment://${imageFileSplit}`)
+						.attachFiles([attachmentFile])
+					return message.reply(embed_message)
+						.then(msg => {
+							if (msg.deletable) msg.delete({ timeout: time })
+								.catch(error => console.error(`teaBot.js:10 botReply() ${error}`))
+						})
+						.catch(error => console.error(`teaBot.js:11 botReply() ${error}`));
+				} else if (imageFileSplit) {
 					const embed_message = new Discord.MessageEmbed()
 						.setColor('RANDOM')
 						.attachFiles([embedImage])
 						.setImage(`attachment://${imageFileSplit}`)
 					return message.reply(embed_message)
-						.then(message => { if (message && message.deletable) message.delete({ timeout: time }).catch(() => { }); });
+						.then(msg => {
+							if (msg.deletable) msg.delete({ timeout: time })
+								.catch(error => console.error(`teaBot.js:12 botReply() ${error}`))
+						})
+						.catch(error => console.error(`teaBot.js:13 botReply() ${error}`));
+				} else if (attachmentFile) {
+					return message.reply(attachmentFile)
+						.then(msg => {
+							if (msg.deletable) msg.delete({ timeout: time })
+								.catch(error => console.error(`teaBot.js:14 botReply() ${error}`))
+						})
+						.catch(error => console.error(`teaBot.js:15 botReply() ${error}`));
+				} else return console.error(`teaBot.js:16 botReply() There is no text nor attachment!`);
+			}
+		} else { // if there is no time provided
+			if (text) { // check if function has text provided
+				if (imageFileSplit && attachmentFile) {
+					const embed_message = new Discord.MessageEmbed()
+						.setColor('RANDOM')
+						.attachFiles([embedImage])
+						.setImage(`attachment://${imageFileSplit}`)
+						.attachFiles([attachmentFile])
+					return message.reply(text, embed_message)
+						.catch(error => console.error(`teaBot.js:17 botReply() ${error}`));
+				} else if (imageFileSplit) {
+					const embed_message = new Discord.MessageEmbed()
+						.setColor('RANDOM')
+						.attachFiles([embedImage])
+						.setImage(`attachment://${imageFileSplit}`)
+					return message.reply(text, embed_message)
+						.catch(error => console.error(`teaBot.js:18 botReply() ${error}`));
+				} else if (attachmentFile) {
+					return message.reply(text, attachmentFile)
+						.catch(error => console.error(`teaBot.js:19 botReply() ${error}`));
+				} else {
+					return message.reply(text)
+						.catch(error => console.error(`teaBot.js:20 botReply() ${error}`));
 				}
-			}
-			else if (text) {
-				const imageFileSplit = embedImage.split('/').slice(-1).toString();
-				const embed_message = new Discord.MessageEmbed()
-					.setColor('RANDOM')
-					.attachFiles([embedImage])
-					.setImage(`attachment://${imageFileSplit}`)
-				return message.reply(text, embed_message);
-			} else {
-				const imageFileSplit = embedImage.split('/').slice(-1).toString();
-				const embed_message = new Discord.MessageEmbed()
-					.setColor('RANDOM')
-					.attachFiles([embedImage])
-					.setImage(`attachment://${imageFileSplit}`)
-				return message.reply(embed_message);
+			} else { // if without text
+				if (imageFileSplit && attachmentFile) {
+					const embed_message = new Discord.MessageEmbed()
+						.setColor('RANDOM')
+						.attachFiles([embedImage])
+						.setImage(`attachment://${imageFileSplit}`)
+						.attachFiles([attachmentFile])
+					return message.reply(embed_message)
+						.catch(error => console.error(`teaBot.js:21 botReply() ${error}`));
+				} else if (imageFileSplit) {
+					const embed_message = new Discord.MessageEmbed()
+						.setColor('RANDOM')
+						.attachFiles([embedImage])
+						.setImage(`attachment://${imageFileSplit}`)
+					return message.reply(embed_message)
+						.catch(error => console.error(`teaBot.js:22 botReply() ${error}`));
+				} else if (attachmentFile) {
+					return message.reply(attachmentFile)
+						.catch(error => console.error(`teaBot.js:23 botReply() ${error}`));
+				} else return console.error(`teaBot.js:24 botReply() There is no text nor attachment!`);
 			}
 		}
-		else if (attachFile) {
-			// Create the attachment using MessageAttachment
-			const attachment = new Discord.MessageAttachment(attachFile);
-
-			if (deleteStatus) {
-				return message.reply(text, attachment)
-					.then(message => { if (message && message.deletable) message.delete({ timeout: time }).catch(() => { }); });
-			} else return message.reply(text, attachment);
-		}
-		else if (deleteStatus) {
-			return message.reply(text,)
-				.then(message => { if (message && message.deletable) message.delete({ timeout: time }).catch(() => { }); });
-		} else return message.reply(text);
 	},
-
+	
 	embedMessage: function (text, user) {
 		if (!user) {
 			// Send an embed message without footer
@@ -196,7 +263,6 @@ module.exports = {
 					.catch((error) => { console.warn(`teaBot.js:6 messageRemoverWithReact() ❌ Owner has DMs disabled.`, error) });
 			});
 	},
-
 
 	sendEmbedLog: function (embedMessage, channelID, webHookName) {
 		const logChannel = bot.channels.cache.get(channelID);

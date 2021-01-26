@@ -22,7 +22,7 @@ bot.on('messageReactionAdd', async (reaction, user) => {
                 .setColor('#0095ff')
                 .setAuthor('Reaction Menu', TEAlogo)
                 .setDescription(`${user} You have reacted on this **[report message](${message.url})**.\nPlease react under this message to move to the appropriate category.\n\nLegend:\n❌ • Exit\n${emojiCharacters[1]} • <#${config.report.bugGraphicalChannelID}>\n${emojiCharacters[2]} • <#${config.report.bugUIChannelID}>\n${emojiCharacters[3]} • <#${config.report.bugCombatChannelID}>\n${emojiCharacters[4]} • <#${config.report.bugBuildingChannelID}>\n${emojiCharacters[5]} • <#${config.report.bugCriticalChannelID}>\n${emojiCharacters[6]} • <#${config.report.bugMiscalculationChannelID}>\n${emojiCharacters[7]} • <#${config.report.bugInsufficientDataChannelID}>`)
-            return botReply(menuEmbed, message, 0, false, false, false)
+            return botReply(menuEmbed, message)
                 .then(async msg => {
 
                     if (msg) {
@@ -49,7 +49,7 @@ bot.on('messageReactionAdd', async (reaction, user) => {
                             })
                             .catch(error => {
                                 msg.delete().catch(() => { });
-                                if (error.message === "Cannot read property 'emoji' of undefined") return botReply(embedMessage(`${user} ❌ There was no reaction within the time limit (1min)!`), message, 10000, true, false, false);
+                                if (error.message === "Cannot read property 'emoji' of undefined") return botReply(embedMessage(`${user} ❌ There was no reaction within the time limit (1min)!`), message, 10000);
                                 errorLog(`tip-reactions.js:1 emojiReactionMenu()\nError when user answer the msg.`, error);
                             });
 
@@ -73,18 +73,18 @@ bot.on('messageReactionAdd', async (reaction, user) => {
             const BUGchannel = bot.guilds.cache.get(config.report.hidenBugServerID).channels.cache.get(channelID);
 
             if (BUGchannel) {
-                if (reaction.message.channel === BUGchannel) return botReply(embedMessage(`${user} ${TEAemoji()} You can't move the report because it's already here!`), reaction.message, 10000, true, false, false);
-                else return BUGchannel.send(reaction.message.embeds[0]).catch(() => { botReply(embedMessage(`${user} ${TEAemoji()} Error to move the report, try again later...`), reaction.message, 10000, true, false, false) })
+                if (reaction.message.channel === BUGchannel) return botReply(embedMessage(`${user} ${TEAemoji()} You can't move the report because it's already here!`), reaction.message, 10000);
+                else return BUGchannel.send(reaction.message.embeds[0]).catch(() => { botReply(embedMessage(`${user} ${TEAemoji()} Error to move the report, try again later...`), reaction.message, 10000) })
                     .then(async message => {
                         if (message) {
                             reaction.message.delete().catch(() => { });
-                            botReply(embedMessage(`${user} ${TEAemoji()} [Report](${message.url}) has been moved to ${BUGchannel}!`), reaction.message, 10000, true, false, false);
+                            botReply(embedMessage(`${user} ${TEAemoji()} [Report](${message.url}) has been moved to ${BUGchannel}!`), reaction.message, 10000);
                         } else return;
                     })
                     .catch(error => { errorLog(`tip-reactions.js:1 moveTheReport() Error in the function - probably missing permissions (READ_MESSAGES/READ_MESSAGE_HISTORY/ADD_REACTIONS)`, error); })
 
             } else {
-                botReply(embedMessage(`${user} ${TEAemoji()} Error to move report, try again later...`), reaction.message, 10000, true, false, false);
+                botReply(embedMessage(`${user} ${TEAemoji()} Error to move report, try again later...`), reaction.message, 10000);
                 errorLog(`tip-reactions.js:2 moveTheReport() ${type} channel is missing read permissions or maybe wrong channel ID in conf file.`);
             }
         }
@@ -94,7 +94,7 @@ bot.on('messageReactionAdd', async (reaction, user) => {
                 .setColor('#0095ff')
                 .setAuthor('Auto-Reply Confirmation', TEAlogo)
                 .setDescription(`${user}, Please confirm to send an auto-reply to the author of this [report](${message.url}).`)
-            return botReply(confirmationEmbed, message, 0, false, false, false)
+            return botReply(confirmationEmbed, message)
                 .then(async msg => {
 
                     if (msg) {
@@ -115,7 +115,7 @@ bot.on('messageReactionAdd', async (reaction, user) => {
                             })
                             .catch(error => {
                                 msg.delete().catch(() => { });
-                                if (error.message === "Cannot read property 'emoji' of undefined") return botReply(embedMessage(`${user} ❌ There was no reaction within the time limit (1min)!`), message, 10000, true, false, false);
+                                if (error.message === "Cannot read property 'emoji' of undefined") return botReply(embedMessage(`${user} ❌ There was no reaction within the time limit (1min)!`), message, 10000);
                                 errorLog(`tip-reactions.js:1 confirmationMenu()\nError when user answer the msg.`, error);
                             });
 

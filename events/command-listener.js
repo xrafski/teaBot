@@ -16,21 +16,21 @@ bot.on("message", async message => {
             case "administrator": {
                 if (message.channel.type != "dm") {
                     if (message.guild.id === config.TEAserverID && message.member.hasPermission("ADMINISTRATOR")) return cmdFile.run(bot, message, args);
-                    else return botReply(`You don't have access to run **${config.BotPrefix}${cmdFile.help.name}**!`, message, 10000, true, false, false);
-                } else return botReply(`**${config.BotPrefix}${cmdFile.help.name}** is not available on DM!`, message, 0, false, false, false);
+                    else return botReply(`You don't have access to run **${config.BotPrefix}${cmdFile.help.name}**!`, message, 10000);
+                } else return botReply(`**${config.BotPrefix}${cmdFile.help.name}** is not available on DM!`, message);
             }
             case "dm": if (message.channel.type === "dm") return cmdFile.run(bot, message, args);
-            else return botReply(`**${config.BotPrefix}${cmdFile.help.name}** is only available via direct message.`, message, 10000, true, false, false);
+            else return botReply(`**${config.BotPrefix}${cmdFile.help.name}** is only available via direct message.`, message, 10000);
 
             case "public": if (message.channel.type != "dm") return cmdFile.run(bot, message, args)
-            else return botReply(`**${config.BotPrefix}${cmdFile.help.name}** is not available on DM!`, message, 0, false, false, false);
+            else return botReply(`**${config.BotPrefix}${cmdFile.help.name}** is not available on DM!`, message);
 
-            case "disabled": if (message.channel.type != "dm") return botReply(`**${config.BotPrefix}${cmdFile.help.name}** is currently **disabled**!`, message, 10000, true, false, false);
-            else return botReply(`**${config.BotPrefix}${cmdFile.help.name}** is currently **disabled**!`, message, 0, false, false, false);
+            case "disabled": if (message.channel.type != "dm") return botReply(`**${config.BotPrefix}${cmdFile.help.name}** is currently **disabled**!`, message, 10000);
+            else return botReply(`**${config.BotPrefix}${cmdFile.help.name}** is currently **disabled**!`, message);
 
             default: {
-                if (message.channel.type != "dm") botReply(`**${config.BotPrefix}${cmdFile.help.name}** ERROR, try again later!`, message, 10000, true, false, false);
-                else botReply(`**${config.BotPrefix}${cmdFile.help.name}** ERROR, try again later!`, message, 0, false, false, false,);
+                if (message.channel.type != "dm") botReply(`**${config.BotPrefix}${cmdFile.help.name}** ERROR, try again later!`, message, 10000);
+                else botReply(`**${config.BotPrefix}${cmdFile.help.name}** ERROR, try again later!`, message);
                 return errorLog(`command-listener.js:1 command switch() default - no type was found for the ${cmdFile.help.name} command.`);
             }
         }
