@@ -1,6 +1,6 @@
 const config = require("../../bot-settings.json");
-const { TEAemoji } = require('../../teaBot');
 const fs = require('fs');
+const { getEmoji } = require("../../teaBot");
 
 module.exports.help = {
     name: "guidelines",
@@ -22,25 +22,25 @@ module.exports.run = async (bot, message) => {
     const primaryGuildChannel = await message.guild.channels.cache.find(ch => ch.name === config.other.guidelinesChannelName);
 
     // when primaryGuildChannel is not found
-    if (!primaryGuildChannel) return message.reply(`${TEAemoji()} I can't find the channel with a global message to send!\nMake sure the channel has a proper name: **${config.other.guidelinesChannelName}**`)
+    if (!primaryGuildChannel) return message.reply(`${getEmoji(config.TEAserverID, 'TEA')} I can't find the channel with a global message to send!\nMake sure the channel has a proper name: **${config.other.guidelinesChannelName}**`)
         .then(message => message.delete({ timeout: 15000 })).catch(() => { return });
 
     // if command sent in the primaryGuildChannel
-    if (message.channel === primaryGuildChannel) return message.reply(`${TEAemoji()} You can't use that command in this channel!`)
+    if (message.channel === primaryGuildChannel) return message.reply(`${getEmoji(config.TEAserverID, 'TEA')} You can't use that command in this channel!`)
         .then(message => message.delete({ timeout: 2000 })).catch(() => { return });
 
     // the bot permissions check
     if (primaryGuildChannel.permissionsFor(message.guild.me).has('READ_MESSAGE_HISTORY')) {
         const primaryGuildChannelFetch = await primaryGuildChannel.messages.fetch({ limit: 1 }).catch(() => { return });
 
-        if (!primaryGuildChannelFetch) return message.reply(`${TEAemoji()} I can't fetch the global message!\nMake sure bot has **READ_MESSAGES** set as **TRUE** on the ${primaryGuildChannel} channel.`)
+        if (!primaryGuildChannelFetch) return message.reply(`${getEmoji(config.TEAserverID, 'TEA')} I can't fetch the global message!\nMake sure bot has **READ_MESSAGES** set as **TRUE** on the ${primaryGuildChannel} channel.`)
             .then(message => message.delete({ timeout: 15000 })).catch(() => { return });
 
-        if (!primaryGuildChannelFetch.size) return message.reply(`${TEAemoji()} ${primaryGuildChannel} looks empty to me.\nSend an embed message using <https://carl.gg/dashboard/${message.guild.id}/botsettings> to the ${primaryGuildChannel} channel and try again.`)
+        if (!primaryGuildChannelFetch.size) return message.reply(`${getEmoji(config.TEAserverID, 'TEA')} ${primaryGuildChannel} looks empty to me.\nSend an embed message using <https://carl.gg/dashboard/${message.guild.id}/botsettings> to the ${primaryGuildChannel} channel and try again.`)
             .then(message => message.delete({ timeout: 15000 })).catch(() => { return });
 
         const primaryMessage = primaryGuildChannelFetch.first();
-        if (!primaryMessage.embeds[0]) return message.reply(`${TEAemoji()} The bot only supports embeds.\nIt looks like your global message set on the ${primaryGuildChannel} channel is plain text.`)
+        if (!primaryMessage.embeds[0]) return message.reply(`${getEmoji(config.TEAserverID, 'TEA')} The bot only supports embeds.\nIt looks like your global message set on the ${primaryGuildChannel} channel is plain text.`)
             .then(message => message.delete({ timeout: 15000 })).catch(() => { return });
 
         console.warn(`Manual guidelines update (${Math.round(bot.guilds.cache.size - 1)} guilds)`);
@@ -55,7 +55,7 @@ module.exports.run = async (bot, message) => {
             } else return;
         });
 
-        return message.reply(`${TEAemoji()} The command has been executed.\nIt may take some time to see the changes across all servers.`)
+        return message.reply(`${getEmoji(config.TEAserverID, 'TEA')} The command has been executed.\nIt may take some time to see the changes across all servers.`)
             .then(message => message.delete({ timeout: 30000 })).catch(() => { return });
 
     } else return message.reply(`The bot has **READ_MESSAGE_HISTORY** set as **FALSE** on the #${primaryGuildChannel} channel.\nThis permission is required for the command to work.`)

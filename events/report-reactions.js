@@ -1,4 +1,4 @@
-const { bot, TEAemoji, errorLog, botReply, embedMessage, Discord, TEAlogo, emojiCharacters } = require('../teaBot');
+const { bot, errorLog, botReply, embedMessage, Discord, TEAlogo, emojiCharacters, getEmoji } = require('../teaBot');
 const config = require("../bot-settings.json");
 
 bot.on('messageReactionAdd', async (reaction, user) => {
@@ -73,18 +73,18 @@ bot.on('messageReactionAdd', async (reaction, user) => {
             const BUGchannel = bot.guilds.cache.get(config.report.hidenBugServerID).channels.cache.get(channelID);
 
             if (BUGchannel) {
-                if (reaction.message.channel === BUGchannel) return botReply(embedMessage(`${user} ${TEAemoji()} You can't move the report because it's already here!`), reaction.message, 10000);
-                else return BUGchannel.send(reaction.message.embeds[0]).catch(() => { botReply(embedMessage(`${user} ${TEAemoji()} Error to move the report, try again later...`), reaction.message, 10000) })
+                if (reaction.message.channel === BUGchannel) return botReply(embedMessage(`${user} ${getEmoji(config.TEAserverID, 'TEA')} You can't move the report because it's already here!`), reaction.message, 10000);
+                else return BUGchannel.send(reaction.message.embeds[0]).catch(() => { botReply(embedMessage(`${user} ${getEmoji(config.TEAserverID, 'TEA')} Error to move the report, try again later...`), reaction.message, 10000) })
                     .then(async message => {
                         if (message) {
                             reaction.message.delete().catch(() => { });
-                            botReply(embedMessage(`${user} ${TEAemoji()} [Report](${message.url}) has been moved to ${BUGchannel}!`), reaction.message, 10000);
+                            botReply(embedMessage(`${user} ${getEmoji(config.TEAserverID, 'TEA')} [Report](${message.url}) has been moved to ${BUGchannel}!`), reaction.message, 10000);
                         } else return;
                     })
                     .catch(error => { errorLog(`tip-reactions.js:1 moveTheReport() Error in the function - probably missing permissions (READ_MESSAGES/READ_MESSAGE_HISTORY/ADD_REACTIONS)`, error); })
 
             } else {
-                botReply(embedMessage(`${user} ${TEAemoji()} Error to move report, try again later...`), reaction.message, 10000);
+                botReply(embedMessage(`${user} ${getEmoji(config.TEAserverID, 'TEA')} Error to move report, try again later...`), reaction.message, 10000);
                 errorLog(`tip-reactions.js:2 moveTheReport() ${type} channel is missing read permissions or maybe wrong channel ID in conf file.`);
             }
         }
@@ -135,7 +135,7 @@ bot.on('messageReactionAdd', async (reaction, user) => {
 
             bot.users.fetch(requesterID)
                 .then(requester => {
-                    requester.send(embedMessage(`Unfortunately, ${TEAemoji()} **TEA** is unable to utilize this information.\nPlease contact customer support [here](https://support.gamigo.com/hc/en-us "gamigo Group Support Center").`))
+                    requester.send(embedMessage(`Unfortunately, ${getEmoji(config.TEAserverID, 'TEA')} **TEA** is unable to utilize this information.\nPlease contact customer support [here](https://support.gamigo.com/hc/en-us "gamigo Group Support Center").`))
                         .then(messageSent => {
                             if (messageSent) {
                                 const replyConfirmation = new Discord.MessageEmbed(embedContent).setDescription(`💬 Auto-Reply has been sent`);

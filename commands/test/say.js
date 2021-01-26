@@ -1,5 +1,4 @@
 const config = require("../bot-settings.json");
-const { TEAemoji } = require('../../teaBot');
 
 module.exports.help = {
     name: "say",

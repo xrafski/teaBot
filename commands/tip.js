@@ -1,5 +1,5 @@
 const config = require("../bot-settings.json");
-const { TEAemoji, TEAlogo, Discord, errorLog } = require('../teaBot');
+const { TEAlogo, Discord, errorLog, getEmoji } = require('../teaBot');
 
 module.exports.help = {
     name: "tip",
@@ -59,7 +59,7 @@ module.exports.run = async (bot, message) => {
     //////////////////////////////////////////////////////////////////////////////////////////////
 
     function nameQuestion() {
-        return message.reply(`${message.author} ${TEAemoji()} Type \`cancel\` to exit.\n\`\`\`Please enter the name of the user you want to report.\`\`\``)
+        return message.reply(`${message.author} ${getEmoji(config.TEAserverID, 'TEA')} Type \`cancel\` to exit.\n\`\`\`Please enter the name of the user you want to report.\`\`\``)
             .then(Question => {
                 message.channel.awaitMessages(filter, { max: 1, time: 180000 })
                     .then(Answer => {
@@ -89,7 +89,7 @@ module.exports.run = async (bot, message) => {
     }
 
     function descriptionQuestion() {
-        return message.reply(`${message.author} ${TEAemoji()} Type \`cancel\` to exit.\n\`\`\`Description of the ToS breaker.\`\`\``)
+        return message.reply(`${message.author} ${getEmoji(config.TEAserverID, 'TEA')} Type \`cancel\` to exit.\n\`\`\`Description of the ToS breaker.\`\`\``)
             .then(Question => {
                 message.channel.awaitMessages(filter, { max: 1, time: 180000 })
                     .then(Answer => {
@@ -118,7 +118,7 @@ module.exports.run = async (bot, message) => {
     }
 
     function dateQuestion1() {
-        return message.reply(`${message.author} ${TEAemoji()} Type \`cancel\` to exit.\n\`\`\`Is this occurring at the time of this tip being sent? (Yes/No)\`\`\``)
+        return message.reply(`${message.author} ${getEmoji(config.TEAserverID, 'TEA')} Type \`cancel\` to exit.\n\`\`\`Is this occurring at the time of this tip being sent? (Yes/No)\`\`\``)
             .then(Question => {
                 message.channel.awaitMessages(filter, { max: 1, time: 180000 })
                     .then(Answer => {
@@ -149,7 +149,7 @@ module.exports.run = async (bot, message) => {
     }
 
     function dateQuestion2() {
-        return message.reply(`${message.author} ${TEAemoji()} Type \`cancel\` to exit.\n\`\`\`Provide us date and time when this accident happened (please include your timezone).\`\`\``)
+        return message.reply(`${message.author} ${getEmoji(config.TEAserverID, 'TEA')} Type \`cancel\` to exit.\n\`\`\`Provide us date and time when this accident happened (please include your timezone).\`\`\``)
             .then(Question => {
                 message.channel.awaitMessages(filter, { max: 1, time: 180000 })
                     .then(Answer => {
@@ -178,7 +178,7 @@ module.exports.run = async (bot, message) => {
     }
 
     function serverQuestion() {
-        return message.reply(`${message.author} ${TEAemoji()} Type \`cancel\` to exit.\n\`\`\`What server? (EU/NA).\`\`\``)
+        return message.reply(`${message.author} ${getEmoji(config.TEAserverID, 'TEA')} Type \`cancel\` to exit.\n\`\`\`What server? (EU/NA).\`\`\``)
             .then(Question => {
                 message.channel.awaitMessages(filter, { max: 1, time: 180000 })
                     .then(Answer => {
@@ -205,7 +205,7 @@ module.exports.run = async (bot, message) => {
     }
 
     function worldQuestion() {
-        return message.reply(`${message.author} ${TEAemoji()} Type \`cancel\` to exit.\n\`\`\`If you have worldID, please enter it now or type none to go to the next question.\`\`\``)
+        return message.reply(`${message.author} ${getEmoji(config.TEAserverID, 'TEA')} Type \`cancel\` to exit.\n\`\`\`If you have worldID, please enter it now or type none to go to the next question.\`\`\``)
             .then(Question => {
                 message.channel.awaitMessages(filter, { max: 1, time: 180000 })
                     .then(Answer => {
@@ -234,7 +234,7 @@ module.exports.run = async (bot, message) => {
     }
 
     function proofQuestion() {
-        return message.reply(`${message.author} ${TEAemoji()} Type \`cancel\` to exit.\n\`\`\`Please, link any proofs that you have images/videos that will be used for evidence or type none if you don't have any.\`\`\``)
+        return message.reply(`${message.author} ${getEmoji(config.TEAserverID, 'TEA')} Type \`cancel\` to exit.\n\`\`\`Please, link any proofs that you have images/videos that will be used for evidence or type none if you don't have any.\`\`\``)
             .then(Question => {
                 message.channel.awaitMessages(filter, { max: 1, time: 180000 })
                     .then(Answer => {
@@ -263,7 +263,7 @@ module.exports.run = async (bot, message) => {
     }
 
     function noteQuestion() {
-        return message.reply(`${message.author} ${TEAemoji()} Type \`cancel\` to exit.\n\`\`\`Now you can enter an additional note to the tip, and if you don't want then type none to finish.\`\`\``)
+        return message.reply(`${message.author} ${getEmoji(config.TEAserverID, 'TEA')} Type \`cancel\` to exit.\n\`\`\`Now you can enter an additional note to the tip, and if you don't want then type none to finish.\`\`\``)
             .then(Question => {
                 message.channel.awaitMessages(filter, { max: 1, time: 180000 })
                     .then(Answer => {
@@ -282,7 +282,7 @@ module.exports.run = async (bot, message) => {
                         else {
                             qNote = Answer.first().content;
                             return postToMods(message).then(() => {
-                                // message.channel.send(`${TEAemoji()} Your tip has been successfully sent!`);
+                                // message.channel.send(`${getEmoji(config.TEAserverID, 'TEA')} Your tip has been successfully sent!`);
                                 // userInputSummary();
                             });
                         }
@@ -319,14 +319,14 @@ module.exports.run = async (bot, message) => {
                 .then(async message => {
                     await message.react('✅');
                     await message.react('❌');
-                    await dmMessage.channel.send(`${TEAemoji()} Your tip has been successfully sent!`);
+                    await dmMessage.channel.send(`${getEmoji(config.TEAserverID, 'TEA')} Your tip has been successfully sent!`);
                 })
                 .catch(error => {
-                    dmMessage.channel.send(`${TEAemoji()} Error to send tip, try again later...`);
+                    dmMessage.channel.send(`${getEmoji(config.TEAserverID, 'TEA')} Error to send tip, try again later...`);
                     errorLog(`tip.js:1 postToMods() Error in the function - probably missing permissions (READ/SEND/REACT)\n-------------------------------------------------\nUser tip summary:\nqUser: ${qUser}\nqDescription: ${qDescription}\nqDate: ${qDate}\nqServer: ${qServer}\nqWorld: ${qWorld}\nqProof: ${qProof}\nqNote: ${qNote}\nqRequester: ${qRequester} - ${qRequester.tag} - ${qRequester.id}`, error)
                 })
         } else {
-            dmMessage.channel.send(`${TEAemoji()} Error to send tip, try again later...`);
+            dmMessage.channel.send(`${getEmoji(config.TEAserverID, 'TEA')} Error to send tip, try again later...`);
             errorLog(`tip.js:2 postToMods() TEA official chat channel is missing - maybe wrong channel ID in 'TEAofficialChannel' conf file: ${config.other.officialChannelID}\n-------------------------------------------------\nUser tip summary:\nqUser: ${qUser}\nqDescription: ${qDescription}\nqDate: ${qDate}\nqServer: ${qServer}\nqWorld: ${qWorld}\nqProof: ${qProof}\nqNote: ${qNote}\nqRequester: ${qRequester} - ${qRequester.tag} - ${qRequester.id}`);
         }
     }

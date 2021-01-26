@@ -49,13 +49,10 @@ module.exports.run = async (bot, message, args) => {
     }
 
     function printResultsMessage(guildID) {
-        const TEAemoji = getEmoji(config.TEAserverID, 'TEA');
-        const TEAverified = getEmoji(config.TEAserverID, 'verified');
-
         switch (guildID) {
-            case config.TEAserverID: return botReply(embedMessage(`${TEAverified} **${message.guild.name}** is a primary server of the ${TEAemoji} Trove Ethics Alliance.`, message.author), message, 15000);
-            case undefined: return botReply(embedMessage(`❌ This club is not a certified member of the ${TEAemoji} **Trove Ethics Alliance**`, message.author), message, 15000);
-            default: return botReply(embedMessage(`${TEAverified} **${message.guild.name}** is a certified member of the ${TEAemoji} Trove Ethics Alliance.`, message.author), message, 15000)
+            case config.TEAserverID: return botReply(embedMessage(`${getEmoji(config.TEAserverID, 'verified')} **${message.guild.name}** is a primary server of the ${getEmoji(config.TEAserverID, 'TEA')} Trove Ethics Alliance.`, message.author), message, 15000);
+            case undefined: return botReply(embedMessage(`❌ This club is not a certified member of the ${getEmoji(config.TEAserverID, 'TEA')} **Trove Ethics Alliance**`, message.author), message, 15000);
+            default: return botReply(embedMessage(`${getEmoji(config.TEAserverID, 'verified')} **${message.guild.name}** is a certified member of the ${getEmoji(config.TEAserverID, 'TEA')} Trove Ethics Alliance.`, message.author), message, 15000)
         }
     }
 }

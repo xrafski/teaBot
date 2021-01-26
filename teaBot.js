@@ -6,7 +6,7 @@ require('console-stamp')(console, 'dd/mm/yyyy - HH:MM:ss');
 const bot = new Discord.Client({ partials: ['MESSAGE', 'REACTION'] });
 
 // define current bot version
-const BotVersion = 'pre.alpha12';
+const BotVersion = 'pre.alpha13';
 
 // define icon image url for embeds
 const TEAlogo = 'https://skillez.eu/images/discord/teabanner.png'
@@ -211,7 +211,7 @@ module.exports = {
 			}
 		}
 	},
-	
+
 	embedMessage: function (text, user) {
 		if (!user) {
 			// Send an embed message without footer
@@ -227,12 +227,6 @@ module.exports = {
 				.setFooter(user.tag, user.displayAvatarURL())
 			return embed_message;
 		}
-	},
-
-	TEAemoji: function () {
-		let TEAemoji = bot.guilds.cache.get(config.TEAserverID).emojis.cache.find(emoji => emoji.name === 'TEA');
-		if (TEAemoji) return TEAemoji;
-		else return TEAemoji = '';
 	},
 
 	getEmoji: function (serverID, emojiName) {

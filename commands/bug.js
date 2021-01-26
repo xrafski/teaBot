@@ -1,5 +1,5 @@
 const config = require("../bot-settings.json");
-const { TEAemoji, TEAlogo, Discord, errorLog } = require('../teaBot');
+const { TEAlogo, Discord, errorLog, getEmoji } = require('../teaBot');
 
 module.exports.help = {
     name: "bug",
@@ -63,7 +63,7 @@ module.exports.run = async (bot, message) => {
         if (!additionalText) additionalText = '';
         else additionalText = `**${additionalText}**`;
 
-        return message.reply(`${additionalText}\n${message.author} ${TEAemoji()} Type \`cancel\` to exit.\n\n**Character Details**\n\`\`\`Please provide your in-game name.\`\`\``)
+        return message.reply(`${additionalText}\n${message.author} ${getEmoji(config.TEAserverID, 'TEA')} Type \`cancel\` to exit.\n\n**Character Details**\n\`\`\`Please provide your in-game name.\`\`\``)
             .then(Question => {
                 message.channel.awaitMessages(filter, { max: 1, time: questionResponseTime })
                     .then(Answer => {
@@ -96,7 +96,7 @@ module.exports.run = async (bot, message) => {
         if (!additionalText) additionalText = '';
         else additionalText = `**${additionalText}**`;
 
-        return message.reply(`${additionalText}\n${message.author} ${TEAemoji()} Type \`cancel\` to exit.\n\n**Platform**\n\`\`\`Please, specify the platform you play on (PC, Xbox, PS4 NA, PS4 EU).\`\`\``)
+        return message.reply(`${additionalText}\n${message.author} ${getEmoji(config.TEAserverID, 'TEA')} Type \`cancel\` to exit.\n\n**Platform**\n\`\`\`Please, specify the platform you play on (PC, Xbox, PS4 NA, PS4 EU).\`\`\``)
             .then(Question => {
                 message.channel.awaitMessages(filter, { max: 1, time: questionResponseTime })
                     .then(Answer => {
@@ -128,7 +128,7 @@ module.exports.run = async (bot, message) => {
         if (!additionalText) additionalText = '';
         else additionalText = `**${additionalText}**`;
 
-        return message.reply(`${additionalText}\n${message.author} ${TEAemoji()} Type \`cancel\` to exit.\n\n**Character Details**\n\`\`\`Please provide your basic in-game details.\ncharacter/level/power rank/mastery etc.\`\`\``)
+        return message.reply(`${additionalText}\n${message.author} ${getEmoji(config.TEAserverID, 'TEA')} Type \`cancel\` to exit.\n\n**Character Details**\n\`\`\`Please provide your basic in-game details.\ncharacter/level/power rank/mastery etc.\`\`\``)
             .then(Question => {
                 message.channel.awaitMessages(filter, { max: 1, time: questionResponseTime })
                     .then(Answer => {
@@ -160,7 +160,7 @@ module.exports.run = async (bot, message) => {
         if (!additionalText) additionalText = '';
         else additionalText = `**${additionalText}**`;
 
-        return message.reply(`${additionalText}\n${message.author} ${TEAemoji()} Type \`cancel\` to exit.\n\n**Time and Date**\n\`\`\`When did this happen? Give as specific a timeframe as possible (please include timezone).\nIf it's always bugged, that's helpful too, so you can just say that.\`\`\``)
+        return message.reply(`${additionalText}\n${message.author} ${getEmoji(config.TEAserverID, 'TEA')} Type \`cancel\` to exit.\n\n**Time and Date**\n\`\`\`When did this happen? Give as specific a timeframe as possible (please include timezone).\nIf it's always bugged, that's helpful too, so you can just say that.\`\`\``)
             .then(Question => {
                 message.channel.awaitMessages(filter, { max: 1, time: questionResponseTime })
                     .then(Answer => {
@@ -192,7 +192,7 @@ module.exports.run = async (bot, message) => {
         if (!additionalText) additionalText = '';
         else additionalText = `**${additionalText}**`;
 
-        return message.reply(`${additionalText}\n${message.author} ${TEAemoji()} Type \`cancel\` to exit.\n\n**Context**\n\`\`\`Where did you find this bug? Was it in a specific biome? Which? A specific lair? Which?\nIf the bug is with a costume, which specific costume?\nThe more details you provide, the more quickly we'll be able to replicate the issue.\`\`\``)
+        return message.reply(`${additionalText}\n${message.author} ${getEmoji(config.TEAserverID, 'TEA')} Type \`cancel\` to exit.\n\n**Context**\n\`\`\`Where did you find this bug? Was it in a specific biome? Which? A specific lair? Which?\nIf the bug is with a costume, which specific costume?\nThe more details you provide, the more quickly we'll be able to replicate the issue.\`\`\``)
             .then(Question => {
                 message.channel.awaitMessages(filter, { max: 1, time: questionResponseTime })
                     .then(Answer => {
@@ -224,7 +224,7 @@ module.exports.run = async (bot, message) => {
         if (!additionalText) additionalText = '';
         else additionalText = `**${additionalText}**`;
 
-        return message.reply(`${additionalText}\n${message.author} ${TEAemoji()} Type \`cancel\` to exit.\n\n**Game Details**\n\`\`\`What are the name(s) of any involved quest/badges/item/clubs?\nPlease attempt to provide exact names as shown in-game or type none.\`\`\``)
+        return message.reply(`${additionalText}\n${message.author} ${getEmoji(config.TEAserverID, 'TEA')} Type \`cancel\` to exit.\n\n**Game Details**\n\`\`\`What are the name(s) of any involved quest/badges/item/clubs?\nPlease attempt to provide exact names as shown in-game or type none.\`\`\``)
             .then(Question => {
                 message.channel.awaitMessages(filter, { max: 1, time: questionResponseTime })
                     .then(Answer => {
@@ -256,7 +256,7 @@ module.exports.run = async (bot, message) => {
         if (!additionalText) additionalText = '';
         else additionalText = `**${additionalText}**`;
 
-        return message.reply(`${additionalText}\n${message.author} ${TEAemoji()} Type \`cancel\` to exit.\n\n**Expected**\n\`\`\`What did you expect to happen?\nExample: I summoned my mount and expected to spawn Slow Sebastion.\`\`\``)
+        return message.reply(`${additionalText}\n${message.author} ${getEmoji(config.TEAserverID, 'TEA')} Type \`cancel\` to exit.\n\n**Expected**\n\`\`\`What did you expect to happen?\nExample: I summoned my mount and expected to spawn Slow Sebastion.\`\`\``)
             .then(Question => {
                 message.channel.awaitMessages(filter, { max: 1, time: questionResponseTime })
                     .then(Answer => {
@@ -288,7 +288,7 @@ module.exports.run = async (bot, message) => {
         if (!additionalText) additionalText = '';
         else additionalText = `**${additionalText}**`;
 
-        return message.reply(`${additionalText}\n${message.author} ${TEAemoji()} Type \`cancel\` to exit.\n\n**Observed**\n\`\`\`What happened instead?\nExample: My character threw a bomb.\`\`\``)
+        return message.reply(`${additionalText}\n${message.author} ${getEmoji(config.TEAserverID, 'TEA')} Type \`cancel\` to exit.\n\n**Observed**\n\`\`\`What happened instead?\nExample: My character threw a bomb.\`\`\``)
             .then(Question => {
                 message.channel.awaitMessages(filter, { max: 1, time: questionResponseTime })
                     .then(Answer => {
@@ -320,7 +320,7 @@ module.exports.run = async (bot, message) => {
         if (!additionalText) additionalText = '';
         else additionalText = `**${additionalText}**`;
 
-        return message.reply(`${additionalText}\n${message.author} ${TEAemoji()} Type \`cancel\` to exit.\n\n**Reproduction Steps**\n\`\`\`Most importantly, if possible, please include a list of specific steps we can take to reproduce this issue on our end. \nThese steps need to be something we can reproduce on a new character, not isolated to your character only.\`\`\``)
+        return message.reply(`${additionalText}\n${message.author} ${getEmoji(config.TEAserverID, 'TEA')} Type \`cancel\` to exit.\n\n**Reproduction Steps**\n\`\`\`Most importantly, if possible, please include a list of specific steps we can take to reproduce this issue on our end. \nThese steps need to be something we can reproduce on a new character, not isolated to your character only.\`\`\``)
             .then(Question => {
                 message.channel.awaitMessages(filter, { max: 1, time: questionResponseTime })
                     .then(Answer => {
@@ -352,7 +352,7 @@ module.exports.run = async (bot, message) => {
         if (!additionalText) additionalText = '';
         else additionalText = `**${additionalText}**`;
 
-        return message.reply(`${additionalText}\n${message.author} ${TEAemoji()} Type \`cancel\` to exit.\n\n**Image/Video Documentation**\n\`\`\`Often the most useful information we can get for bugs will be screenshots or video documentation of the bug occurring.\nThese can be uploaded to 3rd party websites (youtube/imgur) and you just have to include the link to them or type none if you don't have any.\`\`\``)
+        return message.reply(`${additionalText}\n${message.author} ${getEmoji(config.TEAserverID, 'TEA')} Type \`cancel\` to exit.\n\n**Image/Video Documentation**\n\`\`\`Often the most useful information we can get for bugs will be screenshots or video documentation of the bug occurring.\nThese can be uploaded to 3rd party websites (youtube/imgur) and you just have to include the link to them or type none if you don't have any.\`\`\``)
             .then(Question => {
                 message.channel.awaitMessages(filter, { max: 1, time: questionResponseTime })
                     .then(Answer => {
@@ -384,7 +384,7 @@ module.exports.run = async (bot, message) => {
         if (!additionalText) additionalText = '';
         else additionalText = `**${additionalText}**`;
 
-        return message.reply(`${additionalText}\n${message.author} ${TEAemoji()} Type \`cancel\` to exit.\n\n**Note**\n\`\`\`Now you can insert a note. It might be your idea to fix this bug or anything else.\nYou can also type 'none' to proceed without this note.\`\`\``)
+        return message.reply(`${additionalText}\n${message.author} ${getEmoji(config.TEAserverID, 'TEA')} Type \`cancel\` to exit.\n\n**Note**\n\`\`\`Now you can insert a note. It might be your idea to fix this bug or anything else.\nYou can also type 'none' to proceed without this note.\`\`\``)
             .then(Question => {
                 message.channel.awaitMessages(filter, { max: 1, time: questionResponseTime })
                     .then(Answer => {
@@ -436,14 +436,14 @@ module.exports.run = async (bot, message) => {
                 .setThumbnail(qRequester.displayAvatarURL())
                 .setFooter('React with ✅ below to move to the appropriate category')
                 .setTimestamp()
-            return TEAchannel.send(embed_tip_summary).catch(() => { dmMessage.channel.send(`${TEAemoji()} Error to send bug report, try again later...`); })
+            return TEAchannel.send(embed_tip_summary).catch(() => { dmMessage.channel.send(`${getEmoji(config.TEAserverID, 'TEA')} Error to send bug report, try again later...`); })
                 .then(async message => {
-                    if (message) dmMessage.channel.send(`${TEAemoji()} Your bug report has been successfully sent!`);
+                    if (message) dmMessage.channel.send(`${getEmoji(config.TEAserverID, 'TEA')} Your bug report has been successfully sent!`);
                     // userInputSummary();
                 })
                 .catch(error => { errorLog(`bug.js:1 postToMods() Error in the function - probably missing permissions (SEND_MESSAGES/READ_MESSAGES/READ_MESSAGE_HISTORY/EMBED_LINKS)`, error); })
         } else {
-            dmMessage.channel.send(`${TEAemoji()} Error to send bug report, try again later...`);
+            dmMessage.channel.send(`${getEmoji(config.TEAserverID, 'TEA')} Error to send bug report, try again later...`);
             errorLog(`bug.js:2 postToMods() TEA bug queue chat channel is missing - maybe wrong channel ID in 'bugQueueChannelID' conf file: ${config.report.bugQueueChannelID}\n-------------------------------------------------`);
         }
     }

@@ -1,5 +1,5 @@
 const config = require("../bot-settings.json");
-const { TEAemoji } = require('../teaBot');
+const { getEmoji } = require("../teaBot");
 
 module.exports.help = {
     name: "uptime",
@@ -13,7 +13,7 @@ module.exports.run = async (bot, message) => {
     //                                          uptime                                          //
     //////////////////////////////////////////////////////////////////////////////////////////////
 
-    return message.channel.send(`${TEAemoji()} Current TEA bot uptime: **${convertMiliseconds(bot.uptime)}**.`)
+    return message.channel.send(`${getEmoji(config.TEAserverID, 'TEA')} Current TEA bot uptime: **${convertMiliseconds(bot.uptime)}**.`)
         .then(message => message.delete({ timeout: 5000 })).catch(() => { return });
 
     /////////////////////////////////////////////////////////////////////////////////////////
