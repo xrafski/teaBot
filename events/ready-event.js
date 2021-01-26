@@ -13,5 +13,5 @@ bot.on('ready', () => {
                 bot.guilds.cache.forEach(guild => amountOfPeople = amountOfPeople + guild.memberCount);
                 bot.user.setPresence({ activity: { name: `${amountOfPeople} users 👮‍♂️`, type: 'WATCHING' }, status: 'online' });
             }, 3600000);
-        }).catch(error => errorLog(`ready-event.js:1 ready Event()\nError to set the bot activity.`, error.message));
+        }).catch(error => errorLog(`ready-event.js:1 ready Event()\nError to set the bot activity.`, error));
 });

@@ -1,4 +1,4 @@
-const { bot, errorLog, botReply, embedMessage, Discord, TEAlogo, emojiCharacters, getEmoji } = require('../teaBot');
+const { bot, botReply, embedMessage, Discord, TEAlogo, emojiCharacters, getEmoji } = require('../teaBot');
 const config = require("../bot-settings.json");
 
 bot.on('messageReactionAdd', async (reaction, user) => {
@@ -12,7 +12,8 @@ bot.on('messageReactionAdd', async (reaction, user) => {
                 if (reaction.message.embeds[0] && reaction.message.embeds[0].author && reaction.message.embeds[0].author.name === 'Bug Report' && reaction.emoji.name === '✅') return emojiReactionMenu(reaction.message, user);
                 else if (reaction.message.embeds[0] && reaction.message.embeds[0].author && reaction.message.embeds[0].author.name === 'Bug Report' && reaction.emoji.name === '💬' && !reaction.message.embeds[0].description) return confirmationMenu(reaction.message, user);
                 // else if (reaction.message.embeds[0] && reaction.message.embeds[0].author && reaction.message.embeds[0].author.name === 'Bug Report' && reaction.message.embeds[0].description && reaction.emoji.name === '🐛') return autoReportReplyReset(reaction.message);
-            }).catch(error => errorLog(`tip-reactions.js:1 messageReactionAdd event()\nError to fetch the message`, error));
+            })
+            .catch(error => console.error(`report-reactions.js:1 messageReactionAdd event() Error to fetch the message ${error}`));
 
         //////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -33,7 +34,7 @@ bot.on('messageReactionAdd', async (reaction, user) => {
                         msg.awaitReactions(emojiFilter, { max: 1, time: 60000 })
                             .then(collected => {
                                 const reaction = collected.first();
-                                msg.delete().catch(() => { }); // Delete bot's msg
+                                msg.delete().catch(error => console.error(`report-reactions.js:1 emojiReactionMenu() Error to delete the message ${error}`)); // Delete bot's msg
 
                                 switch (reaction.emoji.name) {
                                     case '❌': return;
@@ -48,9 +49,8 @@ bot.on('messageReactionAdd', async (reaction, user) => {
                                 }
                             })
                             .catch(error => {
-                                msg.delete().catch(() => { });
-                                if (error.message === "Cannot read property 'emoji' of undefined") return botReply(embedMessage(`${user} ❌ There was no reaction within the time limit (1min)!`), message, 10000);
-                                errorLog(`tip-reactions.js:1 emojiReactionMenu()\nError when user answer the msg.`, error);
+                                if (error.message === "Cannot read property 'emoji' of undefined") botReply(embedMessage(`${user} ❌ There was no reaction within the time limit (1min)!`), message, 10000);
+                                else console.error(`report-reactions.js:2 emojiReactionMenu() ${error}`);
                             });
 
                         await msg.react(emojiCharacters[1]);
@@ -63,10 +63,7 @@ bot.on('messageReactionAdd', async (reaction, user) => {
                         await msg.react('❌');
                     }
                 })
-                .catch(error => {
-                    if (error.message === 'Unknown Message') return;
-                    errorLog(`tip-reactions.js:2 emojiReactionMenu() Error in the function - probably missing permissions (READ_MESSAGES/READ_MESSAGE_HISTORY/ADD_REACTIONS)`, error)
-                })
+                .catch(error => console.error(`report-reactions.js:4 emojiReactionMenu() (READ_MESSAGES/READ_MESSAGE_HISTORY/ADD_REACTIONS) ${error}`))
         }
 
         function moveTheReport(channelID, type) {
@@ -74,18 +71,21 @@ bot.on('messageReactionAdd', async (reaction, user) => {
 
             if (BUGchannel) {
                 if (reaction.message.channel === BUGchannel) return botReply(embedMessage(`${user} ${getEmoji(config.TEAserverID, 'TEA')} You can't move the report because it's already here!`), reaction.message, 10000);
-                else return BUGchannel.send(reaction.message.embeds[0]).catch(() => { botReply(embedMessage(`${user} ${getEmoji(config.TEAserverID, 'TEA')} Error to move the report, try again later...`), reaction.message, 10000) })
+                else return BUGchannel.send(reaction.message.embeds[0])
                     .then(async message => {
                         if (message) {
-                            reaction.message.delete().catch(() => { });
+                            reaction.message.delete().catch(error => console.error(`report-reactions.js:1 moveTheReport() Error to delete the message ${error}`));
                             botReply(embedMessage(`${user} ${getEmoji(config.TEAserverID, 'TEA')} [Report](${message.url}) has been moved to ${BUGchannel}!`), reaction.message, 10000);
-                        } else return;
+                        }
                     })
-                    .catch(error => { errorLog(`tip-reactions.js:1 moveTheReport() Error in the function - probably missing permissions (READ_MESSAGES/READ_MESSAGE_HISTORY/ADD_REACTIONS)`, error); })
+                    .catch(error => {
+                        botReply(embedMessage(`${user} ${getEmoji(config.TEAserverID, 'TEA')} Error to move the report, try again later...`), reaction.message, 10000);
+                        console.error(`report-reactions.js:2 moveTheReport() (READ_MESSAGES/READ_MESSAGE_HISTORY/ADD_REACTIONS) ${error}`)
+                    })
 
             } else {
                 botReply(embedMessage(`${user} ${getEmoji(config.TEAserverID, 'TEA')} Error to move report, try again later...`), reaction.message, 10000);
-                errorLog(`tip-reactions.js:2 moveTheReport() ${type} channel is missing read permissions or maybe wrong channel ID in conf file.`);
+                console.error(`report-reactions.js:3 moveTheReport() ${type} channel is missing read permissions or maybe wrong channel ID in conf file.`);
             }
         }
 
@@ -105,7 +105,7 @@ bot.on('messageReactionAdd', async (reaction, user) => {
                         msg.awaitReactions(emojiFilter, { max: 1, time: 60000 })
                             .then(collected => {
                                 const reaction = collected.first();
-                                msg.delete().catch(() => { }); // Delete bot's msg
+                                msg.delete().catch(error => console.error(`report-reactions.js:1 confirmationMenu() Error to delete the message ${error}`)); // Delete bot's msg
 
                                 switch (reaction.emoji.name) {
                                     case '❌': return;
@@ -114,19 +114,15 @@ bot.on('messageReactionAdd', async (reaction, user) => {
                                 }
                             })
                             .catch(error => {
-                                msg.delete().catch(() => { });
-                                if (error.message === "Cannot read property 'emoji' of undefined") return botReply(embedMessage(`${user} ❌ There was no reaction within the time limit (1min)!`), message, 10000);
-                                errorLog(`tip-reactions.js:1 confirmationMenu()\nError when user answer the msg.`, error);
+                                if (error.message === "Cannot read property 'emoji' of undefined") botReply(embedMessage(`${user} ❌ There was no reaction within the time limit (1min)!`), message, 10000);
+                                else console.error(`report-reactions.js:2 confirmationMenu() ${error}`);
                             });
 
                         await msg.react('✅');
                         await msg.react('❌');
                     }
                 })
-                .catch(error => {
-                    if (error.message === 'Unknown Message') return;
-                    errorLog(`tip-reactions.js:2 confirmationMenu() Error in the function - probably missing permissions (READ_MESSAGES/READ_MESSAGE_HISTORY/ADD_REACTIONS)`, error)
-                })
+                .catch(error => console.error(`report-reactions.js:3 confirmationMenu() (READ_MESSAGES/READ_MESSAGE_HISTORY/ADD_REACTIONS) ${error}`))
         }
 
         function autoReportReply(message) {
@@ -139,26 +135,25 @@ bot.on('messageReactionAdd', async (reaction, user) => {
                         .then(messageSent => {
                             if (messageSent) {
                                 const replyConfirmation = new Discord.MessageEmbed(embedContent).setDescription(`💬 Auto-Reply has been sent`);
-                                message.edit(replyConfirmation).catch(error => console.debug(`Error to edit the report message #1`, error.message));
-                            } else console.debug(`messageSent is undefined aka DM is not sent - ${message.url}`);
+                                message.edit(replyConfirmation).catch(error => console.error(`report-reactions.js:1 autoReportReply() Error to edit the message ${error}`));
+                            }
                         })
                         .catch(error => {
                             const errorReply = new Discord.MessageEmbed(embedContent).setDescription(`💬 Auto-Reply has failed successfully!\n❌ ${error.message}`);
-                            message.edit(errorReply).catch(error => console.debug(`Error to edit the report message #2`, error.message));
+                            message.edit(errorReply).catch(error => console.debug(`report-reactions.js:2 autoReportReply() Error to edit the message ${error}`));
                         });
                 })
                 .catch(error => {
-                    // console.debug(`Error to fetch the user`, error);
                     const errorReply = new Discord.MessageEmbed(embedContent).setDescription(`💬 Auto-Reply has failed successfully!\n❌ ${error.message}`);
-                    message.edit(errorReply).catch(error => console.debug(`Error to edit the report message #3`, error.message));
+                    message.edit(errorReply).catch(error => console.debug(`report-reactions.js:3 autoReportReply() Error to edit the message ${error}`));
                 });
         }
 
-        function autoReportReplyReset(message) {
-            const embedContent = message.embeds[0];
-            const replyConfirmation = new Discord.MessageEmbed(embedContent).setDescription('');
-            message.edit(replyConfirmation)
-        }
+        // function autoReportReplyReset(message) {
+        //     const embedContent = message.embeds[0];
+        //     const replyConfirmation = new Discord.MessageEmbed(embedContent).setDescription('');
+        //     message.edit(replyConfirmation)
+        // }
 
     } else return;
 });

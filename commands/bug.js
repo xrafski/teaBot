@@ -1,5 +1,5 @@
 const config = require("../bot-settings.json");
-const { TEAlogo, Discord, errorLog, getEmoji } = require('../teaBot');
+const { TEAlogo, Discord, errorLog, getEmoji, botReply } = require('../teaBot');
 
 module.exports.help = {
     name: "bug",
@@ -60,18 +60,17 @@ module.exports.run = async (bot, message) => {
     }
 
     function nicknameQuestion(additionalText) {
-        if (!additionalText) additionalText = '';
-        else additionalText = `**${additionalText}**`;
+        additionalText = (additionalText ? `**${additionalText}**` : '');
 
-        return message.reply(`${additionalText}\n${message.author} ${getEmoji(config.TEAserverID, 'TEA')} Type \`cancel\` to exit.\n\n**Character Details**\n\`\`\`Please provide your in-game name.\`\`\``)
+        return botReply(`${additionalText}\n${message.author} ${getEmoji(config.TEAserverID, 'TEA')} Type \`cancel\` to exit.\n\n**Character Details**\n\`\`\`Please provide your in-game name.\`\`\``, message)
             .then(Question => {
                 message.channel.awaitMessages(filter, { max: 1, time: questionResponseTime })
                     .then(Answer => {
-                        Question.delete().catch(() => { return });
+                        if (Question.deleteable) Question.delete().catch((error) => console.error(`bug.js:1 nicknameQuestion() Error to remove question ${error}`));
                         if (Answer.first().content.startsWith(config.BotPrefix)) return;
 
                         else if (Answer.first().content.toLowerCase() === 'exit' || Answer.first().content.toLowerCase() === 'cancel')
-                            return message.channel.send(`❌ Cancelled`);
+                            return botReply(`❌ Cancelled`, message);
 
                         else if (Answer.first().content.length < 3)
                             return nicknameQuestion('❌ Nickname is too short [3 characters].');
@@ -86,25 +85,24 @@ module.exports.run = async (bot, message) => {
                         }
 
                     }).catch(error => {
-                        if (error.message === "Cannot read property 'content' of undefined") return message.channel.send(`❌ There was no message within the time limit (${Math.round(questionResponseTime / 60000)}mins)! - Cancelled.`);
-                        else return;
+                        if (error.message === "Cannot read property 'content' of undefined") botReply(`❌ There was no message within the time limit (${Math.round(questionResponseTime / 60000)}mins)! - Cancelled.`, message);
+                        else console.error(`bug.js:2 nicknameQuestion() ${error}`);
                     });
             });
     }
 
     function platformQuestion(additionalText) {
-        if (!additionalText) additionalText = '';
-        else additionalText = `**${additionalText}**`;
+        additionalText = (additionalText ? `**${additionalText}**` : '');
 
-        return message.reply(`${additionalText}\n${message.author} ${getEmoji(config.TEAserverID, 'TEA')} Type \`cancel\` to exit.\n\n**Platform**\n\`\`\`Please, specify the platform you play on (PC, Xbox, PS4 NA, PS4 EU).\`\`\``)
+        return botReply(`${additionalText}\n${message.author} ${getEmoji(config.TEAserverID, 'TEA')} Type \`cancel\` to exit.\n\n**Platform**\n\`\`\`Please, specify the platform you play on (PC, Xbox, PS4 NA, PS4 EU).\`\`\``, message)
             .then(Question => {
                 message.channel.awaitMessages(filter, { max: 1, time: questionResponseTime })
                     .then(Answer => {
-                        Question.delete().catch(() => { return });
+                        if (Question.deleteable) Question.delete().catch((error) => console.error(`bug.js:1 platformQuestion() Error to remove question ${error}`));
                         if (Answer.first().content.startsWith(config.BotPrefix)) return;
 
                         else if (Answer.first().content.toLowerCase() === 'exit' || Answer.first().content.toLowerCase() === 'cancel')
-                            return message.channel.send(`❌ Cancelled`);
+                            return botReply(`❌ Cancelled`, message);
 
                         else if (Answer.first().content.length < 1)
                             return platformQuestion('❌ Platform answer is too short.');
@@ -118,25 +116,24 @@ module.exports.run = async (bot, message) => {
                         }
 
                     }).catch(error => {
-                        if (error.message === "Cannot read property 'content' of undefined") return message.channel.send(`❌ There was no message within the time limit (${Math.round(questionResponseTime / 60000)}mins)! - Cancelled.`);
-                        else return;
+                        if (error.message === "Cannot read property 'content' of undefined") botReply(`❌ There was no message within the time limit (${Math.round(questionResponseTime / 60000)}mins)! - Cancelled.`, message);
+                        else console.error(`bug.js:2 platformQuestion() ${error}`);
                     });
             });
     }
 
     function characterQuestion(additionalText) {
-        if (!additionalText) additionalText = '';
-        else additionalText = `**${additionalText}**`;
+        additionalText = (additionalText ? `**${additionalText}**` : '');
 
-        return message.reply(`${additionalText}\n${message.author} ${getEmoji(config.TEAserverID, 'TEA')} Type \`cancel\` to exit.\n\n**Character Details**\n\`\`\`Please provide your basic in-game details.\ncharacter/level/power rank/mastery etc.\`\`\``)
+        return botReply(`${additionalText}\n${message.author} ${getEmoji(config.TEAserverID, 'TEA')} Type \`cancel\` to exit.\n\n**Character Details**\n\`\`\`Please provide your basic in-game details.\ncharacter/level/power rank/mastery etc.\`\`\``, message)
             .then(Question => {
                 message.channel.awaitMessages(filter, { max: 1, time: questionResponseTime })
                     .then(Answer => {
-                        Question.delete().catch(() => { return });
+                        if (Question.deleteable) Question.delete().catch((error) => console.error(`bug.js:1 characterQuestion() Error to remove question ${error}`));
                         if (Answer.first().content.startsWith(config.BotPrefix)) return;
 
                         else if (Answer.first().content.toLowerCase() === 'exit' || Answer.first().content.toLowerCase() === 'cancel')
-                            return message.channel.send(`❌ Cancelled`);
+                            return botReply(`❌ Cancelled`, message);
 
                         else if (Answer.first().content.length < 1)
                             return characterQuestion('❌ Character details are too short.');
@@ -150,25 +147,24 @@ module.exports.run = async (bot, message) => {
                         }
 
                     }).catch(error => {
-                        if (error.message === "Cannot read property 'content' of undefined") return message.channel.send(`❌ There was no message within the time limit (${Math.round(questionResponseTime / 60000)}mins)! - Cancelled.`);
-                        else return;
+                        if (error.message === "Cannot read property 'content' of undefined") botReply(`❌ There was no message within the time limit (${Math.round(questionResponseTime / 60000)}mins)! - Cancelled.`, message);
+                        else console.error(`bug.js:2 characterQuestion() ${error}`);
                     });
             });
     }
 
     function dateQuestion(additionalText) {
-        if (!additionalText) additionalText = '';
-        else additionalText = `**${additionalText}**`;
+        additionalText = (additionalText ? `**${additionalText}**` : '');
 
-        return message.reply(`${additionalText}\n${message.author} ${getEmoji(config.TEAserverID, 'TEA')} Type \`cancel\` to exit.\n\n**Time and Date**\n\`\`\`When did this happen? Give as specific a timeframe as possible (please include timezone).\nIf it's always bugged, that's helpful too, so you can just say that.\`\`\``)
+        return botReply(`${additionalText}\n${message.author} ${getEmoji(config.TEAserverID, 'TEA')} Type \`cancel\` to exit.\n\n**Time and Date**\n\`\`\`When did this happen? Give as specific a timeframe as possible (please include timezone).\nIf it's always bugged, that's helpful too, so you can just say that.\`\`\``, message)
             .then(Question => {
                 message.channel.awaitMessages(filter, { max: 1, time: questionResponseTime })
                     .then(Answer => {
-                        Question.delete().catch(() => { return });
+                        if (Question.deleteable) Question.delete().catch((error) => console.error(`bug.js:1 dateQuestion() Error to remove question ${error}`));
                         if (Answer.first().content.startsWith(config.BotPrefix)) return;
 
                         else if (Answer.first().content.toLowerCase() === 'exit' || Answer.first().content.toLowerCase() === 'cancel')
-                            return message.channel.send(`❌ Cancelled`);
+                            return botReply(`❌ Cancelled`, message);
 
                         else if (Answer.first().content.length < 1)
                             return dateQuestion('❌ Date is too short.');
@@ -182,25 +178,24 @@ module.exports.run = async (bot, message) => {
                         }
 
                     }).catch(error => {
-                        if (error.message === "Cannot read property 'content' of undefined") return message.channel.send(`❌ There was no message within the time limit (${Math.round(questionResponseTime / 60000)}mins)! - Cancelled.`);
-                        else return;
+                        if (error.message === "Cannot read property 'content' of undefined") botReply(`❌ There was no message within the time limit (${Math.round(questionResponseTime / 60000)}mins)! - Cancelled.`, message);
+                        else console.error(`bug.js:2 dateQuestion() ${error}`);
                     });
             });
     }
 
     function contextQuestion(additionalText) {
-        if (!additionalText) additionalText = '';
-        else additionalText = `**${additionalText}**`;
+        additionalText = (additionalText ? `**${additionalText}**` : '');
 
-        return message.reply(`${additionalText}\n${message.author} ${getEmoji(config.TEAserverID, 'TEA')} Type \`cancel\` to exit.\n\n**Context**\n\`\`\`Where did you find this bug? Was it in a specific biome? Which? A specific lair? Which?\nIf the bug is with a costume, which specific costume?\nThe more details you provide, the more quickly we'll be able to replicate the issue.\`\`\``)
+        return botReply(`${additionalText}\n${message.author} ${getEmoji(config.TEAserverID, 'TEA')} Type \`cancel\` to exit.\n\n**Context**\n\`\`\`Where did you find this bug? Was it in a specific biome? Which? A specific lair? Which?\nIf the bug is with a costume, which specific costume?\nThe more details you provide, the more quickly we'll be able to replicate the issue.\`\`\``, message)
             .then(Question => {
                 message.channel.awaitMessages(filter, { max: 1, time: questionResponseTime })
                     .then(Answer => {
-                        Question.delete().catch(() => { return });
+                        if (Question.deleteable) Question.delete().catch((error) => console.error(`bug.js:1 contextQuestion() Error to remove question ${error}`));
                         if (Answer.first().content.startsWith(config.BotPrefix)) return;
 
                         else if (Answer.first().content.toLowerCase() === 'exit' || Answer.first().content.toLowerCase() === 'cancel')
-                            return message.channel.send(`❌ Cancelled`);
+                            return botReply(`❌ Cancelled`, message);
 
                         else if (Answer.first().content.length < 1)
                             return contextQuestion('❌ Context is too short.');
@@ -214,25 +209,24 @@ module.exports.run = async (bot, message) => {
                         }
 
                     }).catch(error => {
-                        if (error.message === "Cannot read property 'content' of undefined") return message.channel.send(`❌ There was no message within the time limit (${Math.round(questionResponseTime / 60000)}mins)! - Cancelled.`);
-                        else return;
+                        if (error.message === "Cannot read property 'content' of undefined") botReply(`❌ There was no message within the time limit (${Math.round(questionResponseTime / 60000)}mins)! - Cancelled.`, message);
+                        else console.error(`bug.js:2 contextQuestion() ${error}`);
                     });
             });
     }
 
     function gameQuestion(additionalText) {
-        if (!additionalText) additionalText = '';
-        else additionalText = `**${additionalText}**`;
+        additionalText = (additionalText ? `**${additionalText}**` : '');
 
-        return message.reply(`${additionalText}\n${message.author} ${getEmoji(config.TEAserverID, 'TEA')} Type \`cancel\` to exit.\n\n**Game Details**\n\`\`\`What are the name(s) of any involved quest/badges/item/clubs?\nPlease attempt to provide exact names as shown in-game or type none.\`\`\``)
+        return botReply(`${additionalText}\n${message.author} ${getEmoji(config.TEAserverID, 'TEA')} Type \`cancel\` to exit.\n\n**Game Details**\n\`\`\`What are the name(s) of any involved quest/badges/item/clubs?\nPlease attempt to provide exact names as shown in-game or type none.\`\`\``, message)
             .then(Question => {
                 message.channel.awaitMessages(filter, { max: 1, time: questionResponseTime })
                     .then(Answer => {
-                        Question.delete().catch(() => { return });
+                        if (Question.deleteable) Question.delete().catch((error) => console.error(`bug.js:1 gameQuestion() Error to remove question ${error}`));
                         if (Answer.first().content.startsWith(config.BotPrefix)) return;
 
                         else if (Answer.first().content.toLowerCase() === 'exit' || Answer.first().content.toLowerCase() === 'cancel')
-                            return message.channel.send(`❌ Cancelled`);
+                            return botReply(`❌ Cancelled`, message);
 
                         else if (Answer.first().content.length < 1)
                             return gameQuestion('❌ Game details are too short.');
@@ -246,25 +240,24 @@ module.exports.run = async (bot, message) => {
                         }
 
                     }).catch(error => {
-                        if (error.message === "Cannot read property 'content' of undefined") return message.channel.send(`❌ There was no message within the time limit (${Math.round(questionResponseTime / 60000)}mins)! - Cancelled.`);
-                        else return;
+                        if (error.message === "Cannot read property 'content' of undefined") botReply(`❌ There was no message within the time limit (${Math.round(questionResponseTime / 60000)}mins)! - Cancelled.`, message);
+                        else console.error(`bug.js:2 gameQuestion() ${error}`);
                     });
             });
     }
 
     function expectedQuestion(additionalText) {
-        if (!additionalText) additionalText = '';
-        else additionalText = `**${additionalText}**`;
+        additionalText = (additionalText ? `**${additionalText}**` : '');
 
-        return message.reply(`${additionalText}\n${message.author} ${getEmoji(config.TEAserverID, 'TEA')} Type \`cancel\` to exit.\n\n**Expected**\n\`\`\`What did you expect to happen?\nExample: I summoned my mount and expected to spawn Slow Sebastion.\`\`\``)
+        return botReply(`${additionalText}\n${message.author} ${getEmoji(config.TEAserverID, 'TEA')} Type \`cancel\` to exit.\n\n**Expected**\n\`\`\`What did you expect to happen?\nExample: I summoned my mount and expected to spawn Slow Sebastion.\`\`\``, message)
             .then(Question => {
                 message.channel.awaitMessages(filter, { max: 1, time: questionResponseTime })
                     .then(Answer => {
-                        Question.delete().catch(() => { return });
+                        if (Question.deleteable) Question.delete().catch((error) => console.error(`bug.js:1 expectedQuestion() Error to remove question ${error}`));
                         if (Answer.first().content.startsWith(config.BotPrefix)) return;
 
                         else if (Answer.first().content.toLowerCase() === 'exit' || Answer.first().content.toLowerCase() === 'cancel')
-                            return message.channel.send(`❌ Cancelled`);
+                            return botReply(`❌ Cancelled`, message);
 
                         else if (Answer.first().content.length < 1)
                             return expectedQuestion('❌ Expected answer is too short.');
@@ -278,25 +271,24 @@ module.exports.run = async (bot, message) => {
                         }
 
                     }).catch(error => {
-                        if (error.message === "Cannot read property 'content' of undefined") return message.channel.send(`❌ There was no message within the time limit (${Math.round(questionResponseTime / 60000)}mins)! - Cancelled.`);
-                        else return;
+                        if (error.message === "Cannot read property 'content' of undefined") botReply(`❌ There was no message within the time limit (${Math.round(questionResponseTime / 60000)}mins)! - Cancelled.`, message);
+                        else console.error(`bug.js:2 expectedQuestion() ${error}`);
                     });
             });
     }
 
     function observedQuestion(additionalText) {
-        if (!additionalText) additionalText = '';
-        else additionalText = `**${additionalText}**`;
+        additionalText = (additionalText ? `**${additionalText}**` : '');
 
         return message.reply(`${additionalText}\n${message.author} ${getEmoji(config.TEAserverID, 'TEA')} Type \`cancel\` to exit.\n\n**Observed**\n\`\`\`What happened instead?\nExample: My character threw a bomb.\`\`\``)
             .then(Question => {
                 message.channel.awaitMessages(filter, { max: 1, time: questionResponseTime })
                     .then(Answer => {
-                        Question.delete().catch(() => { return });
+                        if (Question.deleteable) Question.delete().catch((error) => console.error(`bug.js:1 observedQuestion() Error to remove question ${error}`));
                         if (Answer.first().content.startsWith(config.BotPrefix)) return;
 
                         else if (Answer.first().content.toLowerCase() === 'exit' || Answer.first().content.toLowerCase() === 'cancel')
-                            return message.channel.send(`❌ Cancelled`);
+                            return botReply(`❌ Cancelled`, message);
 
                         else if (Answer.first().content.length < 1)
                             return observedQuestion('❌ Observed answer is too short.');
@@ -310,25 +302,24 @@ module.exports.run = async (bot, message) => {
                         }
 
                     }).catch(error => {
-                        if (error.message === "Cannot read property 'content' of undefined") return message.channel.send(`❌ There was no message within the time limit (${Math.round(questionResponseTime / 60000)}mins)! - Cancelled.`);
-                        else return;
+                        if (error.message === "Cannot read property 'content' of undefined") botReply(`❌ There was no message within the time limit (${Math.round(questionResponseTime / 60000)}mins)! - Cancelled.`, message);
+                        else console.error(`bug.js:2 observedQuestion() ${error}`);
                     });
             });
     }
 
     function reproductionQuestion(additionalText) {
-        if (!additionalText) additionalText = '';
-        else additionalText = `**${additionalText}**`;
+        additionalText = (additionalText ? `**${additionalText}**` : '');
 
-        return message.reply(`${additionalText}\n${message.author} ${getEmoji(config.TEAserverID, 'TEA')} Type \`cancel\` to exit.\n\n**Reproduction Steps**\n\`\`\`Most importantly, if possible, please include a list of specific steps we can take to reproduce this issue on our end. \nThese steps need to be something we can reproduce on a new character, not isolated to your character only.\`\`\``)
+        return botReply(`${additionalText}\n${message.author} ${getEmoji(config.TEAserverID, 'TEA')} Type \`cancel\` to exit.\n\n**Reproduction Steps**\n\`\`\`Most importantly, if possible, please include a list of specific steps we can take to reproduce this issue on our end. \nThese steps need to be something we can reproduce on a new character, not isolated to your character only.\`\`\``, message)
             .then(Question => {
                 message.channel.awaitMessages(filter, { max: 1, time: questionResponseTime })
                     .then(Answer => {
-                        Question.delete().catch(() => { return });
+                        if (Question.deleteable) Question.delete().catch((error) => console.error(`bug.js:1 reproductionQuestion() Error to remove question ${error}`));
                         if (Answer.first().content.startsWith(config.BotPrefix)) return;
 
                         else if (Answer.first().content.toLowerCase() === 'exit' || Answer.first().content.toLowerCase() === 'cancel')
-                            return message.channel.send(`❌ Cancelled`);
+                            return botReply(`❌ Cancelled`, message);
 
                         else if (Answer.first().content.length < 1)
                             return reproductionQuestion('❌ Reproduction steps answer is too short.');
@@ -342,25 +333,24 @@ module.exports.run = async (bot, message) => {
                         }
 
                     }).catch(error => {
-                        if (error.message === "Cannot read property 'content' of undefined") return message.channel.send(`❌ There was no message within the time limit (${Math.round(questionResponseTime / 60000)}mins)! - Cancelled.`);
-                        else return;
+                        if (error.message === "Cannot read property 'content' of undefined") botReply(`❌ There was no message within the time limit (${Math.round(questionResponseTime / 60000)}mins)! - Cancelled.`, message);
+                        else console.error(`bug.js:2 reproductionQuestion() ${error}`);
                     });
             });
     }
 
     function mediaQuestion(additionalText) {
-        if (!additionalText) additionalText = '';
-        else additionalText = `**${additionalText}**`;
+        additionalText = (additionalText ? `**${additionalText}**` : '');
 
-        return message.reply(`${additionalText}\n${message.author} ${getEmoji(config.TEAserverID, 'TEA')} Type \`cancel\` to exit.\n\n**Image/Video Documentation**\n\`\`\`Often the most useful information we can get for bugs will be screenshots or video documentation of the bug occurring.\nThese can be uploaded to 3rd party websites (youtube/imgur) and you just have to include the link to them or type none if you don't have any.\`\`\``)
+        return botReply(`${additionalText}\n${message.author} ${getEmoji(config.TEAserverID, 'TEA')} Type \`cancel\` to exit.\n\n**Image/Video Documentation**\n\`\`\`Often the most useful information we can get for bugs will be screenshots or video documentation of the bug occurring.\nThese can be uploaded to 3rd party websites (youtube/imgur) and you just have to include the link to them or type none if you don't have any.\`\`\``, message)
             .then(Question => {
                 message.channel.awaitMessages(filter, { max: 1, time: questionResponseTime })
                     .then(Answer => {
-                        Question.delete().catch(() => { return });
+                        if (Question.deleteable) Question.delete().catch((error) => console.error(`bug.js:1 mediaQuestion() Error to remove question ${error}`));
                         if (Answer.first().content.startsWith(config.BotPrefix)) return;
 
                         else if (Answer.first().content.toLowerCase() === 'exit' || Answer.first().content.toLowerCase() === 'cancel')
-                            return message.channel.send(`❌ Cancelled`);
+                            return botReply(`❌ Cancelled`, message);
 
                         else if (Answer.first().content.length < 1)
                             return mediaQuestion('❌ Media are too short.');
@@ -374,25 +364,24 @@ module.exports.run = async (bot, message) => {
                         }
 
                     }).catch(error => {
-                        if (error.message === "Cannot read property 'content' of undefined") return message.channel.send(`❌ There was no message within the time limit (${Math.round(questionResponseTime / 60000)}mins)! - Cancelled.`);
-                        else return;
+                        if (error.message === "Cannot read property 'content' of undefined") botReply(`❌ There was no message within the time limit (${Math.round(questionResponseTime / 60000)}mins)! - Cancelled.`, message);
+                        else console.error(`bug.js:2 mediaQuestion() ${error}`);
                     });
             });
     }
 
     function noteQuestion(additionalText) {
-        if (!additionalText) additionalText = '';
-        else additionalText = `**${additionalText}**`;
+        additionalText = (additionalText ? `**${additionalText}**` : '');
 
-        return message.reply(`${additionalText}\n${message.author} ${getEmoji(config.TEAserverID, 'TEA')} Type \`cancel\` to exit.\n\n**Note**\n\`\`\`Now you can insert a note. It might be your idea to fix this bug or anything else.\nYou can also type 'none' to proceed without this note.\`\`\``)
+        return botReply(`${additionalText}\n${message.author} ${getEmoji(config.TEAserverID, 'TEA')} Type \`cancel\` to exit.\n\n**Note**\n\`\`\`Now you can insert a note. It might be your idea to fix this bug or anything else.\nYou can also type 'none' to proceed without this note.\`\`\``, message)
             .then(Question => {
                 message.channel.awaitMessages(filter, { max: 1, time: questionResponseTime })
                     .then(Answer => {
-                        Question.delete().catch(() => { return });
+                        if (Question.deleteable) Question.delete().catch((error) => console.error(`bug.js:1 noteQuestion() Error to remove question ${error}`));
                         if (Answer.first().content.startsWith(config.BotPrefix)) return;
 
                         else if (Answer.first().content.toLowerCase() === 'exit' || Answer.first().content.toLowerCase() === 'cancel')
-                            return message.channel.send(`❌ Cancelled`);
+                            return botReply(`❌ Cancelled`, message);
 
                         else if (Answer.first().content.length < 1)
                             return noteQuestion('❌ Note is too short.');
@@ -406,13 +395,13 @@ module.exports.run = async (bot, message) => {
                         }
 
                     }).catch(error => {
-                        if (error.message === "Cannot read property 'content' of undefined") return message.channel.send(`❌ There was no message within the time limit (${Math.round(questionResponseTime / 60000)}mins)! - Cancelled.`);
-                        else return;
+                        if (error.message === "Cannot read property 'content' of undefined") botReply(`❌ There was no message within the time limit (${Math.round(questionResponseTime / 60000)}mins)! - Cancelled.`, message);
+                        else console.error(`bug.js:2 noteQuestion() ${error}`);
                     });
             });
     }
 
-    function postToMods(dmMessage) { // to make everything good with the command: SEND_MESSAGES / READ_MESSAGES / READ_MESSAGE_HISTORY / EMBED_LINKS
+    function postToMods(dmMessage) {
         const TEAchannel = bot.guilds.cache.get(config.report.hidenBugServerID).channels.cache.get(config.report.bugQueueChannelID);
 
         if (TEAchannel) {
@@ -436,15 +425,19 @@ module.exports.run = async (bot, message) => {
                 .setThumbnail(qRequester.displayAvatarURL())
                 .setFooter('React with ✅ below to move to the appropriate category')
                 .setTimestamp()
-            return TEAchannel.send(embed_tip_summary).catch(() => { dmMessage.channel.send(`${getEmoji(config.TEAserverID, 'TEA')} Error to send bug report, try again later...`); })
+            return TEAchannel.send(embed_tip_summary)
                 .then(async message => {
-                    if (message) dmMessage.channel.send(`${getEmoji(config.TEAserverID, 'TEA')} Your bug report has been successfully sent!`);
-                    // userInputSummary();
+                    if (message) botReply(`${getEmoji(config.TEAserverID, 'TEA')} Your bug report has been successfully sent!`, dmMessage);
                 })
-                .catch(error => { errorLog(`bug.js:1 postToMods() Error in the function - probably missing permissions (SEND_MESSAGES/READ_MESSAGES/READ_MESSAGE_HISTORY/EMBED_LINKS)`, error); })
+                .catch(error => {
+                    botReply(`${getEmoji(config.TEAserverID, 'TEA')} Error to send bug report, try again later...`, dmMessage);
+                    errorLog(`bug.js:1 postToMods() Error in the function - probably missing permissions (SEND_MESSAGES/READ_MESSAGES/READ_MESSAGE_HISTORY/EMBED_LINKS)`, error);
+                    userInputSummary();
+                });
         } else {
             dmMessage.channel.send(`${getEmoji(config.TEAserverID, 'TEA')} Error to send bug report, try again later...`);
-            errorLog(`bug.js:2 postToMods() TEA bug queue chat channel is missing - maybe wrong channel ID in 'bugQueueChannelID' conf file: ${config.report.bugQueueChannelID}\n-------------------------------------------------`);
+            errorLog(`bug.js:2 postToMods() TEA bug queue chat channel is missing or maybe wrong channelID in 'bugQueueChannelID' conf file: ${config.report.bugQueueChannelID}`, 'Check console for more info!');
+            userInputSummary();
         }
     }
 
