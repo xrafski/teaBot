@@ -5,7 +5,7 @@ module.exports.help = {
     name: "reload",
     description: "Reload a command.",
     type: "administrator",
-    usage: `**${config.BotPrefix}reload** commandName`
+    usage: `ℹ️ Format: **${config.BotPrefix}reload** commandName\n\nℹ️ Example(s):\n${config.BotPrefix}reload uptime`
 };
 
 module.exports.run = async (bot, message, args) => {

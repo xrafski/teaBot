@@ -6,7 +6,7 @@ module.exports.help = {
     name: "certification",
     description: "Check if the club is certified TEA member.",
     type: "public",
-    usage: `**${config.BotPrefix}certification** details(optional)`
+    usage: `ℹ️ Format: **${config.BotPrefix}certification** details(optional)`
 };
 
 module.exports.run = async (bot, message, args) => {
@@ -34,7 +34,6 @@ module.exports.run = async (bot, message, args) => {
                 console.error(`certification.js:1 mysqlQuery error ${error}`);
                 botReply('❌ Database error, try again later.', message, 10000);
             });
-
 
     } else {
         return mysqlQuery(`SELECT * FROM ${config.mysql.cert_table_name} WHERE guildDiscordID=${message.guild.id}`)

@@ -1,22 +1,15 @@
 const config = require("../bot-settings.json");
-const { getEmoji } = require("../teaBot");
+const { getEmoji, botReply } = require("../teaBot");
 
 module.exports.help = {
     name: "uptime",
     description: "Current uptime of the bot.",
     type: "public",
-    usage: `**${config.BotPrefix}uptime**`
+    usage: `ℹ️ Format: **${config.BotPrefix}uptime**`
 };
 
 module.exports.run = async (bot, message) => {
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    //                                          uptime                                          //
-    //////////////////////////////////////////////////////////////////////////////////////////////
-
-    return message.channel.send(`${getEmoji(config.TEAserverID, 'TEA')} Current TEA bot uptime: **${convertMiliseconds(bot.uptime)}**.`)
-        .then(message => message.delete({ timeout: 5000 })).catch(() => { return });
-
-    /////////////////////////////////////////////////////////////////////////////////////////
+    return botReply(`${getEmoji(config.TEAserverID, 'TEA')} Current TEA bot uptime: **${convertMiliseconds(bot.uptime)}**.`, message, 10000);
 
     function convertMiliseconds(miliseconds) {
         var days, hours, minutes, seconds, total_hours, total_minutes, total_seconds;
@@ -29,7 +22,6 @@ module.exports.run = async (bot, message) => {
         seconds = parseInt(total_seconds % 60);
         minutes = parseInt(total_minutes % 60);
         hours = parseInt(total_hours % 24);
-
 
         if (days > 1) {
             if (hours > 1) {
@@ -105,6 +97,5 @@ module.exports.run = async (bot, message) => {
                 return `${minutes} minutes ${seconds} seconds`;
             }
         }
-
     };
 }

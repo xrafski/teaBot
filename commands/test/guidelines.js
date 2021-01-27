@@ -19,10 +19,10 @@ module.exports.run = async (bot, message) => {
     const certification = JSON.parse(cert);
 
     // define channel where embed is stored
-    const primaryGuildChannel = await message.guild.channels.cache.find(ch => ch.name === config.other.guidelinesChannelName);
+    const primaryGuildChannel = await message.guild.channels.cache.find(ch => ch.name === config.guidelines.channelName);
 
     // when primaryGuildChannel is not found
-    if (!primaryGuildChannel) return message.reply(`${getEmoji(config.TEAserverID, 'TEA')} I can't find the channel with a global message to send!\nMake sure the channel has a proper name: **${config.other.guidelinesChannelName}**`)
+    if (!primaryGuildChannel) return message.reply(`${getEmoji(config.TEAserverID, 'TEA')} I can't find the channel with a global message to send!\nMake sure the channel has a proper name: **${config.guidelines.channelName}**`)
         .then(message => message.delete({ timeout: 15000 })).catch(() => { return });
 
     // if command sent in the primaryGuildChannel
@@ -47,11 +47,11 @@ module.exports.run = async (bot, message) => {
         // forEach to send/update guidelines
         bot.guilds.cache.forEach((guild) => {
             if (guild.id === config.TEAserverID) return;
-            const channel = guild.channels.cache.find(ch => ch.name === config.other.guidelinesChannelName);
+            const channel = guild.channels.cache.find(ch => ch.name === config.guidelines.channelName);
 
             if (certification[guild.id]) {
                 if (channel) return updateGuidelines(guild, channel, primaryMessage.embeds[0]);
-                else return console.error(`🔴 '${guild.name}' (${guild.owner.user.tag}) - No #${config.other.guidelinesChannelName} channel found.`);
+                else return console.error(`🔴 '${guild.name}' (${guild.owner.user.tag}) - No #${config.guidelines.channelName} channel found.`);
             } else return;
         });
 

@@ -6,7 +6,7 @@ module.exports.help = {
     name: "certupdate",
     description: "Manual certification database update",
     type: "administrator",
-    usage: `**${config.BotPrefix}certupdate**`
+    usage: `ℹ️ Format: **${config.BotPrefix}certupdate**`
 };
 
 module.exports.run = async (bot, message, args) => {

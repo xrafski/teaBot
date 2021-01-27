@@ -30,7 +30,6 @@ bot.on('ready', () => { // https://crontab.guru/examples.html
                     if (!discordIDlist.includes(element[0])) {
                         const guild = bot.guilds.cache.get(element[0])
                         if (guild) {
-                            // return console.debug(`📤 Leave server triggered for the '${guild.name}'`);
                             return guild.leave()
                                 .then(g => console.info(`⭕ auto-leave.js:2 autoLeaver() Left the guild '${g}' due to not being a part of TEA.`))
                                 .catch(error => console.error(`auto-leave.js:3 autoLeaver() Leave guild error ${error}`));

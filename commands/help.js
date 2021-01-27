@@ -5,7 +5,7 @@ module.exports.help = {
     name: "help",
     description: "List all of commands.",
     type: "public",
-    usage: `**${config.BotPrefix}help** commandName(optional)`
+    usage: `ℹ️ Format: **${config.BotPrefix}help** commandName(optional)\n\nℹ️ Example(s):\n${config.BotPrefix}help uptime`
 };
 
 module.exports.run = async (bot, message, args) => {
@@ -35,41 +35,5 @@ module.exports.run = async (bot, message, args) => {
     } else {
         if (getCommand(args[0])) return message.channel.send(`Help for the **${config.BotPrefix}${args[0]}** command:\nAccess Level: __${getCommand(args[0]).help.type}__\nDescription: ${getCommand(args[0]).help.description}\n\nUsage: ${getCommand(args[0]).help.usage}`)
             .then(helpMessage => messageRemoverWithReact(helpMessage, message.author));
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    if (args[0]) {
-        // if (args[0] === 'guidelines') {
-        //     // define the embed color by role
-        //     let roleColor = message.guild.me.displayHexColor === "#000000" ? "#ffffff" : message.guild.me.displayHexColor;
-        //     // define the embed: guidelines usage 
-        //     let embed_update_guidelines_usage = new Discord.MessageEmbed()
-        //         .setColor(roleColor)
-        //         .setAuthor(`Guidelines help`, TEAlogo)
-        //         .setDescription(`Follow the instructions below to ensure that the guidelines work.`)
-        //         .addFields(
-        //             { name: 'Create a new channel for guidelines:', value: `Channel name has to match '**${config.other.guidelinesChannelName}**' (feel free to copy).`, inline: false },
-        //             { name: `Set the following channel permissions for the bot:`, value: `✅ Read Messages\n✅ Send Messages\n✅ Embed Links\n✅ Read Message History`, inline: false },
-        //             { name: '‏‏‎ ‎', value: `That's it, within a day you should receive a new message from the bot with the latest guidelines.`, inline: false },
-        //         )
-        //         .setThumbnail(TEAlogo)
-
-        //     return message.channel.send(embed_update_guidelines_usage)
-        //         .then(helpMessage => messageRemoverWithReact(helpMessage, message.author));
-        // }
-
-
     }
 }
