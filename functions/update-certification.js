@@ -15,15 +15,15 @@ const pool = mysql.createPool({
 });
 
 pool.on('acquire', function (connection) {
-    console.debug(`%c⧭ update-certification.js:1 - Connection ${connection.threadId} acquired`, 'color: #ffffff');
+    console.debug(`%cupdate-certification.js:1 - Connection ${connection.threadId} acquired`, 'color: #ffffff');
 });
 
 pool.on('release', function (connection) {
-    console.debug(`%c⧭ update-certification.js:2 - Connection ${connection.threadId} released`, 'color: #ffffff');
+    console.debug(`%cupdate-certification.js:2 - Connection ${connection.threadId} released`, 'color: #ffffff');
 });
 
 pool.on('enqueue', function () {
-    console.debug('%c⧭ update-certification.js:3 - Waiting for available connection slot!', 'color: #ff1100');
+    console.debug('%cupdate-certification.js:3 - Waiting for available connection slot!', 'color: #ff1100');
 });
 
 function certificationUpdate() {

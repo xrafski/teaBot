@@ -5,7 +5,7 @@ module.exports.help = {
     name: "bug",
     description: "Report trove game bugs.",
     type: "dm",
-    usage: `**${config.BotPrefix}bug** on direct message with the bot.`
+    usage: `**${config.botPrefix}bug** on direct message with the bot.`
 };
 
 module.exports.run = async (bot, message) => {
@@ -67,7 +67,7 @@ module.exports.run = async (bot, message) => {
                 message.channel.awaitMessages(filter, { max: 1, time: questionResponseTime })
                     .then(Answer => {
                         if (Question.deleteable) Question.delete().catch((error) => console.error(`bug.js:1 nicknameQuestion() Error to remove question ${error}`));
-                        if (Answer.first().content.startsWith(config.BotPrefix)) return;
+                        if (Answer.first().content.startsWith(config.botPrefix)) return;
 
                         else if (Answer.first().content.toLowerCase() === 'exit' || Answer.first().content.toLowerCase() === 'cancel')
                             return botReply(`❌ Cancelled`, message);
@@ -99,7 +99,7 @@ module.exports.run = async (bot, message) => {
                 message.channel.awaitMessages(filter, { max: 1, time: questionResponseTime })
                     .then(Answer => {
                         if (Question.deleteable) Question.delete().catch((error) => console.error(`bug.js:1 platformQuestion() Error to remove question ${error}`));
-                        if (Answer.first().content.startsWith(config.BotPrefix)) return;
+                        if (Answer.first().content.startsWith(config.botPrefix)) return;
 
                         else if (Answer.first().content.toLowerCase() === 'exit' || Answer.first().content.toLowerCase() === 'cancel')
                             return botReply(`❌ Cancelled`, message);
@@ -130,7 +130,7 @@ module.exports.run = async (bot, message) => {
                 message.channel.awaitMessages(filter, { max: 1, time: questionResponseTime })
                     .then(Answer => {
                         if (Question.deleteable) Question.delete().catch((error) => console.error(`bug.js:1 characterQuestion() Error to remove question ${error}`));
-                        if (Answer.first().content.startsWith(config.BotPrefix)) return;
+                        if (Answer.first().content.startsWith(config.botPrefix)) return;
 
                         else if (Answer.first().content.toLowerCase() === 'exit' || Answer.first().content.toLowerCase() === 'cancel')
                             return botReply(`❌ Cancelled`, message);
@@ -161,7 +161,7 @@ module.exports.run = async (bot, message) => {
                 message.channel.awaitMessages(filter, { max: 1, time: questionResponseTime })
                     .then(Answer => {
                         if (Question.deleteable) Question.delete().catch((error) => console.error(`bug.js:1 dateQuestion() Error to remove question ${error}`));
-                        if (Answer.first().content.startsWith(config.BotPrefix)) return;
+                        if (Answer.first().content.startsWith(config.botPrefix)) return;
 
                         else if (Answer.first().content.toLowerCase() === 'exit' || Answer.first().content.toLowerCase() === 'cancel')
                             return botReply(`❌ Cancelled`, message);
@@ -192,7 +192,7 @@ module.exports.run = async (bot, message) => {
                 message.channel.awaitMessages(filter, { max: 1, time: questionResponseTime })
                     .then(Answer => {
                         if (Question.deleteable) Question.delete().catch((error) => console.error(`bug.js:1 contextQuestion() Error to remove question ${error}`));
-                        if (Answer.first().content.startsWith(config.BotPrefix)) return;
+                        if (Answer.first().content.startsWith(config.botPrefix)) return;
 
                         else if (Answer.first().content.toLowerCase() === 'exit' || Answer.first().content.toLowerCase() === 'cancel')
                             return botReply(`❌ Cancelled`, message);
@@ -223,7 +223,7 @@ module.exports.run = async (bot, message) => {
                 message.channel.awaitMessages(filter, { max: 1, time: questionResponseTime })
                     .then(Answer => {
                         if (Question.deleteable) Question.delete().catch((error) => console.error(`bug.js:1 gameQuestion() Error to remove question ${error}`));
-                        if (Answer.first().content.startsWith(config.BotPrefix)) return;
+                        if (Answer.first().content.startsWith(config.botPrefix)) return;
 
                         else if (Answer.first().content.toLowerCase() === 'exit' || Answer.first().content.toLowerCase() === 'cancel')
                             return botReply(`❌ Cancelled`, message);
@@ -254,7 +254,7 @@ module.exports.run = async (bot, message) => {
                 message.channel.awaitMessages(filter, { max: 1, time: questionResponseTime })
                     .then(Answer => {
                         if (Question.deleteable) Question.delete().catch((error) => console.error(`bug.js:1 expectedQuestion() Error to remove question ${error}`));
-                        if (Answer.first().content.startsWith(config.BotPrefix)) return;
+                        if (Answer.first().content.startsWith(config.botPrefix)) return;
 
                         else if (Answer.first().content.toLowerCase() === 'exit' || Answer.first().content.toLowerCase() === 'cancel')
                             return botReply(`❌ Cancelled`, message);
@@ -285,7 +285,7 @@ module.exports.run = async (bot, message) => {
                 message.channel.awaitMessages(filter, { max: 1, time: questionResponseTime })
                     .then(Answer => {
                         if (Question.deleteable) Question.delete().catch((error) => console.error(`bug.js:1 observedQuestion() Error to remove question ${error}`));
-                        if (Answer.first().content.startsWith(config.BotPrefix)) return;
+                        if (Answer.first().content.startsWith(config.botPrefix)) return;
 
                         else if (Answer.first().content.toLowerCase() === 'exit' || Answer.first().content.toLowerCase() === 'cancel')
                             return botReply(`❌ Cancelled`, message);
@@ -316,7 +316,7 @@ module.exports.run = async (bot, message) => {
                 message.channel.awaitMessages(filter, { max: 1, time: questionResponseTime })
                     .then(Answer => {
                         if (Question.deleteable) Question.delete().catch((error) => console.error(`bug.js:1 reproductionQuestion() Error to remove question ${error}`));
-                        if (Answer.first().content.startsWith(config.BotPrefix)) return;
+                        if (Answer.first().content.startsWith(config.botPrefix)) return;
 
                         else if (Answer.first().content.toLowerCase() === 'exit' || Answer.first().content.toLowerCase() === 'cancel')
                             return botReply(`❌ Cancelled`, message);
@@ -347,7 +347,7 @@ module.exports.run = async (bot, message) => {
                 message.channel.awaitMessages(filter, { max: 1, time: questionResponseTime })
                     .then(Answer => {
                         if (Question.deleteable) Question.delete().catch((error) => console.error(`bug.js:1 mediaQuestion() Error to remove question ${error}`));
-                        if (Answer.first().content.startsWith(config.BotPrefix)) return;
+                        if (Answer.first().content.startsWith(config.botPrefix)) return;
 
                         else if (Answer.first().content.toLowerCase() === 'exit' || Answer.first().content.toLowerCase() === 'cancel')
                             return botReply(`❌ Cancelled`, message);
@@ -378,7 +378,7 @@ module.exports.run = async (bot, message) => {
                 message.channel.awaitMessages(filter, { max: 1, time: questionResponseTime })
                     .then(Answer => {
                         if (Question.deleteable) Question.delete().catch((error) => console.error(`bug.js:1 noteQuestion() Error to remove question ${error}`));
-                        if (Answer.first().content.startsWith(config.BotPrefix)) return;
+                        if (Answer.first().content.startsWith(config.botPrefix)) return;
 
                         else if (Answer.first().content.toLowerCase() === 'exit' || Answer.first().content.toLowerCase() === 'cancel')
                             return botReply(`❌ Cancelled`, message);

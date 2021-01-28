@@ -6,7 +6,7 @@ require('console-stamp')(console, 'dd/mm/yyyy - HH:MM:ss');
 const bot = new Discord.Client({ partials: ['MESSAGE', 'REACTION'] });
 
 // define current bot version
-const BotVersion = 'pre.alpha18';
+const BotVersion = 'pre.alpha19';
 
 // define icon image url for embeds
 const TEAlogo = 'https://skillez.eu/images/discord/teabanner.png'
@@ -65,11 +65,11 @@ module.exports = {
 
 	ownerDM: function (message) {
 		message = message || 'Message is not provided';
-		const ownerObj = bot.users.cache.get(config.BotOwnerID);
+		const ownerObj = bot.users.cache.get(config.botOwnerID);
 		if (ownerObj) {
 			ownerObj.send(message)
 				.catch(error => console.error(`teaBot.js:1 ownerDM() Error to send owner DM ${error}`));
-		} else return console.error(`teaBot.js:2 ownerDM() Bot owner is undefined probably wrong uID in config.BotOwnerID`);
+		} else return console.error(`teaBot.js:2 ownerDM() Bot owner is undefined probably wrong uID in config.botOwnerID`);
 	},
 
 	errorLog: function (text, error) {
@@ -77,11 +77,11 @@ module.exports = {
 		text = text || 'No text provided';
 		console.error(`${text} ${error}`);
 
-		const ownerObj = bot.users.cache.get(config.BotOwnerID);
+		const ownerObj = bot.users.cache.get(config.botOwnerID);
 		if (ownerObj) {
 			ownerObj.send(`❌ an issue occured with the ${bot.user.username} application!\n👉 **${text}**\n\`\`\`${error}\`\`\``)
 				.catch(error => console.error(`teaBot.js:1 errorLog() Error to send owner DM ${error}`));
-		} else return console.error(`teaBot.js:2 errorLog() Bot owner is undefined probably wrong uID in config.BotOwnerID`);
+		} else return console.error(`teaBot.js:2 errorLog() Bot owner is undefined probably wrong uID in config.botOwnerID`);
 	},
 
 	getCommand: function (commandName) {
@@ -105,7 +105,7 @@ module.exports = {
 					return message.reply(text, embed_message)
 						.then(msg => {
 							if (msg.deletable) msg.delete({ timeout: time })
-								.catch(error => console.error(`teaBot.js:2 botReply() ${error}`))
+								.catch(error => console.error(`teaBot.js:2 botReply() ${error}`));
 						})
 						.catch(error => console.error(`teaBot.js:3 botReply() ${error}`));
 				} else if (imageFileSplit) {
@@ -116,21 +116,21 @@ module.exports = {
 					return message.reply(text, embed_message)
 						.then(msg => {
 							if (msg.deletable) msg.delete({ timeout: time })
-								.catch(error => console.error(`teaBot.js:4 botReply() ${error}`))
+								.catch(error => console.error(`teaBot.js:4 botReply() ${error}`));
 						})
 						.catch(error => console.error(`teaBot.js:5 botReply() ${error}`));
 				} else if (attachmentFile) {
 					return message.reply(text, attachmentFile)
 						.then(msg => {
 							if (msg.deletable) msg.delete({ timeout: time })
-								.catch(error => console.error(`teaBot.js:6 botReply() ${error}`))
+								.catch(error => console.error(`teaBot.js:6 botReply() ${error}`));
 						})
 						.catch(error => console.error(`teaBot.js:7 botReply() ${error}`));
 				} else {
 					return message.reply(text)
 						.then(msg => {
 							if (msg.deletable) msg.delete({ timeout: time })
-								.catch(error => console.error(`teaBot.js:8 botReply() ${error}`))
+								.catch(error => console.error(`teaBot.js:8 botReply() ${error}`));
 						})
 						.catch(error => console.error(`teaBot.js:9 botReply() ${error}`));
 				}
@@ -144,7 +144,7 @@ module.exports = {
 					return message.reply(embed_message)
 						.then(msg => {
 							if (msg.deletable) msg.delete({ timeout: time })
-								.catch(error => console.error(`teaBot.js:10 botReply() ${error}`))
+								.catch(error => console.error(`teaBot.js:10 botReply() ${error}`));
 						})
 						.catch(error => console.error(`teaBot.js:11 botReply() ${error}`));
 				} else if (imageFileSplit) {
@@ -155,14 +155,14 @@ module.exports = {
 					return message.reply(embed_message)
 						.then(msg => {
 							if (msg.deletable) msg.delete({ timeout: time })
-								.catch(error => console.error(`teaBot.js:12 botReply() ${error}`))
+								.catch(error => console.error(`teaBot.js:12 botReply() ${error}`));
 						})
 						.catch(error => console.error(`teaBot.js:13 botReply() ${error}`));
 				} else if (attachmentFile) {
 					return message.reply(attachmentFile)
 						.then(msg => {
 							if (msg.deletable) msg.delete({ timeout: time })
-								.catch(error => console.error(`teaBot.js:14 botReply() ${error}`))
+								.catch(error => console.error(`teaBot.js:14 botReply() ${error}`));
 						})
 						.catch(error => console.error(`teaBot.js:15 botReply() ${error}`));
 				} else return console.error(`teaBot.js:16 botReply() There is no text nor attachment!`);
@@ -240,7 +240,7 @@ module.exports = {
 	},
 
 	messageRemoverWithReact: async function (message, author) {
-		await message.react('❌').catch(error => console.error(`teaBot.js:1 messageRemoverWithReact() Error to add reaction ${error}`));
+		await message.react('❌').catch(error => console.error(`teaBot.js:1 messageRemoverWithReact() Error to add reaction ${error} on the #${message.channel.name} in '${message.guild.name}'.`));
 
 		const emojiFilter = (reaction, user) => {
 			return ['❌'].includes(reaction.emoji.name) && !user.bot && author === user;
@@ -250,12 +250,12 @@ module.exports = {
 			.then(collected => {
 				const reaction = collected.first();
 				if (reaction.emoji.name === '❌')
-					if (message.deletable) return message.delete().catch(error => console.error(`teaBot.js:2 messageRemoverWithReact() ${error}`));
+					if (message.deletable) return message.delete().catch(error => console.error(`teaBot.js:2 messageRemoverWithReact() ${error} on the #${message.channel.name} in '${message.guild.name}'`));
 			})
 			.catch(error => {
-				if (message.deletable) message.delete().catch(error => console.error(`teaBot.js:3 messageRemoverWithReact() ${error}`));
+				if (message.deletable) message.delete().catch(error => console.error(`teaBot.js:3 messageRemoverWithReact() ${error} on the #${message.channel.name} in '${message.guild.name}'`));
 				if (error.message === "Cannot read property 'emoji' of undefined") return;
-				else console.error(`teaBot.js:4 messageRemoverWithReact() ${error}`);
+				else console.error(`teaBot.js:4 messageRemoverWithReact() ${error} on the #${message.channel.name} in '${message.guild.name}'`);
 			});
 	},
 
@@ -289,13 +289,13 @@ module.exports = {
 		}
 	},
 
-	removeUserLastMessage: function (Member, details) {
-		if (!Member.lastMessage) return;
-		Member.lastMessage.channel.messages.fetch(Member.lastMessage.id)
-			.then(MemberLastMessage => {
-				if (MemberLastMessage.deletable) MemberLastMessage.delete({ timeout: 2000 })
-					.catch(error => console.error(`teaBot.js:1 removeUserLastMessage() ${details} ${error}`));
+	removeUserLastMessage: function (message) {
+		if (!message.author.lastMessage) return;
+		message.author.lastMessage.channel.messages.fetch(message.author.lastMessage.id)
+			.then(userLastMessage => {
+				if (userLastMessage.deletable) userLastMessage.delete({ timeout: 2000 })
+					.catch(error => console.error(`teaBot.js:1 removeUserLastMessage() '${message.content}' sent by '${message.author.tag}' ${error}`));
 			})
-			.catch(error => console.error(`teaBot.js:2 removeUserLastMessage() ${details} ${error}`));
+			.catch(error => console.error(`teaBot.js:2 removeUserLastMessage() '${message.content}' sent by '${message.author.tag}' ${error}`));
 	}
 }

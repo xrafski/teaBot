@@ -1,6 +1,6 @@
 const { bot, BotVersion, errorLog } = require('../teaBot');
 const config = require("../bot-settings.json");
-bot.login(config.BotToken);
+bot.login(config.botToken);
 
 bot.on('ready', () => {
     console.info(`\n▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬\nTEA Bot (${bot.user.tag}) has logged in!\nVersion: ${BotVersion}\n▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬`);

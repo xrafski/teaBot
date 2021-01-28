@@ -6,7 +6,7 @@ module.exports.help = {
     name: "certification",
     description: "Check if the club is certified TEA member.",
     type: "public",
-    usage: `ℹ️ Format: **${config.BotPrefix}certification** details(optional)`
+    usage: `ℹ️ Format: **${config.botPrefix}certification** details(optional)`
 };
 
 module.exports.run = async (bot, message, args) => {

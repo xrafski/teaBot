@@ -15,15 +15,15 @@ const pool = mysql.createPool({
 });
 
 pool.on('acquire', function (connection) {
-    console.debug(`%c⧭ update-tread-database.js.js:1 - Connection ${connection.threadId} acquired`, 'color: #ffffff');
+    console.debug(`%cupdate-tread-database.js.js:1 - Connection ${connection.threadId} acquired`, 'color: #ffffff');
 });
 
 pool.on('release', function (connection) {
-    console.debug(`%c⧭ update-tread-database.js.js:2 - Connection ${connection.threadId} released`, 'color: #ffffff');
+    console.debug(`%cupdate-tread-database.js.js:2 - Connection ${connection.threadId} released`, 'color: #ffffff');
 });
 
 pool.on('enqueue', function () {
-    console.debug('%c⧭ update-tread-database.js.js:3 - Waiting for available connection slot!', 'color: #ff1100');
+    console.debug('%cupdate-tread-database.js.js:3 - Waiting for available connection slot!', 'color: #ff1100');
 });
 
 function treadUpdate() {
@@ -102,7 +102,6 @@ function treadUpdate() {
                         // if all was good relase the connection and resolve function
                         pool.releaseConnection(connection);
                         const timeDiff = process.hrtime(timer);
-                        // resolve(`👉 Thread database has been updated: '${results.info}' in ${timeDiff[0]}.${timeDiff[1].toString().slice(0, 3)}s.`);
                         resolve(`'${results.info}' in ${timeDiff[0]}.${timeDiff[1].toString().slice(0, 3)}s.`);
                     })
                 })
