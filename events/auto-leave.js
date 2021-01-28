@@ -11,8 +11,6 @@ bot.on('ready', () => { // https://crontab.guru/examples.html
         autoLeaver();
     });
 
-    //////////////////////////////////////////////////////////////////////////////////////////////
-
     function autoLeaver() {
         mysqlBotQuery(`SELECT guildDiscordID from ${config.mysql.cert_table_name} WHERE guildDiscordID IS NOT NULL`)
             .then(results => {
