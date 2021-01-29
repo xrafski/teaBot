@@ -19,7 +19,14 @@ function checkGuidelines() {
                 .then(msgs => {
                     const guidelinesMessage = msgs.filter(message => message.author === bot.user && message.embeds[0]).first(); // guidelinesMessage has to be sent by the bot and need to have an embed.
                     if (!guidelinesMessage) return console.error(`update-guidelines.js:1 checkGuidelines() #${primaryGuildChannel.name} doesn't have a message to copy data from.`);
-                    else return updateGuidelines(guidelinesMessage.embeds[0]);
+                    else {
+                        const messageObject = {
+                            content: (guidelinesMessage.content ? guidelinesMessage.content : ''),
+                            embed: guidelinesMessage.embeds[0]
+                        }
+                        if (guidelinesMessage.content) return updateGuidelines(messageObject);
+                        else return updateGuidelines(messageObject);
+                    }
                 })
                 .catch(error => console.error(`update-guidelines.js:2 checkGuidelines() ${error}`));
         } else return console.error(`update-guidelines.js:3 checkGuidelines() Missing READ_MESSAGE_HISTORY for the #${primaryGuildChannel.name} in '${primaryGuildChannel.guild.name}' server.`);
@@ -40,7 +47,7 @@ function updateGuidelines(guidelinesMessage) {
                                 .then(msgs => {
                                     const gMessage = msgs.filter(message => message.author === bot.user && message.embeds[0]).first(); // gMessage has to be sent by the bot and need to have an embed.
                                     if (gMessage) { // message found - update it if needed
-                                        if (gMessage.embeds[0].footer.text != guidelinesMessage.footer.text) { // update the message if footer text doesn't match
+                                        if (gMessage.embeds[0].footer.text != guidelinesMessage.embed.footer.text) { // update the message if footer text doesn't match
                                             return gMessage.edit(guidelinesMessage)
                                                 .then(() => console.debug(`update-guidelines.js:1 updateGuidelines(${guild.name}) Guidelines message has been updated.`))
                                                 .catch(error => console.error(`update-guidelines.js:2 updateGuidelines(${guild.name}) Error to modify the message ${error}`));
