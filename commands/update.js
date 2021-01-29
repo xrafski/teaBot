@@ -15,6 +15,7 @@ module.exports.run = async (bot, message, args) => {
 
     switch (args[0]?.toLowerCase()) {
         case 'guidelines': {
+            if (message.channel.name === config.guidelines.channelName) return botReply(`You can't use this command in this channel, try somewhere else!`, message, 5000);
             const lastUpdate = new Date(Date.now()).toUTCString();
             console.info(`%c⧭ Guidelines Update [Manual] ${lastUpdate}`, 'color: #ff42ec',);
             botReply(`${getEmoji(config.TEAserverID, 'TEA')} Requested guidelines update...`, message, 10000);
