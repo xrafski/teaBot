@@ -51,7 +51,7 @@ function updateGuidelines(guidelinesMessage) {
                                             return gMessage.edit(guidelinesMessage)
                                                 .then(() => console.debug(`update-guidelines.js:1 updateGuidelines(${guild.name}) Guidelines message has been updated.`))
                                                 .catch(error => console.error(`update-guidelines.js:2 updateGuidelines(${guild.name}) Error to modify the message ${error}`));
-                                        } else return console.log(`update-guidelines.js:3 updateGuidelines(${guild.name}) No need to update, latest guidelines message detected.`);
+                                        } else return; console.log(`update-guidelines.js:3 updateGuidelines(${guild.name}) No need to update, latest guidelines message detected.`);
                                     } else { // send a new message if not found old one.
                                         return guidelinesChannel.send(guidelinesMessage)
                                             .then(() => console.info(`update-guidelines.js:4 updateGuidelines(${guild.name}) Sent a new guidelines message into '${guidelinesChannel.name}'.`))
