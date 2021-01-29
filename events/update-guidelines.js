@@ -19,10 +19,7 @@ function checkGuidelines() {
                 .then(msgs => {
                     const guidelinesMessage = msgs.filter(message => message.author === bot.user && message.embeds[0]).first(); // guidelinesMessage has to be sent by the bot and need to have an embed.
                     if (!guidelinesMessage) return console.error(`update-guidelines.js:1 checkGuidelines() #${primaryGuildChannel.name} doesn't have a message to copy data from.`);
-                    else {
-                        console.debug(guidelinesMessage);
-                        return updateGuidelines(guidelinesMessage.embeds[0]);
-                    }
+                    else return updateGuidelines(guidelinesMessage.embeds[0]);
                 })
                 .catch(error => console.error(`update-guidelines.js:2 checkGuidelines() ${error}`));
         } else return console.error(`update-guidelines.js:3 checkGuidelines() Missing READ_MESSAGE_HISTORY for the #${primaryGuildChannel.name} in '${primaryGuildChannel.guild.name}' server.`);
