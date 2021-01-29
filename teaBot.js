@@ -263,11 +263,9 @@ module.exports = {
 		const logChannel = bot.channels.cache.get(channelID);
 		if (!logChannel) return console.error(`teaBot.js:1 sendEmbedLog() provided channelID(${channelID}) doesn't exist.`);
 		else {
-
 			logChannel.fetchWebhooks()
 				.then(hooks => {
 					const existingHook = hooks.find(hook => hook.owner === bot.user && hook.name === webHookName);
-
 					if (!existingHook) {
 						return logChannel.createWebhook(webHookName, {
 							avatar: 'https://skillez.eu/images/discord/teaicon.png',
@@ -275,7 +273,6 @@ module.exports = {
 						})
 							.then(hook => {
 								console.debug(`✅ A new webhook '${webHookName}' has been created in the #${logChannel.name} channel.`);
-
 								hook.send(embedMessage)
 									.catch(error => console.error(`teaBot.js:2 sendEmbedLog() Error to send webhook message ${error}`));
 							})

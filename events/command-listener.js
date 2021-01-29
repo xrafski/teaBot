@@ -11,8 +11,7 @@ bot.on("message", async message => {
     const cmdFile = bot.commands.get(command);
     if (cmdFile) {
         removeUserLastMessage(message);
-        console.info(`command-listener.js:1 (ℹ) '${message.author.tag}' used '${message.content}' on the #${message.channel.name} channel in '${message.guild.name}' server.`);
-
+        console.info(`command-listener.js:1 (ℹ) '${message.author.tag}' used '${(message.content.length > 40 ? `${message.content.slice(0, 40)}...` : `${message.content}`)}' on the ${(message.channel?.name ? `#${message.channel.name} channel` : 'direct message')}${(message.guild?.name ? ` in '${message.guild.name}' server` : '')}.`);
         switch (cmdFile.help.type) {
             case "administrator": {
                 if (message.channel.type != "dm") {
