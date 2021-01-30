@@ -6,6 +6,7 @@ const { google } = require('googleapis');
 const keys = require('../Laezaria-Bot-292d692ec77c.json');
 
 const mysql = require('mysql2');
+const { logger } = require("./logger");
 const pool = mysql.createPool({
     connectionLimit: 1,
     host: config.mysql.host,
@@ -15,15 +16,17 @@ const pool = mysql.createPool({
 });
 
 pool.on('acquire', function (connection) {
-    console.debug(`%cupdate-tread-database.js.js:1 - Connection ${connection.threadId} acquired`, 'color: #ffffff');
+    logger('debug', `update-tread-database.js.js:1  - Connection ${connection.threadId} acquired`);
 });
 
 pool.on('release', function (connection) {
-    console.debug(`%cupdate-tread-database.js.js:2 - Connection ${connection.threadId} released`, 'color: #ffffff');
+    logger('debug', `update-tread-database.js.js:2 - Connection ${connection.threadId} released`);
+
 });
 
 pool.on('enqueue', function () {
-    console.debug('%cupdate-tread-database.js.js:3 - Waiting for available connection slot!', 'color: #ff1100');
+    logger('debug', 'update-tread-database.js.js:3 - Waiting for available connection slot');
+
 });
 
 function treadUpdate() {
@@ -77,7 +80,7 @@ function treadUpdate() {
             pool.getConnection(function (error, connection) {
                 if (error) {
                     reject(error);
-                    return; console.error(`update-tread-database.js.js:1 treadUpdate() ❌ MySQL login error: '${error.code}'`);
+                    return logger('debug', `update-tread-database.js.js:1 treadUpdate() MySQL login`, error);
                 }
                 runQuery(connection);
             })
@@ -88,7 +91,7 @@ function treadUpdate() {
                     if (error) {
                         pool.releaseConnection(connection);
                         reject(error);
-                        return; console.error(`update-tread-database.js.js:2 treadUpdate() ❌ TRUNCATE query error: '${error.code}'`);
+                        return logger('debug', `update-tread-database.js.js:2 treadUpdate() TRUNCATE query`, error);
                     }
 
                     // Run another query to put data into cleared table
@@ -96,7 +99,7 @@ function treadUpdate() {
                         if (error) {
                             pool.releaseConnection(connection);
                             reject(error);
-                            return; console.error(`update-tread-database.js.js:3 treadUpdate() ❌ INSERT query error: '${error.code}'`);
+                            return logger('debug', `update-tread-database.js.js:3 treadUpdate() INSERT query`, error);
                         }
 
                         // if all was good relase the connection and resolve function

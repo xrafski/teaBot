@@ -1,5 +1,6 @@
 const config = require("../bot-settings.json");
-const { TEAlogo, Discord, errorLog, getEmoji, botReply } = require('../teaBot');
+const { logger } = require("../functions/logger");
+const { TEAlogo, Discord, getEmoji, botReply, ownerDM } = require('../teaBot');
 
 module.exports.help = {
     name: "bug",
@@ -66,7 +67,7 @@ module.exports.run = async (bot, message) => {
             .then(Question => {
                 message.channel.awaitMessages(filter, { max: 1, time: questionResponseTime })
                     .then(Answer => {
-                        if (Question.deleteable) Question.delete().catch((error) => console.error(`bug.js:1 nicknameQuestion() Error to remove question ${error}`));
+                        if (Question.deletable) Question.delete().catch((error) => logger('error', 'bug.js:1 nicknameQuestion() Remove question', error));
                         if (Answer.first().content.startsWith(config.botPrefix)) return;
 
                         else if (Answer.first().content.toLowerCase() === 'exit' || Answer.first().content.toLowerCase() === 'cancel')
@@ -86,7 +87,7 @@ module.exports.run = async (bot, message) => {
 
                     }).catch(error => {
                         if (error.message === "Cannot read property 'content' of undefined") botReply(`❌ There was no message within the time limit (${Math.round(questionResponseTime / 60000)}mins)! - Cancelled.`, message);
-                        else console.error(`bug.js:2 nicknameQuestion() ${error}`);
+                        else logger('error', 'bug.js:2 nicknameQuestion() Answer error', error);
                     });
             });
     }
@@ -98,7 +99,7 @@ module.exports.run = async (bot, message) => {
             .then(Question => {
                 message.channel.awaitMessages(filter, { max: 1, time: questionResponseTime })
                     .then(Answer => {
-                        if (Question.deleteable) Question.delete().catch((error) => console.error(`bug.js:1 platformQuestion() Error to remove question ${error}`));
+                        if (Question.deletable) Question.delete().catch((error) => logger('error', 'bug.js:1 platformQuestion() Remove question', error));
                         if (Answer.first().content.startsWith(config.botPrefix)) return;
 
                         else if (Answer.first().content.toLowerCase() === 'exit' || Answer.first().content.toLowerCase() === 'cancel')
@@ -117,7 +118,7 @@ module.exports.run = async (bot, message) => {
 
                     }).catch(error => {
                         if (error.message === "Cannot read property 'content' of undefined") botReply(`❌ There was no message within the time limit (${Math.round(questionResponseTime / 60000)}mins)! - Cancelled.`, message);
-                        else console.error(`bug.js:2 platformQuestion() ${error}`);
+                        else logger('error', 'bug.js:2 platformQuestion() Answer error', error);
                     });
             });
     }
@@ -129,7 +130,7 @@ module.exports.run = async (bot, message) => {
             .then(Question => {
                 message.channel.awaitMessages(filter, { max: 1, time: questionResponseTime })
                     .then(Answer => {
-                        if (Question.deleteable) Question.delete().catch((error) => console.error(`bug.js:1 characterQuestion() Error to remove question ${error}`));
+                        if (Question.deletable) Question.delete().catch((error) => logger('error', 'bug.js:1 characterQuestion() Remove question', error));
                         if (Answer.first().content.startsWith(config.botPrefix)) return;
 
                         else if (Answer.first().content.toLowerCase() === 'exit' || Answer.first().content.toLowerCase() === 'cancel')
@@ -148,7 +149,7 @@ module.exports.run = async (bot, message) => {
 
                     }).catch(error => {
                         if (error.message === "Cannot read property 'content' of undefined") botReply(`❌ There was no message within the time limit (${Math.round(questionResponseTime / 60000)}mins)! - Cancelled.`, message);
-                        else console.error(`bug.js:2 characterQuestion() ${error}`);
+                        else logger('error', `bug.js:2 characterQuestion() Answer error`, error);
                     });
             });
     }
@@ -160,7 +161,7 @@ module.exports.run = async (bot, message) => {
             .then(Question => {
                 message.channel.awaitMessages(filter, { max: 1, time: questionResponseTime })
                     .then(Answer => {
-                        if (Question.deleteable) Question.delete().catch((error) => console.error(`bug.js:1 dateQuestion() Error to remove question ${error}`));
+                        if (Question.deletable) Question.delete().catch((error) => logger('error', `bug.js:1 dateQuestion() Remove question`, error));
                         if (Answer.first().content.startsWith(config.botPrefix)) return;
 
                         else if (Answer.first().content.toLowerCase() === 'exit' || Answer.first().content.toLowerCase() === 'cancel')
@@ -179,7 +180,7 @@ module.exports.run = async (bot, message) => {
 
                     }).catch(error => {
                         if (error.message === "Cannot read property 'content' of undefined") botReply(`❌ There was no message within the time limit (${Math.round(questionResponseTime / 60000)}mins)! - Cancelled.`, message);
-                        else console.error(`bug.js:2 dateQuestion() ${error}`);
+                        else logger('error', `bug.js:2 dateQuestion() Answer error`, error);
                     });
             });
     }
@@ -191,7 +192,7 @@ module.exports.run = async (bot, message) => {
             .then(Question => {
                 message.channel.awaitMessages(filter, { max: 1, time: questionResponseTime })
                     .then(Answer => {
-                        if (Question.deleteable) Question.delete().catch((error) => console.error(`bug.js:1 contextQuestion() Error to remove question ${error}`));
+                        if (Question.deletable) Question.delete().catch((error) => logger('error', `bug.js:1 contextQuestion() Remove question`, error));
                         if (Answer.first().content.startsWith(config.botPrefix)) return;
 
                         else if (Answer.first().content.toLowerCase() === 'exit' || Answer.first().content.toLowerCase() === 'cancel')
@@ -210,7 +211,7 @@ module.exports.run = async (bot, message) => {
 
                     }).catch(error => {
                         if (error.message === "Cannot read property 'content' of undefined") botReply(`❌ There was no message within the time limit (${Math.round(questionResponseTime / 60000)}mins)! - Cancelled.`, message);
-                        else console.error(`bug.js:2 contextQuestion() ${error}`);
+                        else logger('error', `bug.js:2 contextQuestion() Answer error`, error);
                     });
             });
     }
@@ -222,7 +223,7 @@ module.exports.run = async (bot, message) => {
             .then(Question => {
                 message.channel.awaitMessages(filter, { max: 1, time: questionResponseTime })
                     .then(Answer => {
-                        if (Question.deleteable) Question.delete().catch((error) => console.error(`bug.js:1 gameQuestion() Error to remove question ${error}`));
+                        if (Question.deletable) Question.delete().catch((error) => logger('error', `bug.js:1 gameQuestion() Remove question`, error));
                         if (Answer.first().content.startsWith(config.botPrefix)) return;
 
                         else if (Answer.first().content.toLowerCase() === 'exit' || Answer.first().content.toLowerCase() === 'cancel')
@@ -241,7 +242,7 @@ module.exports.run = async (bot, message) => {
 
                     }).catch(error => {
                         if (error.message === "Cannot read property 'content' of undefined") botReply(`❌ There was no message within the time limit (${Math.round(questionResponseTime / 60000)}mins)! - Cancelled.`, message);
-                        else console.error(`bug.js:2 gameQuestion() ${error}`);
+                        else logger('error', `bug.js:2 gameQuestion() Answer error`, error);
                     });
             });
     }
@@ -253,7 +254,7 @@ module.exports.run = async (bot, message) => {
             .then(Question => {
                 message.channel.awaitMessages(filter, { max: 1, time: questionResponseTime })
                     .then(Answer => {
-                        if (Question.deleteable) Question.delete().catch((error) => console.error(`bug.js:1 expectedQuestion() Error to remove question ${error}`));
+                        if (Question.deletable) Question.delete().catch((error) => logger('error', `bug.js:1 expectedQuestion() Remove question`, error));
                         if (Answer.first().content.startsWith(config.botPrefix)) return;
 
                         else if (Answer.first().content.toLowerCase() === 'exit' || Answer.first().content.toLowerCase() === 'cancel')
@@ -272,7 +273,7 @@ module.exports.run = async (bot, message) => {
 
                     }).catch(error => {
                         if (error.message === "Cannot read property 'content' of undefined") botReply(`❌ There was no message within the time limit (${Math.round(questionResponseTime / 60000)}mins)! - Cancelled.`, message);
-                        else console.error(`bug.js:2 expectedQuestion() ${error}`);
+                        else logger('error', `bug.js:2 expectedQuestion() Answer error`, error);
                     });
             });
     }
@@ -284,7 +285,7 @@ module.exports.run = async (bot, message) => {
             .then(Question => {
                 message.channel.awaitMessages(filter, { max: 1, time: questionResponseTime })
                     .then(Answer => {
-                        if (Question.deleteable) Question.delete().catch((error) => console.error(`bug.js:1 observedQuestion() Error to remove question ${error}`));
+                        if (Question.deletable) Question.delete().catch((error) => logger('error', `bug.js:1 observedQuestion() Remove question`, error));
                         if (Answer.first().content.startsWith(config.botPrefix)) return;
 
                         else if (Answer.first().content.toLowerCase() === 'exit' || Answer.first().content.toLowerCase() === 'cancel')
@@ -303,7 +304,7 @@ module.exports.run = async (bot, message) => {
 
                     }).catch(error => {
                         if (error.message === "Cannot read property 'content' of undefined") botReply(`❌ There was no message within the time limit (${Math.round(questionResponseTime / 60000)}mins)! - Cancelled.`, message);
-                        else console.error(`bug.js:2 observedQuestion() ${error}`);
+                        else logger('error', `bug.js:2 observedQuestion() Answer error`, error);
                     });
             });
     }
@@ -315,7 +316,7 @@ module.exports.run = async (bot, message) => {
             .then(Question => {
                 message.channel.awaitMessages(filter, { max: 1, time: questionResponseTime })
                     .then(Answer => {
-                        if (Question.deleteable) Question.delete().catch((error) => console.error(`bug.js:1 reproductionQuestion() Error to remove question ${error}`));
+                        if (Question.deletable) Question.delete().catch((error) => logger('error', `bug.js:1 reproductionQuestion() Remove question`, error));
                         if (Answer.first().content.startsWith(config.botPrefix)) return;
 
                         else if (Answer.first().content.toLowerCase() === 'exit' || Answer.first().content.toLowerCase() === 'cancel')
@@ -334,7 +335,7 @@ module.exports.run = async (bot, message) => {
 
                     }).catch(error => {
                         if (error.message === "Cannot read property 'content' of undefined") botReply(`❌ There was no message within the time limit (${Math.round(questionResponseTime / 60000)}mins)! - Cancelled.`, message);
-                        else console.error(`bug.js:2 reproductionQuestion() ${error}`);
+                        else logger('error', `bug.js:2 reproductionQuestion() Answer error`, error);
                     });
             });
     }
@@ -346,7 +347,7 @@ module.exports.run = async (bot, message) => {
             .then(Question => {
                 message.channel.awaitMessages(filter, { max: 1, time: questionResponseTime })
                     .then(Answer => {
-                        if (Question.deleteable) Question.delete().catch((error) => console.error(`bug.js:1 mediaQuestion() Error to remove question ${error}`));
+                        if (Question.deletable) Question.delete().catch((error) => logger('error', `bug.js:1 mediaQuestion() Remove question`, error));
                         if (Answer.first().content.startsWith(config.botPrefix)) return;
 
                         else if (Answer.first().content.toLowerCase() === 'exit' || Answer.first().content.toLowerCase() === 'cancel')
@@ -365,7 +366,7 @@ module.exports.run = async (bot, message) => {
 
                     }).catch(error => {
                         if (error.message === "Cannot read property 'content' of undefined") botReply(`❌ There was no message within the time limit (${Math.round(questionResponseTime / 60000)}mins)! - Cancelled.`, message);
-                        else console.error(`bug.js:2 mediaQuestion() ${error}`);
+                        else logger('error', `bug.js:2 mediaQuestion() Answer error`, error);
                     });
             });
     }
@@ -377,7 +378,7 @@ module.exports.run = async (bot, message) => {
             .then(Question => {
                 message.channel.awaitMessages(filter, { max: 1, time: questionResponseTime })
                     .then(Answer => {
-                        if (Question.deleteable) Question.delete().catch((error) => console.error(`bug.js:1 noteQuestion() Error to remove question ${error}`));
+                        if (Question.deletable) Question.delete().catch((error) => logger('error', `bug.js:1 noteQuestion() Remove question`, error));
                         if (Answer.first().content.startsWith(config.botPrefix)) return;
 
                         else if (Answer.first().content.toLowerCase() === 'exit' || Answer.first().content.toLowerCase() === 'cancel')
@@ -396,14 +397,13 @@ module.exports.run = async (bot, message) => {
 
                     }).catch(error => {
                         if (error.message === "Cannot read property 'content' of undefined") botReply(`❌ There was no message within the time limit (${Math.round(questionResponseTime / 60000)}mins)! - Cancelled.`, message);
-                        else console.error(`bug.js:2 noteQuestion() ${error}`);
+                        else logger('error', `bug.js:2 noteQuestion() Answer error`, error);
                     });
             });
     }
 
     function postToMods(dmMessage) {
         const TEAchannel = bot.guilds.cache.get(config.report.hidenBugServerID).channels.cache.get(config.report.bugQueueChannelID);
-
         if (TEAchannel) {
             //define the embed: tip embed message summary
             let embed_tip_summary = new Discord.MessageEmbed()
@@ -431,18 +431,18 @@ module.exports.run = async (bot, message) => {
                 })
                 .catch(error => {
                     botReply(`${getEmoji(config.TEAserverID, 'TEA')} Error to send bug report, try again later...`, dmMessage);
-                    errorLog(`bug.js:1 postToMods() Error in the function - probably missing permissions (SEND_MESSAGES/READ_MESSAGES/READ_MESSAGE_HISTORY/EMBED_LINKS)`, error);
-                    userInputSummary();
+                    logger('error', 'bug.js:1 postToMods() Send the message (SEND_MESSAGES/READ_MESSAGES/READ_MESSAGE_HISTORY/EMBED_LINKS)', error);
+                    ownerDM(`Error with ${bot.user} application\n bug.js postToMods() Error to post bug report, check out console for more info.`);
                 });
         } else {
-            dmMessage.channel.send(`${getEmoji(config.TEAserverID, 'TEA')} Error to send bug report, try again later...`);
-            errorLog(`bug.js:2 postToMods() TEA bug queue chat channel is missing or maybe wrong channelID in 'bugQueueChannelID' conf file: ${config.report.bugQueueChannelID}`, 'Check console for more info!');
-            userInputSummary();
+            botReply(`${getEmoji(config.TEAserverID, 'TEA')} Error to send bug report, try again later...`, dmMessage);
+            logger('error', `bug.js:2 postToMods()  Bug report queue channel is missing or maybe wrong channelID in 'bugQueueChannelID' conf file: ${config.report.bugQueueChannelID}`);
+            ownerDM(`Error with ${bot.user} application\n bug.js postToMods() Bug report queue channel is missing check out bot configuration, more info in console.`);
         }
     }
 
     function userInputSummary() {
-        return console.debug(`-----------------------------------
+        return logger('info', `-----------------------------------
 User input summary:
 qNickname: ${qNickname}
 qPlatform: ${qPlatform}

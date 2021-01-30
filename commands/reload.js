@@ -21,5 +21,5 @@ module.exports.run = async (bot, message, args) => {
             bot.commands.set(reloadCommand.help.name, reloadCommand);
             return botReply(`Command \`${command.help.name}\` has been reloaded!`, message, 10000);
         } catch (error) { return botReply(`There was an error while reloading a command \`${command.help.name}\`:\n\`${error.message}\``, message, 20000); }
-    } else return botReply(`There is no \`${commandName}\` command and cannot be reloaded!`, message, 10000);
+    } else return botReply(`There is no \`${commandName}\` command loaded and cannot be reloaded!`, message, 10000);
 }

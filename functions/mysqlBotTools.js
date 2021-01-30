@@ -3,6 +3,7 @@
 
 const config = require("../bot-settings.json");
 const mysql = require('mysql2');
+const { logger } = require("./logger");
 const pool = mysql.createPool({
   connectionLimit: 5,
   host: config.mysql.host,
@@ -12,15 +13,15 @@ const pool = mysql.createPool({
 });
 
 pool.on('acquire', function (connection) {
-  console.debug('mysqlBotTools.js - Connection %d acquired', connection.threadId);
+  logger('debug', `mysqlBotTools.js:1 - Connection ${connection.threadId} acquired`);
 });
 
 pool.on('release', function (connection) {
-  console.debug('mysqlBotTools.js - Connection %d released', connection.threadId);
+  logger('debug', `mysqlBotTools.js:2 - Connection ${connection.threadId} release`);
 });
 
 pool.on('enqueue', function () {
-  console.debug('mysqlBotTools.js - Waiting for available connection slot');
+  logger('debug', 'mysqlBotTools.js:3 - Waiting for available connection slot');
 });
 
 function mysqlBotQuery(sqlQuery) {

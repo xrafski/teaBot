@@ -6,6 +6,7 @@ const { google } = require('googleapis');
 const keys = require('../Laezaria-Bot-292d692ec77c.json');
 
 const mysql = require('mysql2');
+const { logger } = require("./logger");
 const pool = mysql.createPool({
     connectionLimit: 1,
     host: config.mysql.host,
@@ -15,15 +16,17 @@ const pool = mysql.createPool({
 });
 
 pool.on('acquire', function (connection) {
-    console.debug(`%cupdate-certification.js:1 - Connection ${connection.threadId} acquired`, 'color: #ffffff');
+    logger('debug', `update-certification.js:1  - Connection ${connection.threadId} acquired`);
 });
 
 pool.on('release', function (connection) {
-    console.debug(`%cupdate-certification.js:2 - Connection ${connection.threadId} released`, 'color: #ffffff');
+    logger('debug', `update-certification.js:2 - Connection ${connection.threadId} released`);
+
 });
 
 pool.on('enqueue', function () {
-    console.debug('%cupdate-certification.js:3 - Waiting for available connection slot!', 'color: #ff1100');
+    logger('debug', 'update-certification.js:3 - Waiting for available connection slot');
+
 });
 
 function certificationUpdate() {
@@ -77,7 +80,7 @@ function certificationUpdate() {
             pool.getConnection(function (error, connection) {
                 if (error) {
                     reject(error);
-                    return; console.error(`update-certification.js:1 certificationUpdate() ❌ MySQL login error: '${error.code}'`);
+                    return logger('debug', `update-certification.js:1 certificationUpdate() MySQL login`, error);
                 }
                 runQuery(connection);
             })
@@ -88,7 +91,7 @@ function certificationUpdate() {
                     if (error) {
                         pool.releaseConnection(connection);
                         reject(error);
-                        return; console.error(`update-certification.js:2 certificationUpdate() ❌ TRUNCATE query error: '${error.code}'`);
+                        return logger('debug', `update-certification.js:2 certificationUpdate() TRUNCATE query`, error);
                     }
 
                     // Run another query to put data into cleared table
@@ -96,13 +99,12 @@ function certificationUpdate() {
                         if (error) {
                             pool.releaseConnection(connection);
                             reject(error);
-                            return; console.error(`update-certification.js:3 certificationUpdate() ❌ INSERT query error: '${error.code}'`);
+                            return logger('debug', `update-certification.js:3 certificationUpdate() INSERT query`, error);
                         }
 
                         // if all was good relase the connection and resolve function
                         pool.releaseConnection(connection);
                         const timeDiff = process.hrtime(timer);
-                        // const timeInMs = (timeDiff[0]* 1000000000 + timeDiff[1]) / 1000000; // convert first to ns then to ms
                         // resolve(`👉 Certification has been updated: '${results.info}' in ${timeDiff[0]}.${timeDiff[1].toString().slice(0, 3)}s.`);
                         resolve(`'${results.info}' in ${timeDiff[0]}.${timeDiff[1].toString().slice(0, 3)}s.`);
                     })

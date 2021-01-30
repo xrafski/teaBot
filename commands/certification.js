@@ -1,4 +1,5 @@
 const config = require("../bot-settings.json");
+const { logger } = require("../functions/logger");
 const { mysqlQuery } = require("../functions/mysqlTools");
 const { getEmoji, botReply, embedMessage, TEAlogo, Discord } = require("../teaBot");
 
@@ -31,7 +32,7 @@ module.exports.run = async (bot, message, args) => {
                 botReply(embed_certification_details, message, 30000);
             })
             .catch(error => {
-                console.error(`certification.js:1 mysqlQuery error ${error}`);
+                logger('error', `certification.js:1 () mysqlQuery`, error);
                 botReply('❌ Database error, try again later.', message, 10000);
             });
 
@@ -42,7 +43,7 @@ module.exports.run = async (bot, message, args) => {
                 else return printResultsMessage(undefined);
             })
             .catch(error => {
-                console.error(`certification.js:2 mysqlQuery error ${error}`);
+                logger('error', `certification.js:2 () mysqlQuery`, error);
                 botReply('❌ Database error, try again later.', message, 10000);
             });
     }

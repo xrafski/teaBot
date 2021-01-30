@@ -1,9 +1,10 @@
-const { bot, BotVersion, errorLog } = require('../teaBot');
+const { bot, BotVersion } = require('../teaBot');
 const config = require("../bot-settings.json");
+const { logger } = require('../functions/logger');
 bot.login(config.botToken);
 
 bot.on('ready', () => {
-    console.info(`\n▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬\nTEA Bot (${bot.user.tag}) has logged in!\nVersion: ${BotVersion}\n▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬`);
+    logger('info', `\n▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬\nTrove Ethics Alliance Bot (${bot.user.tag}) has logged in!\nVersion: ${BotVersion}\n▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬`);
 
     // Set the bot user's presence
     bot.user.setPresence({ activity: { name: ' ', type: 'WATCHING' }, status: 'idle' })
@@ -13,5 +14,5 @@ bot.on('ready', () => {
                 bot.guilds.cache.forEach(guild => amountOfPeople = amountOfPeople + guild.memberCount);
                 bot.user.setPresence({ activity: { name: `${amountOfPeople} users 👮‍♂️`, type: 'WATCHING' }, status: 'online' });
             }, 3600000);
-        }).catch(error => errorLog(`ready-event.js:1 ready Event()\nError to set the bot activity.`, error));
+        }).catch(error => logger('warn',`ready-event.js:1 () Set the bot activity`, error));
 });

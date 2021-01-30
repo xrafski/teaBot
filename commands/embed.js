@@ -1,4 +1,5 @@
 const config = require("../bot-settings.json");
+const { logger } = require("../functions/logger");
 const { botReply } = require("../teaBot");
 
 module.exports.help = {
@@ -15,12 +16,12 @@ module.exports.run = async (bot, message, args) => {
             content: arguments[1],
             embed: JSON.parse(arguments[0])
         }
-        return message.channel.send(messageBot).catch(error => console.error(`embed.js:1 () Error to send the message ${error}`))
+        return message.channel.send(messageBot).catch(error => logger('error', `embed.js:1 () Send the message`, error))
     } else if (arguments[0]) {
         const messageBot = {
             embed: JSON.parse(arguments[0])
         }
-        return message.channel.send(messageBot).catch(error => console.error(`embed.js:2 () Error to send the message ${error}`))
+        return message.channel.send(messageBot).catch(error => logger(`embed.js:2 () Send the message`, error))
     } else return botReply(`Wrong command format, type **${config.botPrefix}help ${module.exports.help.name}** to see usage and examples!`, message, 10000);
 
 

@@ -1,5 +1,6 @@
-const { bot, removeUserLastMessage, errorLog, botReply } = require('../teaBot');
+const { bot, removeUserLastMessage, botReply, ownerDM } = require('../teaBot');
 const config = require("../bot-settings.json");
+const { logger } = require('../functions/logger');
 
 bot.on("message", async message => {
     if (message.author.bot) return;
@@ -11,7 +12,7 @@ bot.on("message", async message => {
     const cmdFile = bot.commands.get(command);
     if (cmdFile) {
         removeUserLastMessage(message);
-        console.info(`command-listener.js:1 (ℹ) '${message.author.tag}' used '${(message.content.length > 40 ? `${message.content.slice(0, 40)}...` : `${message.content}`)}' on the ${(message.channel?.name ? `#${message.channel.name} channel` : 'direct message')}${(message.guild?.name ? ` in '${message.guild.name}' server` : '')}.`);
+        logger('info', `command-listener.js:1 '${message.author.tag}' used '${(message.content.length > 40 ? `${message.content.slice(0, 40)}...` : `${message.content}`)}' on the ${(message.channel?.name ? `#${message.channel.name} channel` : 'direct message')}${(message.guild?.name ? ` in '${message.guild.name}' server` : '')}.`)
         switch (cmdFile.help.type) {
             case "administrator": {
                 if (message.channel.type != "dm") {
@@ -31,7 +32,8 @@ bot.on("message", async message => {
             default: {
                 if (message.channel.type != "dm") botReply(`**${config.botPrefix}${cmdFile.help.name}** ERROR, try again later!`, message, 10000);
                 else botReply(`**${config.botPrefix}${cmdFile.help.name}** ERROR, try again later!`, message);
-                return errorLog(`command-listener.js:1 command switch() default - no type was found for the ${cmdFile.help.name} command.`);
+                ownerDM(`Error with ${bot.user} application\n command-listener.js () One of the commands has incorrect type, check out console for more info.`);
+                return logger('warn', `command-listener.js:2 command switch() default - incorrect type set for the '${config.botPrefix}${cmdFile.help.name}' command.`);
             }
         }
     }
