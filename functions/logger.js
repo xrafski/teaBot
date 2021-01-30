@@ -14,7 +14,6 @@ function logger(type, text, error, color) {
         case 'purple': return sendLog('\u001b[1;35m');
         case 'cyan': return sendLog('\u001b[1;36m');
         case 'white': return sendLog('\u001b[1;37m');
-        case 'test': return sendLog('\u001b[30;1m');
         default: return sendLog('');
     }
 
@@ -24,14 +23,14 @@ function logger(type, text, error, color) {
 
         switch (type.toLowerCase()) {
             case 'debug':
-                if (config.botDebug) return console.debug(`[${logDate} UTC] [DEBUG] 🟣 ${text}${(error ? ` | ${error}` : '')}`);
+                if (config.botDebug) return console.debug(`[${logDate} UTC] [DEBUG]${clr} 🟣 ${text}${(error ? ` | ${error}` : '')}\u001b[0m`);
                 else return;
-            case 'log': return console.log(`[${logDate} UTC] [LOG]${clr} 🟢 ${text}${(error ? ` | ${error}` : '')}`);
-            case 'info': return console.info(`[${logDate} UTC] [INFO]${clr} 🔵 ${text}${(error ? ` | ${error}` : '')}`);
-            case 'warn': return console.warn(`[${logDate} UTC] [WARN]${clr} 🟡 ${text}${(error ? ` | ${error}` : '')}`);
-            case 'error': return console.error(`[${logDate} UTC] [ERROR]${clr} 🔴 ${text}${(error ? ` | ${error}` : '')}`);
-            case 'trace': return console.trace(`[${logDate} UTC] [TRACE]${clr} 🟤 ${text}${(error ? ` | ${error}` : '')}`);
-            case 'update': return console.log(`[${logDate} UTC] [UPDATE]${clr} ⧭ ${text}${(error ? ` | ${error}` : '')}`);
+            case 'log': return console.log(`[${logDate} UTC] [LOG]${clr} 🟢 ${text}${(error ? ` | ${error}` : '')}\u001b[0m`);
+            case 'info': return console.info(`[${logDate} UTC] [INFO]${clr} 🔵 ${text}${(error ? ` | ${error}` : '')}\u001b[0m`);
+            case 'warn': return console.warn(`[${logDate} UTC] [WARN]${clr} 🟡 ${text}${(error ? ` | ${error}` : '')}\u001b[0m`);
+            case 'error': return console.error(`[${logDate} UTC] [ERROR]${clr} 🔴 ${text}${(error ? ` | ${error}` : '')}\u001b[0m`);
+            case 'trace': return console.trace(`[${logDate} UTC] [TRACE]${clr} 🟤 ${text}${(error ? ` | ${error}` : '')}\u001b[0m`);
+            case 'update': return console.log(`[${logDate} UTC] [UPDATE]${clr} ⧭ ${text}${(error ? ` | ${error}` : '')}\u001b[0m`);
             default: return console.log(`[${logDate} UTC] [DEFAULT] ⚪ ${type} | ${text} | ${error}`);
         }
     }
