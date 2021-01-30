@@ -437,7 +437,7 @@ module.exports.run = async (bot, message) => {
         } else {
             botReply(`${getEmoji(config.TEAserverID, 'TEA')} Error to send bug report, try again later...`, dmMessage);
             logger('error', `bug.js:2 postToMods()  Bug report queue channel is missing or maybe wrong channelID in 'bugQueueChannelID' conf file: ${config.report.bugQueueChannelID}`);
-            ownerDM(`Error with ${bot.user} application\n bug.js postToMods() Bug report queue channel is missing check out bot configuration, more info in console.`);
+            ownerDM(`Error with ${bot.user} application\n bug.js postToMods() Bug report queue channel is missing check out bot configuration, more info in terminal.`);
         }
     }
 
