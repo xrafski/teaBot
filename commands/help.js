@@ -43,8 +43,8 @@ module.exports.run = async (bot, message, args) => {
 ❌ Disabled Commands:\n${dataArray.disabled = dataArray.disabled || 'There are not disabled commands.'}`, message)
                 .then(helpMessage => messageRemoverWithReact(helpMessage, message.author));
         } else {
+            // 🔧 Setup Info:\n${dataArray.setup = dataArray.setup || 'There are not help setup commands.'}\n
             return botReply(`List of all commands! (prefix: **${config.botPrefix}**)\nType **${config.botPrefix}help commandName** for more details.\n
-🔧 Setup Info:\n${dataArray.setup = dataArray.setup || 'There are not help setup commands.'}\n
 🔇 Direct Message Commands:\n${dataArray.dm = dataArray.dm || 'There are no direct message commands.'}\n
 📢 Public Commands:\n${dataArray.public = dataArray.public || 'There are no public commands.'}`, message)
                 .then(helpMessage => messageRemoverWithReact(helpMessage, message.author));
