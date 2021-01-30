@@ -13,7 +13,7 @@ const pool = mysql.createPool({
 });
 
 pool.on('acquire', function (connection) {
-  logger('debug', 'mysqlTools.js:1 - Connection ${connection.threadId} acquired');
+  logger('debug', `mysqlTools.js:1 - Connection ${connection.threadId} acquired`);
 });
 
 pool.on('release', function (connection) {
