@@ -5,7 +5,7 @@ const config = require("../bot-settings.json");
 const mysql = require('mysql2');
 const { logger } = require("./logger");
 const pool = mysql.createPool({
-  connectionLimit: 25,
+  connectionLimit: 10,
   host: config.mysql.host,
   user: config.mysql.user,
   password: config.mysql.password,
@@ -24,7 +24,7 @@ pool.on('enqueue', function () {
   logger('debug', 'mysqlTools.js:3 - Waiting for available connection slot');
 });
 
-function mysqlQuery(sqlQuery) {
+function mysqlPublicQuery(sqlQuery) {
   return new Promise((resolve, reject) => {
     pool.query(sqlQuery, function (error, results, fields) {
       if (error) return reject(error);
@@ -33,7 +33,7 @@ function mysqlQuery(sqlQuery) {
   });
 }
 
-function mysqlQueryArray(sqlQuery, arrayObject) {
+function mysqlPublicQueryArray(sqlQuery, arrayObject) {
   return new Promise((resolve, reject) => {
     pool.query(sqlQuery, [arrayObject], function (error, results, fields) {
       if (error) return reject(error);
@@ -42,5 +42,5 @@ function mysqlQueryArray(sqlQuery, arrayObject) {
   });
 }
 
-module.exports.mysqlQuery = mysqlQuery;
-module.exports.mysqlQueryArray = mysqlQueryArray;
+module.exports.mysqlQueryPublic = mysqlPublicQuery;
+module.exports.mysqlQueryArrayPublic = mysqlPublicQueryArray;

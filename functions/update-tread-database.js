@@ -87,7 +87,7 @@ function treadUpdate() {
 
             function runQuery(connection) {
                 // Use the connection to TRUNCATE the current table data
-                connection.query(`TRUNCATE ${config.mysql.tread_table_name}`, function (error, results, fields) {
+                connection.query(`TRUNCATE ${config.mysql.thread_table_name}`, function (error, results, fields) {
                     if (error) {
                         pool.releaseConnection(connection);
                         reject(error);
@@ -95,7 +95,7 @@ function treadUpdate() {
                     }
 
                     // Run another query to put data into cleared table
-                    connection.query(`INSERT INTO ${config.mysql.tread_table_name} (name, warning, lastKnownName, reason, status, evidence, alternateAccounts, discordID, notes, privateWorld) VALUES ?`, [JSONobj], function (error, results, fields) {
+                    connection.query(`INSERT INTO ${config.mysql.thread_table_name} (name, warning, lastKnownName, reason, status, evidence, alternateAccounts, discordID, notes, privateWorld) VALUES ?`, [JSONobj], function (error, results, fields) {
                         if (error) {
                             pool.releaseConnection(connection);
                             reject(error);

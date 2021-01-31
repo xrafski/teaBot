@@ -42,5 +42,5 @@ function mysqlBotQueryArray(sqlQuery, arrayObject) {
   });
 }
 
-module.exports.mysqlBotQuery = mysqlBotQuery;
-module.exports.mysqlBotQueryArray = mysqlBotQueryArray;
+module.exports.mysqlQueryBot = mysqlBotQuery;
+module.exports.mysqlQueryArrayBot = mysqlBotQueryArray;

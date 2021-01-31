@@ -1,7 +1,7 @@
 const { bot } = require("../teaBot");
 const config = require('../bot-settings.json');
 const cron = require('node-cron');
-const { mysqlBotQuery } = require("../functions/mysqlBotTools");
+const { mysqlQueryBot } = require("../functions/mysqlBotTools");
 const { logger } = require("../functions/logger");
 
 bot.on('ready', () => { // https://crontab.guru/examples.html
@@ -12,7 +12,7 @@ bot.on('ready', () => { // https://crontab.guru/examples.html
     });
 
     function autoLeaver() {
-        mysqlBotQuery(`SELECT guildDiscordID from ${config.mysql.cert_table_name} WHERE guildDiscordID IS NOT NULL`)
+        mysqlQueryBot(`SELECT guildDiscordID from ${config.mysql.cert_table_name} WHERE guildDiscordID IS NOT NULL`)
             .then(results => {
                 if (!results[0]) return logger('warn', `auto-leave.js:1 autoLeaver() PROTECTION - Database is empty, that might be an error.`);
 

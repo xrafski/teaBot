@@ -1,6 +1,6 @@
 const config = require("../bot-settings.json");
 const { logger } = require("../functions/logger");
-const { mysqlQuery } = require("../functions/mysqlTools");
+const { mysqlQueryPublic } = require("../functions/mysqlTools");
 const { getEmoji, botReply, embedMessage, TEAlogo, Discord } = require("../teaBot");
 
 module.exports.help = {
@@ -13,7 +13,7 @@ module.exports.help = {
 module.exports.run = async (bot, message, args) => {
 
     if (args[0] === 'details') {
-        return mysqlQuery(`SELECT * FROM ${config.mysql.cert_table_name} WHERE guildDiscordID=${message.guild.id}`)
+        return mysqlQueryPublic(`SELECT * FROM ${config.mysql.cert_table_name} WHERE guildDiscordID='${message.guild.id}'`)
             .then(results => {
                 if (results.length === 0) return printResultsMessage(undefined);
 
@@ -37,7 +37,7 @@ module.exports.run = async (bot, message, args) => {
             });
 
     } else {
-        return mysqlQuery(`SELECT * FROM ${config.mysql.cert_table_name} WHERE guildDiscordID=${message.guild.id}`)
+        return mysqlQueryPublic(`SELECT * FROM ${config.mysql.cert_table_name} WHERE guildDiscordID='${message.guild.id}'`)
             .then(results => {
                 if (results.length != 0) return printResultsMessage(results[0].guildDiscordID);
                 else return printResultsMessage(undefined);
