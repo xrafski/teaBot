@@ -1,15 +1,15 @@
 const { bot } = require('../teaBot');
 const config = require('../bot-settings.json');
 const cron = require('node-cron');
-const { mysqlBotQuery, mysqlQueryBot } = require("../functions/mysqlBotTools");
+const { mysqlQueryBot } = require("../functions/mysqlBotTools");
 const { logger } = require('../functions/logger');
 
-bot.on('ready', () => { // https://crontab.guru/examples.html
-    cron.schedule('0 8 * * *', () => { // run guidelines update function daily at 8AM CEST
-        logger('update', `Guidelines Update [Daily]`, null, 'white');
-        checkGuidelines();
-    });
-});
+// bot.on('ready', () => { // https://crontab.guru/examples.html
+//     cron.schedule('0 8 * * *', () => { // run guidelines update function daily at 8AM CEST
+//         logger('update', `Guidelines Update [Daily]`, null, 'white');
+//         checkGuidelines();
+//     });
+// });
 
 function checkGuidelines() {
     const primaryGuildChannel = bot.guilds.cache.get(config.TEAserverID)?.channels.cache.find(ch => ch.name === config.guidelines.channelName);

@@ -1,52 +1,45 @@
 const config = require("../bot-settings.json");
 const { logger } = require("../functions/logger");
-const { mysqlQueryPublic } = require("../functions/mysqlTools");
-const { getEmoji, botReply, embedMessage, TEAlogo, Discord } = require("../teaBot");
+const { getEmoji, botReply, embedMessage, TEAlogo, Discord, messageRemoverWithReact } = require("../teaBot");
+const fs = require('fs');
 
 module.exports.help = {
     name: "certification",
-    description: "Check if the club is certified TEA member.",
+    description: "Check if this club is certified TEA member.",
     type: "public",
     usage: `ℹ️ Format: **${config.botPrefix}certification** details(optional)`
 };
 
 module.exports.run = async (bot, message, args) => {
-
-    if (args[0] === 'details') {
-        return mysqlQueryPublic(`SELECT * FROM ${config.mysql.cert_table_name} WHERE guildDiscordID='${message.guild.id}'`)
-            .then(results => {
-                if (results.length === 0) return printResultsMessage(undefined);
-
+    return fs.readFile('./cache/certification.json', 'utf8', (error, data) => {
+        if (error) {
+            logger('error', 'certification.js:1 () Load file', error);
+            return botReply('❌ Error to parse the data, try again later.');
+        }
+        if (args[0] === 'details') {
+            if (JSON.parse(data).find(club => club.guildDiscordID === `${message.guild.id}`)) {
+                const { guildDiscordID, guildName, guildDescription, guildRequirements, guildRepresentative } = JSON.parse(data).find(club => club.guildDiscordID === `${message.guild.id}`);
+                let { guildDiscordLink, guildJoinworld } = JSON.parse(data).find(club => club.guildDiscordID === `${message.guild.id}`);
                 const embed_certification_details = new Discord.MessageEmbed()
                     .setColor('#fcec03')
                     .setAuthor(`Certification Details`, TEAlogo)
                     .setTitle(`${message.guild.name} ${getEmoji(config.TEAserverID, 'verified')}`)
-                    .setDescription(`**Club Name:** ${results[0].guildName}\n**Representative:** ${results[0].guildRepresentative}\n**In-game Joinworld:** ${results[0].guildJoinworld}\n**Discord Invite:** ${results[0].guildDiscordLink}\n**DiscordID:** ${results[0].guildDiscordID}`)
+                    .setDescription(`**Club Name:** ${guildName}\n**Representative:** ${guildRepresentative}\n**In-game club world:** ${guildJoinworld = (guildJoinworld ? `\`/joinworld ${guildJoinworld?.toLowerCase()}\`` : 'Data is not provided')}\n**Discord Invite:** ${guildDiscordLink = guildDiscordLink || "Club has not provided a link"}\n**Discord Server ID:** ${guildDiscordID}`)
                     .addFields(
-                        { name: 'Description', value: results[0].guildDescription, inline: false },
-                        { name: 'Requirements', value: results[0].guildRequirements, inline: false },
+                        { name: 'Description', value: guildDescription, inline: false },
+                        { name: 'Requirements', value: guildRequirements, inline: false },
                     )
                     .setThumbnail(message.guild.iconURL())
-                    .setFooter('Contact TEA Spreadsheet Manager if data is outdated!')
+                    .setFooter('Contact TEA Spreadsheet Manager if the data is outdated!')
                     .setTimestamp()
-                botReply(embed_certification_details, message, 30000);
-            })
-            .catch(error => {
-                logger('error', `certification.js:1 () mysqlQuery`, error);
-                botReply('❌ Database error, try again later.', message, 10000);
-            });
+                botReply(embed_certification_details, message)
+                    .then(msg => messageRemoverWithReact(msg, message.author));
 
-    } else {
-        return mysqlQueryPublic(`SELECT * FROM ${config.mysql.cert_table_name} WHERE guildDiscordID='${message.guild.id}'`)
-            .then(results => {
-                if (results.length != 0) return printResultsMessage(results[0].guildDiscordID);
-                else return printResultsMessage(undefined);
-            })
-            .catch(error => {
-                logger('error', `certification.js:2 () mysqlQuery`, error);
-                botReply('❌ Database error, try again later.', message, 10000);
-            });
-    }
+            } else return printResultsMessage(null);
+        } else if (JSON.parse(data).find(club => club.guildDiscordID === `${message.guild.id}`)) {
+            return printResultsMessage(message.guild.id);
+        } else return printResultsMessage(null);
+    });
 
     function printResultsMessage(guildID) {
         switch (guildID) {

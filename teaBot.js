@@ -6,7 +6,7 @@ const { logger } = require('./functions/logger');
 const bot = new Discord.Client({ partials: ['MESSAGE', 'REACTION'] });
 
 // define current bot version
-const BotVersion = 'pre.alpha22';
+const BotVersion = 'pre.alpha23';
 
 // define icon image url for embeds
 const TEAlogo = 'https://skillez.eu/images/discord/teabanner.png'
@@ -227,6 +227,7 @@ module.exports = {
 	},
 
 	messageRemoverWithReact: async function (message, author) {
+		if (!message) return;
 		await message.react('❌')
 			.catch(error => logger('error', `teaBot.js:1 messageRemoverWithReact() Add reaction on the #${message.channel.name} in '${message.guild.name}' server`, error));
 

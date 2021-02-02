@@ -10,22 +10,23 @@ module.exports.help = {
 
 module.exports.run = async (bot, message, args) => {
 
-    if (args[0]?.toLowerCase() === 'guidelines') {
-        const embed_guidelines_help = new Discord.MessageEmbed()
-            .setColor('#eeff38')
-            .setAuthor(`Guidelines Help Note`, TEAlogo)
-            .setDescription(`Follow the instructions below to ensure that the guidelines work.`)
-            .addFields(
-                { name: `Create a new channel for guidelines 👇`, value: `Channel name has to match '**${config.guidelines.channelName}**' (feel free to copy).`, inline: false },
-                { name: `Add the following channel permissions for the bot:`, value: `✅ Read Messages\n✅ Send Messages\n✅ Embed Links\n✅ Read Message History`, inline: false },
-                { name: `${config.botPrefix}certification details`, value: `Make sure that your club has filled discordID on the club roster spreadsheet. You can check your current certification with the command above.`, inline: false },
-                { name: '‏‏‎ ‎', value: `That's it, within a day your community should receive a new message from the bot with the latest guidelines.`, inline: false },
-            )
-            .setThumbnail(TEAlogo)
-        botReply(embed_guidelines_help, message)
-            .then(helpGuidelines => messageRemoverWithReact(helpGuidelines, message.author));
-    }
-    else if (!args[0] || !getCommand(args[0])) {
+    // if (args[0]?.toLowerCase() === 'guidelines') {
+    //     const embed_guidelines_help = new Discord.MessageEmbed()
+    //         .setColor('#eeff38')
+    //         .setAuthor(`Guidelines Help Note`, TEAlogo)
+    //         .setDescription(`Follow the instructions below to ensure that the guidelines work.`)
+    //         .addFields(
+    //             { name: `Create a new channel for guidelines 👇`, value: `Channel name has to match '**${config.guidelines.channelName}**' (feel free to copy).`, inline: false },
+    //             { name: `Add the following channel permissions for the bot:`, value: `✅ Read Messages\n✅ Send Messages\n✅ Embed Links\n✅ Read Message History`, inline: false },
+    //             { name: `${config.botPrefix}certification details`, value: `Make sure that your club has filled discordID on the club roster spreadsheet. You can check your current certification with the command above.`, inline: false },
+    //             { name: '‏‏‎ ‎', value: `That's it, within a day your community should receive a new message from the bot with the latest guidelines.`, inline: false },
+    //         )
+    //         .setThumbnail(TEAlogo)
+    //     botReply(embed_guidelines_help, message)
+    //         .then(helpGuidelines => messageRemoverWithReact(helpGuidelines, message.author));
+    // }
+    // else 
+    if (!args[0] || !getCommand(args[0])) {
 
         const dataArray = {
             'setup': `**${config.botPrefix}help guidelines** • Information how to set guidelines channel correctly.`,
