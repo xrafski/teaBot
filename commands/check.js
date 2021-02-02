@@ -89,7 +89,7 @@ module.exports.run = async (bot, message, args) => {
 
   function findTheUser(object, word) {
     return new Promise((resolve, reject) => {
-      if (!word.match(/^[a-zA-Z0-9]+$/)) return reject('invalid_regex');
+      if (!word.match(/^[a-zA-Z0-9 ]+$/)) return reject('invalid_regex');
       const regex = new RegExp(`(${word})`, 'gi');
 
       if (object.find(element => element.userName?.toLowerCase() === word || element.userlastName?.toLowerCase() === word || element.userAlternate?.toLowerCase() === word))

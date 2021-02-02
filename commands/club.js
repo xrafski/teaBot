@@ -45,7 +45,7 @@ module.exports.run = async (bot, message, args) => {
       })
       .catch(error => {
         switch (error) {
-          case 'no_user': { return botReply('❌ Club is not found in the database.', message, 5000); }
+          case 'no_club': { return botReply('❌ Club is not found in the database.', message, 5000); }
           case 'invalid_regex': { return botReply('❌ Invalid club name, make sure to type only alphanumeric characters!', message, 10000); }
           default: {
             logger('error', 'club.js:2 () Check for club', error);
@@ -56,8 +56,14 @@ module.exports.run = async (bot, message, args) => {
   });
 
   function findTheClub(object, word) {
+    // console.log(config.certification.hiddenServers[1].guildName)
+
+
+
+
+
     return new Promise((resolve, reject) => {
-      if (!word.match(/^[a-zA-Z0-9]+$/)) return reject('invalid_regex');
+      if (!word.match(/^[a-zA-Z0-9 ]+$/)) return reject('invalid_regex');
       if (word === 'henort') word = 'the  north';
       const regex = new RegExp(`(${word})`, 'gi');
 
@@ -69,6 +75,9 @@ module.exports.run = async (bot, message, args) => {
           const element = object[key];
 
           if (element.guildName.match(regex)) {
+            for (const iterator of config.certification.hiddenServers) {
+              if (element.guildName === iterator.guildName) return reject('no_club');
+            }
             return resolve(element);
           }
         }
