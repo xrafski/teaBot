@@ -1,6 +1,5 @@
 .vscode/
 node_modules/
 *.json
-commands/test.js
 commands/wip/
 

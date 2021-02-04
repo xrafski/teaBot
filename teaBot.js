@@ -6,7 +6,7 @@ const { logger } = require('./functions/logger');
 const bot = new Discord.Client({ partials: ['MESSAGE', 'REACTION'] });
 
 // define current bot version
-const BotVersion = 'pre.alpha23';
+const BotVersion = 'pre.alpha24';
 
 // define icon image url for embeds
 const TEAlogo = 'https://skillez.eu/images/discord/teabanner.png'
@@ -72,8 +72,11 @@ module.exports = {
 	},
 
 	getCommand: function (commandName) {
-		if (commandName) return bot.commands.get(commandName);
-		else return bot.commands; // return all commands if argument is not provided.
+		if (commandName) {
+			if (bot.commands.get(commandName)) return bot.commands.get(commandName);
+			else undefined;
+		}
+		else return bot.commands; // return all commands if commandName is not provided.
 	},
 
 	botReply: function (text, message, time, attachFile, embedImage) {
@@ -264,12 +267,12 @@ module.exports = {
 							.then(hook => {
 								logger('log', `A new webhook '${webHookName}' has been created in the #${logChannel.name} channel in '${logChannel.guild.name}' server`);
 								hook.send(embedMessage)
-									.catch(error => logger('error', `teaBot.js:2 sendEmbedLog() Send webhook message`, error));
+									.catch(error => logger('error', `teaBot.js:2 sendEmbedLog() Send webhook message in the #${logChannel.name} channel in '${logChannel.guild.name}' server`, error));
 							})
-							.catch(error => logger('error', `teaBot.js:3 sendEmbedLog() Create a webhook`, error));
+							.catch(error => logger('error', `teaBot.js:3 sendEmbedLog() Create a webhook in the #${logChannel.name} channel in '${logChannel.guild.name}' server`, error));
 					} else {
 						existingHook.send(embedMessage)
-							.catch(error => logger('error', `teaBot.js:2 sendEmbedLog() Send webhook message`, error));
+							.catch(error => logger('error', `teaBot.js:2 sendEmbedLog() Send webhook message in the #${logChannel.name} channel in '${logChannel.guild.name}' server`, error));
 					}
 				})
 				.catch(error => logger('error', `teaBot.js:4 sendEmbedLog() Error to fetch webhooks for #${logChannel.name} channel in '${logChannel.guild.name}'`, error));
@@ -283,6 +286,6 @@ module.exports = {
 				if (userLastMessage.deletable) userLastMessage.delete({ timeout: 2000 })
 					.catch(error => logger('error', `teaBot.js:1 removeUserLastMessage() '${(userLastMessage.content.length > 40 ? `${userLastMessage.content.slice(0, 40)}...` : `${userLastMessage.content}`)}' sent by '${userLastMessage.author.tag}' in '${userLastMessage.guild.name}' server`, error));
 			})
-			.catch(error => logger('error', `teaBot.js:2 removeUserLastMessage() Fetch user last message`, error));
+			.catch(error => logger('error', `teaBot.js:2 removeUserLastMessage() Fetch user last message in '${message.guild.name}' server`, error));
 	}
 }

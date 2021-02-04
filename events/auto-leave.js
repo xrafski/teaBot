@@ -6,12 +6,10 @@ const { logger } = require("../functions/logger");
 
 bot.on('ready', () => { // https://crontab.guru/examples.html
 
-    // cron.schedule('0 0 * * *', () => {
-    //     logger('update', `Auto leave non-TEA servers [Daily]`, null, 'white');
-    //     autoLeaver();
-    // });
+    cron.schedule('0 0 * * *', () => autoLeaver());  // run autoLeaver function daily at midnight CEST
 
     function autoLeaver() {
+        logger('update', `Auto leave non-TEA servers [Daily]`, null, 'white');
         mysqlQueryBot(`SELECT guildDiscordID from ${config.mysql.cert_table_name} WHERE guildDiscordID IS NOT NULL`)
             .then(results => {
                 if (!results[0]) return logger('warn', `auto-leave.js:1 autoLeaver() PROTECTION - Database is empty, that might be an error.`);

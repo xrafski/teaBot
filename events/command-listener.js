@@ -13,7 +13,13 @@ bot.on("message", async message => {
     if (cmdFile) {
         removeUserLastMessage(message);
         logger('info', `command-listener.js:1 '${message.author.tag}' used '${(message.content.length > 40 ? `${message.content.slice(0, 40)}...` : `${message.content}`)}' on the ${(message.channel?.name ? `#${message.channel.name} channel` : 'direct message')}${(message.guild?.name ? ` in '${message.guild.name}' server` : '')}.`)
-        switch (cmdFile.help.type) {
+        switch (cmdFile.help.type?.toLowerCase()) {
+            case 'serverowner': {
+                if (message.channel.type != "dm") {
+                    if (message.author === message.guild.owner.user) return cmdFile.run(bot, message, args);
+                    else return botReply(`Only server owner can use **${config.botPrefix}${cmdFile.help.name}** command!`, message, 10000);
+                } else return botReply(`**${config.botPrefix}${cmdFile.help.name}** is not available on DM!`, message);
+            }
             case "administrator": {
                 if (message.channel.type != "dm") {
                     if (message.guild.id === config.TEAserverID && message.member.hasPermission("ADMINISTRATOR")) return cmdFile.run(bot, message, args);

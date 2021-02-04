@@ -24,22 +24,22 @@ module.exports.run = async (bot, message, args) => {
         case 'certification': {
             return certUpdate()
                 .then(results => {
-                    logger('update', `update.js:1 () Certification Update [Manual]`, results.info, 'green');
+                    logger('update', `update.js:1 () 👉 Certification Update [Manual]`, results.info, 'green');
                     return botReply(embedMessage(`${getEmoji(config.TEAserverID, 'TEA')} 👉 Certification has been updated!\n${results.info}`, message.author), message, 10000);
                 })
                 .catch(error => {
-                    logger('error', `update.js:2 () Certification Update [Manual]'`, error);
+                    logger('error', `update.js:2 () 👉 Certification Update [Manual]'`, error);
                     return botReply(embedMessage(`${getEmoji(config.TEAserverID, 'TEA')} 👉 ERROR to update certification:\n🔴 **${error.code}**`, message.author), message, 10000);
                 });
         }
         case 'blacklist': {
             return treadUpdate()
                 .then(results => {
-                    logger('update', `update.js:3 () Guidelines Update [Manual]`, results.info, 'green');
+                    logger('update', `update.js:3 () 👉 Thread Database Update [Manual]`, results.info, 'green');
                     return botReply(embedMessage(`${getEmoji(config.TEAserverID, 'TEA')} 👉 Thread Database has been updated!\n${results.info}`, message.author), message, 10000);
                 })
                 .catch(error => {
-                    logger('error', `update.js:4 () Guidelines Update [Manual]`, error);
+                    logger('error', `update.js:4 () 👉 Thread Database Update [Manual]`, error);
                     return botReply(embedMessage(`${getEmoji(config.TEAserverID, 'TEA')} 👉 ERROR to update thread database:\n🔴 **${error.code}**`, message.author), message, 10000);
                 });
         }
