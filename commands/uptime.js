@@ -9,7 +9,7 @@ module.exports.help = {
 };
 
 module.exports.run = async (bot, message) => {
-    return botReply(`${getEmoji(config.TEAserverID, 'TEA')} Current TEA bot uptime: **${convertMiliseconds(bot.uptime)}**.`, message, 10000);
+    return botReply(`${getEmoji(config.TEAserverID, 'TEA')} Current TEA bot uptime: **${convertMiliseconds(bot.uptime)}**.`, message);
 
     function convertMiliseconds(miliseconds) {
         var days, hours, minutes, seconds, total_hours, total_minutes, total_seconds;

@@ -6,7 +6,7 @@ const { logger } = require('./functions/logger');
 const bot = new Discord.Client({ partials: ['MESSAGE', 'REACTION'] });
 
 // define current bot version
-const BotVersion = 'pre.alpha24';
+const BotVersion = 'pre.alpha25';
 
 // define icon image url for embeds
 const TEAlogo = 'https://skillez.eu/images/discord/teabanner.png'
@@ -265,17 +265,17 @@ module.exports = {
 							reason: 'Webhook required to send log messages'
 						})
 							.then(hook => {
-								logger('log', `A new webhook '${webHookName}' has been created in the #${logChannel.name} channel in '${logChannel.guild.name}' server`);
+								logger('log', `teaBot.js:2 sendEmbedLog() A new webhook '${webHookName}' has been created in the #${logChannel.name} channel in '${logChannel.guild.name}' server`);
 								hook.send(embedMessage)
-									.catch(error => logger('error', `teaBot.js:2 sendEmbedLog() Send webhook message in the #${logChannel.name} channel in '${logChannel.guild.name}' server`, error));
+									.catch(error => logger('error', `teaBot.js:3 sendEmbedLog() Send webhook message in the #${logChannel.name} channel in '${logChannel.guild.name}' server`, error));
 							})
-							.catch(error => logger('error', `teaBot.js:3 sendEmbedLog() Create a webhook in the #${logChannel.name} channel in '${logChannel.guild.name}' server`, error));
+							.catch(error => logger('error', `teaBot.js:4 sendEmbedLog() Create a webhook in the #${logChannel.name} channel in '${logChannel.guild.name}' server`, error));
 					} else {
 						existingHook.send(embedMessage)
-							.catch(error => logger('error', `teaBot.js:2 sendEmbedLog() Send webhook message in the #${logChannel.name} channel in '${logChannel.guild.name}' server`, error));
+							.catch(error => logger('error', `teaBot.js:5 sendEmbedLog() Send webhook message in the #${logChannel.name} channel in '${logChannel.guild.name}' server`, error));
 					}
 				})
-				.catch(error => logger('error', `teaBot.js:4 sendEmbedLog() Error to fetch webhooks for #${logChannel.name} channel in '${logChannel.guild.name}'`, error));
+				.catch(error => logger('error', `teaBot.js:6 sendEmbedLog() Error to fetch webhooks for #${logChannel.name} channel in '${logChannel.guild.name}'`, error));
 		}
 	},
 

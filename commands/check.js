@@ -1,7 +1,7 @@
 const config = require("../bot-settings.json");
 const { logger } = require("../functions/logger");
 const fs = require('fs');
-const { botReply, messageRemoverWithReact, TEAlogo, Discord } = require("../teaBot");
+const { botReply, TEAlogo, Discord } = require("../teaBot");
 
 module.exports.help = {
   name: "check",
@@ -14,11 +14,11 @@ module.exports.run = async (bot, message, args) => {
   fs.readFile('./cache/blacklist.json', 'utf8', (error, data) => {
     if (error) {
       logger('error', 'check.js:1 () Load certification file', error);
-      return botReply('Error to parse data, try again later.', message, 5000);
+      return botReply('Error to parse data, try again later.', message);
     }
 
     const newData = JSON.parse(data);
-    if (!args[0] || args[0].length < 3) return botReply(`Wrong command format, type **${config.botPrefix}help ${module.exports.help.name}** to see usage and examples!`, message, 10000);
+    if (!args[0] || args[0].length < 3) return botReply(`Wrong command format, type **${config.botPrefix}help ${module.exports.help.name}** to see usage and examples!`, message);
 
     const searchValue = message.content.slice(config.botPrefix.length + module.exports.help.name.length).trim().toLowerCase();
     return findTheUser(newData, searchValue)
@@ -53,7 +53,7 @@ module.exports.run = async (bot, message, args) => {
             .setThumbnail(TEAlogo)
             .setTimestamp()
           botReply(embed_user_details, message)
-            .then(msg => messageRemoverWithReact(msg, message.author));
+          // .then(msg => messageRemoverWithReact(msg, message.author));
         } else {
           const embed_user_details = new Discord.MessageEmbed()
             .setColor(setThreadColor(userWarning))
@@ -72,16 +72,16 @@ module.exports.run = async (bot, message, args) => {
             .setThumbnail(TEAlogo)
             .setTimestamp()
           botReply(embed_user_details, message)
-            .then(msg => messageRemoverWithReact(msg, message.author));
+          // .then(msg => messageRemoverWithReact(msg, message.author));
         }
       })
       .catch(error => {
         switch (error) {
-          case 'no_user': { return botReply('❌ User is not found in the database.', message, 5000); }
-          case 'invalid_regex': { return botReply('❌ Invalid nickname, make sure to type only alphanumeric characters!', message, 10000); }
+          case 'no_user': return botReply('❌ This user is not found in the database.', message);
+          case 'invalid_regex': return botReply('❌ Invalid nickname, make sure to type only alphanumeric characters!', message);
           default: {
-            logger('error', 'check.js:2 () Check for club', error);
-            return botReply('❌ Error with the command, try again later.', message, 5000);
+            logger('error', 'check.js:2 () Check for user', error);
+            return botReply('❌ Error with the command, try again later.', message);
           }
         }
       });

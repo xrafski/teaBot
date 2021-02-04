@@ -1,4 +1,4 @@
-const { getCommand, messageRemoverWithReact, TEAlogo, Discord, botReply } = require('../teaBot');
+const { getCommand, TEAlogo, Discord, botReply } = require('../teaBot');
 const config = require("../bot-settings.json");
 
 module.exports.help = {
@@ -25,7 +25,7 @@ module.exports.run = async (bot, message, args) => {
                 )
                 .setThumbnail(TEAlogo)
             return botReply(embed_guidelines_help, message)
-                .then(helpGuidelines => messageRemoverWithReact(helpGuidelines, message.author));
+                // .then(helpGuidelines => messageRemoverWithReact(helpGuidelines, message.author));
         }
 
         // case 'guidelines': {
@@ -41,13 +41,13 @@ module.exports.run = async (bot, message, args) => {
         //         )
         //         .setThumbnail(TEAlogo)
         //     return botReply(embed_guidelines_help, message)
-        //         .then(helpGuidelines => messageRemoverWithReact(helpGuidelines, message.author));
+        //         // .then(helpGuidelines => messageRemoverWithReact(helpGuidelines, message.author));
         // }
 
         default: {
             if (args[0] && getCommand(args[0])) {
                 return botReply(`Help for the **${config.botPrefix}${args[0]}** command:\nAccess Level: __${getCommand(args[0]).help.type}__\nDescription: ${getCommand(args[0]).help.description}\n\nUsage: ${getCommand(args[0]).help.usage}`, message)
-                    .then(helpMessage => messageRemoverWithReact(helpMessage, author));
+                    // .then(helpMessage => messageRemoverWithReact(helpMessage, author));
             } else {
                 const dataArray = {
                     'setup': `**${config.botPrefix}help overwatch** • Information how to set up overwatch.`,
@@ -64,14 +64,14 @@ module.exports.run = async (bot, message, args) => {
 🔇 Direct Message Command(s):\n${dataArray.dm = dataArray.dm || 'There are no direct message commands.'}\n
 📢 Public Command(s):\n${dataArray.public = dataArray.public || 'There are no public commands.'}\n
 ❌ Disabled Command(s):\n${dataArray.disabled = dataArray.disabled || 'There are not disabled commands.'}`, message)
-                        .then(helpMessage => messageRemoverWithReact(helpMessage, author));
+                        // .then(helpMessage => messageRemoverWithReact(helpMessage, author));
                 } else {
                     return botReply(`List of all commands! (prefix: **${config.botPrefix}**)\nType **${config.botPrefix}help commandName** for more details.\n
 🔧 Setup Info:\n${dataArray.setup = dataArray.setup || 'There are not help setup commands.'}\n
 👑 Server Owner Command(s):\n${dataArray.sOwner = dataArray.sOwner || 'There are no server owner commands.'}\n
 🔇 Direct Message Command(s):\n${dataArray.dm = dataArray.dm || 'There are no direct message commands.'}\n
 📢 Public Command(s):\n${dataArray.public = dataArray.public || 'There are no public commands.'}`, message)
-                        .then(helpMessage => messageRemoverWithReact(helpMessage, author));
+                        // .then(helpMessage => messageRemoverWithReact(helpMessage, author));
                 }
             }
         }

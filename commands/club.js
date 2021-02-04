@@ -1,7 +1,7 @@
 const config = require("../bot-settings.json");
 const { logger } = require("../functions/logger");
 const fs = require('fs');
-const { botReply, messageRemoverWithReact, TEAlogo, Discord } = require("../teaBot");
+const { botReply, TEAlogo, Discord } = require("../teaBot");
 
 module.exports.help = {
   name: "club",
@@ -14,11 +14,11 @@ module.exports.run = async (bot, message, args) => {
   fs.readFile('./cache/certification.json', 'utf8', (error, data) => {
     if (error) {
       logger('error', 'club.js:1 () Load certification file', error);
-      return botReply('Error to parse data, try again later.', message, 5000);
+      return botReply('Error to parse data, try again later.', message);
     }
 
     const newData = JSON.parse(data);
-    if (!args[0] || args[0].length < 3) return botReply(`Wrong command format, type **${config.botPrefix}help ${module.exports.help.name}** to see usage and examples!`, message, 10000);
+    if (!args[0] || args[0].length < 3) return botReply(`Wrong command format, type **${config.botPrefix}help ${module.exports.help.name}** to see usage and examples!`, message);
 
     const searchValue = message.content.slice(config.botPrefix.length + module.exports.help.name.length).trim().toLowerCase();
     return findTheClub(newData, searchValue)
@@ -41,27 +41,21 @@ module.exports.run = async (bot, message, args) => {
           .setThumbnail(TEAlogo)
           .setTimestamp()
         botReply(embed_club_details, message)
-          .then(msg => messageRemoverWithReact(msg, message.author));
+        // .then(msg => messageRemoverWithReact(msg, message.author));
       })
       .catch(error => {
         switch (error) {
-          case 'no_club': { return botReply('❌ Club is not found in the database.', message, 5000); }
-          case 'invalid_regex': { return botReply('❌ Invalid club name, make sure to type only alphanumeric characters!', message, 10000); }
+          case 'no_club': return botReply('❌ Thic club is not found in the database.', message);
+          case 'invalid_regex': return botReply('❌ Invalid club name, make sure to type only alphanumeric characters!', message);
           default: {
-            logger('error', 'club.js:2 () Check for club', error);
-            return botReply('❌ Error with the command, try again later.', message, 5000);
+            logger('error', 'club.js:2 () Check for the club', error);
+            return botReply('❌ Error with the command, try again later.', message);
           }
         }
       });
   });
 
   function findTheClub(object, word) {
-    // console.log(config.certification.hiddenServers[1].guildName)
-
-
-
-
-
     return new Promise((resolve, reject) => {
       if (!word.match(/^[a-zA-Z0-9 ]+$/)) return reject('invalid_regex');
       if (word === 'henort') word = 'the  north';

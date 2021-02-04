@@ -9,10 +9,6 @@ module.exports.help = {
 };
 
 module.exports.run = async (bot, message) => {
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    //                                            tip                                           //
-    //////////////////////////////////////////////////////////////////////////////////////////////
-
     let qRequester;
     let qUser = 'None';
     let qDescription = 'None';
@@ -22,7 +18,6 @@ module.exports.run = async (bot, message) => {
     let qProof = 'None';
     let qNote = 'None';
     const filter = m => m.author.id === message.author.id;
-
 
     nameQuestion(); // 1st question about the reported username.
 
