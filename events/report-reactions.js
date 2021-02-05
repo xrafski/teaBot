@@ -3,7 +3,6 @@ const config = require("../bot-settings.json");
 const { logger } = require('../functions/logger');
 
 bot.on('messageReactionAdd', async (reaction, user) => {
-
     const channelArray = [config.report.bugQueueChannelID, config.report.bugGraphicalChannelID, config.report.bugCombatChannelID, config.report.bugUIChannelID, config.report.bugBuildingChannelID, config.report.bugCriticalChannelID, config.report.bugMiscalculationChannelID, config.report.bugInsufficientDataChannelID];
     if (channelArray.includes(reaction.message.channel.id)) {
         if (user.id === bot.user.id) return;

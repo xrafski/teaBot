@@ -4,7 +4,7 @@
 const dateFormat = require("dateformat");
 const config = require('../bot-settings.json');
 
-function logger(type, text, error, color) {
+function logger(type, text, error, color) { 
 
     switch (color?.toLowerCase()) {
         case 'red': return sendLog('\u001b[1;31m');

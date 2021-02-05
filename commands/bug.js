@@ -25,10 +25,7 @@ module.exports.run = async (bot, message) => {
 
     const filter = m => m.author.id === message.author.id;
     const questionResponseTime = 1500000;
-
     nicknameQuestion(); // 1st question about the bug report.
-
-    //////////////////////////////////////////////////////////////////////////////////////////////
 
     function currentUTCDate() {
 

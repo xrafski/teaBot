@@ -6,7 +6,7 @@ const { logger } = require('./functions/logger');
 const bot = new Discord.Client({ partials: ['MESSAGE', 'REACTION'] });
 
 // define current bot version
-const BotVersion = 'pre.alpha26';
+const BotVersion = 'alpha 1.0';
 
 // define icon image url for embeds
 const TEAlogo = 'https://skillez.eu/images/discord/teabanner.png'

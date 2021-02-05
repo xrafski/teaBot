@@ -2,7 +2,7 @@ const config = require("../bot-settings.json");
 const { logger } = require("../functions/logger");
 const { embedMessage, botReply } = require("../teaBot");
 
-module.exports.help = {
+module.exports.help = { 
     name: "say",
     description: "Send message as the bot.",
     type: "administrator",

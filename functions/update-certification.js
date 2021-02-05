@@ -29,7 +29,7 @@ const fs = require('fs');
 //     logger('debug', 'update-certification.js:3 - Waiting for available connection slot');
 // });
 
-function certificationUpdate() {
+function certificationUpdate() { 
     const timer = process.hrtime();
     return new Promise((resolve, reject) => {
         const spreadsheet = new google.auth.JWT(

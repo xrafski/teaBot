@@ -4,7 +4,7 @@ const certification = require('../functions/update-certification');
 const blacklist = require('../functions/update-tread-database');
 const { logger } = require('../functions/logger');
 
-bot.on('ready', () => {  // https://crontab.guru/examples.html
+bot.on('ready', () => { // https://crontab.guru/examples.html
     cron.schedule('0 10 * * *', () => { // run certification update function daily at 10AM CEST
         certification.certUpdate()
             .then(results => logger('update', `update-database.js:1 | 👉 Certification Update [Daily] has been updated`, results.info))

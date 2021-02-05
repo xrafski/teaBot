@@ -1,7 +1,7 @@
 const { botReply } = require("../teaBot");
 const config = require('../bot-settings.json');
 
-module.exports.help = {
+module.exports.help = { 
     name: "test",
     description: "Test TEA systems.",
     type: "serverowner",

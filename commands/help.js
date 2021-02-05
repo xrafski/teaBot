@@ -1,7 +1,7 @@
 const { getCommand, TEAlogo, Discord, botReply } = require('../teaBot');
 const config = require("../bot-settings.json");
 
-module.exports.help = {
+module.exports.help = { 
     name: "help",
     description: "List of all commands.",
     type: "public",

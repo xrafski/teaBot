@@ -1,7 +1,7 @@
 const { botReply, TEAlogo, Discord } = require("../teaBot");
 const config = require('../bot-settings.json');
 
-module.exports.help = {
+module.exports.help = { 
     name: "permissions",
     description: "Check bot permissions on a specific server.",
     type: "botowner",

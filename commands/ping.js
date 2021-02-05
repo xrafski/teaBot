@@ -1,7 +1,7 @@
 const { logger } = require("../functions/logger");
 const { botReply } = require("../teaBot");
 
-module.exports.help = {
+module.exports.help = { 
     name: "ping",
     description: "Pong!",
     type: "public",

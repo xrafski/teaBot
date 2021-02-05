@@ -1,7 +1,7 @@
 const config = require("../bot-settings.json");
 const { TEAlogo, Discord, errorLog, getEmoji } = require('../teaBot');
 
-module.exports.help = {
+module.exports.help = { 
     name: "tip",
     description: "Report players privately.",
     type: "disabled",

@@ -5,7 +5,7 @@ const { certUpdate } = require("../functions/update-certification");
 const { treadUpdate } = require("../functions/update-tread-database");
 const { botReply, getEmoji, embedMessage } = require("../teaBot");
 
-module.exports.help = {
+module.exports.help = { 
     name: "update",
     description: "Manual request to update various bot functions.",
     type: "administrator",

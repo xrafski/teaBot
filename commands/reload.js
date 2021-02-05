@@ -1,7 +1,7 @@
 const { botReply, getCommand } = require('../teaBot');
 const config = require("../bot-settings.json");
 
-module.exports.help = {
+module.exports.help = { 
     name: "reload",
     description: "Reload a command.",
     type: "administrator",
