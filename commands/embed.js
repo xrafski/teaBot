@@ -12,6 +12,12 @@ module.exports.help = {
 module.exports.run = async (bot, message, args) => {
     const arguments = args.join(' ').split(' | ');
     if (arguments[1]) {
+        try {
+            JSON.parse(arguments[0]);
+        } catch (error) {
+            return botReply('Invalid JSON input.', message);
+        }
+
         const messageBot = {
             content: arguments[1],
             embed: JSON.parse(arguments[0])
@@ -19,6 +25,12 @@ module.exports.run = async (bot, message, args) => {
         return message.channel.send(messageBot)
             .catch(error => logger('error', `embed.js:1 () Send the message`, error))
     } else if (arguments[0]) {
+        try {
+            JSON.parse(arguments[0]);
+        } catch (error) {
+            return botReply('Invalid JSON input.', message);
+        }
+
         const messageBot = {
             embed: JSON.parse(arguments[0])
         }
