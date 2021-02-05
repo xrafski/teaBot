@@ -10,6 +10,8 @@ module.exports.help = {
 };
 
 module.exports.run = async (bot, message, args) => {
+    if (message.deletable) message.delete({ timeout: 1000 }).catch(error => logger('embed.js:1 () Delete the message', error));
+
     const arguments = args.join(' ').split(' | ');
     if (arguments[1]) {
         try {
@@ -23,7 +25,7 @@ module.exports.run = async (bot, message, args) => {
             embed: JSON.parse(arguments[0])
         }
         return message.channel.send(messageBot)
-            .catch(error => logger('error', `embed.js:1 () Send the message`, error))
+            .catch(error => logger('error', `embed.js:2 () Send the message`, error))
     } else if (arguments[0]) {
         try {
             JSON.parse(arguments[0]);
@@ -35,7 +37,7 @@ module.exports.run = async (bot, message, args) => {
             embed: JSON.parse(arguments[0])
         }
         return message.channel.send(messageBot)
-            .catch(error => logger(`embed.js:2 () Send the message`, error))
+            .catch(error => logger(`embed.js:3 () Send the message`, error))
     } else return botReply(`Wrong command format, type **${config.botPrefix}help ${module.exports.help.name}** to see usage and examples!`, message);
 
 
