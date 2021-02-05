@@ -80,7 +80,6 @@ function treadUpdate() {
 
             });
 
-
             // Write JSONobj to the blacklist.json file
             fs.writeFileSync('./cache/blacklist.json', JSON.stringify(JSONobj, null, 2)), function (error) {
                 if (error) {
