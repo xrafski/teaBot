@@ -5,8 +5,7 @@ const { mysqlQueryBot } = require("../functions/mysqlBotTools");
 const { logger } = require("../functions/logger");
 
 bot.on('ready', () => { // https://crontab.guru/examples.html
-
-    cron.schedule('0 0 * * *', () => autoLeaver());  // run autoLeaver function daily at midnight CEST
+    // cron.schedule('0 0 * * *', () => autoLeaver());  // run autoLeaver function daily at midnight CEST
 
     function autoLeaver() {
         logger('update', `Auto leave non-TEA servers [Daily]`, null, 'white');
