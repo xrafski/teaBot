@@ -8,7 +8,7 @@
 //     cron.schedule('0 8 * * *', () => { checkGuidelines() }); // run guidelines update function daily at 8AM CEST
 // });
 
-// function checkGuidelines() { 
+// function checkGuidelines() {
 //     logger('update', `Guidelines Update [Daily]`, null, 'white');
 //     const primaryGuildChannel = bot.guilds.cache.get(config.TEAserverID)?.channels.cache.find(ch => ch.name === config.guidelines.channelName);
 //     if (primaryGuildChannel) {

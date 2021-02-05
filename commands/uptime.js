@@ -1,7 +1,7 @@
 const config = require("../bot-settings.json");
 const { getEmoji, botReply } = require("../teaBot");
 
-module.exports.help = { 
+module.exports.help = {
     name: "uptime",
     description: "Current uptime of the bot.",
     type: "public",

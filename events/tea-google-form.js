@@ -6,7 +6,7 @@ const keys = require('../Laezaria-Bot-292d692ec77c.json');
 const { logger } = require('../functions/logger');
 
 bot.on('ready', () => { // https://crontab.guru/examples.html
-    cron.schedule('30 */3 * * *', () => { checkTEAspreadsheet() }); // Check TEA spreadsheet for new responses “At minute 30 past every 3rd hour.” (Reports/Appeals)
+    cron.schedule('30 */3 * * *', () => { checkTEAspreadsheet() }); // Check TEA spreadsheet for new responses “At minute 30 past every 3rd hour.” (Reports/Appeals).
 
     function checkTEAspreadsheet() {
         logger('update', `Checking appeal/report spreadsheet [cron]`, null, 'white');

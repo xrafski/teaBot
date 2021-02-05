@@ -27,6 +27,7 @@ module.exports.run = async (bot, message) => {
     const questionResponseTime = 1500000;
     nicknameQuestion(); // 1st question about the bug report.
 
+
     function currentUTCDate() {
 
         function pad2(number) {

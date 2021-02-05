@@ -2,7 +2,7 @@ const config = require("../bot-settings.json");
 const { logger } = require("../functions/logger");
 const { botReply } = require("../teaBot");
 
-module.exports.help = { 
+module.exports.help = {
     name: "embed",
     description: "Send an embed message with RAW JSON data - <https://carl.gg/>",
     type: "administrator",

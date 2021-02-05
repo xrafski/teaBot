@@ -7,7 +7,7 @@
 // bot.on('ready', () => { // https://crontab.guru/examples.html
 //     cron.schedule('0 0 * * *', () => autoLeaver());  // run autoLeaver function daily at midnight CEST
 
-//     function autoLeaver() { 
+//     function autoLeaver() {
 //         logger('update', `Auto leave non-TEA servers [Daily]`, null, 'white');
 //         mysqlQueryBot(`SELECT guildDiscordID from ${config.mysql.cert_table_name} WHERE guildDiscordID IS NOT NULL`)
 //             .then(results => {

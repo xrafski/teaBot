@@ -25,7 +25,7 @@ pool.on('enqueue', function () {
 });
 
 function mysqlPublicQuery(sqlQuery) {
-  return new Promise((resolve, reject) => { 
+  return new Promise((resolve, reject) => {
     pool.query(sqlQuery, function (error, results, fields) {
       if (error) return reject(error);
       return resolve(results);

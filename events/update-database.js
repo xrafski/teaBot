@@ -17,7 +17,7 @@ bot.on('ready', () => { // https://crontab.guru/examples.html
             .catch(error => logger('error', `update-database.js:4 | Certification Update [Bot startup]`, error));
     }, 10000);
 
-    //////////////////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////////
 
     cron.schedule('0 8 * * *', () => { // run thread update function daily at 8AM CEST
         blacklist.treadUpdate()

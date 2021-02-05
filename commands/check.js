@@ -3,7 +3,7 @@ const { logger } = require("../functions/logger");
 const fs = require('fs');
 const { botReply, TEAlogo, Discord } = require("../teaBot");
 
-module.exports.help = { 
+module.exports.help = {
   name: "check",
   description: "Check if user is in thread database.",
   type: "public",

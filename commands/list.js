@@ -1,7 +1,7 @@
 const { botReply, Discord, TEAlogo } = require("../teaBot");
 const config = require('../bot-settings.json');
 
-module.exports.help = { 
+module.exports.help = {
     name: "list",
     description: "List all guilds including its ID.",
     type: "botowner",

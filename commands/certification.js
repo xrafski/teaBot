@@ -3,7 +3,7 @@ const { logger } = require("../functions/logger");
 const { getEmoji, botReply, embedMessage, TEAlogo, Discord } = require("../teaBot");
 const fs = require('fs');
 
-module.exports.help = { 
+module.exports.help = {
     name: "certification",
     description: "Check if this club is certified TEA member.",
     type: "public",

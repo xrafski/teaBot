@@ -3,7 +3,7 @@ const fs = require('fs');
 const config = require('../bot-settings.json');
 const { logger } = require("../functions/logger");
 
-bot.on('guildMemberAdd', member => { 
+bot.on('guildMemberAdd', member => {
     const { guild, user } = member;
     const logChannel = guild.channels.cache.find(channel => channel.name === config.logs.channelName);
     if (!logChannel) return;

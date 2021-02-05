@@ -30,7 +30,7 @@ const fs = require('fs');
 //     logger('debug', 'update-tread-database.js.js:3 - Waiting for available connection slot');
 // });
 
-function treadUpdate() { 
+function treadUpdate() {
     const timer = process.hrtime();
     return new Promise((resolve, reject) => {
         const spreadsheet = new google.auth.JWT(

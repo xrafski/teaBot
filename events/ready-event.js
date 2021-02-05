@@ -3,7 +3,7 @@ const config = require("../bot-settings.json");
 const { logger } = require('../functions/logger');
 bot.login(config.botToken);
 
-bot.on('ready', () => { 
+bot.on('ready', () => {
     logger('info', `\n▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬\nTrove Ethics Alliance Bot (${bot.user.tag}) has logged in!\nVersion: ${BotVersion}\n▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬`);
 
     bot.user.setPresence({ activity: { name: ' ', type: 'WATCHING' }, status: 'idle' })

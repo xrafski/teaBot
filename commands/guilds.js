@@ -1,7 +1,7 @@
 const config = require("../bot-settings.json");
 const { getEmoji, botReply } = require('../teaBot');
 
-module.exports.help = { 
+module.exports.help = {
     name: "guilds",
     description: "Amount of clubs the bot is in.",
     type: "public",

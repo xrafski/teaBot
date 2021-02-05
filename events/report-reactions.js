@@ -15,7 +15,7 @@ bot.on('messageReactionAdd', async (reaction, user) => {
             })
             .catch(error => logger('error', `report-reactions.js:1 () Fetch reaction message`, error));
 
-        //////////////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////////////
 
         function emojiReactionMenu(message, reactUser) {
 

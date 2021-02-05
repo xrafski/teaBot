@@ -12,7 +12,7 @@ const pool = mysql.createPool({
   database: config.mysql.database
 });
 
-pool.on('acquire', function (connection) { 
+pool.on('acquire', function (connection) {
   logger('debug', `mysqlBotTools.js:1 - Connection ${connection.threadId} acquired`);
 });
 

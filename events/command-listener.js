@@ -2,7 +2,7 @@ const { bot, botReply, ownerDM } = require('../teaBot');
 const config = require("../bot-settings.json");
 const { logger } = require('../functions/logger');
 
-bot.on("message", async message => { 
+bot.on("message", async message => {
     if (message.author.bot) return;
     if (!message.content.startsWith(config.botPrefix)) return;
 

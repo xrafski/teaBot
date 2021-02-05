@@ -3,7 +3,7 @@ const { logger } = require("../functions/logger");
 const fs = require('fs');
 const { botReply, TEAlogo, Discord } = require("../teaBot");
 
-module.exports.help = { 
+module.exports.help = {
   name: "club",
   description: "Show information about the club.",
   type: "public",

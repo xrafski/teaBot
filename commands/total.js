@@ -1,7 +1,7 @@
 const { botReply, getEmoji } = require("../teaBot");
 const config = require('../bot-settings.json');
 
-module.exports.help = { 
+module.exports.help = {
     name: "total",
     description: "Display total amount of users on all servers.",
     type: "botowner",
