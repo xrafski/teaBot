@@ -32,7 +32,7 @@ module.exports.run = async (bot, message, args) => {
           .setTitle(`Club Name: \`${guildName}\``)
           .setDescription(`${guildDescription}\n‏‏‎ ‎‎`)
           .addFields(
-            { name: 'Discord Server ID(s)', value: guildDiscordID = guildDiscordID || 'Data is not provided', inline: false },
+            { name: 'Discord Server ID', value: guildDiscordID = guildDiscordID || 'Data is not provided', inline: false },
             { name: 'in-game club world', value: guildJoinworld = (guildJoinworld ? `\`/joinworld ${guildJoinworld?.toLowerCase()}\`` : 'Data is not provided'), inline: false },
             { name: 'Requirement(s)', value: guildRequirements, inline: false },
             { name: 'Discord Invite', value: guildDiscordLink = guildDiscordLink || 'Data is not provided', inline: false },

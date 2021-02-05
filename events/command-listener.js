@@ -14,10 +14,16 @@ bot.on("message", async message => {
         // removeUserLastMessage(message);
         logger('info', `command-listener.js:1 | '${message.author.tag}' used '${(message.content.length > 40 ? `${message.content.slice(0, 40)}...` : `${message.content}`)}' on the ${(message.channel?.name ? `#${message.channel.name} channel` : 'direct message')}${(message.guild?.name ? ` in '${message.guild.name}' server` : '')}.`)
         switch (cmdFile.help.type?.toLowerCase()) {
+            case 'botowner': {
+                if (message.channel.type != "dm") {
+                    if (message.author === message.guild.owner.user) return cmdFile.run(bot, message, args);
+                    else return botReply(`Insufficient permissions!\nOnly the bot owner can use **${config.botPrefix}${cmdFile.help.name}** command!`, message);
+                } else return botReply(`**${config.botPrefix}${cmdFile.help.name}** is not available on DM!`, message);
+            }
             case 'serverowner': {
                 if (message.channel.type != "dm") {
                     if (message.author === message.guild.owner.user) return cmdFile.run(bot, message, args);
-                    else return botReply(`Only server owner can use **${config.botPrefix}${cmdFile.help.name}** command!`, message);
+                    else return botReply(`Insufficient permissions!\nOnly the server owner can use **${config.botPrefix}${cmdFile.help.name}** command!`, message);
                 } else return botReply(`**${config.botPrefix}${cmdFile.help.name}** is not available on DM!`, message);
             }
             case "administrator": {
@@ -36,8 +42,7 @@ bot.on("message", async message => {
             else return botReply(`**${config.botPrefix}${cmdFile.help.name}** is currently **disabled**!`, message);
 
             default: {
-                if (message.channel.type != "dm") botReply(`**${config.botPrefix}${cmdFile.help.name}** ERROR, try again later!`, message);
-                else botReply(`**${config.botPrefix}${cmdFile.help.name}** ERROR, try again later!`, message);
+                botReply(`**${config.botPrefix}${cmdFile.help.name}** Command error, try again later!`, message);
                 ownerDM(`Error with ${bot.user} application\n command-listener.js () One of the commands has incorrect type, check out console for more info.`);
                 return logger('warn', `command-listener.js:2 command switch() default - incorrect type set for the '${config.botPrefix}${cmdFile.help.name}' command.`);
             }

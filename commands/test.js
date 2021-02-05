@@ -19,7 +19,7 @@ module.exports.run = async (bot, message, args) => {
             if (!memberObj) return botReply(`Unknown error, try again later ;(`, message);
 
             bot.emit("guildMemberAdd", memberObj);
-            return botReply(`Overwatch system test requested!\nType **tea!help overwatch** if you don't see a new message in the #${logChannel} channel channel for setup details.`, message)
+            return botReply(`Overwatch system test requested!\nType **tea!help overwatch** if you don't see a new message in the #${logChannel} channel for setup details.`, message)
         }
         default: return botReply('❌ Unknown system name, you can only test **overwatch** right now.', message);
     }

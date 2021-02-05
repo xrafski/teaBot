@@ -51,6 +51,7 @@ module.exports.run = async (bot, message, args) => {
             } else {
                 const dataArray = {
                     'setup': `**${config.botPrefix}help overwatch** • Information how to set up overwatch.`,
+                    'bOwner': getCommand().filter(command => command.help.type === 'botowner').map(command => `**${command.help.name}** • ${command.help.description}`).join('\n'),
                     'sOwner': getCommand().filter(command => command.help.type === 'serverowner').map(command => `**${command.help.name}** • ${command.help.description}`).join('\n'),
                     'admin': getCommand().filter(command => command.help.type === 'administrator').map(command => `**${command.help.name}** • ${command.help.description}`).join('\n'),
                     'dm': getCommand().filter(command => command.help.type === 'dm').map(command => `**${command.help.name}** • ${command.help.description}`).join('\n'),
@@ -60,6 +61,7 @@ module.exports.run = async (bot, message, args) => {
 
                 if (guild.id === config.TEAserverID) {
                     return botReply(`List of all commands! (prefix: **${config.botPrefix}**)\nType **${config.botPrefix}help commandName** for more details.\n
+🤖 Bot Owner Command(s):\n${dataArray.bOwner = dataArray.bOwner || 'There are no bot owner commands.'}\n
 👮‍♂️ Administrator Command(s):\n${dataArray.admin = dataArray.admin || 'There are no administrator commands.'}\n
 🔇 Direct Message Command(s):\n${dataArray.dm = dataArray.dm || 'There are no direct message commands.'}\n
 📢 Public Command(s):\n${dataArray.public = dataArray.public || 'There are no public commands.'}\n
