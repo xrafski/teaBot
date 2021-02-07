@@ -6,7 +6,7 @@ const dateFormat = require("dateformat");
 const bot = new Discord.Client({ partials: ['MESSAGE', 'REACTION'] });
 
 // define current bot version.
-const BotVersion = 'alpha 1.0';
+const BotVersion = '1.0.1';
 
 // define icon image url for embeds
 const TEAlogo = 'https://skillez.eu/images/discord/teabanner.png'
