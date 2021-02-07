@@ -1,6 +1,5 @@
-const { bot, botReply, ownerDM } = require('../teaBot');
+const { bot, botReply, ownerDM, logger } = require('../teaBot');
 const config = require("../bot-settings.json");
-const { logger } = require('../functions/logger');
 
 bot.on("message", async message => {
     if (message.author.bot) return;
@@ -12,7 +11,7 @@ bot.on("message", async message => {
     const cmdFile = bot.commands.get(command);
     if (cmdFile) {
         // removeUserLastMessage(message);
-        logger('info', `command-listener.js:1 | '${message.author.tag}' used '${(message.content.length > 40 ? `${message.content.slice(0, 40)}...` : `${message.content}`)}' on the ${(message.channel?.name ? `#${message.channel.name} channel` : 'direct message')}${(message.guild?.name ? ` in '${message.guild.name}' server` : '')}.`)
+        logger('info', `command-listener.js:1 ⨀ '${message.author.tag}' used '${(message.content.length > 40 ? `${message.content.slice(0, 40)}...` : `${message.content}`)}' on the ${(message.channel?.name ? `#${message.channel.name} channel` : 'direct message')}${(message.guild?.name ? ` in '${message.guild.name}' server` : '')}.`, null, 'white', true);
         switch (cmdFile.help.type?.toLowerCase()) {
             case 'botowner': {
                 if (message.channel.type != "dm") {

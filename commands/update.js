@@ -1,9 +1,8 @@
 const config = require("../bot-settings.json");
 // const { updGuidelines } = require("../events/update-guidelines");
-const { logger } = require("../functions/logger");
 const { certUpdate } = require("../functions/update-certification");
 const { treadUpdate } = require("../functions/update-tread-database");
-const { botReply, getEmoji, embedMessage } = require("../teaBot");
+const { botReply, getEmoji, embedMessage, logger } = require("../teaBot");
 
 module.exports.help = {
     name: "update",

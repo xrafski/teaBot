@@ -1,7 +1,6 @@
-const { bot, Discord, TEAlogo, sendEmbedLog } = require("../teaBot");
+const { bot, Discord, TEAlogo, sendEmbedLog, logger } = require("../teaBot");
 const fs = require('fs');
 const config = require('../bot-settings.json');
-const { logger } = require("../functions/logger");
 
 bot.on('guildMemberAdd', member => {
     const { guild, user } = member;
@@ -34,10 +33,11 @@ bot.on('guildMemberAdd', member => {
                         .setThumbnail(TEAlogo)
                         .setTimestamp()
                     sendEmbedLog(embed_user_details, logChannel.id, 'Trove Ethics Alliance - Overwatch');
+                    if (userName !== 'Trove Ethics Alliance') logger('warn', `thread-welcome.js:2 ⨀ Thread user (${userName}) joined '${guild.name}'`, null, 'yellow', true);
                 })
                 .catch(error => {
                     if (error === 'no_user') return;
-                    logger('error', 'thread-welcome.js: 2 findTread function', error)
+                    logger('error', 'thread-welcome.js:3 findTread function', error)
                 });
         });
     }

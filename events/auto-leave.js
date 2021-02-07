@@ -1,8 +1,7 @@
-// const { bot } = require("../teaBot");
+// const { bot, logger } = require("../teaBot");
 // const config = require('../bot-settings.json');
 // const cron = require('node-cron');
 // const { mysqlQueryBot } = require("../functions/mysqlBotTools");
-// const { logger } = require("../functions/logger");
 
 // bot.on('ready', () => { // https://crontab.guru/examples.html
 //     cron.schedule('0 0 * * *', () => autoLeaver());  // run autoLeaver function daily at midnight CEST

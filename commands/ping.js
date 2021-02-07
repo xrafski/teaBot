@@ -1,5 +1,4 @@
-const { logger } = require("../functions/logger");
-const { botReply } = require("../teaBot");
+const { botReply, logger } = require("../teaBot");
 
 module.exports.help = {
     name: "ping",

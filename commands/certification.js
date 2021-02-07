@@ -1,6 +1,5 @@
 const config = require("../bot-settings.json");
-const { logger } = require("../functions/logger");
-const { getEmoji, botReply, embedMessage, TEAlogo, Discord } = require("../teaBot");
+const { getEmoji, botReply, embedMessage, TEAlogo, Discord, logger } = require("../teaBot");
 const fs = require('fs');
 
 module.exports.help = {

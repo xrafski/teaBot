@@ -1,10 +1,9 @@
-const { bot, BotVersion } = require('../teaBot');
+const { bot, BotVersion, logger } = require('../teaBot');
 const config = require("../bot-settings.json");
-const { logger } = require('../functions/logger');
 bot.login(config.botToken);
 
 bot.on('ready', () => {
-    logger('info', `\n▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬\nTrove Ethics Alliance Bot (${bot.user.tag}) has logged in!\nVersion: ${BotVersion}\n▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬`);
+    logger('info', `▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ Trove Ethics Alliance Bot (${bot.user.tag}) has logged in! Version: ${BotVersion} ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬`);
 
     bot.user.setPresence({ activity: { name: ' ', type: 'WATCHING' }, status: 'idle' })
         .then(() => {

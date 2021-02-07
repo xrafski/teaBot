@@ -1,8 +1,7 @@
-// const { bot } = require('../teaBot');
+// const { bot, logger } = require('../teaBot');
 // const config = require('../bot-settings.json');
 // const cron = require('node-cron');
 // const { mysqlQueryBot } = require("../functions/mysqlBotTools");
-// const { logger } = require('../functions/logger');
 
 // bot.on('ready', () => { // https://crontab.guru/examples.html
 //     cron.schedule('0 8 * * *', () => { checkGuidelines() }); // run guidelines update function daily at 8AM CEST
