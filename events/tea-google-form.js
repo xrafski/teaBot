@@ -8,7 +8,7 @@ bot.on('ready', () => { // https://crontab.guru/examples.html
     cron.schedule('30 */3 * * *', () => { checkTEAspreadsheet() }); // Check TEA spreadsheet for new responses “At minute 30 past every 3rd hour.” (Reports/Appeals).
 
     function checkTEAspreadsheet() {
-        logger('update', `Checking appeal/report spreadsheet [cron]`, null, 'white');
+        logger('update', `tea-google-form.js:1 ⨀ Checking appeal/report spreadsheet [cron]`, null, 'white', true);
         const spreadsheet = new google.auth.JWT(
             keys.client_email,
             null,
