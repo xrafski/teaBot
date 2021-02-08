@@ -1,6 +1,6 @@
 const config = require("../bot-settings.json");
 const fs = require('fs');
-const { botReply, TEAlogo, Discord, logger } = require("../teaBot");
+const { botReply, TEAlogo, Discord, logger, getEmoji } = require("../teaBot");
 
 module.exports.help = {
   name: "club",
@@ -44,7 +44,7 @@ module.exports.run = async (bot, message, args) => {
       })
       .catch(error => {
         switch (error) {
-          case 'no_club': return botReply('❌ Thic club is not found in the database.', message);
+          case 'no_club': return botReply(`❌ This club is not part of ${getEmoji(config.TEAserverID, 'TEA')}**Trove Ethics Alliance**.`, message);
           case 'invalid_regex': return botReply('❌ Invalid club name, make sure to type only alphanumeric characters!', message);
           default: {
             logger('error', 'club.js:2 () Check for the club', error);

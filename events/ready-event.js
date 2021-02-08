@@ -3,7 +3,7 @@ const config = require("../bot-settings.json");
 bot.login(config.botToken);
 
 bot.on('ready', () => {
-    logger('info', `ready-event.js:1 ⨀ Trove Ethics Alliance Bot v${BotVersion} (${bot.user.tag}) has logged in!`, null, 'cyan', true);
+    logger('update', `ready-event.js:1 ⨀ Trove Ethics Alliance Bot v${BotVersion} (${bot.user.tag}) has logged in!`, `New version: ${BotVersion}`, 'cyan', true);
 
     bot.user.setPresence({ activity: { name: ' ', type: 'WATCHING' }, status: 'idle' })
         .then(() => {

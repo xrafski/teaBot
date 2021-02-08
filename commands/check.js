@@ -1,6 +1,6 @@
 const config = require("../bot-settings.json");
 const fs = require('fs');
-const { botReply, TEAlogo, Discord, logger } = require("../teaBot");
+const { botReply, TEAlogo, Discord, logger, embedMessage } = require("../teaBot");
 
 module.exports.help = {
   name: "check",
@@ -76,7 +76,7 @@ module.exports.run = async (bot, message, args) => {
       })
       .catch(error => {
         switch (error) {
-          case 'no_user': return botReply('❌ This user is not found in the threat database.', message);
+          case 'no_user': return botReply(embedMessage(`❌ This user is not detected as a threat in our database.\nHowever, if you think otherwise, please report over **[here](https://forms.gle/8jR6NCXeZZPAsQPf6 'Report Google Form')**.`), message);
           case 'invalid_regex': return botReply('❌ Invalid nickname, make sure to type only alphanumeric characters!', message);
           default: {
             logger('error', 'check.js:2 () Check for user', error);
