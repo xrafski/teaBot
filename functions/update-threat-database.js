@@ -1,4 +1,4 @@
-// update-tread-database.js
+// update-threat-database.js
 // ================================
 
 const config = require("../bot-settings.json");
@@ -18,19 +18,19 @@ const fs = require('fs');
 // });
 
 // pool.on('acquire', function (connection) {
-//     logger('debug', `update-tread-database.js.js:1  - Connection ${connection.threadId} acquired`);
+//     logger('debug', `update-threat-database.js.js:1  - Connection ${connection.threadId} acquired`);
 // });
 
 // pool.on('release', function (connection) {
-//     logger('debug', `update-tread-database.js.js:2 - Connection ${connection.threadId} released`);
+//     logger('debug', `update-threat-database.js.js:2 - Connection ${connection.threadId} released`);
 
 // });
 
 // pool.on('enqueue', function () {
-//     logger('debug', 'update-tread-database.js.js:3 - Waiting for available connection slot');
+//     logger('debug', 'update-threat-database.js.js:3 - Waiting for available connection slot');
 // });
 
-function treadUpdate() {
+function threatUpdate() {
     const timer = process.hrtime();
     return new Promise((resolve, reject) => {
         const spreadsheet = new google.auth.JWT(
@@ -84,7 +84,7 @@ function treadUpdate() {
             fs.writeFileSync('./cache/blacklist.json', JSON.stringify(JSONobj, null, 2)), function (error) {
                 if (error) {
                     reject(error)
-                    return logger('debug', `update-tread-database.js:1 treadUpdate() writeFileSync`, error);
+                    return logger('debug', `update-threat-database.js:1 threatUpdate() writeFileSync`, error);
                 }
             }
 
@@ -94,26 +94,26 @@ function treadUpdate() {
             // pool.getConnection(function (error, connection) {
             //     if (error) {
             //         reject(error);
-            //         return logger('debug', `update-tread-database.js.js:1 treadUpdate() MySQL login`, error);
+            //         return logger('debug', `update-threat-database.js.js:1 threatUpdate() MySQL login`, error);
             //     }
             //     runQuery(connection);
             // })
 
             // function runQuery(connection) {
             //     // Use the connection to TRUNCATE the current table data
-            //     connection.query(`TRUNCATE ${config.mysql.thread_table_name}`, function (error, results, fields) {
+            //     connection.query(`TRUNCATE ${config.mysql.threat_table_name}`, function (error, results, fields) {
             //         if (error) {
             //             pool.releaseConnection(connection);
             //             reject(error);
-            //             return logger('debug', `update-tread-database.js.js:2 treadUpdate() TRUNCATE query`, error);
+            //             return logger('debug', `update-threat-database.js.js:2 threatUpdate() TRUNCATE query`, error);
             //         }
 
             //         // Run another query to put data into cleared table
-            //         connection.query(`INSERT INTO ${config.mysql.thread_table_name} (name, warning, lastKnownName, reason, status, evidence, alternateAccounts, discordID, notes, privateWorld) VALUES ?`, [JSONobj], function (error, results, fields) {
+            //         connection.query(`INSERT INTO ${config.mysql.threat_table_name} (name, warning, lastKnownName, reason, status, evidence, alternateAccounts, discordID, notes, privateWorld) VALUES ?`, [JSONobj], function (error, results, fields) {
             //             if (error) {
             //                 pool.releaseConnection(connection);
             //                 reject(error);
-            //                 return logger('debug', `update-tread-database.js.js:3 treadUpdate() INSERT query`, error);
+            //                 return logger('debug', `update-threat-database.js.js:3 threatUpdate() INSERT query`, error);
             //             }
 
             //             // if all was good relase the connection and resolve function
@@ -127,4 +127,4 @@ function treadUpdate() {
     })
 }
 
-module.exports.treadUpdate = treadUpdate;
+module.exports.threatUpdate = threatUpdate;

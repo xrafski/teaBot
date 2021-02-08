@@ -4,7 +4,7 @@ const { botReply, TEAlogo, Discord, logger } = require("../teaBot");
 
 module.exports.help = {
   name: "check",
-  description: "Check if user is in thread database.",
+  description: "Check if user is in threat database.",
   type: "public",
   usage: `ℹ️ Format: **${config.botPrefix}check userName**\n\nℹ️ Example(s):\n${config.botPrefix}user RNG\n${config.botPrefix}check Surge\n**Nickname must contain at least 3 characters!**`
 };
@@ -21,23 +21,23 @@ module.exports.run = async (bot, message, args) => {
 
     const searchValue = message.content.slice(config.botPrefix.length + module.exports.help.name.length).trim().toLowerCase();
     return findTheUser(newData, searchValue)
-      .then(threadUser => {
+      .then(threatUser => {
 
-        const { userName, userWarning, userReason, userEvidence } = threadUser;
-        let { userlastName, userAlternate, userNotes, userDiscord } = threadUser;
+        const { userName, userWarning, userReason, userEvidence } = threatUser;
+        let { userlastName, userAlternate, userNotes, userDiscord } = threatUser;
 
         const formatDiscordID = userDiscord?.replace(/[\\<>@#&! ]/g, "").split(',');
-        let threadInServer = '';
+        let threatInServer = '';
 
         formatDiscordID?.forEach(element => {
-          const threadFound = checkIfTreadHere(element);
-          if (threadFound) threadInServer = threadInServer + `\n${threadFound.tag} (${threadFound.toString()})`;
+          const threatFound = checkIfThreatHere(element);
+          if (threatFound) threatInServer = threatInServer + `\n${threatFound.tag} (${threatFound.toString()})`;
         });
 
-        if (threadInServer) {
+        if (threatInServer) {
           const embed_user_details = new Discord.MessageEmbed()
-            .setColor(setThreadColor(userWarning))
-            .setAuthor(`Thread Details`, TEAlogo)
+            .setColor(setThreatColor(userWarning))
+            .setAuthor(`Threat Details`, TEAlogo)
             .setTitle(`Nickname: \`${userName}\``)
             .setDescription(`**Reason:** ${userReason}\n‏‏‎ ‎‎`)
             .addFields(
@@ -46,7 +46,7 @@ module.exports.run = async (bot, message, args) => {
               { name: 'Alternate accounts', value: `\`${userAlternate = userAlternate || 'No other known accounts'}\``, inline: false },
               { name: 'Evidence(s)', value: userEvidence, inline: false },
               { name: 'Additional notes', value: userNotes = userNotes || 'No notes', inline: false },
-              { name: 'Server Scan', value: `The following threat account(s) have been identified on this server:${threadInServer}`, inline: false },
+              { name: 'Server Scan', value: `The following threat account(s) have been identified on this server:${threatInServer}`, inline: false },
               { name: 'Links', value: `Appeal is avaiable over [here](https://forms.gle/oR78HXAJcdSHBEvx7 'Appeal Google Form')\nPlayer report [here](https://forms.gle/8jR6NCXeZZPAsQPf6 'Report Google Form')`, inline: false },
             )
             .setThumbnail(TEAlogo)
@@ -55,8 +55,8 @@ module.exports.run = async (bot, message, args) => {
           // .then(msg => messageRemoverWithReact(msg, message.author));
         } else {
           const embed_user_details = new Discord.MessageEmbed()
-            .setColor(setThreadColor(userWarning))
-            .setAuthor(`Thread Details`, TEAlogo)
+            .setColor(setThreatColor(userWarning))
+            .setAuthor(`Threat Details`, TEAlogo)
             .setTitle(`Nickname: \`${userName}\``)
             .setDescription(`**Reason:** ${userReason}\n‏‏‎ ‎‎`)
             .addFields(
@@ -76,7 +76,7 @@ module.exports.run = async (bot, message, args) => {
       })
       .catch(error => {
         switch (error) {
-          case 'no_user': return botReply('❌ This user is not found in the database.', message);
+          case 'no_user': return botReply('❌ This user is not found in the threat database.', message);
           case 'invalid_regex': return botReply('❌ Invalid nickname, make sure to type only alphanumeric characters!', message);
           default: {
             logger('error', 'check.js:2 () Check for user', error);
@@ -107,7 +107,7 @@ module.exports.run = async (bot, message, args) => {
     })
   }
 
-  function setThreadColor(color) {
+  function setThreatColor(color) {
     switch (color) {
       case 'g': return '#45ff24';
       case 'y': return '#ffff24';
@@ -117,7 +117,7 @@ module.exports.run = async (bot, message, args) => {
     }
   }
 
-  function checkIfTreadHere(params) {
+  function checkIfThreatHere(params) {
     const userObject = message.guild.members.cache.get(params);
     if (userObject) return userObject.user;
     else return false;

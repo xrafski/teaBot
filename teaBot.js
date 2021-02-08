@@ -6,7 +6,7 @@ const dateFormat = require("dateformat");
 const bot = new Discord.Client({ partials: ['MESSAGE', 'REACTION'] });
 
 // define current bot version.
-const BotVersion = '1.0.1';
+const BotVersion = '1.0.2';
 
 // define icon image url for embeds
 const TEAlogo = 'https://skillez.eu/images/discord/teabanner.png'
@@ -339,7 +339,7 @@ function logger(type, text, error, color, sendChannelLog) {
 				case 'green': return sendTheEmbed(text, error, '#1dff1a');
 				case 'yellow': return sendTheEmbed(text, error, '#f7ff0a');
 				case 'blue': return sendTheEmbed(text, error, '#006ef5');
-				case 'purple': return sendTheEmbed(text, error, '#a31aff');
+				case 'purple': return sendTheEmbed(text, error, '#a727e7');
 				case 'cyan': return sendTheEmbed(text, error, '#1ac9ff');
 				case 'white': return sendTheEmbed(text, error, '#fafafa');
 				default: return sendTheEmbed(text, error, '#030303');

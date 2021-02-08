@@ -3,7 +3,7 @@ const config = require("../bot-settings.json");
 bot.login(config.botToken);
 
 bot.on('ready', () => {
-    logger('info', `▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ Trove Ethics Alliance Bot (${bot.user.tag}) has logged in! Version: ${BotVersion} ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬`);
+    logger('info', `ready-event.js:1 ⨀ Trove Ethics Alliance Bot v${BotVersion} (${bot.user.tag}) has logged in!`, null, 'cyan', true);
 
     bot.user.setPresence({ activity: { name: ' ', type: 'WATCHING' }, status: 'idle' })
         .then(() => {
@@ -13,5 +13,5 @@ bot.on('ready', () => {
                 bot.user.setPresence({ activity: { name: `${memberCount} users 👮‍♂️`, type: 'WATCHING' }, status: 'online' });
             }, 3600000);
         })
-        .catch(error => logger('error', `ready-event.js:1 () Set the bot activity`, error));
+        .catch(error => logger('error', `ready-event.js:2 () Set the bot activity`, error));
 });

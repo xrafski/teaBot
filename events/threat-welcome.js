@@ -9,16 +9,16 @@ bot.on('guildMemberAdd', member => {
 
     if (logChannel) {
         fs.readFile('./cache/blacklist.json', 'utf8', (error, data) => {
-            if (error) return logger('error', 'thread-welcome.js:1 Load certification file', error);
+            if (error) return logger('error', 'threat-welcome.js:1 Load certification file', error);
 
-            findThread(JSON.parse(data), user.id)
-                .then(threadObject => {
-                    const { userEvidence, userName, userReason, userWarning } = threadObject;
-                    let { userAlternate, userlastName, userNotes, userDiscord } = threadObject;
+            findThreat(JSON.parse(data), user.id)
+                .then(threatObject => {
+                    const { userEvidence, userName, userReason, userWarning } = threatObject;
+                    let { userAlternate, userlastName, userNotes, userDiscord } = threatObject;
 
                     const embed_user_details = new Discord.MessageEmbed()
-                        .setColor(setThreadColor(userWarning))
-                        .setAuthor(`Thread user has joined this server!`, TEAlogo)
+                        .setColor(setThreatColor(userWarning))
+                        .setAuthor(`Threat user has joined this server!`, TEAlogo)
                         .setTitle(`⚠ Nickname: \`${userName}\``)
                         .setDescription(`**Reason:** ${userReason}\n‏‏‎ ‎‎`)
                         .addFields(
@@ -33,17 +33,17 @@ bot.on('guildMemberAdd', member => {
                         .setThumbnail(TEAlogo)
                         .setTimestamp()
                     sendEmbedLog(embed_user_details, logChannel.id, 'Trove Ethics Alliance - Overwatch');
-                    if (userName !== 'Trove Ethics Alliance') logger('warn', `thread-welcome.js:2 ⨀ Thread user (${userName}) joined '${guild.name}'`, null, 'yellow', true);
+                    if (userName !== 'Trove Ethics Alliance') logger('warn', `threat-welcome.js:2 ⨀ Threat user (${userName}) joined '${guild.name}'`, null, 'yellow', true);
                 })
                 .catch(error => {
                     if (error === 'no_user') return;
-                    logger('error', 'thread-welcome.js:3 findTread function', error)
+                    logger('error', 'threat-welcome.js:3 findThreat function', error)
                 });
         });
     }
 })
 
-function findThread(object, userID) {
+function findThreat(object, userID) {
     return new Promise((resolve, reject) => {
         const regex = new RegExp(`(${userID})`, 'g');
 
@@ -77,7 +77,7 @@ function findThread(object, userID) {
     })
 }
 
-function setThreadColor(color) {
+function setThreatColor(color) {
     switch (color) {
         case 'g': return '#45ff24';
         case 'y': return '#ffff24';

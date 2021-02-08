@@ -1,7 +1,7 @@
 const config = require("../bot-settings.json");
 // const { updGuidelines } = require("../events/update-guidelines");
 const { certUpdate } = require("../functions/update-certification");
-const { treadUpdate } = require("../functions/update-tread-database");
+const { threatUpdate } = require("../functions/update-threat-database");
 const { botReply, getEmoji, embedMessage, logger } = require("../teaBot");
 
 module.exports.help = {
@@ -32,14 +32,14 @@ module.exports.run = async (bot, message, args) => {
                 });
         }
         case 'blacklist': {
-            return treadUpdate()
+            return threatUpdate()
                 .then(results => {
-                    logger('update', `update.js:3 () 👉 Thread Database Update [Manual]`, results.info, 'green');
-                    return botReply(embedMessage(`${getEmoji(config.TEAserverID, 'TEA')} 👉 Thread Database has been updated!\n${results.info}`, message.author), message);
+                    logger('update', `update.js:3 () 👉 Threat Database Update [Manual]`, results.info, 'green');
+                    return botReply(embedMessage(`${getEmoji(config.TEAserverID, 'TEA')} 👉 Threat Database has been updated!\n${results.info}`, message.author), message);
                 })
                 .catch(error => {
-                    logger('error', `update.js:4 () 👉 Thread Database Update [Manual]`, error);
-                    return botReply(embedMessage(`${getEmoji(config.TEAserverID, 'TEA')} 👉 ERROR to update thread database:\n🔴 **${error.code}**`, message.author), message);
+                    logger('error', `update.js:4 () 👉 Threat Database Update [Manual]`, error);
+                    return botReply(embedMessage(`${getEmoji(config.TEAserverID, 'TEA')} 👉 ERROR to update threat database:\n🔴 **${error.code}**`, message.author), message);
                 });
         }
         default: return botReply(`Wrong command format, type **${config.botPrefix}help ${module.exports.help.name}** to see usage and examples!`, message);
