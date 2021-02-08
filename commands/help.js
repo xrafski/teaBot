@@ -20,7 +20,7 @@ module.exports.run = async (bot, message, args) => {
                 .setDescription(`Follow the instructions below to ensure that the overwatch work.`)
                 .addFields(
                     { name: `Log channel`, value: `Make sure '**${config.logs.channelName}**' channel exists, if not create a new one.`, inline: false },
-                    { name: `Set the following permissions for the bot:`, value: `✅ Manage Webhooks\n✅ Read Messages\n✅ Send Messages\n✅ Embed Links\n✅ Read Message History`, inline: false },
+                    { name: `Set the following permissions for the bot:`, value: `✅ Manage Webhooks\n✅ Read Messages\n✅ Send Messages\n✅ Embed Links\n✅ Read Message History\n✅ Use External Emoji`, inline: false },
                     { name: '‏‏‎ ‎', value: `That's it. The server owner can use **${config.botPrefix}test overwatch** command to check configuration.`, inline: false },
                 )
                 .setThumbnail(TEAlogo)

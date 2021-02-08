@@ -12,7 +12,7 @@ module.exports.help = {
 module.exports.run = async (bot, message, args) => {
   fs.readFile('./cache/certification.json', 'utf8', (error, data) => {
     if (error) {
-      logger('error', 'club.js:1 () Load certification file', error);
+      logger('error', 'club.js:1 () Load certification.json file', error);
       return botReply('Error to parse data, try again later.', message);
     }
 

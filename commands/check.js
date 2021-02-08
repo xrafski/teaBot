@@ -12,7 +12,7 @@ module.exports.help = {
 module.exports.run = async (bot, message, args) => {
   fs.readFile('./cache/blacklist.json', 'utf8', (error, data) => {
     if (error) {
-      logger('error', 'check.js:1 () Load certification file', error);
+      logger('error', 'check.js:1 () Load blacklist.json file', error);
       return botReply('Error to parse data, try again later.', message);
     }
 
@@ -26,7 +26,7 @@ module.exports.run = async (bot, message, args) => {
         const { userName, userWarning, userReason, userEvidence } = threatUser;
         let { userlastName, userAlternate, userNotes, userDiscord } = threatUser;
 
-        const formatDiscordID = userDiscord?.replace(/[\\<>@#&! ]/g, "").split(',');
+        const formatDiscordID = userDiscord?.replace(/[\\<>@#&?! ]/g, "").split(',');
         let threatInServer = '';
 
         formatDiscordID?.forEach(element => {
@@ -91,14 +91,14 @@ module.exports.run = async (bot, message, args) => {
       if (!word.match(/[a-zA-Z0-9 ]/)) return reject('invalid_regex');
       const regex = new RegExp(`(${word})`, 'gi');
 
-      if (object.find(element => element.userName?.toLowerCase() === word || element.userlastName?.toLowerCase() === word || element.userAlternate?.toLowerCase() === word))
-        return resolve(object.find(element => element.userName?.toLowerCase() === word || element.userlastName?.toLowerCase() === word || element.userAlternate?.toLowerCase() === word));
+      if (object.find(element => element.userName?.toLowerCase() === word || element.userlastName?.toLowerCase() === word || element.userAlternate?.toLowerCase() === word || element.userDiscord?.toLowerCase() === word))
+        return resolve(object.find(element => element.userName?.toLowerCase() === word || element.userlastName?.toLowerCase() === word || element.userAlternate?.toLowerCase() === word || element.userDiscord?.toLowerCase() === word));
 
       for (const key in object) {
         if (Object.hasOwnProperty.call(object, key)) {
           const element = object[key];
 
-          if (element.userName?.match(regex) || element.userlastName?.match(regex) || element.userAlternate?.match(regex)) {
+          if (element.userName?.match(regex) || element.userlastName?.match(regex) || element.userAlternate?.match(regex) || element.userDiscord?.match(regex)) {
             return resolve(element);
           }
         }
