@@ -13,5 +13,5 @@ bot.on('ready', () => {
                 bot.user.setPresence({ activity: { name: `${memberCount} users 👮‍♂️`, type: 'WATCHING' }, status: 'online' });
             }, 3600000);
         })
-        .catch(error => logger('error', `ready-event.js:2 () Set the bot activity`, error));
+        .catch(error => logger('error', `ready-event.js:2 () Set the bot activity.`, error));
 });
