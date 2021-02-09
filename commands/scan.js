@@ -48,8 +48,13 @@ module.exports.run = async (bot, message) => {
                 .setTitle(`Detected ${detectedNumber} threat(s) in total!`)
                 .setDescription(detectedThreats)
                 .setTimestamp()
-                .setFooter(`Type ${config.botPrefix}check bold_nickname for details.`, TEAlogo)
-            sendEmbedLog(embed_scan_results, logChannel.id, config.logs.loggerName);
+                .setFooter(`Type ${config.botPrefix}check nickname for details.`, TEAlogo)
+
+            sendEmbedLog(embed_scan_results, logChannel.id, config.logs.loggerName)
+                .catch(error => {
+                    botReply(`${error.info}\n**Reason**: ${error.data.message}`, message);
+                    logger('error', `scan.js:2 () ${error.info} in the ${message.guild.name}.`);
+                });
         } else {
             const embed_scan_results = new Discord.MessageEmbed()
                 .setColor('#55ff42')
@@ -57,7 +62,17 @@ module.exports.run = async (bot, message) => {
                 .setTitle(`✅ No threats detected!`)
                 .setThumbnail(TEAlogo)
                 .setTimestamp()
-            sendEmbedLog(embed_scan_results, logChannel.id, config.logs.loggerName);
+
+            sendEmbedLog(embed_scan_results, logChannel.id, config.logs.loggerName)
+                .catch(error => {
+                    if (error.data.message === 'Missing Permissions') {
+                        botReply(`Not enough permissions, missing '**Manage Webhooks**' for the ${logChannel} channel.`, message);
+                        logger('error', `scan.js:3 () ${error.info} in the ${message.guild.name}.`);
+                    } else {
+                        botReply(`${error.info}\n**Reason**: ${error.data.message}`, message);
+                        logger('error', `scan.js:4 () ${error.info} in the ${message.guild.name}.`);
+                    }
+                });
         }
     });
 

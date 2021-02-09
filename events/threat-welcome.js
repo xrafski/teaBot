@@ -32,12 +32,13 @@ bot.on('guildMemberAdd', member => {
                         )
                         .setThumbnail(TEAlogo)
                         .setTimestamp()
-                    sendEmbedLog(embed_user_details, logChannel.id, 'Trove Ethics Alliance - Overwatch');
-                    if (userName !== 'Trove Ethics Alliance') logger('warn', `threat-welcome.js:2 ⨀ Threat user (${userName}) joined '${guild.name}'`, null, 'yellow', true);
+                    sendEmbedLog(embed_user_details, logChannel.id, 'Trove Ethics Alliance - Overwatch')
+                        .catch(error => logger('error', `threat-welcome.js:2 findThreat() ${error.info} in the '${logChannel.guild.name}'.`));
+                    if (userName !== 'Trove Ethics Alliance') logger('warn', `threat-welcome.js:3 ⨀ Threat user (${userName}) joined '${guild.name}'.`, null, 'yellow', true);
                 })
                 .catch(error => {
                     if (error === 'no_user') return;
-                    logger('error', 'threat-welcome.js:3 findThreat function', error)
+                    logger('error', 'threat-welcome.js:4 findThreat function', error)
                 });
         });
     }

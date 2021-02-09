@@ -15,7 +15,7 @@ bot.on("message", async message => {
         switch (cmdFile.help.type?.toLowerCase()) {
             case 'botowner': {
                 if (message.channel.type != "dm") {
-                    if (message.author.id === config.botOwnerID) return cmdFile.run(bot, message, args);
+                    if (message.author.id === config.botOwnerID || message.author.id === config.botOwnerID) return cmdFile.run(bot, message, args);
                     else return botReply(`Insufficient permissions!\nOnly the bot owner can use **${config.botPrefix}${cmdFile.help.name}** command!`, message);
                 } else return botReply(`**${config.botPrefix}${cmdFile.help.name}** is not available on DM!`, message);
             }

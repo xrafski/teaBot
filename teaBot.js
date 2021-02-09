@@ -6,7 +6,7 @@ const dateFormat = require("dateformat");
 const bot = new Discord.Client({ partials: ['MESSAGE', 'REACTION'] });
 
 // define current bot version.
-const BotVersion = '1.0.3';
+const BotVersion = '1.0.4';
 
 // define icon image url for embeds
 const TEAlogo = 'https://skillez.eu/images/discord/teabanner.png'
@@ -245,31 +245,35 @@ async function messageRemoverWithReact(message, author) {
 		});
 }
 
-function sendEmbedLog(embedMessage, channelID, webHookName) {
-	const logChannel = bot.channels.cache.get(channelID);
-	if (!logChannel) return logger('error', `teaBot.js:1 sendEmbedLog() provided channelID(${channelID}) doesn't exist.`);
-	else {
-		logChannel.fetchWebhooks()
-			.then(hooks => {
-				const existingHook = hooks.find(hook => hook.owner === bot.user && hook.name === webHookName);
-				if (!existingHook) {
-					return logChannel.createWebhook(webHookName, {
-						avatar: 'https://skillez.eu/images/discord/teaicon.png',
-						reason: 'Webhook required to send log messages'
-					})
-						.then(hook => {
-							logger('log', `teaBot.js:2 sendEmbedLog() A new webhook '${webHookName}' has been created in the #${logChannel.name} channel in '${logChannel.guild.name}' server`);
-							hook.send(embedMessage)
-								.catch(error => logger('error', `teaBot.js:3 sendEmbedLog() Send webhook message in the #${logChannel.name} channel in '${logChannel.guild.name}' server`, error));
+function sendEmbedLog(MessageTest, channelID, webHookName) {
+	return new Promise((resolve, reject) => {
+		const logChannel = bot.channels.cache.get(channelID);
+		if (!logChannel) return reject({ 'info': `Target channel is not found.`, 'data': null });
+		else {
+			logChannel.fetchWebhooks()
+				.then(hooks => {
+					const existingHook = hooks.find(hook => hook.owner === bot.user && hook.name === webHookName);
+					if (!existingHook) {
+						logChannel.createWebhook(webHookName, {
+							avatar: 'https://skillez.eu/images/discord/teaicon.png',
+							reason: 'Webhook required to send log messages.'
 						})
-						.catch(error => logger('error', `teaBot.js:4 sendEmbedLog() Create a webhook in the #${logChannel.name} channel in '${logChannel.guild.name}' server`, error));
-				} else {
-					existingHook.send(embedMessage)
-						.catch(error => logger('error', `teaBot.js:5 sendEmbedLog() Send webhook message in the #${logChannel.name} channel in '${logChannel.guild.name}' server`, error));
-				}
-			})
-			.catch(error => logger('error', `teaBot.js:6 sendEmbedLog() Error to fetch webhooks for #${logChannel.name} channel in '${logChannel.guild.name}'`, error));
-	}
+							.then(hook => {
+								logger('log', `teaBot.js:1 sendEmbedLog() A new webhook '${webHookName}' has been created for the #${logChannel.name} channel in the '${logChannel.guild.name}'`);
+								hook.send(MessageTest)
+									.then(msg => resolve(msg))
+									.catch(error => reject({ 'info': `Error to send a webhook message to the #${logChannel.name} channel`, 'data': error }));
+							})
+							.catch(error => reject({ 'info': `Error to create a new webhook for the #${logChannel.name} channel`, 'data': error }));
+					} else {
+						existingHook.send(MessageTest)
+							.then(msg => resolve(msg))
+							.catch(error => reject({ 'info': `Error to send a webhook message to the #${logChannel.name} channel`, 'data': error }));
+					}
+				})
+				.catch(error => reject({ 'info': `Error to fetch webhooks for the #${logChannel.name} channel`, 'data': error }));
+		}
+	});
 }
 
 function removeUserLastMessage(message) {
