@@ -310,28 +310,33 @@ function logger(type, text, error, color, sendChannelLog) {
 				else return;
 			case 'log': {
 				console.log(`[${logDate} UTC] [LOG]${clr} 🟢 ${text?.join(' ⨀ ')}${(error ? ` | ${error}` : '')}\u001b[0m`);
-				if (sendChannelLog) return sendEmbedLog(logEmbed(text, error, color), config.logs.botChannelLogID, config.logs.loggerName);
+				if (sendChannelLog) return sendEmbedLog(logEmbed(text, error, color), config.logs.botChannelLogID, config.logs.loggerName)
+					.catch(error => logger('error', 'teaBot.js:1 sendLog() sendEmbedLog error', error?.info));
 				else return;
 			}
 			case 'info': {
 				console.info(`[${logDate} UTC] [INFO]${clr} 🔵 ${text?.join(' ⨀ ')}${(error ? ` | ${error}` : '')}\u001b[0m`);
-				if (sendChannelLog) return sendEmbedLog(logEmbed(text, error, color), config.logs.botChannelLogID, config.logs.loggerName);
+				if (sendChannelLog) return sendEmbedLog(logEmbed(text, error, color), config.logs.botChannelLogID, config.logs.loggerName)
+					.catch(error => logger('error', 'teaBot.js:2 sendLog() sendEmbedLog error', error?.info));
 				else return;
 			}
 			case 'warn': {
 				console.warn(`[${logDate} UTC] [WARN]${clr} 🟡 ${text?.join(' ⨀ ')}${(error ? ` | ${error}` : '')}\u001b[0m`);
-				if (sendChannelLog) return sendEmbedLog(logEmbed(text, error, color), config.logs.botChannelLogID, config.logs.loggerName);
+				if (sendChannelLog) return sendEmbedLog(logEmbed(text, error, color), config.logs.botChannelLogID, config.logs.loggerName)
+					.catch(error => logger('error', 'teaBot.js:3 sendLog() sendEmbedLog error', error?.info));
 				else return;
 			}
 			case 'error': {
 				console.error(`[${logDate} UTC] [ERROR]${clr} 🔴 ${text?.join(' ⨀ ')}${(error ? ` | ${error}` : '')}\u001b[0m`);
-				if (sendChannelLog) return sendEmbedLog(logEmbed(text, error, color), config.logs.botChannelLogID, config.logs.loggerName);
+				if (sendChannelLog) return sendEmbedLog(logEmbed(text, error, color), config.logs.botChannelLogID, config.logs.loggerName)
+					.catch(error => logger('error', 'teaBot.js:4 sendLog() sendEmbedLog error', error?.info));
 				else return;
 			}
 			case 'trace': return console.trace(`[${logDate} UTC] [TRACE]${clr} 🟤 ${text?.join(' ⨀ ')}${(error ? ` | ${error}` : '')}\u001b[0m`);
 			case 'update': {
 				console.log(`[${logDate} UTC] [UPDATE]${clr} ⧭ ${text?.join(' ⨀ ')}${(error ? ` | ${error}` : '')}\u001b[0m`);
-				if (sendChannelLog) return sendEmbedLog(logEmbed(text, error, color), config.logs.botChannelLogID, config.logs.loggerName);
+				if (sendChannelLog) return sendEmbedLog(logEmbed(text, error, color), config.logs.botChannelLogID, config.logs.loggerName)
+					.catch(error => logger('error', 'teaBot.js:5 sendLog() sendEmbedLog error', error?.info));
 				else return;
 			}
 			default: return console.log(`[${logDate} UTC] [DEFAULT] ⚪ ${type} | ${text?.join(' ⨀ ')} | ${error}`);
