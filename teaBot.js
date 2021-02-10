@@ -56,6 +56,10 @@ fs.readdir('./events/', (err, files) => {
 	});
 });
 
+process.on('unhandledRejection', error => {
+	console.warn('Unhandled promise rejection:', error);
+});
+
 function ownerDM(message) {
 	message = message || 'Message is not provided';
 	const ownerObj = bot.users.cache.get(config.botOwnerID);
