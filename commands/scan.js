@@ -12,7 +12,7 @@ module.exports.help = {
 module.exports.run = async (bot, message) => {
     const logChannel = message.guild.channels.cache.find(channel => channel.name === config.logs.channelName);
     if (!logChannel) return botReply(embedMessage(`**Log channel is not detected!**\nPlease, create a new channel '**${config.logs.channelName}**' or fix permissions if already exists.\n\nSet the following permissions for the bot:\n✅ Manage Webhooks\n✅ Read Messages\n✅ Send Messages\n✅ Embed Links\n✅ Read Message History\n✅ Use External Emoji`, message.author), message);
-    if (message.channel != logChannel) return botReply(`You can use this command **only** in the ${logChannel} channel for secirity reasons.`, message);
+    if (message.channel != logChannel) return botReply(`You can use this command **only** in the ${logChannel} channel for security reasons.`, message);
     // if (!logChannel.permissionsFor(bot.user).has('MANAGE_WEBHOOKS')) return botReply(`❌ Missing '**Manage Webhooks**' permissions for ${logChannel}.`, message);
 
     fs.readFile('./cache/blacklist.json', 'utf8', (error, data) => {
