@@ -62,7 +62,7 @@ module.exports.run = async (bot, message, args) => {
                 // .then(helpMessage => messageRemoverWithReact(helpMessage, author));
             } else {
                 const dataArray = {
-                    'setup': `**${config.botPrefix}help overwatch** • Information how to set up overwatch.`,
+                    'setup': `**${config.botPrefix}help overwatch** • Information how to set up overwatch.\n**${config.botPrefix}help announcements** • Information how to set up TEA announcements.`,
                     'bOwner': getCommand().filter(command => command.help.type === 'botowner').map(command => `**${command.help.name}** • ${command.help.description}`).join('\n'),
                     'sOwner': getCommand().filter(command => command.help.type === 'serverowner').map(command => `**${command.help.name}** • ${command.help.description}`).join('\n'),
                     'admin': getCommand().filter(command => command.help.type === 'administrator').map(command => `**${command.help.name}** • ${command.help.description}`).join('\n'),
