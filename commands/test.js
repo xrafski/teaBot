@@ -25,7 +25,7 @@ module.exports.run = async (bot, message, args) => {
             const announcementsChannel = guild.channels.cache.find(channel => channel.name === config.announcements.channelName);
             if (!announcementsChannel) return botReply(`Your server is missing '**${config.announcements.channelName}**' channel, and you won't receive announcements without it!`, message);
 
-            sendEmbedLog(`Feel free to remove this test message.\n\nSet ✅ **Use External Emoji** permission in the ${announcementsChannel} channel for ${bot.user} bot\nif you see a text instead of this 👉 ${getEmoji(config.TEAserverID, 'TEA')} 👈 emoji.`, announcementsChannel.id, config.announcements.hookName)
+            sendEmbedLog(`Feel free to remove this test message.\n\nSet ✅ **Use External Emoji** permission in the ${announcementsChannel} channel for ${bot.user} bot and everyone role\nif you see a text instead of this 👉 ${getEmoji(config.TEAserverID, 'TEA')} 👈 emoji.`, announcementsChannel.id, config.announcements.hookName)
                 .then(() => logger('debug', `test.js:1 () An announcement test message sent in the '${announcementsChannel.name}' channel for the '${guild.name}' server.`))
                 .catch(error => logger('warn', 'test.js:2 () Send to send test announcement', error.info));
             return botReply(`Announcements system test requested!\nType **tea!help announcements** if you don't see a new message in the ${announcementsChannel} channel for setup details.`, message)
