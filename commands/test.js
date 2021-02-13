@@ -30,6 +30,6 @@ module.exports.run = async (bot, message, args) => {
                 .catch(error => logger('warn', 'test.js:2 () Send to send test announcement', error.info));
             return botReply(`Announcements system test requested!\nType **tea!help announcements** if you don't see a new message in the ${announcementsChannel} channel for setup details.`, message)
         }
-        default: return botReply('❌ Unknown system name, you can only test **overwatch** right now.', message);
+        default: return botReply('❌ Unknown system name, you can only test **overwatch** or **announcements** right now.', message);
     }
 }
