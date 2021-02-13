@@ -28,7 +28,7 @@ module.exports.run = async (bot, message, args) => {
             sendEmbedLog(`Feel free to remove this test message.\n\nSet ✅ **Use External Emoji** permission in the ${announcementsChannel} channel for ${bot.user} bot and everyone role\nif you see a text instead of this 👉 ${getEmoji(config.TEAserverID, 'TEA')} 👈 emoji.`, announcementsChannel.id, config.announcements.hookName)
                 .then(() => logger('debug', `test.js:1 () An announcement test message sent in the '${announcementsChannel.name}' channel for the '${guild.name}' server.`))
                 .catch(error => logger('warn', 'test.js:2 () Send to send test announcement', error.info));
-            return botReply(`Announcements system test requested!\nType **tea!help announcements** if you don't see a new message in the ${announcementsChannel} channel for setup details.`, message)
+            return botReply(`Announcement system test requested!\nType **tea!help announcements** if you don't see a new message in the ${announcementsChannel} channel for setup details.`, message)
         }
         default: return botReply('❌ Unknown system name, you can only test **overwatch** or **announcements** right now.', message);
     }
