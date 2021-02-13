@@ -20,14 +20,27 @@ module.exports.run = async (bot, message, args) => {
                 .setDescription(`Follow the instructions below to ensure that the overwatch work.`)
                 .addFields(
                     { name: `Log channel`, value: `Make sure '**${config.logs.channelName}**' channel exists, if not create a new one.`, inline: false },
-                    { name: `Set the following permissions for the bot:`, value: `✅ Manage Webhooks\n✅ Read Messages\n✅ Send Messages\n✅ Embed Links\n✅ Read Message History\n✅ Use External Emoji`, inline: false },
-                    { name: '‏‏‎ ‎', value: `That's it. The server owner can use **${config.botPrefix}test overwatch** command to check configuration.`, inline: false },
+                    { name: `Set the following permissions for the bot:`, value: `✅ View Channel\n✅ Manage Webhooks\n✅ Send Messages\n✅ Embed Links\n✅ Read Messages\n✅ Read Message History\n✅ Use External Emoji\n✅ Attach Files`, inline: false },
+                    { name: '‏‏‎ ‎', value: `That's it. The server owner can use **${config.botPrefix}test overwatch** to check configuration.`, inline: false },
                 )
                 .setThumbnail(TEAlogo)
             return botReply(embed_guidelines_help, message)
-            // .then(helpGuidelines => messageRemoverWithReact(helpGuidelines, message.author));
+            // .then(helpGuidelines => messageRemoverWithReact(helpGuidelines, author));
         }
-
+        case 'announcements': {
+            const embed_announcements_help = new Discord.MessageEmbed()
+                .setColor('#eeff38')
+                .setAuthor(`TEA Announcements Help Note`, TEAlogo)
+                .setDescription(`Follow the instructions below to ensure that announcements work.`)
+                .addFields(
+                    { name: `Announcements channel`, value: `Make sure '**${config.announcements.channelName}**' channel exists, if not create a new one.`, inline: false },
+                    { name: `Set the following permissions for the bot:`, value: `✅ View Channel\n✅ Manage Webhooks\n✅ Send Messages\n✅ Embed Links\n✅ Read Messages\n✅ Read Message History\n✅ Use External Emoji\n✅ Attach Files`, inline: false },
+                    { name: '‏‏‎ ‎', value: `That's it. The server owner can use **${config.botPrefix}test announcements** to check configuration.`, inline: false },
+                )
+                .setThumbnail(TEAlogo)
+            return botReply(embed_announcements_help, message)
+            // .then(helpGuidelines => messageRemoverWithReact(helpGuidelines, author));
+        }
         // case 'guidelines': {
         //     const embed_guidelines_help = new Discord.MessageEmbed()
         //         .setColor('#eeff38')
@@ -41,9 +54,8 @@ module.exports.run = async (bot, message, args) => {
         //         )
         //         .setThumbnail(TEAlogo)
         //     return botReply(embed_guidelines_help, message)
-        //         // .then(helpGuidelines => messageRemoverWithReact(helpGuidelines, message.author));
+        //         // .then(helpGuidelines => messageRemoverWithReact(helpGuidelines, author));
         // }
-
         default: {
             if (args[0] && getCommand(args[0])) {
                 return botReply(`Help for the **${config.botPrefix}${args[0]}** command:\nAccess Level: __${getCommand(args[0]).help.type}__\nDescription: ${getCommand(args[0]).help.description}\n\nUsage: ${getCommand(args[0]).help.usage}`, message)
