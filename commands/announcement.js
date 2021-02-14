@@ -14,6 +14,7 @@ module.exports.run = async (bot, message, args) => {
     // if (!mainAnnouncementChannel) return botReply(`No **#${config.announcements.channelName}** channel on this server!`, message);
     // if (message.channel != mainAnnouncementChannel) return botReply(`You can use this command **only** in the ${mainAnnouncementChannel}!`, message);
 
+    botReply(`The announcement has been sent to TEA members.`, message);
     for (const guild of bot.guilds.cache) {
         const announcementChannel = guild[1].channels.cache.find(channel => channel.name === config.announcements.channelName);
         if (announcementChannel) {
