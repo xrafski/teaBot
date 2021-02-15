@@ -34,7 +34,7 @@ bot.on('guildMemberAdd', member => {
                         .setTimestamp()
                     sendEmbedLog(embed_user_details, logChannel.id, 'Trove Ethics Alliance - Overwatch')
                         .catch(error => logger('error', `threat-welcome.js:2 findThreat() ${error.info} in the '${logChannel.guild.name}'.`));
-                    if (userName !== 'Trove Ethics Alliance') logger('warn', `threat-welcome.js:3 () Threat user (${userName}) joined '${guild.name}'.`);
+                    if (userName !== 'Trove Ethics Alliance') logger('warn', `threat-welcome.js:3 () Threat user (${userName})[${user.tag}] joined '${guild.name}'.`);
                 })
                 .catch(error => {
                     if (error === 'no_user') return;
