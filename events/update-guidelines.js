@@ -8,7 +8,7 @@
 // });
 
 // function checkGuidelines() {
-//     logger('update', `Guidelines Update [Daily]`, null, 'white');
+//     logger('update', `Guidelines Update [Daily]`);
 //     const primaryGuildChannel = bot.guilds.cache.get(config.TEAserverID)?.channels.cache.find(ch => ch.name === config.guidelines.channelName);
 //     if (primaryGuildChannel) {
 //         if (primaryGuildChannel.permissionsFor(primaryGuildChannel.guild.me).has('READ_MESSAGE_HISTORY')) {

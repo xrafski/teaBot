@@ -6,7 +6,7 @@ const dateFormat = require("dateformat");
 const bot = new Discord.Client({ partials: ['MESSAGE', 'REACTION'] });
 
 // define current bot version.
-const BotVersion = '1.0.5';
+const BotVersion = '1.0.6';
 
 // define icon image url for embeds
 const TEAlogo = 'https://skillez.eu/images/discord/teabanner.png'
@@ -197,7 +197,7 @@ function botReply(text, message, time, attachFile, embedImage) {
 			} else if (attachmentFile) {
 				return message.reply(attachmentFile)
 					.catch(error => logger('error', `teaBot.js:23 botReply() Send the message`, error));
-			} else return logger('error', `teaBot.js:24 botReply() There is no text nor attachment!`);
+			} else return logger('warn', `teaBot.js:24 botReply() There is no text nor attachment!`);
 		}
 	}
 }
@@ -290,93 +290,23 @@ function removeUserLastMessage(message) {
 		.catch(error => logger('error', `teaBot.js:2 removeUserLastMessage() Fetch user last message in '${message.guild.name}' server`, error));
 }
 
-function logger(type, text, error, color, sendChannelLog) {
-	text = text?.replace(/\s+/g, ' ').split(' ⨀ ');
+function logger(type, text, error) {
+	text = text?.replace(/\s+/g, ' ');
 
-	switch (color?.toLowerCase()) {
-		case 'red': return sendLog('\u001b[1;31m');
-		case 'green': return sendLog('\u001b[1;32m');
-		case 'yellow': return sendLog('\u001b[1;33m');
-		case 'blue': return sendLog('\u001b[1;34m');
-		case 'purple': return sendLog('\u001b[1;35m');
-		case 'cyan': return sendLog('\u001b[1;36m');
-		case 'white': return sendLog('\u001b[1;37m');
-		default: return sendLog('');
-	}
+	const logDate = dateFormat(new Date(), "UTC:dd/mm/yyyy - hh:MM:ss TT");
+	if (!type) return logger('trace', 'logger.js:1 logger() Missing type for command in this trace');
 
-	function sendLog(clr) {
-		const logDate = dateFormat(new Date(), "UTC:dd/mm/yyyy - h:MM:ss TT");
-		if (!type) return logger('trace', 'logger.js:1 logger() Missing type for command in this trace');
-
-		switch (type.toLowerCase()) {
-			case 'debug':
-				if (config.botDebug) return console.debug(`[${logDate} UTC] [DEBUG]${clr} 🟣 ${text?.join(' ⨀ ')}${(error ? ` | ${error}` : '')}\u001b[0m`);
-				else return;
-			case 'log': {
-				console.log(`[${logDate} UTC] [LOG]${clr} 🟢 ${text?.join(' ⨀ ')}${(error ? ` | ${error}` : '')}\u001b[0m`);
-				if (sendChannelLog) return sendEmbedLog(logEmbed(text, error, color), config.logs.botChannelLogID, config.logs.loggerName)
-					.catch(error => logger('error', 'teaBot.js:1 sendLog() sendEmbedLog error', error?.info));
-				else return;
-			}
-			case 'info': {
-				console.info(`[${logDate} UTC] [INFO]${clr} 🔵 ${text?.join(' ⨀ ')}${(error ? ` | ${error}` : '')}\u001b[0m`);
-				if (sendChannelLog) return sendEmbedLog(logEmbed(text, error, color), config.logs.botChannelLogID, config.logs.loggerName)
-					.catch(error => logger('error', 'teaBot.js:2 sendLog() sendEmbedLog error', error?.info));
-				else return;
-			}
-			case 'warn': {
-				console.warn(`[${logDate} UTC] [WARN]${clr} 🟡 ${text?.join(' ⨀ ')}${(error ? ` | ${error}` : '')}\u001b[0m`);
-				if (sendChannelLog) return sendEmbedLog(logEmbed(text, error, color), config.logs.botChannelLogID, config.logs.loggerName)
-					.catch(error => logger('error', 'teaBot.js:3 sendLog() sendEmbedLog error', error?.info));
-				else return;
-			}
-			case 'error': {
-				console.error(`[${logDate} UTC] [ERROR]${clr} 🔴 ${text?.join(' ⨀ ')}${(error ? ` | ${error}` : '')}\u001b[0m`);
-				if (sendChannelLog) return sendEmbedLog(logEmbed(text, error, color), config.logs.botChannelLogID, config.logs.loggerName)
-					.catch(error => logger('error', 'teaBot.js:4 sendLog() sendEmbedLog error', error?.info));
-				else return;
-			}
-			case 'trace': return console.trace(`[${logDate} UTC] [TRACE]${clr} 🟤 ${text?.join(' ⨀ ')}${(error ? ` | ${error}` : '')}\u001b[0m`);
-			case 'update': {
-				console.log(`[${logDate} UTC] [UPDATE]${clr} ⧭ ${text?.join(' ⨀ ')}${(error ? ` | ${error}` : '')}\u001b[0m`);
-				if (sendChannelLog) return sendEmbedLog(logEmbed(text, error, color), config.logs.botChannelLogID, config.logs.loggerName)
-					.catch(error => logger('error', 'teaBot.js:5 sendLog() sendEmbedLog error', error?.info));
-				else return;
-			}
-			default: return console.log(`[${logDate} UTC] [DEFAULT] ⚪ ${type} | ${text?.join(' ⨀ ')} | ${error}`);
-		}
-
-		function logEmbed(text, error, color) {
-			switch (color?.toLowerCase()) {
-				case 'red': return sendTheEmbed(text, error, '#ff1a1a');
-				case 'green': return sendTheEmbed(text, error, '#1dff1a');
-				case 'yellow': return sendTheEmbed(text, error, '#f7ff0a');
-				case 'blue': return sendTheEmbed(text, error, '#006ef5');
-				case 'purple': return sendTheEmbed(text, error, '#a727e7');
-				case 'cyan': return sendTheEmbed(text, error, '#1ac9ff');
-				case 'white': return sendTheEmbed(text, error, '#fafafa');
-				default: return sendTheEmbed(text, error, '#030303');
-			}
-
-			function sendTheEmbed(text, error, color) {
-				if (error) {
-					const embed_log_message = new Discord.MessageEmbed()
-						.setDescription(text[1])
-						.setColor(color)
-						.addFields({ name: type.toUpperCase(), value: error, inline: false })
-						.setFooter(text[0], bot.user.displayAvatarURL())
-						.setTimestamp()
-					return embed_log_message;
-				} else {
-					const embed_log_message = new Discord.MessageEmbed()
-						.setDescription(text[1])
-						.setColor(color)
-						.setFooter(text[0], bot.user.displayAvatarURL())
-						.setTimestamp()
-					return embed_log_message;
-				}
-			}
-		}
+	switch (type.toLowerCase()) {
+		case 'debug':
+			if (config.botDebug) return console.debug(`[${logDate} UTC] [DEBUG] 🟣 ${text}${(error ? ` | ${error}` : '')}`);
+			else return;
+		case 'log': return console.log(`[${logDate} UTC] [LOG] 🟢 ${text}${(error ? ` | ${error}` : '')}`);
+		case 'info': return console.info(`[${logDate} UTC] [INFO] 🔵 ${text}${(error ? ` | ${error}` : '')}`);;
+		case 'warn': return console.warn(`[${logDate} UTC] [WARN] 🟠 ${text}${(error ? ` | ${error}` : '')}`);
+		case 'error': return console.error(`[${logDate} UTC] [ERROR] 🔴 ${text}${(error ? ` | ${error}` : '')}`);
+		case 'trace': return console.trace(`[${logDate} UTC] [TRACE] 🟡 ${text}${(error ? ` | ${error}` : '')}`);
+		case 'update': return console.log(`[${logDate} UTC] [UPDATE] 🟤 ${text}${(error ? ` | ${error}` : '')}`);
+		default: return console.log(`[${logDate} UTC] [DEFAULT] ⚪ ${type} | ${text} | ${error}`);
 	}
 }
 

@@ -16,14 +16,14 @@ module.exports.run = async (bot, message, args) => {
     switch (args[0]?.toLowerCase()) {
         // case 'guidelines': {
         //     if (message.channel.name === config.guidelines.channelName) return botReply(`You can't use this command in this channel, try somewhere else!`, message);
-        //     logger('update', `Guidelines Update [Manual]`, null, 'white');
+        //     logger('update', `Guidelines Update [Manual]`);
         //     botReply(`${getEmoji(config.TEAserverID, 'TEA')} Requested guidelines update...`, message);
         //     return updGuidelines();
         // }
         case 'certification': {
             return certUpdate()
                 .then(results => {
-                    logger('update', `update.js:1 () 👉 Certification Update [Manual]`, results.info, 'green');
+                    logger('update', `update.js:1 () 👉 Certification Update [Manual]`, results.info);
                     return botReply(embedMessage(`${getEmoji(config.TEAserverID, 'TEA')} 👉 Certification has been updated!\n${results.info}`, message.author), message);
                 })
                 .catch(error => {
@@ -34,7 +34,7 @@ module.exports.run = async (bot, message, args) => {
         case 'blacklist': {
             return threatUpdate()
                 .then(results => {
-                    logger('update', `update.js:3 () 👉 Threat Database Update [Manual]`, results.info, 'green');
+                    logger('update', `update.js:3 () 👉 Threat Database Update [Manual]`, results.info);
                     return botReply(embedMessage(`${getEmoji(config.TEAserverID, 'TEA')} 👉 Threat Database has been updated!\n${results.info}`, message.author), message);
                 })
                 .catch(error => {

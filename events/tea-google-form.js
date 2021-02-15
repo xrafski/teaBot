@@ -8,7 +8,7 @@ bot.on('ready', () => { // https://crontab.guru/examples.html
     cron.schedule('30 */3 * * *', () => { checkTEAspreadsheet() }); // Check TEA spreadsheet for new responses “At minute 30 past every 3rd hour.” (Reports/Appeals).
 
     function checkTEAspreadsheet() {
-        logger('update', `tea-google-form.js:1 ⨀ Checking appeal/report spreadsheet [cron]`, null, 'white', true);
+        logger('update', `tea-google-form.js:1 checkTEAspreadsheet() Checking appeal/report spreadsheet [cron]`);
         const spreadsheet = new google.auth.JWT(
             keys.client_email,
             null,
@@ -17,7 +17,7 @@ bot.on('ready', () => { // https://crontab.guru/examples.html
         );
 
         spreadsheet.authorize(async function (error, tokens) {
-            if (error) return logger('error', `tea-google-form.js:1 checkTEAspreadsheet() Login to google sheet service`, error);
+            if (error) return logger('error', `tea-google-form.js:2 checkTEAspreadsheet() Login to google sheet service`, error);
             await reportgsrun(spreadsheet);
             await appealgsrun(spreadsheet);
         });
