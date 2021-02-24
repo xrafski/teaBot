@@ -5,7 +5,7 @@ module.exports.help = {
     name: "total",
     description: "Display total amount of users on all servers.",
     type: "botowner",
-    usage: "Type the command without any arguments."
+    usage: `ℹ️ Format: **${config.prefixPlaceholder}total**`
 };
 
 module.exports.run = async (bot, message) => {

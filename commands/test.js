@@ -5,13 +5,13 @@ module.exports.help = {
     name: "test",
     description: "Test TEA systems.",
     type: "serverowner",
-    usage: `ℹ️ Format: **${config.botPrefix}test** systemName\n\nℹ️ Example(s):\n${config.botPrefix}test overwatch`
+    usage: `ℹ️ Format: **${config.prefixPlaceholder}test systemName**\nℹ️ Available systems(s): overwatch, announcements\nℹ️ Example(s):\n${config.prefixPlaceholder}test overwatch\n${config.prefixPlaceholder}test announcements`
 };
 
-module.exports.run = async (bot, message, args) => {
+module.exports.run = async (bot, message, args, prefix) => {
     const { guild } = message;
 
-    if (!args[0]) return botReply(`Wrong command format, type **${config.botPrefix}help ${module.exports.help.name}** to see usage and examples!`, message);
+    if (!args[0]) return botReply(`Wrong command format, type **${prefix}help ${module.exports.help.name}** to see usage and examples!`, message);
 
     switch (args[0].toLowerCase()) {
         case 'overwatch': {

@@ -6,10 +6,10 @@ module.exports.help = {
   name: "check",
   description: "Check if user is in threat database.",
   type: "public",
-  usage: `ℹ️ Format: **${config.botPrefix}check userName**\n\nℹ️ Example(s):\n${config.botPrefix}user RNG\n${config.botPrefix}check Surge\n**Nickname must contain at least 3 characters!**`
+  usage: `ℹ️ Format: **${config.prefixPlaceholder}check userName**\nℹ️ Example(s):\n${config.prefixPlaceholder}user RNG\n${config.prefixPlaceholder}check Surge\n**Nickname must contain at least 3 characters!**`
 };
 
-module.exports.run = async (bot, message, args) => {
+module.exports.run = async (bot, message, args, prefix) => {
   fs.readFile('./cache/blacklist.json', 'utf8', (error, data) => {
     if (error) {
       logger('error', 'check.js:1 () Load blacklist.json file', error);
@@ -17,9 +17,9 @@ module.exports.run = async (bot, message, args) => {
     }
 
     const newData = JSON.parse(data);
-    if (!args[0] || args[0].length < 3) return botReply(`Wrong command format, type **${config.botPrefix}help ${module.exports.help.name}** to see usage and examples!`, message);
+    if (!args[0] || args[0].length < 3) return botReply(`Wrong command format, type **${prefix}help ${module.exports.help.name}** to see usage and examples!`, message);
 
-    const searchValue = message.content.slice(config.botPrefix.length + module.exports.help.name.length).trim().toLowerCase();
+    const searchValue = message.content.slice(prefix.length + module.exports.help.name.length).trim().toLowerCase();
     return findTheUser(newData, searchValue)
       .then(threatUser => {
 

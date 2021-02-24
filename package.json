@@ -1,0 +1,24 @@
+{
+  "name": "trove-ethics-alliance-bot",
+  "version": "1.0.0",
+  "description": "Private discord bot for Trove Ethics Alliance",
+  "main": "teaBot.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Skillez/teaBot.git"
+  },
+  "keywords": [],
+  "author": "Skillez",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Skillez/teaBot/issues"
+  },
+  "homepage": "https://github.com/Skillez/teaBot#readme",
+  "dependencies": {
+    "dateformat": "^4.5.1",
+    "discord.js": "^12.5.1",
+    "googleapis": "^67.1.0",
+    "mongoose": "^5.11.15",
+    "node-cron": "^2.0.3"
+  }
+}

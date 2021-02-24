@@ -5,10 +5,10 @@ module.exports.help = {
     name: "embed",
     description: "Send an embed message with RAW JSON data - <https://carl.gg/>",
     type: "administrator",
-    usage: `ℹ️ Format: **${config.botPrefix}embed JSONdata | message content**\n\nℹ️ Example(s):\n${config.botPrefix}embed {"description":"embed message","author":{"name":"Test"},"color":1174281}\n${config.botPrefix}embed {"description":"embed message","author":{"name":"Test"},"color":62708} | My Test Embed`
+    usage: `ℹ️ Format: **${config.prefixPlaceholder}embed JSONdata** | message content\nℹ️ Example(s):\n${config.prefixPlaceholder}embed {"description":"embed message","author":{"name":"Test"},"color":1174281}\n${config.prefixPlaceholder}embed {"description":"embed message","author":{"name":"Test"},"color":62708} | My Test Embed`
 };
 
-module.exports.run = async (bot, message, args) => {
+module.exports.run = async (bot, message, args, prefix) => {
     if (message.deletable) message.delete({ timeout: 1000 }).catch(error => logger('embed.js:1 () Delete the message', error));
 
     const arguments = args.join(' ').split(' | ');
@@ -37,7 +37,7 @@ module.exports.run = async (bot, message, args) => {
         }
         return message.channel.send(messageBot)
             .catch(error => logger(`embed.js:3 () Send the message`, error))
-    } else return botReply(`Wrong command format, type **${config.botPrefix}help ${module.exports.help.name}** to see usage and examples!`, message);
+    } else return botReply(`Wrong command format, type **${prefix}help ${module.exports.help.name}** to see usage and examples!`, message);
 
 
     // // for webhook

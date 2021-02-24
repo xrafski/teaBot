@@ -5,14 +5,11 @@ module.exports.help = {
     name: "announcement",
     description: "Send a global announcement to all TEA members",
     type: "administrator",
-    usage: "Type the command without any arguments."
+    usage: `ℹ️ Format: **${config.prefixPlaceholder}announcement message**\nℹ️ Example(s):\n${config.prefixPlaceholder}announcement This is a global message`
 };
 
-module.exports.run = async (bot, message, args) => {
-    if (!args[0]) return botReply(`Wrong command format, type **${config.botPrefix}help ${module.exports.help.name}** to see usage and examples!`, message);
-    // const mainAnnouncementChannel = message.guild.channels.cache.get(config.announcements.channelName);
-    // if (!mainAnnouncementChannel) return botReply(`No **#${config.announcements.channelName}** channel on this server!`, message);
-    // if (message.channel != mainAnnouncementChannel) return botReply(`You can use this command **only** in the ${mainAnnouncementChannel}!`, message);
+module.exports.run = async (bot, message, args, prefix) => {
+    if (!args[0]) return botReply(`Wrong command format, type **${prefix}help ${module.exports.help.name}** to see usage and examples!`, message);
 
     botReply(`The announcement has been sent to TEA members.`, message);
     for (const guild of bot.guilds.cache) {

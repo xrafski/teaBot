@@ -5,7 +5,7 @@ module.exports.help = {
     name: "permissions",
     description: "Check bot permissions on a specific server.",
     type: "botowner",
-    usage: `ℹ️ Format: **${config.botPrefix}permissions** serverID(optional)\n\nℹ️ Example(s):\n${config.botPrefix}permissions\n${config.botPrefix}permissions 551715331638569420`
+    usage: `ℹ️ Format: **${config.prefixPlaceholder}permissions** serverID(optional)\nℹ️ Example(s):\n${config.prefixPlaceholder}permissions\n${config.prefixPlaceholder}permissions 551715331638569420`
 };
 
 module.exports.run = async (bot, message, args) => {

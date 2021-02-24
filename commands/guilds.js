@@ -5,7 +5,7 @@ module.exports.help = {
     name: "guilds",
     description: "Amount of clubs the bot is in.",
     type: "public",
-    usage: `ℹ️ Format: **${config.botPrefix}guilds**`
+    usage: `ℹ️ Format: **${config.prefixPlaceholder}guilds**`
 };
 
 module.exports.run = async (bot, message) => {

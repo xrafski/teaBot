@@ -1,3 +1,4 @@
+// Disabled & Outdated
 // const { bot, logger } = require('../teaBot');
 // const config = require('../bot-settings.json');
 // const cron = require('node-cron');

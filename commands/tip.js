@@ -5,7 +5,7 @@ module.exports.help = {
     name: "tip",
     description: "Report players privately.",
     type: "disabled",
-    usage: `**${config.botPrefix}tip** on direct message with the bot.`
+    usage: `ℹ️ Format: **${config.botPrefix}tip** on direct message with the bot.`
 };
 
 module.exports.run = async (bot, message) => {
@@ -59,7 +59,7 @@ module.exports.run = async (bot, message) => {
                 message.channel.awaitMessages(filter, { max: 1, time: 180000 })
                     .then(Answer => {
                         Question.delete().catch(() => { return });
-                        if (Answer.first().content.startsWith(config.botPrefix)) return;
+                        if (Answer.first().content.toLowerCase().startsWith(config.botPrefix.toLowerCase()) || Answer.first().content.startsWith(`<@!${bot.user.id}>`)) return;
 
                         else if (Answer.first().content.toLowerCase() === 'exit' || Answer.first().content.toLowerCase() === 'cancel')
                             return message.channel.send(`❌ Cancelled`);
@@ -89,7 +89,7 @@ module.exports.run = async (bot, message) => {
                 message.channel.awaitMessages(filter, { max: 1, time: 180000 })
                     .then(Answer => {
                         Question.delete().catch(() => { return });
-                        if (Answer.first().content.startsWith(config.botPrefix)) return;
+                        if (Answer.first().content.toLowerCase().startsWith(config.botPrefix.toLowerCase()) || Answer.first().content.startsWith(`<@!${bot.user.id}>`)) return;
 
                         else if (Answer.first().content.toLowerCase() === 'exit' || Answer.first().content.toLowerCase() === 'cancel')
                             return message.channel.send(`❌ Cancelled`);
@@ -118,7 +118,7 @@ module.exports.run = async (bot, message) => {
                 message.channel.awaitMessages(filter, { max: 1, time: 180000 })
                     .then(Answer => {
                         Question.delete().catch(() => { return });
-                        if (Answer.first().content.startsWith(config.botPrefix)) return;
+                        if (Answer.first().content.toLowerCase().startsWith(config.botPrefix.toLowerCase()) || Answer.first().content.startsWith(`<@!${bot.user.id}>`)) return;
 
                         else if (Answer.first().content.toLowerCase() === 'exit' || Answer.first().content.toLowerCase() === 'cancel')
                             return message.channel.send(`❌ Cancelled`);
@@ -149,7 +149,7 @@ module.exports.run = async (bot, message) => {
                 message.channel.awaitMessages(filter, { max: 1, time: 180000 })
                     .then(Answer => {
                         Question.delete().catch(() => { return });
-                        if (Answer.first().content.startsWith(config.botPrefix)) return;
+                        if (Answer.first().content.toLowerCase().startsWith(config.botPrefix.toLowerCase()) || Answer.first().content.startsWith(`<@!${bot.user.id}>`)) return;
 
                         else if (Answer.first().content.toLowerCase() === 'exit' || Answer.first().content.toLowerCase() === 'cancel')
                             return message.channel.send(`❌ Cancelled`);
@@ -178,7 +178,7 @@ module.exports.run = async (bot, message) => {
                 message.channel.awaitMessages(filter, { max: 1, time: 180000 })
                     .then(Answer => {
                         Question.delete().catch(() => { return });
-                        if (Answer.first().content.startsWith(config.botPrefix)) return;
+                        if (Answer.first().content.toLowerCase().startsWith(config.botPrefix.toLowerCase()) || Answer.first().content.startsWith(`<@!${bot.user.id}>`)) return;
 
                         else if (Answer.first().content.toLowerCase() === 'exit' || Answer.first().content.toLowerCase() === 'cancel')
                             return message.channel.send(`❌ Cancelled`);
@@ -205,7 +205,7 @@ module.exports.run = async (bot, message) => {
                 message.channel.awaitMessages(filter, { max: 1, time: 180000 })
                     .then(Answer => {
                         Question.delete().catch(() => { return });
-                        if (Answer.first().content.startsWith(config.botPrefix)) return;
+                        if (Answer.first().content.toLowerCase().startsWith(config.botPrefix.toLowerCase()) || Answer.first().content.startsWith(`<@!${bot.user.id}>`)) return;
 
                         else if (Answer.first().content.toLowerCase() === 'exit' || Answer.first().content.toLowerCase() === 'cancel')
                             return message.channel.send(`❌ Cancelled`);
@@ -234,7 +234,7 @@ module.exports.run = async (bot, message) => {
                 message.channel.awaitMessages(filter, { max: 1, time: 180000 })
                     .then(Answer => {
                         Question.delete().catch(() => { return });
-                        if (Answer.first().content.startsWith(config.botPrefix)) return;
+                        if (Answer.first().content.toLowerCase().startsWith(config.botPrefix.toLowerCase()) || Answer.first().content.startsWith(`<@!${bot.user.id}>`)) return;
 
                         else if (Answer.first().content.toLowerCase() === 'exit' || Answer.first().content.toLowerCase() === 'cancel')
                             return message.channel.send(`❌ Cancelled`);
@@ -263,7 +263,7 @@ module.exports.run = async (bot, message) => {
                 message.channel.awaitMessages(filter, { max: 1, time: 180000 })
                     .then(Answer => {
                         Question.delete().catch(() => { return });
-                        if (Answer.first().content.startsWith(config.botPrefix)) return;
+                        if (Answer.first().content.toLowerCase().startsWith(config.botPrefix.toLowerCase()) || Answer.first().content.startsWith(`<@!${bot.user.id}>`)) return;
 
                         else if (Answer.first().content.toLowerCase() === 'exit' || Answer.first().content.toLowerCase() === 'cancel')
                             return message.channel.send(`❌ Cancelled`);

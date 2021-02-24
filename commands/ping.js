@@ -1,10 +1,11 @@
 const { botReply, logger } = require("../teaBot");
+const config = require('../bot-settings.json');
 
 module.exports.help = {
     name: "ping",
     description: "Pong!",
     type: "public",
-    usage: "Type the command without any arguments."
+    usage: `ℹ️ Format: **${config.prefixPlaceholder}ping**`
 };
 
 module.exports.run = async (bot, message) => {

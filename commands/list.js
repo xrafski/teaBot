@@ -5,7 +5,7 @@ module.exports.help = {
     name: "list",
     description: "List all guilds including its ID.",
     type: "botowner",
-    usage: "Type the command without any arguments."
+    usage: `ℹ️ Format: **${config.prefixPlaceholder}list**`
 };
 
 module.exports.run = async (bot, message) => {
@@ -15,7 +15,6 @@ module.exports.run = async (bot, message) => {
         for (const hidden of config.certification.hiddenServers) {
             if (guild.id === hidden.guildDiscordID) return;
         }
-
         clubList = clubList + `\n${guild.name} • '${guild.id}'`
     });
 

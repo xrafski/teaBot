@@ -8,10 +8,10 @@ module.exports.help = {
     name: "update",
     description: "Manual request to update various bot functions.",
     type: "administrator",
-    usage: `ℹ️ Format: **${config.botPrefix}update functionName**\n\nℹ️ Example(s):\n${config.botPrefix}update guidelines\n${config.botPrefix}update certification\n${config.botPrefix}update blacklist`
+    usage: `ℹ️ Format: **${config.prefixPlaceholder}update functionName**\nℹ️ Available functions(s): certification, blacklist\nℹ️ Example(s):\n${config.prefixPlaceholder}update certification\n${config.prefixPlaceholder}update blacklist`
 };
 
-module.exports.run = async (bot, message, args) => {
+module.exports.run = async (bot, message, args, prefix) => {
 
     switch (args[0]?.toLowerCase()) {
         // case 'guidelines': {
@@ -42,6 +42,6 @@ module.exports.run = async (bot, message, args) => {
                     return botReply(embedMessage(`${getEmoji(config.TEAserverID, 'TEA')} 👉 ERROR to update threat database:\n🔴 **${error.code}**`, message.author), message);
                 });
         }
-        default: return botReply(`Wrong command format, type **${config.botPrefix}help ${module.exports.help.name}** to see usage and examples!`, message);
+        default: return botReply(`Wrong command format, type **${prefix}help ${module.exports.help.name}** to see usage and examples!`, message);
     }
 }

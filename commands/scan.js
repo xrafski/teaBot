@@ -6,10 +6,10 @@ module.exports.help = {
     name: "scan",
     description: "Scan the entire server to find threat users.",
     type: "serverowner",
-    usage: "Type the command without any arguments."
+    usage: `ℹ️ Format: **${config.prefixPlaceholder}scan**`
 };
 
-module.exports.run = async (bot, message) => {
+module.exports.run = async (bot, message, args, prefix) => {
     const logChannel = message.guild.channels.cache.find(channel => channel.name === config.logs.channelName);
     if (!logChannel) return botReply(embedMessage(`**Log channel is not detected!**\nPlease, create a new channel '**${config.logs.channelName}**' or fix permissions if already exists.\n\nSet the following permissions for the bot:\n✅ Manage Webhooks\n✅ Read Messages\n✅ Send Messages\n✅ Embed Links\n✅ Read Message History\n✅ Use External Emoji`, message.author), message);
     if (message.channel != logChannel) return botReply(`You can use this command **only** in the ${logChannel} channel for security reasons.`, message);
@@ -48,7 +48,7 @@ module.exports.run = async (bot, message) => {
                 .setTitle(`Detected ${detectedNumber} threat(s) in total!`)
                 .setDescription(detectedThreats)
                 .setTimestamp()
-                .setFooter(`Type ${config.botPrefix}check nickname for details.`, TEAlogo)
+                .setFooter(`Type ${prefix}check nickname for details.`, TEAlogo)
 
             sendEmbedLog(embed_scan_results, logChannel.id, config.logs.loggerName)
                 .catch(error => {
