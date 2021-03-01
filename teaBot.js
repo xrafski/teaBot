@@ -2,11 +2,13 @@ const Discord = require('discord.js');
 const config = require("./bot-settings.json");
 const fs = require('fs');
 const dateFormat = require("dateformat");
+const mongoose = require('mongoose');
+const { MongoClient } = require('./functions/mongodb-connection');
 
 const bot = new Discord.Client({ partials: ['MESSAGE', 'REACTION'] });
 
 // define current bot version.
-const BotVersion = '1.0.7';
+const BotVersion = '1.0.8';
 
 // define icon image url for embeds
 const TEAlogo = 'https://skillez.eu/images/discord/teabanner.png'
@@ -56,8 +58,25 @@ fs.readdir('./events/', (err, files) => {
 	});
 });
 
+MongoClient()
+	.then(() => bot.login(config.botToken))
+	.catch(err => {
+		logger('error', 'teaBot.js:3 () Error to connect to the MongoDB', err);
+		process.exit(1);
+	});
+
 process.on('unhandledRejection', error => {
 	console.warn('Unhandled promise rejection:', error);
+});
+
+process.on('SIGINT', () => {
+	mongoose.connection.close({}, () => {
+		process.exit(0);
+	});
+});
+
+process.on('exit', (code) => {
+	console.log(`About to exit with code: ${code}`);
 });
 
 function ownerDM(message) {
@@ -304,26 +323,28 @@ function logger(type, text, error) {
 		case 'info': return console.info(`[${logDate} UTC] [INFO] 🔵 ${text}${(error ? ` | ${error}` : '')}`);;
 		case 'warn': return console.warn(`[${logDate} UTC] [WARN] 🟠 ${text}${(error ? ` | ${error}` : '')}`);
 		case 'error': return console.error(`[${logDate} UTC] [ERROR] 🔴 ${text}${(error ? ` | ${error}` : '')}`);
+		case 'event': return console.log(`[${logDate} UTC] [EVENT] ⚪ ${text}${(error ? ` | ${error}` : '')}`);
+		case 'mongo': return console.log(`[${logDate} UTC] [MONGODB] 📝 ${text}${(error ? ` | ${error}` : '')}`);
 		case 'trace': return console.trace(`[${logDate} UTC] [TRACE] 🟡 ${text}${(error ? ` | ${error}` : '')}`);
 		case 'update': return console.log(`[${logDate} UTC] [UPDATE] 🟤 ${text}${(error ? ` | ${error}` : '')}`);
-		default: return console.log(`[${logDate} UTC] [DEFAULT] ⚪ ${type} | ${text} | ${error}`);
+		default: return console.log(`[${logDate} UTC] [DEFAULT] ⚫ ${type} | ${text} | ${error}`);
 	}
 }
 
 module.exports = {
-	bot: bot, // bot client object.
-	Discord: Discord, // discord module.
-	TEAlogo: TEAlogo, // defines icon image url for embeds.
-	BotVersion: BotVersion, // defines current bot version.
-	emojiCharacters: emojiCharacters, // defines some discord emojis.
+	bot, // bot client object.
+	Discord, // discord module.
+	TEAlogo, // defines icon image url for embeds.
+	BotVersion, // defines current bot version.
+	emojiCharacters, // defines some discord emojis.
 
-	ownerDM: ownerDM, // a function to send DM to the bot owner.
-	getCommand: getCommand, // a function to get a specific command or all commands.
-	botReply: botReply, // a function to send messages back as the bot.
-	embedMessage: embedMessage, // a function to easily embed message with provided text.
-	getEmoji: getEmoji, // a function to get emoji object from a specific server via its name, if invalid emoji is provided, then returns 🐛 back.
-	messageRemoverWithReact: messageRemoverWithReact, // a function to manage await reactions much easier.
-	sendEmbedLog: sendEmbedLog, // a function to manage sending webhooks automatically and create a new one if necessary.
-	removeUserLastMessage: removeUserLastMessage, // a function to remove last user message after 2 seconds.
-	logger: logger // a function to manage logs.
+	ownerDM, // a function to send DM to the bot owner.
+	getCommand, // a function to get a specific command or all commands.
+	botReply, // a function to send messages back as the bot.
+	embedMessage, // a function to easily embed message with provided text.
+	getEmoji, // a function to get emoji object from a specific server via its name, if invalid emoji is provided, then returns 🐛 back.
+	messageRemoverWithReact, // a function to manage await reactions much easier.
+	sendEmbedLog, // a function to manage sending webhooks automatically and create a new one if necessary.
+	removeUserLastMessage, // a function to remove last user message after 2 seconds.
+	logger // a function to manage logs.
 }

@@ -5,7 +5,7 @@ const fs = require('fs');
 module.exports.help = {
     name: "scan",
     description: "Scan the entire server to find threat users.",
-    type: "serverowner",
+    type: "serverstaff",
     usage: `ℹ️ Format: **${config.prefixPlaceholder}scan**`
 };
 

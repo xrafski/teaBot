@@ -7,6 +7,9 @@
     "type": "git",
     "url": "git+https://github.com/Skillez/teaBot.git"
   },
+  "scripts": {
+    "server": "node teaBot.js --trace-warnings"
+  },
   "keywords": [],
   "author": "Skillez",
   "license": "ISC",

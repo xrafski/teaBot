@@ -4,7 +4,7 @@ const config = require('../bot-settings.json');
 module.exports.help = {
     name: "test",
     description: "Test TEA systems.",
-    type: "serverowner",
+    type: "serverstaff",
     usage: `ℹ️ Format: **${config.prefixPlaceholder}test systemName**\nℹ️ Available systems(s): overwatch, announcements\nℹ️ Example(s):\n${config.prefixPlaceholder}test overwatch\n${config.prefixPlaceholder}test announcements`
 };
 

@@ -3,7 +3,7 @@ const config = require('../bot-settings.json');
 
 module.exports.help = {
     name: "announcement",
-    description: "Send a global announcement to all TEA members",
+    description: "Send a global announcement to all TEA members.",
     type: "administrator",
     usage: `ℹ️ Format: **${config.prefixPlaceholder}announcement message**\nℹ️ Example(s):\n${config.prefixPlaceholder}announcement This is a global message`
 };

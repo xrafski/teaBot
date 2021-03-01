@@ -66,6 +66,7 @@ module.exports.run = async (bot, message, args, prefix) => {
                     'setup': `**${prefix}help overwatch** • Information how to set up overwatch.\n**${prefix}help announcements** • Information how to set up TEA announcements.`,
                     'bOwner': getCommand().filter(command => command.help.type === 'botowner').map(command => `**${command.help.name}** • ${command.help.description}`).join('\n'),
                     'sOwner': getCommand().filter(command => command.help.type === 'serverowner').map(command => `**${command.help.name}** • ${command.help.description}`).join('\n'),
+                    'sStaff': getCommand().filter(command => command.help.type === 'serverstaff').map(command => `**${command.help.name}** • ${command.help.description}`).join('\n'),
                     'admin': getCommand().filter(command => command.help.type === 'administrator').map(command => `**${command.help.name}** • ${command.help.description}`).join('\n'),
                     'dm': getCommand().filter(command => command.help.type === 'dm').map(command => `**${command.help.name}** • ${command.help.description}`).join('\n'),
                     'public': getCommand().filter(command => command.help.type === 'public').map(command => `**${command.help.name}** • ${command.help.description}`).join('\n'),
@@ -75,8 +76,9 @@ module.exports.run = async (bot, message, args, prefix) => {
                 if (guild.id === config.TEAserverID) {
                     return botReply(`List of all commands! (prefix: **${prefix}**)\nType **${prefix}help commandName** for more details.\n
 🤖 Bot Owner Command(s):\n${dataArray.bOwner = dataArray.bOwner || 'There are no bot owner commands.'}\n
+👮‍♂️ TEA Administrator Command(s):\n${dataArray.admin = dataArray.admin || 'There are no administrator commands.'}\n
 👑 Server Owner Command(s):\n${dataArray.sOwner = dataArray.sOwner || 'There are no server owner commands.'}\n
-👮‍♂️ Administrator Command(s):\n${dataArray.admin = dataArray.admin || 'There are no administrator commands.'}\n
+🚓 Server Staff Command(s):\n${dataArray.sOwner = dataArray.sStaff || 'There are no server staff commands.'}\n
 🔇 Direct Message Command(s):\n${dataArray.dm = dataArray.dm || 'There are no direct message commands.'}\n
 📢 Public Command(s):\n${dataArray.public = dataArray.public || 'There are no public commands.'}\n
 ❌ Disabled Command(s):\n${dataArray.disabled = dataArray.disabled || 'There are not disabled commands.'}`, message)
@@ -85,6 +87,7 @@ module.exports.run = async (bot, message, args, prefix) => {
                     return botReply(`List of all commands! (prefix: **${prefix}**)\nType **${prefix}help commandName** for more details.\n
 🔧 Setup Info:\n${dataArray.setup = dataArray.setup || 'There are not help setup commands.'}\n
 👑 Server Owner Command(s):\n${dataArray.sOwner = dataArray.sOwner || 'There are no server owner commands.'}\n
+🚓 Server Staff Command(s):\n${dataArray.sOwner = dataArray.sStaff || 'There are no server staff commands.'}\n
 🔇 Direct Message Command(s):\n${dataArray.dm = dataArray.dm || 'There are no direct message commands.'}\n
 📢 Public Command(s):\n${dataArray.public = dataArray.public || 'There are no public commands.'}`, message)
                     // .then(helpMessage => messageRemoverWithReact(helpMessage, author));

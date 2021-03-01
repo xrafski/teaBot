@@ -1,17 +1,21 @@
 // mongoose@5.11.15
 const mongoose = require('mongoose');
 const { mongodb } = require('../bot-settings.json');
-const { logger } = require('../teaBot');
 
-async function mongoConnect() {
+async function MongoClient() {
     await mongoose.connect(mongodb.path, {
+        poolSize: 10,
+        keepAlive: true,
+        socketTimeoutMS: 30000,
+
         useNewUrlParser: true,
-        useUnifiedTopology: true,
         useFindAndModify: false,
+        useUnifiedTopology: true,
         useCreateIndex: true,
-        serverSelectionTimeoutMS: 15000
-    }).then(() => logger('debug', `mongodb-connection.js:1 () Connected to the database.`));
+        serverSelectionTimeoutMS: 10000
+    })
     return mongoose;
 }
 
-module.exports.mongoConnect = mongoConnect;
+
+module.exports.MongoClient = MongoClient;

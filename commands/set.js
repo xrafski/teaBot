@@ -4,7 +4,7 @@ const config = require('../bot-settings.json');
 
 module.exports.help = {
     name: "set",
-    description: "Change bot settings",
+    description: "Change bot settings.",
     type: "serverowner",
     usage: `ℹ️ Format: **${config.prefixPlaceholder}set module argument**\nℹ️ Available module(s): prefix\nℹ️ Example(s):\n${config.prefixPlaceholder}set prefix tea/\n${config.prefixPlaceholder}set prefix yourprefix!`
 };

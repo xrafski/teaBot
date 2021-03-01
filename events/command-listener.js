@@ -26,31 +26,37 @@ bot.on("message", async message => {
         // removeUserLastMessage(message);
         logger('info', `command-listener.js:1 () '${author.tag}' used '${(content.length > 40 ? `${content.slice(0, 40)}...` : `${content}`)}' on the ${(channel?.name ? `#${channel.name} channel` : 'direct message')}${(guild?.name ? ` in '${guild.name}' server` : '')}.`);
         switch (cmdFile.help.type?.toLowerCase()) {
-            case 'botowner': {
+            case 'botowner': { // only me
                 if (channel.type != "dm") {
                     if (author.id === botOwnerID) return cmdFile.run(bot, message, args, prefix);
-                    else return botReply(`Insufficient permissions!\nOnly the bot owner can use **${botPrefix}${cmdFile.help.name}** command!`, message);
+                    else return botReply(`Insufficient permissions!\nOnly the bot owner can use **${prefix}${cmdFile.help.name}** command!`, message);
                 } else return botReply(`**${botPrefix}${cmdFile.help.name}** is not available on DM!`, message);
             }
-            case 'serverowner': {
+            case "administrator": { // TEA Main Server user with ADMINISTRATOR permission
+                if (channel.type != "dm") {
+                    if (guild.id === TEAserverID && message.member.hasPermission('ADMINISTRATOR')) return cmdFile.run(bot, message, args, prefix);
+                    else return botReply(`You don't have access to run **${prefix}${cmdFile.help.name}**!`, message);
+                } else return botReply(`**${botPrefix}${cmdFile.help.name}** is not available on DM!`, message);
+            }
+            case 'serverowner': { // TEA member server owner
                 if (channel.type != "dm") {
                     if (author === guild.owner.user || author.id === botOwnerID) return cmdFile.run(bot, message, args, prefix);
-                    else return botReply(`Insufficient permissions!\nOnly the server owner can use **${botPrefix}${cmdFile.help.name}** command!`, message);
+                    else return botReply(`Insufficient permissions!\nOnly the server owner can use **${prefix}${cmdFile.help.name}** command!`, message);
                 } else return botReply(`**${botPrefix}${cmdFile.help.name}** is not available on DM!`, message);
             }
-            case "administrator": {
+            case 'serverstaff': { // TEA member server staff
                 if (channel.type != "dm") {
-                    if (guild.id === TEAserverID && message.member.hasPermission("ADMINISTRATOR")) return cmdFile.run(bot, message, args, prefix);
-                    else return botReply(`You don't have access to run **${botPrefix}${cmdFile.help.name}**!`, message);
+                    if (message.member.hasPermission('MANAGE_GUILD') || author.id === botOwnerID) return cmdFile.run(bot, message, args, prefix);
+                    else return botReply(`Insufficient permissions!\nOnly users with '**Manage Server**' permission can use **${prefix}${cmdFile.help.name}** command!`, message);
                 } else return botReply(`**${botPrefix}${cmdFile.help.name}** is not available on DM!`, message);
             }
             case "dm": if (channel.type === "dm") return cmdFile.run(bot, message, args, prefix);
-            else return botReply(`**${botPrefix}${cmdFile.help.name}** is only available via direct message.`, message);
+            else return botReply(`**${prefix}${cmdFile.help.name}** is only available via direct message.`, message);
 
             case "public": if (channel.type != "dm") return cmdFile.run(bot, message, args, prefix)
             else return botReply(`**${botPrefix}${cmdFile.help.name}** is not available on DM!`, message);
 
-            case "disabled": if (channel.type != "dm") return botReply(`**${botPrefix}${cmdFile.help.name}** is currently **disabled**!`, message);
+            case "disabled": if (channel.type != "dm") return botReply(`**${prefix}${cmdFile.help.name}** is currently **disabled**!`, message);
             else return botReply(`**${botPrefix}${cmdFile.help.name}** is currently **disabled**!`, message);
 
             default: {
