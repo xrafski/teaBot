@@ -40,19 +40,23 @@ module.exports.run = async (bot, message, args, prefix) => {
             return await addCode(userCode, itemName, redeemCode, (err, res) => {
                 if (err) {
                     if (err.code === 11000) botReply(`'**${userCode}**' code already exists in the database!`, message);
+                    else if (err?.message === 'codeStr or itemName is not suppled for addCode() function') botReply(`Wrong command format, type **${prefix}help ${module.exports.help.name}** to see usage and examples!`, message);
                     else botReply(`Database error ;(`, message);
                     return logger('error', `code.js:5 () Error to add '${userCode}' code to the 'event' collection.`, err);
                 }
-                logger('info', `code.js:6 () '${author.tag}' ${res.message}`);
+                logger('log', `code.js:6 () '${author.tag}' ${res.message}`);
                 botReply(`A new code has been added!\nID: \`${res.doc.id}\`\nItem Name: \`${res.doc.prize.item}\`\nCode redeemable on the glyph page? \`${res.doc.prize.code ? `YES: '${res.doc.prize.code}'` : `NO`}\`\n\nPlease type **${prefix}code del -${res.doc.id}** if you made a mistake to delate this code.`, message);
             });
         }
         case 'del': {
             return await delCode(userCode, (err, res) => {
-                if (err) return console.log(err);
+                if (err) {
+                    logger('error', `code.js:7 () ${err.message}`);
+                    return botReply(`${err.message}`, message);
+                }
 
                 botReply(`${res.message}`, message);
-                logger('log', `code.js:7 ()'${author.tag}' removed document assigned to '${res.deletedDoc.id}' code.`);
+                logger('log', `code.js:8 ()'${author.tag}' removed document assigned to '${res.deletedDoc.id}' code.`);
             });
         }
         default: {
