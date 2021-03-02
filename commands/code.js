@@ -45,7 +45,7 @@ module.exports.run = async (bot, message, args, prefix) => {
                     return logger('error', `code.js:5 () Error to add '${userCode}' code to the 'event' collection.`, err);
                 }
                 logger('log', `code.js:6 () '${author.tag}' ${res.message}`);
-                botReply(`A new code has been added!\nID: \`${res.doc.id}\`\nItem Name: \`${res.doc.prize.item}\`\nCode redeemable on the glyph page? \`${res.doc.prize.code ? `YES: '${res.doc.prize.code}'` : `NO`}\`\n\nPlease type **${prefix}code del -${res.doc.id}** if you made a mistake to delate this code.`, message);
+                botReply(`A new code has been added!\nID: \`${res.doc.id}\`\nItem Name: \`${res.doc.prize.item}\`\nCode redeemable on the glyph page? \`${res.doc.prize.code ? `YES: '${res.doc.prize.code}'` : `NO`}\`\n\nPlease type **${prefix}code del -${res.doc.id}** if you made a mistake and want to delete this code.`, message);
             });
         }
         case 'del': {
