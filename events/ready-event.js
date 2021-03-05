@@ -5,17 +5,17 @@ const { loadCodes, loadEventStatus } = require('../cache/tea-events');
 bot.on('ready', async () => {
     logger('update', `ready-event.js:1 () Trove Ethics Alliance Bot v${BotVersion} (${bot.user.tag}) has logged in!`, `New version: ${BotVersion}`);
 
-    await loadPrefixes(bot, (err, res) => { // module to load guild's prefixes
+    await loadPrefixes(bot, (err, res) => { // Module to load guild's prefixes
         if (err) return logger('error', `ready-event.js:2 () Error to load prefixes`, err);
         logger('info', `ready-event.js:3 () ${res.message}`);
     });
 
-    await loadCodes((err, res) => { // module to load event codes
+    await loadCodes((err, res) => { // Module to load event codes
         if (err) return logger('error', `ready-event.js:4 () Error to load codes`, err);
         logger('info', `ready-event.js:5 () ${res.message}`);
     });
 
-    await loadEventStatus((err, res) => { // module to load event status
+    await loadEventStatus((err, res) => { // Module to load event status
         if (err) return logger('error', `ready-event.js:6 () Error to load event status`, err);
         logger('info', `ready-event.js:7 () ${res.message}`);
     });

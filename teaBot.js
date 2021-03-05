@@ -8,12 +8,12 @@ const { MongoClient } = require('./functions/mongodb-connection');
 const bot = new Discord.Client({ partials: ['MESSAGE', 'REACTION'] });
 
 // define current bot version.
-const BotVersion = '1.0.8';
+const BotVersion = '1.0.9';
 
 // define icon image url for embeds
 const TEAlogo = 'https://skillez.eu/images/discord/teabanner.png'
 
-const emojiCharacters = {
+const emojiCharacters = { // some ASCII emojis to make my life easier
 	a: '🇦', b: '🇧', c: '🇨', d: '🇩',
 	e: '🇪', f: '🇫', g: '🇬', h: '🇭',
 	i: '🇮', j: '🇯', k: '🇰', l: '🇱',
@@ -30,8 +30,8 @@ const emojiCharacters = {
 // Load commands and events
 bot.commands = new Discord.Collection();
 
-fs.readdir('./commands/', (err, files) => {
-	if (err) return ('error', 'teaBot.js:1 () Loading commands', err);
+fs.readdir('./commands/', (err, files) => { // Load commands
+	if (err) return ('error', 'teaBot.js:1 () Error to load commands', err);
 
 	let jsfiles = files.filter(f => f.split('.').pop() === 'js');
 	if (jsfiles.length <= 0) return logger('log', 'There are no commands to load...');
@@ -40,13 +40,13 @@ fs.readdir('./commands/', (err, files) => {
 	jsfiles.forEach((f, i) => {
 
 		let props = require(`./commands/${f}`);
-		logger('log', `${i + 1}: ${props.help.type} - ${f}`);
+		logger('log', `${i + 1}: ${f} - (${props.help.type})`);
 		bot.commands.set(props.help.name, props);
 	});
 });
 
-fs.readdir('./events/', (err, files) => {
-	if (err) return logger('error', 'teaBot.js:2 () Loading events', err);
+fs.readdir('./events/', (err, files) => { // Load events
+	if (err) return logger('error', 'teaBot.js:2 () Error to load events', err);
 
 	let jsfiles = files.filter(f => f.split('.').pop() === 'js');
 	if (jsfiles.length <= 0) return logger('info', 'There are no events to load...');
@@ -58,10 +58,10 @@ fs.readdir('./events/', (err, files) => {
 	});
 });
 
-MongoClient()
-	.then(() => bot.login(config.botToken))
+MongoClient() // connect to the mongoDB database
+	.then(() => bot.login(config.botDetails.token))
 	.catch(err => {
-		logger('error', 'teaBot.js:3 () Error to connect to the MongoDB', err);
+		logger('error', 'teaBot.js:1 MongoClient() Error to connect to the MongoDB', err);
 		process.exit(1);
 	});
 
@@ -76,8 +76,10 @@ process.on('SIGINT', () => {
 });
 
 process.on('exit', (code) => {
-	console.log(`About to exit with code: ${code}`);
+	console.warn(`About to exit with code: ${code}`);
 });
+
+//////////////////////////////////////////////////////////////////////////////
 
 function ownerDM(message) {
 	message = message || 'Message is not provided';

@@ -16,7 +16,9 @@ module.exports.run = async (bot, message, args, prefix) => {
     const { author } = message;
     const [userCode] = args;
 
-    if (userCode.toLowerCase() === 'remaining') return botReply(`${getEmoji(config.TEAserverID, 'TEA')} Event Codes Information\nEvent code pool: **${remainingCodes().totalCodes}**\nRemaining codes: **${remainingCodes().availableCodes}**`, message);
+    if (userCode.toLowerCase() === 'remaining') {
+        return botReply(`${getEmoji(config.TEAserverID, 'TEA')} Event Codes Information\nEvent code pool: **${remainingCodes().totalCodes}**\nRemaining codes: **${remainingCodes().availableCodes}**\n\nHint(s): ${remainingCodes().availableHints}`, message);
+    }
 
     if (codeValidation(userCode).code === 'correct_code') { // check if code is correct
         logger('event', `event.js:1 () '${userCode}' code passed validation with 'correct_code' status.`);
@@ -66,9 +68,9 @@ module.exports.run = async (bot, message, args, prefix) => {
 
     } else { // if code status is something else than 'correct_code'
         switch (codeValidation(userCode).code) {
-            case 'invalid_code': return botReply(`**Your code could not be redeemed**, invalid code 😉`, message);
-            case 'used_code': return botReply(`**Your code could not be redeemed**, this code is already redeemed 😭`, message);
-            default: return botReply(`**Your code could not be redeemed**, invalid or already redeemed 🐛`, message);
+            case 'invalid_code': return botReply(`This code seems to be invalid. Make sure to type it correctly!`, message);
+            case 'used_code': return botReply(`This code is already redeemed by the other member.`, message);
+            default: return botReply(`**Your code could not be redeemed**, invalid code status 🐛\nContact ${config.ownerTag} to investigate.`, message);
         }
     }
 }

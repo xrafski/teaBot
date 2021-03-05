@@ -2,6 +2,7 @@ const { Schema, model } = require("mongoose");
 
 const eventModel = new Schema({
     id: { type: String, unique: true, required: true, lowercase: true },
+    hint: { type: String, required: true },
     available: { type: Boolean, required: true },
     prize: {
         claimed: { type: Boolean, required: true },

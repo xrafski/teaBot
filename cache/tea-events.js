@@ -1,16 +1,17 @@
 const { MongoClient } = require("../functions/mongodb-connection");
-const { eventModel } = require("../schema/event-codes"); // { id: 'testCode', available: true, prize: { claimed: false, code: '', item: "ItemName", userID: '0', userTag: '' } }
+const { eventModel } = require("../schema/event-codes"); // { id: 'testCode', hint: 'string', available: true, prize: { claimed: false, code: '', item: "ItemName", userID: '0', userTag: '' } }
 const { eventSettingsModel } = require("../schema/event-settings");
 const eventCache = {}; // { code: { available: true, userID: '', claimed: false } }
 let eventStatus = { status: false } // { status: false }
 
-async function addCode(codeStr, itemName, redeemCode, callback) {
+async function addCode(codeStr, itemName, codeHint, redeemCode, callback) {
 
     if (!codeStr || !itemName) return callback(new Error(`codeStr or itemName is not suppled for addCode() function`), null);
     await MongoClient().then(async () => {
 
         const dataFormat = {
             id: codeStr,
+            hint: codeHint,
             available: true,
             prize: {
                 claimed: false, code: redeemCode = redeemCode || '', item: itemName, userID: '', userTag: ''
@@ -21,7 +22,7 @@ async function addCode(codeStr, itemName, redeemCode, callback) {
             .then(doc => {
 
                 if (doc._doc) {
-                    eventCache[doc._doc.id] = { available: doc._doc.available, userID: '', claimed: false };
+                    eventCache[doc._doc.id] = { available: doc._doc.available, hint: doc._doc.hint, userID: '', claimed: false };
                     callback(null, { message: `added '${doc._doc.id}' code to the 'event-codes' collection successfully.`, doc: doc._doc });
                 } else callback(new Error(`Insert document failed.`), null);
             })
@@ -54,7 +55,7 @@ async function loadCodes(callback) {
 
             let cacheNumber = 0;
             for (const code of docs) {
-                eventCache[code.id] = { available: code.available, userID: code.prize.userID, claimed: code.prize.claimed };
+                eventCache[code.id] = { available: code.available, hint: code.hint, userID: code.prize.userID, claimed: code.prize.claimed };
                 cacheNumber++;
             }
             callback(null, { message: `'eventCache Object' successfully loaded '${cacheNumber}' codes from the 'event-codes' collection.`, eventCache, length: cacheNumber })
@@ -77,7 +78,7 @@ async function updateCode(codeStr, updateData, callback) {
         await eventModel.findOneAndUpdate({ id: codeStr }, updateData, { returnOriginal: false }, (err, doc) => {
             if (err) return callback(err, null);
             if (doc) {
-                eventCache[doc.id] = { available: doc.available, userID: doc.prize.userID, claimed: doc.prize.claimed };
+                eventCache[doc.id] = { available: doc.available, hint: doc.hint, userID: doc.prize.userID, claimed: doc.prize.claimed };
                 callback(null, { message: `code '${doc.id}' information has been updated in the 'event-codes' collection.`, doc });
             } else callback(new Error(`Document for '${codeStr}' code is not found.`), '');
         }).lean();
@@ -151,15 +152,19 @@ async function loadEventStatus(callback) {
 
 function remainingCodes() {
     let availableCodes = 0;
+    let availableHints = '';
     const totalCodes = Object.keys(eventCache).length;
 
     for (const code in eventCache) {
         if (Object.hasOwnProperty.call(eventCache, code)) {
             const element = eventCache[code];
-            if (element.available === true) availableCodes++;
+            if (element.available === true) {
+                availableCodes++;
+                if (element.hint) availableHints = availableHints + `\n${element.hint}`;
+            }
         }
     }
-    return { totalCodes, availableCodes };
+    return { totalCodes, availableCodes, availableHints };
 }
 
 module.exports = {
