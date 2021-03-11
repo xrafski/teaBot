@@ -6,10 +6,10 @@ module.exports.help = {
   name: "check",
   description: "Check if user is in threat database.",
   type: "public",
-  usage: `ℹ️ Format: **${config.prefixPlaceholder}check userName**\nℹ️ Example(s):\n${config.prefixPlaceholder}user RNG\n${config.prefixPlaceholder}check Surge\n**Nickname must contain at least 3 characters!**`
+  usage: `ℹ️ Format: **${config.botPrefix}check userName**\nℹ️ Example(s):\n${config.botPrefix}user RNG\n${config.botPrefix}check Surge\n**Nickname must contain at least 3 characters!**`
 };
 
-module.exports.run = async (bot, message, args, prefix) => {
+module.exports.run = async (bot, message, args) => {
   fs.readFile('./cache/blacklist.json', 'utf8', (error, data) => {
     if (error) {
       logger('error', 'check.js:1 () Load blacklist.json file', error);
@@ -17,7 +17,7 @@ module.exports.run = async (bot, message, args, prefix) => {
     }
 
     const newData = JSON.parse(data);
-    if (!args[0] || args[0].length < 3) return botReply(`Wrong command format, type **${prefix}help ${module.exports.help.name}** to see usage and examples!`, message);
+    if (!args[0] || args[0].length < 3) return botReply(`Wrong command format, type **${config.botPrefix}help ${module.exports.help.name}** to see usage and examples!`, message);
 
     const searchValue = message.content.slice(prefix.length + module.exports.help.name.length).trim().toLowerCase();
     return findTheUser(newData, searchValue)
@@ -50,8 +50,8 @@ module.exports.run = async (bot, message, args, prefix) => {
               { name: 'Links', value: `Appeal is avaiable over [here](https://forms.gle/oR78HXAJcdSHBEvx7 'Appeal Google Form')\nPlayer report [here](https://forms.gle/8jR6NCXeZZPAsQPf6 'Report Google Form')`, inline: false },
             )
             .setThumbnail(TEAlogo)
-            .setTimestamp()
-          botReply(embed_user_details, message)
+            .setTimestamp();
+          botReply(embed_user_details, message);
           // .then(msg => messageRemoverWithReact(msg, message.author));
         } else {
           const embed_user_details = new Discord.MessageEmbed()
@@ -69,8 +69,8 @@ module.exports.run = async (bot, message, args, prefix) => {
               { name: 'Links', value: `Appeal is avaiable over [here](https://forms.gle/oR78HXAJcdSHBEvx7 'Appeal Google Form')\nPlayer report [here](https://forms.gle/8jR6NCXeZZPAsQPf6 'Report Google Form')`, inline: false },
             )
             .setThumbnail(TEAlogo)
-            .setTimestamp()
-          botReply(embed_user_details, message)
+            .setTimestamp();
+          botReply(embed_user_details, message);
           // .then(msg => messageRemoverWithReact(msg, message.author));
         }
       })
@@ -98,13 +98,11 @@ module.exports.run = async (bot, message, args, prefix) => {
         if (Object.hasOwnProperty.call(object, key)) {
           const element = object[key];
 
-          if (element.userName?.match(regex) || element.userlastName?.match(regex) || element.userAlternate?.match(regex) || element.userDiscord?.match(regex)) {
-            return resolve(element);
-          }
+          if (element.userName?.match(regex) || element.userlastName?.match(regex) || element.userAlternate?.match(regex) || element.userDiscord?.match(regex)) return resolve(element);
         }
       }
       reject('no_user');
-    })
+    });
   }
 
   function setThreatColor(color) {
@@ -122,4 +120,4 @@ module.exports.run = async (bot, message, args, prefix) => {
     if (userObject) return userObject.user;
     else return false;
   }
-}
+};

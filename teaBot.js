@@ -8,10 +8,10 @@ const { MongoClient } = require('./functions/mongodb-connection');
 const bot = new Discord.Client({ partials: ['MESSAGE', 'REACTION'] });
 
 // define current bot version.
-const BotVersion = '1.0.9';
+const BotVersion = '1.0.10';
 
 // define icon image url for embeds
-const TEAlogo = 'https://skillez.eu/images/discord/teabanner.png'
+const TEAlogo = 'https://skillez.eu/images/discord/teabanner.png';
 
 const emojiCharacters = { // some ASCII emojis to make my life easier
 	a: '🇦', b: '🇧', c: '🇨', d: '🇩',
@@ -92,13 +92,13 @@ function ownerDM(message) {
 function getCommand(commandName) {
 	if (commandName) {
 		if (bot.commands.get(commandName)) return bot.commands.get(commandName);
-		else undefined;
+		else return undefined;
 	}
-	else return bot.commands; // return all commands if commandName is not provided.
+	else return bot.commands; // return all commands if commandName is not provided.;
 }
 
 function botReply(text, message, time, attachFile, embedImage) {
-	if (!message) return logger('error', `teaBot.js:1 botReply() message object is not provided`);
+	if (!message) return logger('trace', `teaBot.js:1 botReply() message object is not provided`);
 	const attachmentFile = (attachFile ? new Discord.MessageAttachment(attachFile) : undefined);
 	const imageFileSplit = (embedImage ? embedImage.split('/').slice(-1).toString() : undefined);
 
@@ -109,7 +109,7 @@ function botReply(text, message, time, attachFile, embedImage) {
 					.setColor('RANDOM')
 					.attachFiles([embedImage])
 					.setImage(`attachment://${imageFileSplit}`)
-					.attachFiles([attachmentFile])
+					.attachFiles([attachmentFile]);
 				return message.reply(text, embed_message)
 					.then(msg => {
 						if (msg.deletable) msg.delete({ timeout: time })
@@ -120,7 +120,7 @@ function botReply(text, message, time, attachFile, embedImage) {
 				const embed_message = new Discord.MessageEmbed()
 					.setColor('RANDOM')
 					.attachFiles([embedImage])
-					.setImage(`attachment://${imageFileSplit}`)
+					.setImage(`attachment://${imageFileSplit}`);
 				return message.reply(text, embed_message)
 					.then(msg => {
 						if (msg.deletable) msg.delete({ timeout: time })
@@ -148,7 +148,7 @@ function botReply(text, message, time, attachFile, embedImage) {
 					.setColor('RANDOM')
 					.attachFiles([embedImage])
 					.setImage(`attachment://${imageFileSplit}`)
-					.attachFiles([attachmentFile])
+					.attachFiles([attachmentFile]);
 				return message.reply(embed_message)
 					.then(msg => {
 						if (msg.deletable) msg.delete({ timeout: time })
@@ -159,7 +159,7 @@ function botReply(text, message, time, attachFile, embedImage) {
 				const embed_message = new Discord.MessageEmbed()
 					.setColor('RANDOM')
 					.attachFiles([embedImage])
-					.setImage(`attachment://${imageFileSplit}`)
+					.setImage(`attachment://${imageFileSplit}`);
 				return message.reply(embed_message)
 					.then(msg => {
 						if (msg.deletable) msg.delete({ timeout: time })
@@ -182,14 +182,14 @@ function botReply(text, message, time, attachFile, embedImage) {
 					.setColor('RANDOM')
 					.attachFiles([embedImage])
 					.setImage(`attachment://${imageFileSplit}`)
-					.attachFiles([attachmentFile])
+					.attachFiles([attachmentFile]);
 				return message.reply(text, embed_message)
 					.catch(error => logger('error', `teaBot.js:17 botReply() Send the message`, error));
 			} else if (imageFileSplit) {
 				const embed_message = new Discord.MessageEmbed()
 					.setColor('RANDOM')
 					.attachFiles([embedImage])
-					.setImage(`attachment://${imageFileSplit}`)
+					.setImage(`attachment://${imageFileSplit}`);
 				return message.reply(text, embed_message)
 					.catch(error => logger('error', `teaBot.js:18 botReply() Send the message`, error));
 			} else if (attachmentFile) {
@@ -205,14 +205,14 @@ function botReply(text, message, time, attachFile, embedImage) {
 					.setColor('RANDOM')
 					.attachFiles([embedImage])
 					.setImage(`attachment://${imageFileSplit}`)
-					.attachFiles([attachmentFile])
+					.attachFiles([attachmentFile]);
 				return message.reply(embed_message)
 					.catch(error => logger('error', `teaBot.js:21 botReply() Send the message`, error));
 			} else if (imageFileSplit) {
 				const embed_message = new Discord.MessageEmbed()
 					.setColor('RANDOM')
 					.attachFiles([embedImage])
-					.setImage(`attachment://${imageFileSplit}`)
+					.setImage(`attachment://${imageFileSplit}`);
 				return message.reply(embed_message)
 					.catch(error => logger('error', `teaBot.js:22 botReply() Send the message`, error));
 			} else if (attachmentFile) {
@@ -228,14 +228,14 @@ function embedMessage(text, user) {
 		// Send an embed message without footer
 		const embed_message = new Discord.MessageEmbed()
 			.setDescription(text)
-			.setColor('#0095ff')
+			.setColor('#0095ff');
 		return embed_message;
 	} else {
 		// Send an embed message with footer
 		const embed_message = new Discord.MessageEmbed()
 			.setDescription(text)
 			.setColor('#0095ff')
-			.setFooter(user.tag, user.displayAvatarURL())
+			.setFooter(user.tag, user.displayAvatarURL());
 		return embed_message;
 	}
 }
@@ -254,7 +254,7 @@ async function messageRemoverWithReact(message, author) {
 
 	const emojiFilter = (reaction, user) => {
 		return ['❌'].includes(reaction.emoji.name) && !user.bot && author === user;
-	}
+	};
 
 	message.awaitReactions(emojiFilter, { max: 1, time: 60000 })
 		.then(collected => {
@@ -312,17 +312,16 @@ function removeUserLastMessage(message) {
 }
 
 function logger(type, text, error) {
+	if (type?.toLowerCase() === 'debug' && config.botDebug === false) return; // check if debug is enabled
 	text = text?.replace(/\s+/g, ' ');
 
 	const logDate = dateFormat(new Date(), "UTC:dd/mm/yyyy - hh:MM:ss TT");
 	if (!type) return logger('trace', 'logger.js:1 logger() Missing type for command in this trace');
 
 	switch (type.toLowerCase()) {
-		case 'debug':
-			if (config.botDebug) return console.debug(`[${logDate} UTC] [DEBUG] 🟣 ${text}${(error ? ` | ${error}` : '')}`);
-			else return;
+		case 'debug': return console.debug(`[${logDate} UTC] [DEBUG] 🟣 ${text}${(error ? ` | ${error}` : '')}`);
 		case 'log': return console.log(`[${logDate} UTC] [LOG] 🟢 ${text}${(error ? ` | ${error}` : '')}`);
-		case 'info': return console.info(`[${logDate} UTC] [INFO] 🔵 ${text}${(error ? ` | ${error}` : '')}`);;
+		case 'info': return console.info(`[${logDate} UTC] [INFO] 🔵 ${text}${(error ? ` | ${error}` : '')}`);
 		case 'warn': return console.warn(`[${logDate} UTC] [WARN] 🟠 ${text}${(error ? ` | ${error}` : '')}`);
 		case 'error': return console.error(`[${logDate} UTC] [ERROR] 🔴 ${text}${(error ? ` | ${error}` : '')}`);
 		case 'event': return console.log(`[${logDate} UTC] [EVENT] ⚪ ${text}${(error ? ` | ${error}` : '')}`);
@@ -349,4 +348,4 @@ module.exports = {
 	sendEmbedLog, // a function to manage sending webhooks automatically and create a new one if necessary.
 	removeUserLastMessage, // a function to remove last user message after 2 seconds.
 	logger // a function to manage logs.
-}
+};

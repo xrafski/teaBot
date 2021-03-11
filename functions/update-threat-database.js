@@ -53,17 +53,15 @@ function threatUpdate() {
             });
 
             // Write JSONobj to the blacklist.json file
-            fs.writeFileSync('./cache/blacklist.json', JSON.stringify(JSONobj, null, 2)), function (error) {
-                if (error) {
-                    reject(error)
-                    return logger('debug', `update-threat-database.js:1 threatUpdate() writeFileSync`, error);
-                }
+            try {
+                fs.writeFileSync('./cache/blacklist.json', JSON.stringify(JSONobj, null, 2));
+                const timeDiff = process.hrtime(timer);
+                resolve({ 'info': `Finished in ${timeDiff[0]}.${timeDiff[1].toString().slice(0, 3)}s.`, 'data': JSONobj });
+            } catch (error) {
+                return reject(error);
             }
-
-            const timeDiff = process.hrtime(timer);
-            resolve({ 'info': `Finished in ${timeDiff[0]}.${timeDiff[1].toString().slice(0, 3)}s.`, 'data': JSONobj });
         }
-    })
+    });
 }
 
 module.exports.threatUpdate = threatUpdate;

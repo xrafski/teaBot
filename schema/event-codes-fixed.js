@@ -1,12 +1,13 @@
 const { Schema, model } = require("mongoose");
 
-const eventModel = new Schema({
+const eventFixedCodeModel = new Schema({
     id: { type: String, unique: true, required: true, lowercase: true },
-    hint: { type: String, required: true },
+    type: { type: String, required: true, lowercase: true },
+    timestamp: { type: String },
+    hint: { type: String },
     available: { type: Boolean, required: true },
     prize: {
         claimed: { type: Boolean, required: true },
-        code: { type: String },
         item: { type: String, required: true },
         userID: { type: String },
         userTag: { type: String }
@@ -15,4 +16,4 @@ const eventModel = new Schema({
     // versionKey: false
 });
 
-module.exports.eventModel = model('event-codes', eventModel);
+module.exports.eventFixedCodeModel = model('event-codes-fixed', eventFixedCodeModel);

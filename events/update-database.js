@@ -10,11 +10,9 @@ bot.on('ready', () => { // https://crontab.guru/examples.html
             .catch(error => logger('error', `update-database.js:2 ()) Certification Update [Daily]`, error));
     });
 
-    // setTimeout(() => { // run certification update function at bot startup
     certification.certUpdate()
         .then(results => logger('update', `update-database.js:3 () 👉 Certification Update [Bot startup]`, results.info))
         .catch(error => logger('error', `update-database.js:4 () Certification Update [Bot startup]`, error));
-    // }, 3000);
 
     /////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -24,9 +22,7 @@ bot.on('ready', () => { // https://crontab.guru/examples.html
             .catch(error => logger('error', `update-database.js:6 () Threat Database Update [Daily]`, error));
     });
 
-    // setTimeout(() => { // run threat database function update at bot startup
     blacklist.threatUpdate()
         .then(results => logger('update', `update-database.js:7 () 👉 Threat Database Update [Bot startup]`, results.info))
         .catch(error => logger('error', `update-database.js:8 () Threat Database Update [Bot startup]`, error));
-    // }, 3000);
 });

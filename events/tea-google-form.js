@@ -5,7 +5,7 @@ const config = require("../bot-settings.json");
 const keys = require('../Laezaria-Bot-292d692ec77c.json');
 
 bot.on('ready', () => { // https://crontab.guru/examples.html
-    cron.schedule('30 */3 * * *', () => { checkTEAspreadsheet() }); // Check TEA spreadsheet for new responses “At minute 30 past every 3rd hour.” (Reports/Appeals).
+    cron.schedule('30 */3 * * *', () => { checkTEAspreadsheet(); }); // Check TEA spreadsheet for new responses “At minute 30 past every 3rd hour.” (Reports/Appeals).
 
     function checkTEAspreadsheet() {
         logger('update', `tea-google-form.js:1 checkTEAspreadsheet() Checking appeal/report spreadsheet [cron]`);
@@ -24,7 +24,7 @@ bot.on('ready', () => { // https://crontab.guru/examples.html
     }
 
     async function reportgsrun(cl) {
-        const gsapi = google.sheets({ version: 'v4', auth: cl })
+        const gsapi = google.sheets({ version: 'v4', auth: cl });
 
         const reportS = await gsapi.spreadsheets.values.get({
             spreadsheetId: config.formAppealReport.spreadsheetIdentifier,
@@ -47,7 +47,7 @@ bot.on('ready', () => { // https://crontab.guru/examples.html
                 { name: reportsheet[0][5], value: reportsheet[1][5], inline: false }, //Post link(s) to evidence
             )
             .setFooter(`• ${reportsheet[1][0]} ${reportsheet[0][0]}`)
-            .setThumbnail(TEAlogo)
+            .setThumbnail(TEAlogo);
         sendEmbedLog(embed_reports_sheet_information, config.formAppealReport.TEAreportChannel, 'TEA - Report')
             .then(async () => {
                 // Remove 1st row if not empty
@@ -77,7 +77,7 @@ bot.on('ready', () => { // https://crontab.guru/examples.html
     }
 
     async function appealgsrun(cl) {
-        const gsapi = google.sheets({ version: 'v4', auth: cl })
+        const gsapi = google.sheets({ version: 'v4', auth: cl });
 
         const appealS = await gsapi.spreadsheets.values.get({
             spreadsheetId: config.formAppealReport.spreadsheetIdentifier,
@@ -98,7 +98,7 @@ bot.on('ready', () => { // https://crontab.guru/examples.html
                 { name: appealsheet[0][3], value: appealsheet[1][3], inline: false }, // Appeal
             )
             .setFooter(`• ${appealsheet[1][0]} ${appealsheet[0][0]}`)
-            .setThumbnail(TEAlogo)
+            .setThumbnail(TEAlogo);
         sendEmbedLog(embed_appeals_sheet_information, config.formAppealReport.TEAappealChannel, 'TEA - Appeal')
             .then(async () => {
                 // Remove 1st row if not empty

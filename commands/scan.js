@@ -6,10 +6,10 @@ module.exports.help = {
     name: "scan",
     description: "Scan the entire server to find threat users.",
     type: "serverstaff",
-    usage: `ℹ️ Format: **${config.prefixPlaceholder}scan**`
+    usage: `ℹ️ Format: **${config.botPrefix}scan**`
 };
 
-module.exports.run = async (bot, message, args, prefix) => {
+module.exports.run = async (bot, message, args) => {
     const logChannel = message.guild.channels.cache.find(channel => channel.name === config.logs.channelName);
     if (!logChannel) return botReply(embedMessage(`**Log channel is not detected!**\nPlease, create a new channel '**${config.logs.channelName}**' or fix permissions if already exists.\n\nSet the following permissions for the bot:\n✅ Manage Webhooks\n✅ Read Messages\n✅ Send Messages\n✅ Embed Links\n✅ Read Message History\n✅ Use External Emoji`, message.author), message);
     if (message.channel != logChannel) return botReply(`You can use this command **only** in the ${logChannel} channel for security reasons.`, message);
@@ -17,7 +17,7 @@ module.exports.run = async (bot, message, args, prefix) => {
 
     fs.readFile('./cache/blacklist.json', 'utf8', (error, data) => {
         if (error) {
-            logger('error', 'scan.js:1 () Load blacklist.json file', error);
+            logger('error', 'scan.js:1 () Error to load blacklist.json file', error);
             return botReply('Error to parse data, try again later.', message);
         }
 
@@ -48,7 +48,7 @@ module.exports.run = async (bot, message, args, prefix) => {
                 .setTitle(`Detected ${detectedNumber} threat(s) in total!`)
                 .setDescription(detectedThreats)
                 .setTimestamp()
-                .setFooter(`Type ${prefix}check nickname for details.`, TEAlogo)
+                .setFooter(`Type ${config.botPrefix}check nickname for details.`, TEAlogo);
 
             sendEmbedLog(embed_scan_results, logChannel.id, config.logs.loggerName)
                 .catch(error => {
@@ -61,7 +61,7 @@ module.exports.run = async (bot, message, args, prefix) => {
                 .setAuthor(`${message.guild.name} Scan Results`, TEAlogo)
                 .setTitle(`✅ No threats detected!`)
                 .setThumbnail(TEAlogo)
-                .setTimestamp()
+                .setTimestamp();
 
             sendEmbedLog(embed_scan_results, logChannel.id, config.logs.loggerName)
                 .catch(error => {
@@ -91,4 +91,4 @@ module.exports.run = async (bot, message, args, prefix) => {
             default: return '⚪';
         }
     }
-}
+};

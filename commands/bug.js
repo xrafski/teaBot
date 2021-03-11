@@ -52,7 +52,7 @@ module.exports.run = async (bot, message) => {
         }
 
         const date = new Date();
-        // return `${date.getUTCDate()} ${MonthAsString(date.getUTCMonth())} ${date.getUTCFullYear()} • ${pad2(date.getUTCHours())}:${pad2(date.getUTCMinutes())}:${pad2(date.getUTCSeconds())}`;
+        // return `${date.getUTCDate()} ${MonthAsString(date.getUTCMonth())} ${date.getUTCFullYear()} • ${pad2(date.getUTCHours())}:${pad2(date.getUTCMinutes())}:${pad2(date.getUTCSeconds())}`
         return `${date.getUTCDate()} ${MonthAsString(date.getUTCMonth())} ${date.getUTCFullYear()} • ${formatAMPM(date)} UTC`;
     }
 
@@ -420,7 +420,7 @@ module.exports.run = async (bot, message) => {
                 )
                 .setThumbnail(qRequester.displayAvatarURL())
                 .setFooter('React with ✅ below to move to the appropriate category')
-                .setTimestamp()
+                .setTimestamp();
             return TEAchannel.send(embed_tip_summary)
                 .then(async message => {
                     if (message) botReply(`${getEmoji(config.TEAserverID, 'TEA')} Your bug report has been successfully sent!`, dmMessage);
@@ -452,4 +452,4 @@ qRepro: ${qRepro}
 qMedia: ${qMedia}
 qRequester: ${qRequester} - ${qRequester.tag} - ${qRequester.id}`);
     }
-}
+};

@@ -1,76 +1,216 @@
 const config = require("../bot-settings.json");
-const { codeValidation, updateCode, checkEventStatus, remainingCodes } = require("../cache/tea-events");
+const { checkEventCache, remainingCodes, codeValidation, updateCodeCache, blockEventWhileProcessing } = require("../cache/tea-event-cache");
+const { MongoClient } = require("../functions/mongodb-connection");
+const { eventFixedCodeModel } = require("../schema/event-codes-fixed");
+const { eventPriorityCodeModel } = require("../schema/event-codes-priority");
+const { eventPriorityPrizeModel } = require("../schema/event-priority-prizes");
 const { botReply, logger, sendEmbedLog, getEmoji } = require('../teaBot');
 
 module.exports.help = {
     name: "event",
     description: "Participate command in the TEA events.",
     type: "public",
-    usage: `ℹ️ Format: **${config.prefixPlaceholder}event code**\nℹ️ Example(s):\n${config.prefixPlaceholder}event asd123zxc\n${config.prefixPlaceholder}event remaining`
+    usage: `ℹ️ Format: **${config.botPrefix}event code**\nℹ️ Example(s):\n${config.botPrefix}event asd123zxc\n${config.botPrefix}event remaining`
 };
 
-module.exports.run = async (bot, message, args, prefix) => {
-    if (checkEventStatus().status === false) return botReply(`There is no active event to participate!`, message);
+module.exports.run = async (bot, message, args) => {
+    if (checkEventCache('eventstatus') === false) return botReply(`There is no active event to participate!`, message);
+    if (checkEventCache('blockevent') === true) return botReply(`I'm busy processing someone's request. Please try again in a second or two.`, message);
 
-    if (!args.length) return botReply(`Wrong command format, type **${prefix}help ${module.exports.help.name}** to see usage and examples!`, message);
-    const { author } = message;
-    const [userCode] = args;
+    if (!args.length) return botReply(`Wrong command format, type **${config.botPrefix}help ${module.exports.help.name}** to see usage and examples!`, message);
+    const { author, guild } = message;
+    const userCode = args[0]?.toLowerCase();
 
-    if (userCode.toLowerCase() === 'remaining') {
-        return botReply(`${getEmoji(config.TEAserverID, 'TEA')} Event Codes Information\nEvent code pool: **${remainingCodes().totalCodes}**\nRemaining codes: **${remainingCodes().availableCodes}**\n\nHint(s): ${remainingCodes().availableHints}`, message);
-    }
+    if (userCode === 'remaining') return botReply(`${getEmoji(config.TEAserverID, 'TEA')} Event Codes Information\nEvent code pool: **${remainingCodes().totalCodes}**\nRemaining codes: **${remainingCodes().availableCodes}**\n\n${remainingCodes().availableHints ? `Hint(s): ${remainingCodes().availableHints}` : ``}`, message);
 
-    if (codeValidation(userCode).code === 'correct_code') { // check if code is correct
-        logger('event', `event.js:1 () '${userCode}' code passed validation with 'correct_code' status.`);
+    if (codeValidation(userCode).code === 'correct_code') { // check if code can be claimed
+        blockEventWhileProcessing(true); // block command at the start to prevent other people
 
-        await updateCode(userCode, { "$set": { 'available': false, 'prize.userID': author.id, 'prize.userTag': author.tag } }, async (err, resAssign) => { // update code information with the updateData
-            if (err) {
-                botReply('Failed to update code information, try again later ;(', message);
-                return logger('error', `event.js:2 () Error to update code details`, err);
-            }
-            logger('event', `event.js:3 () Assigned '${resAssign.doc.prize.userTag}'(${resAssign.doc.prize.userID}) and ${resAssign.message}`);
+        switch (codeValidation(userCode).type) {
 
-            if (resAssign.doc.prize.code) { // if prize is redeemable code
-                author.send(`Congratulations, you have won: **${resAssign.doc.prize.item}**!\nThis is **redeemable code** on the Trion Worlds page (<https://www.trionworlds.com/trove/en/store/redeem/>)\n\nUse this code to redeem your prize: **${resAssign.doc.prize.code}**`)
-                    .then(async dmMsg => {
-                        if (dmMsg) {
-                            botReply(`Congratulations, you have won: **${resAssign.doc.prize.item}**!\nPlease, check your Direct Messages for details 😜`, message);
-                            logger('event', `event.js:4 () User: '${author.tag}'(${author.id}) has received a DM with a redeemable code behind '${resAssign.doc.id}' code.`)
-                            await updateCode(userCode, { "$set": { 'prize.claimed': true } }, (err, resClaimed) => {
-                                if (err) {
-                                    botReply(`Failed to update code information, please type '**${prefix}claim ${userCode}**' to confirm that you received DM with the code.`, message);
-                                    return logger('error', `event.js:5 () Error to update code details`, err);
-                                }
-                                logger('event', `event.js:6 () Updated document for the '${resClaimed.doc.id}' code, set prize status as claimed.`);
-                                sendEmbedLog(`<@${resClaimed.doc.prize.userID}> - ${resClaimed.doc.prize.userTag} - ${resClaimed.doc.prize.userID}\nUser has claimed **${resClaimed.doc.prize.item}** using **${resClaimed.doc.id}** code.`, config.eventLogs.channelID, config.eventLogs.loggerName)
-                                    .catch(err => logger('error', 'event.js:7 () Error to send embed log.', err));
-                            });
-                        } else logger('warn', `event.js:8 () Direct Message has been sent but not received? Anyway, we should send a redeem code that is behind '${resAssign.doc.id}' code again to the '${author.tag}'(${author.id}) user.`)
-                    })
-                    .catch(err => {
-                        logger('error', `event.js:9 () Error to send DM to '${author.tag}'(${author.id}).`, err);
-                        botReply(`There was an error to send you a direct message, make sure your DMs are not disabled in privacy settings.\nType **${prefix}claim ${userCode}** to re-send the prize!`, message);
-                    });
+            case 'fixed': {
+                logger('event', `event.js:1 switch fixed() '${userCode}' code passed validation with 'correct_code' status and 'fixed' type.`);
 
-            } else { // if prize is a trade-required item
-                await updateCode(userCode, { "$set": { 'prize.claimed': true } }, (err, resClaimed) => {
-                    if (err) {
-                        botReply(`Failed to update code information, please type '**${prefix}claim ${userCode}**' later.`, message);
-                        return logger('error', `event.js:10 () Error to update code details`, err);
-                    }
-                    logger('event', `event.js:11 User: '${resClaimed.doc.prize.userTag}'(${resClaimed.doc.prize.userID}) has claimed prize behind '${resClaimed.doc.id}' code.`);
-                    botReply(`Congratulations, you have won: **${resClaimed.doc.prize.item}**!\nNon-code prizes require an in-game trade with our staff members, so we will try to contact you after the event ;)`, message);
-                    sendEmbedLog(`<@${resClaimed.doc.prize.userID}> - ${resClaimed.doc.prize.userTag} - ${resClaimed.doc.prize.userID}\nUser has claimed **${resClaimed.doc.prize.item}** using **${resClaimed.doc.id}** code.`, config.eventLogs.channelID, config.eventLogs.loggerName)
-                        .catch(err => logger('error', 'event.js:12 () Error to send embed log.', err));
+                await MongoClient().then(async () => { // connect to the MongoDB
+
+                    // Run query to find document with userCode provided.
+                    await eventFixedCodeModel.findOneAndUpdate({ id: userCode }, { '$set': { 'available': false, 'prize.userID': author.id, 'prize.userTag': author.tag } }, { new: true }).exec()
+                        .then(codeDocument => {
+
+                            if (codeDocument) {  // document with 'userCode' id is found
+                                updateCodeCache(userCode, null); // remove key from cache
+                                logger('event', `event.js:2 switch fixed() Document '${codeDocument.id}' has been successfully updated by the '${author.tag}'(${author.id}).`);
+                                botReply(`Congratulations, you won: **${codeDocument.prize.item}**!\n${getEmoji(config.TEAserverID, 'TEA')} After the event, we will contact you to claim your prize!`, message);
+                                sendEmbedLog(`<@${codeDocument.prize.userID}> | ${codeDocument.prize.userTag} | ${codeDocument.prize.userID}\nUser has claimed **${codeDocument.prize.item}** (${codeDocument.type} prize type) using **${codeDocument.id}** code on the **${guild?.name}** server.`, config.eventLogs.channelID, config.eventLogs.loggerName);
+                            }
+
+                            else { // document is not found for this userCode which shound not happend
+                                logger('error', `event.js:3 switch fixed() Document is not found for '${userCode}' code by the '${author.tag}'(${author.id}) user request.`);
+                                botReply(`Document with your code is not found which might be a bug.\nPlease make a screenshot of this message and report it to **${config.ownerTag}**\nTimestamp: \`${Date.now()}\``, message);
+                            }
+                        }).catch(err => {
+                            logger('error', `event.js:4 switch fixed() Error to run MongoDB model query`, err);
+                            botReply(`Database error, try again later!`, message);
+                        });
+
+                }).catch(err => {
+                    logger('error', `event.js:5 switch fixed() Connect error to MongoDB.`, err);
+                    botReply(`Database error, try again later!`, message);
                 });
-            }
-        });
 
-    } else { // if code status is something else than 'correct_code'
-        switch (codeValidation(userCode).code) {
-            case 'invalid_code': return botReply(`This code seems to be invalid. Make sure to type it correctly!`, message);
-            case 'used_code': return botReply(`This code is already redeemed by the other member.`, message);
-            default: return botReply(`**Your code could not be redeemed**, invalid code status 🐛\nContact ${config.ownerTag} to investigate.`, message);
+                return blockEventWhileProcessing(false); // unlock
+            }
+
+            case 'priority': {
+                logger('event', `event.js:1 swith priority() '${userCode}' code passed validation with 'correct_code' status and 'priority' type.`);
+
+                await MongoClient().then(async () => { // connect to the MongoDB
+
+                    // Find one code document with 'high' priority status.
+                    await eventPriorityPrizeModel.findOne({ priority: 'high', available: true }).exec()
+                        .then(async highPrize => {
+
+                            if (highPrize) { // if document with 'high' priority is found.
+
+                                // change cache/database available value for priority prize code to FALSE
+                                await eventPriorityCodeModel.findOne({ id: userCode, available: true }).exec()
+                                    .then(async codeDocument => {
+
+                                        if (codeDocument) { // check if document is found
+                                            codeDocument.available = false; // make the code not available anymore
+                                            codeDocument.userID = author.id; // assign userID to the document
+                                            codeDocument.userTag = author.tag; // same as above but with authorTag
+                                            codeDocument.prizeID = highPrize.timestamp; // assign prize document ID in the code document
+
+                                            highPrize.available = false; // set prize document as not available to claim
+
+                                            const updatedPrizeDoc = await highPrize.save(); // save prize document
+                                            const updatedCodeDoc = await codeDocument.save(); // save code document
+
+                                            if (updatedCodeDoc === codeDocument && updatedPrizeDoc === highPrize) { // when both documents are update correctly
+                                                updateCodeCache(userCode, null);
+                                                logger('event', `event.js:2 switch priority() Document '${codeDocument.id}' and '${highPrize.timestamp}' has been successfully updated by the '${author.tag}'(${author.id}).`);
+                                                botReply(`Congratulations, you won: **${highPrize.name}**!\n${getEmoji(config.TEAserverID, 'TEA')} After the event, we will contact you to claim your prize!`, message);
+                                                sendEmbedLog(`<@${codeDocument.userID}> | ${codeDocument.userTag} | ${codeDocument.userID}\nUser has claimed **${highPrize.name}** (${highPrize.priority} ${codeDocument.type} prize type) using **${codeDocument.id}** code on the **${guild?.name}** server.`, config.eventLogs.channelID, config.eventLogs.loggerName);
+                                            }
+                                            else { // when one of documents failed to update
+                                                updateCodeCache(userCode, null);
+                                                logger('error', `event.js:3 switch priority() Failed to update '${codeDocument.id}' or '${highPrize.timestamp}' document request by '${author.tag}'(${author.id}) user.`);
+                                                botReply(`Congratulations, you won: **${highPrize.name}**!\n${getEmoji(config.TEAserverID, 'TEA')} After the event, we will contact you to claim your prize!\nHowever, there was an issue with saving document changes.\nPlease make a screenshot of this message and report it to **${config.ownerTag}**\nTimestamp: \`${Date.now()}\``, message);
+                                                sendEmbedLog(`<@${codeDocument.userID}> | ${codeDocument.userTag} | ${codeDocument.userID}\nUser has claimed **${highPrize.name}** (${highPrize.priority} ${codeDocument.type} prize type) using **${codeDocument.id}** code on the **${guild?.name}** server.\n_However, there was an issue with saving document changes._`, config.eventLogs.channelID, config.eventLogs.loggerName);
+                                            }
+                                        }
+                                        else { // document is not found for this userCode which shound not happend
+                                            logger('error', `code.js:4 switch priority() Error to find '${userCode}' document provided by the '${author.tag}'(${author.id}).`);
+                                            botReply(`Error to find document with provided code, try again or/and contact **${config.ownerTag}** to investigate.\nTimestamp: ${Date.now()}`, message);
+                                        }
+
+                                    }).catch(err => {
+                                        logger('error', `event.js:5 switch priority() Error to run MongoDB model query`, err);
+                                        botReply(`Database error, try again later!`, message);
+                                    });
+
+                            } else { // try to give 'low' prize instead
+
+                                // Find one code document with 'low' priority status.
+                                await eventPriorityPrizeModel.findOne({ priority: 'low', available: true }).exec()
+                                    .then(async lowPrize => {
+
+                                        if (lowPrize) { // if document with 'low' priority is found.
+
+                                            // change cache/database available value for priority prize code to FALSE
+                                            await eventPriorityCodeModel.findOne({ id: userCode, available: true }).exec()
+                                                .then(async codeDocument => {
+
+                                                    if (codeDocument) { // check if document is found
+                                                        codeDocument.available = false; // make the code not available anymore
+                                                        codeDocument.userID = author.id; // assign userID to the document
+                                                        codeDocument.userTag = author.tag; // same as above but with authorTag
+                                                        codeDocument.prizeID = lowPrize.timestamp; // assign prize document ID in the code document
+
+                                                        lowPrize.available = false; // set prize document as not available to claim
+
+                                                        const updatedPrizeDoc = await lowPrize.save(); // save prize document
+                                                        const updatedCodeDoc = await codeDocument.save(); // save code document
+
+                                                        if (updatedCodeDoc === codeDocument && updatedPrizeDoc === lowPrize) { // when both documents are update correctly
+                                                            updateCodeCache(userCode, null);
+                                                            logger('event', `event.js:6 switch priority() Document '${codeDocument.id}' and '${lowPrize.timestamp}' has been updated successfully by the '${author.tag}'(${author.id}).`);
+                                                            botReply(`Congratulations! You won: **${lowPrize.name}**!\n${getEmoji(config.TEAserverID, 'TEA')} After the event, we will contact you to claim your prize!`, message);
+                                                            sendEmbedLog(`<@${codeDocument.userID}> | ${codeDocument.userTag} | ${codeDocument.userID}\nUser has claimed **${lowPrize.name}** (${lowPrize.priority} ${codeDocument.type} prize type) using **${codeDocument.id}** code on the **${guild?.name}** server.`, config.eventLogs.channelID, config.eventLogs.loggerName);
+                                                        }
+                                                        else { // when one of documents failed to update
+                                                            updateCodeCache(userCode, null);
+                                                            logger('error', `event.js:7 switch priority() Failed to update '${codeDocument.id}' or '${lowPrize.timestamp}' document request by '${author.tag}'(${author.id}) user.`);
+                                                            botReply(`Congratulations! You won: **${lowPrize.name}**!\n${getEmoji(config.TEAserverID, 'TEA')} After the event, we will contact you to claim your prize!\nHowever, there was an issue with saving document changes.\nPlease make a screenshot of this message and report it to **${config.ownerTag}**\nTimestamp: \`${Date.now()}\``, message);
+                                                            sendEmbedLog(`<@${codeDocument.userID}> | ${codeDocument.userTag} | ${codeDocument.userID}\nUser has claimed **${lowPrize.name}** (${lowPrize.priority} ${codeDocument.type} prize type) using **${codeDocument.id}** code on the **${guild?.name}** server.\n_However, there was an issue with saving document changes._`, config.eventLogs.channelID, config.eventLogs.loggerName);
+                                                        }
+                                                    }
+
+                                                    else { // document is not found for this userCode which shound not happend
+                                                        logger('error', `event.js:8 switch fixed() Error to find '${userCode}' document provided by the '${author.tag}'(${author.id}).`);
+                                                        botReply(`Error to find document with provided code, try again or/and contact **${config.ownerTag}** to investigate.\nTimestamp: ${Date.now()}`, message);
+                                                    }
+
+                                                }).catch(err => {
+                                                    logger('error', `event.js:9 switch priority() Error to run MongoDB model query`, err);
+                                                    botReply(`Database error, try again later!`, message);
+                                                });
+
+                                        } else {  // WHAT WHEN THERE IS NOT EVEN LOW PRIZE AVAILABLE - aka more codes than prizes
+                                            logger('error', `event.js:10 switch priority() Low prize document is not found for '${author.tag}'(${author.id}) that used '${userCode}' code!`);
+
+                                            await eventPriorityCodeModel.findOneAndUpdate({ id: userCode }, { '$set': { available: false, userID: author.id, userTag: author.tag, prizeID: 'No prize document available' } }, { new: true })
+                                                .then(codeDoc => {
+
+                                                    if (codeDoc) { // check if document exist and updated
+                                                        updateCodeCache(userCode, null);
+                                                        logger('error', `event.js:11 switch priority() Updated '${userCode}' document, but without prize assigned to it.`);
+                                                        botReply(`Congratulations! You won **something**, but due to a bug, I can't show exactly what it is.\nPlease make a screenshot of this message and report it to **${config.ownerTag}**\nTimestamp: \`${Date.now()}\``, message);
+                                                        sendEmbedLog(`<@${codeDoc.userID}> | ${codeDoc.userTag} | ${codeDoc.userID}\nUser has claimed **undefined prize** using **${codeDoc.id}** code on the **${guild?.name}** server.\n_There wasn't a document with the prize to assign to this code._`, config.eventLogs.channelID, config.eventLogs.loggerName);
+                                                    }
+
+                                                    else { // document is not found for this userCode which shound not happend
+                                                        logger('error', `event.js:12 switch priority() Error to find '${userCode}' document provided by the '${author.tag}'(${author.id}).`);
+                                                        botReply(`Error to find document with provided code, try again or/and contact **${config.ownerTag}** to investigate.\nTimestamp: ${Date.now()}`, message);
+                                                    }
+
+                                                }).catch(err => {
+                                                    logger('error', `event.js:13 switch priority() Error to run MongoDB model query`, err);
+                                                    botReply(`Database error, try again later!`, message);
+                                                });
+
+                                        }
+
+                                    }).catch(err => {
+                                        logger('error', `event.js:14 switch priority() Error to run MongoDB model query`, err);
+                                        botReply(`Database error, try again later!`, message);
+                                    });
+
+                            }
+
+                        }).catch(err => {
+                            logger('error', `event.js:15 switch priority() Error to run MongoDB model query`, err);
+                            botReply(`Database error, try again later!`, message);
+                        });
+
+                }).catch(err => {
+                    logger('error', `event.js:16 switch priority() Connect error to MongoDB.`, err);
+                    botReply(`Database error, try again later!`, message);
+                });
+
+                return blockEventWhileProcessing(false); // unlock
+            }
+
+            default: {
+                blockEventWhileProcessing(false); // unlock
+                logger('error', `event.js:1 switch default() '${userCode}' code passed validation with status:'${codeValidation(userCode).code}' and type:'${codeValidation(userCode).type}'.`);
+                return botReply(`Unknown code type, that might be an error. Please, report it to **${config.ownerTag}**\nTimestamp: \`${Date.now()}\``, message);
+            }
         }
+
+    } else {
+        if (codeValidation(userCode).code === 'invalid_code') botReply(`This code has already been redeemed or is not valid.`, message);
+        else botReply(`**Your code could not be redeemed**, invalid code status 🐛\nContact **${config.ownerTag}** to investigate.`, message);
     }
-}
+};

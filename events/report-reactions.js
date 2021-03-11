@@ -21,14 +21,14 @@ bot.on('messageReactionAdd', async (reaction, user) => {
             const menuEmbed = new Discord.MessageEmbed()
                 .setColor('#0095ff')
                 .setAuthor('Reaction Menu', TEAlogo)
-                .setDescription(`${user} You have reacted on this **[report message](${message.url})**.\nPlease react under this message to move to the appropriate category.\n\nLegend:\n❌ • Exit\n${emojiCharacters[1]} • <#${config.report.bugGraphicalChannelID}>\n${emojiCharacters[2]} • <#${config.report.bugUIChannelID}>\n${emojiCharacters[3]} • <#${config.report.bugCombatChannelID}>\n${emojiCharacters[4]} • <#${config.report.bugBuildingChannelID}>\n${emojiCharacters[5]} • <#${config.report.bugCriticalChannelID}>\n${emojiCharacters[6]} • <#${config.report.bugMiscalculationChannelID}>\n${emojiCharacters[7]} • <#${config.report.bugInsufficientDataChannelID}>`)
+                .setDescription(`${user} You have reacted on this **[report message](${message.url})**.\nPlease react under this message to move to the appropriate category.\n\nLegend:\n❌ • Exit\n${emojiCharacters[1]} • <#${config.report.bugGraphicalChannelID}>\n${emojiCharacters[2]} • <#${config.report.bugUIChannelID}>\n${emojiCharacters[3]} • <#${config.report.bugCombatChannelID}>\n${emojiCharacters[4]} • <#${config.report.bugBuildingChannelID}>\n${emojiCharacters[5]} • <#${config.report.bugCriticalChannelID}>\n${emojiCharacters[6]} • <#${config.report.bugMiscalculationChannelID}>\n${emojiCharacters[7]} • <#${config.report.bugInsufficientDataChannelID}>`);
             return botReply(menuEmbed, message)
                 .then(async msg => {
 
                     if (msg) {
                         const emojiFilter = (reaction, user) => { // accept interaction only from the message author
                             return ['❌', emojiCharacters[1], emojiCharacters[2], emojiCharacters[3], emojiCharacters[4], emojiCharacters[5], emojiCharacters[6], emojiCharacters[7]].includes(reaction.emoji.name) && !user.bot && reactUser === user;
-                        }
+                        };
 
                         msg.awaitReactions(emojiFilter, { max: 1, time: 60000 })
                             .then(collected => {
@@ -80,7 +80,7 @@ bot.on('messageReactionAdd', async (reaction, user) => {
                     .catch(error => {
                         botReply(embedMessage(`${user} ${getEmoji(config.TEAserverID, 'TEA')} Error to move the report, try again later...`), reaction.message, 10000);
                         logger('error', `report-reactions.js:2 moveTheReport() (READ_MESSAGES/READ_MESSAGE_HISTORY/ADD_REACTIONS)`, error);
-                    })
+                    });
 
             } else {
                 botReply(embedMessage(`${user} ${getEmoji(config.TEAserverID, 'TEA')} Error to move report, try again later...`), reaction.message, 10000);
@@ -92,14 +92,14 @@ bot.on('messageReactionAdd', async (reaction, user) => {
             const confirmationEmbed = new Discord.MessageEmbed()
                 .setColor('#0095ff')
                 .setAuthor('Auto-Reply Confirmation', TEAlogo)
-                .setDescription(`${user}, Please confirm to send an auto-reply to the author of this [report](${message.url}).`)
+                .setDescription(`${user}, Please confirm to send an auto-reply to the author of this [report](${message.url}).`);
             return botReply(confirmationEmbed, message)
                 .then(async msg => {
 
                     if (msg) {
                         const emojiFilter = (reaction, user) => { // accept interaction only from the message author
                             return ['❌', '✅'].includes(reaction.emoji.name) && !user.bot && reactUser === user;
-                        }
+                        };
 
                         msg.awaitReactions(emojiFilter, { max: 1, time: 60000 })
                             .then(collected => {
@@ -140,7 +140,7 @@ bot.on('messageReactionAdd', async (reaction, user) => {
         function autoReportReplyReset(message) {
             const embedContent = message.embeds[0];
             const replyConfirmation = new Discord.MessageEmbed(embedContent).setDescription('');
-            message.edit(replyConfirmation)
+            message.edit(replyConfirmation);
         }
     }
 });

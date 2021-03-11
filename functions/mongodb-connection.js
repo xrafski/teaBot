@@ -1,5 +1,8 @@
-// mongoose@5.11.15
+// mongodb-connection.js
+// ================================
+
 const mongoose = require('mongoose');
+mongoose.pluralize(null);
 const { mongodb } = require('../bot-settings.json');
 
 async function MongoClient() {
@@ -13,7 +16,7 @@ async function MongoClient() {
         useUnifiedTopology: true,
         useCreateIndex: true,
         serverSelectionTimeoutMS: 10000
-    })
+    });
     return mongoose;
 }
 

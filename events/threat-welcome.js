@@ -31,18 +31,18 @@ bot.on('guildMemberAdd', member => {
                             { name: 'Links', value: `Appeal is avaiable over [here](https://forms.gle/oR78HXAJcdSHBEvx7 'Appeal Google Form')\nPlayer report [here](https://forms.gle/8jR6NCXeZZPAsQPf6 'Report Google Form')`, inline: false },
                         )
                         .setThumbnail(TEAlogo)
-                        .setTimestamp()
+                        .setTimestamp();
                     sendEmbedLog(embed_user_details, logChannel.id, 'Trove Ethics Alliance - Overwatch')
                         .catch(error => logger('error', `threat-welcome.js:2 findThreat() ${error.info} in the '${logChannel.guild.name}'.`));
                     if (userName !== 'Trove Ethics Alliance') logger('warn', `threat-welcome.js:3 () Threat user (${userName})[${user.tag}] joined '${guild.name}'.`);
                 })
                 .catch(error => {
                     if (error === 'no_user') return;
-                    logger('error', 'threat-welcome.js:4 findThreat function', error)
+                    logger('error', 'threat-welcome.js:4 findThreat function', error);
                 });
         });
     }
-})
+});
 
 function findThreat(object, userID) {
     return new Promise((resolve, reject) => {
@@ -68,14 +68,11 @@ function findThreat(object, userID) {
         for (const key in object) {
             if (Object.hasOwnProperty.call(object, key)) {
                 const element = object[key];
-
-                if (element.userDiscord?.match(regex)) {
-                    return resolve(element);
-                }
+                if (element.userDiscord?.match(regex)) return resolve(element);
             }
         }
         reject('no_user');
-    })
+    });
 }
 
 function setThreatColor(color) {

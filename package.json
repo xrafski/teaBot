@@ -21,7 +21,7 @@
     "dateformat": "^4.5.1",
     "discord.js": "^12.5.1",
     "googleapis": "^67.1.0",
-    "mongoose": "^5.11.15",
+    "mongoose": "^5.11.19",
     "node-cron": "^2.0.3"
   }
 }

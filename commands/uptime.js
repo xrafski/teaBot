@@ -5,7 +5,7 @@ module.exports.help = {
     name: "uptime",
     description: "Current uptime of the bot.",
     type: "public",
-    usage: `ℹ️ Format: **${config.prefixPlaceholder}uptime**`
+    usage: `ℹ️ Format: **${config.botPrefix}uptime**`
 };
 
 module.exports.run = async (bot, message) => {
@@ -97,5 +97,5 @@ module.exports.run = async (bot, message) => {
                 return `${minutes} minutes ${seconds} seconds`;
             }
         }
-    };
-}
+    }
+};

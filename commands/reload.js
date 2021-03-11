@@ -5,11 +5,11 @@ module.exports.help = {
     name: "reload",
     description: "Reload a command.",
     type: "administrator",
-    usage: `ℹ️ Format: **${config.prefixPlaceholder}reload commandName**\n\nℹ️ Example(s):\n${config.prefixPlaceholder}reload uptime`
+    usage: `ℹ️ Format: **${config.botPrefix}reload commandName**\n\nℹ️ Example(s):\n${config.botPrefix}reload uptime`
 };
 
-module.exports.run = async (bot, message, args, prefix) => {
-    if (!args.length) return botReply(`Wrong command format, type **${prefix}help ${module.exports.help.name}** to see usage and examples!`, message);
+module.exports.run = async (bot, message, args) => {
+    if (!args.length) return botReply(`Wrong command format, type **${config.botPrefix}help ${module.exports.help.name}** to see usage and examples!`, message);
 
     const commandName = args[0].toLowerCase();
     const command = getCommand(commandName);
@@ -20,6 +20,8 @@ module.exports.run = async (bot, message, args, prefix) => {
             const reloadCommand = require(`./${command.help.name}.js`);
             bot.commands.set(reloadCommand.help.name, reloadCommand);
             return botReply(`Command \`${command.help.name}\` has been reloaded!`, message);
-        } catch (error) { return botReply(`There was an error while reloading a command \`${command.help.name}\`:\n\`${error.message}\``, message); }
+        } catch (error) {
+            return botReply(`There was an error while reloading a command \`${command.help.name}\`:\n\`${error.message}\``, message);
+        }
     } else return botReply(`There is no \`${commandName}\` command loaded and cannot be reloaded!`, message);
-}
+};

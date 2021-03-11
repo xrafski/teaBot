@@ -53,17 +53,15 @@ function certificationUpdate() {
             JSONobj = JSONobj.concat(config.certification.hiddenServers);
 
             // Write JSONobj to the certification.json file
-            fs.writeFileSync('./cache/certification.json', JSON.stringify(JSONobj, null, 2)), function (error) {
-                if (error) {
-                    reject(error)
-                    return logger('debug', `update-certification.js:1 certificationUpdate() writeFileSync`, error);
-                }
+            try {
+                fs.writeFileSync('./cache/certification.json', JSON.stringify(JSONobj, null, 2));
+                const timeDiff = process.hrtime(timer);
+                resolve({ 'info': `Finished in ${timeDiff[0]}.${timeDiff[1].toString().slice(0, 3)}s.`, 'data': JSONobj });
+            } catch (error) {
+                return reject(error);
             }
-
-            const timeDiff = process.hrtime(timer);
-            resolve({ 'info': `Finished in ${timeDiff[0]}.${timeDiff[1].toString().slice(0, 3)}s.`, 'data': JSONobj });
         }
-    })
+    });
 }
 
 module.exports.certUpdate = certificationUpdate;

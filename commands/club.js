@@ -6,10 +6,10 @@ module.exports.help = {
   name: "club",
   description: "Show information about the club.",
   type: "public",
-  usage: `ℹ️ Format: **${config.prefixPlaceholder}club clubName**\nℹ️ Example(s):\n${config.prefixPlaceholder}club laez\n${config.prefixPlaceholder}club henort`
+  usage: `ℹ️ Format: **${config.botPrefix}club clubName**\nℹ️ Example(s):\n${config.botPrefix}club laez\n${config.botPrefix}club henort`
 };
 
-module.exports.run = async (bot, message, args, prefix) => {
+module.exports.run = async (bot, message, args) => {
   fs.readFile('./cache/certification.json', 'utf8', (error, data) => {
     if (error) {
       logger('error', 'club.js:1 () Load certification.json file', error);
@@ -17,7 +17,7 @@ module.exports.run = async (bot, message, args, prefix) => {
     }
 
     const newData = JSON.parse(data);
-    if (!args[0] || args[0].length < 3) return botReply(`Wrong command format, type **${prefix}help ${module.exports.help.name}** to see usage and examples!`, message);
+    if (!args[0] || args[0].length < 3) return botReply(`Wrong command format, type **${config.botPrefix}help ${module.exports.help.name}** to see usage and examples!`, message);
 
     const searchValue = message.content.slice(prefix.length + module.exports.help.name.length).trim().toLowerCase();
     return findTheClub(newData, searchValue)
@@ -38,8 +38,8 @@ module.exports.run = async (bot, message, args, prefix) => {
             { name: 'Representative', value: guildRepresentative, inline: false },
           )
           .setThumbnail(TEAlogo)
-          .setTimestamp()
-        botReply(embed_club_details, message)
+          .setTimestamp();
+        botReply(embed_club_details, message);
         // .then(msg => messageRemoverWithReact(msg, message.author));
       })
       .catch(error => {
@@ -76,6 +76,6 @@ module.exports.run = async (bot, message, args, prefix) => {
         }
       }
       reject('no_club');
-    })
+    });
   }
-}
+};

@@ -6,7 +6,7 @@ module.exports.help = {
     name: "certification",
     description: "Check if this club is certified TEA member.",
     type: "public",
-    usage: `ℹ️ Format: **${config.prefixPlaceholder}certification** details(optional)`
+    usage: `ℹ️ Format: **${config.botPrefix}certification** details(optional)`
 };
 
 module.exports.run = async (bot, message, args) => {
@@ -30,8 +30,8 @@ module.exports.run = async (bot, message, args) => {
                     )
                     .setThumbnail(message.guild.iconURL())
                     .setFooter('Contact TEA Spreadsheet Manager if the data is outdated!')
-                    .setTimestamp()
-                botReply(embed_certification_details, message)
+                    .setTimestamp();
+                botReply(embed_certification_details, message);
                 // .then(msg => messageRemoverWithReact(msg, message.author));
 
             } else return printResultsMessage(null);
@@ -47,4 +47,4 @@ module.exports.run = async (bot, message, args) => {
             default: return botReply(embedMessage(`${getEmoji(config.TEAserverID, 'verified')} **${message.guild.name}** is a certified member of the ${getEmoji(config.TEAserverID, 'TEA')} Trove Ethics Alliance.`, message.author), message);
         }
     }
-}
+};
