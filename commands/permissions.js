@@ -10,7 +10,7 @@ module.exports.help = {
 
 module.exports.run = async (bot, message, args) => {
     if (args[0]) return checkAdminPermission(args[0]);
-    else return checkAdminPermission(message.guild.id);
+    else return checkAdminPermission();
 
     function checkAdminPermission(param) {
         const permissionResults = [[], []]; // [[0 - ❌ List], [1 - ✅ List]]

@@ -19,7 +19,7 @@ module.exports.run = async (bot, message, args) => {
     const newData = JSON.parse(data);
     if (!args[0] || args[0].length < 3) return botReply(`Wrong command format, type **${config.botPrefix}help ${module.exports.help.name}** to see usage and examples!`, message);
 
-    const searchValue = message.content.slice(prefix.length + module.exports.help.name.length).trim().toLowerCase();
+    const searchValue = message.content.slice(config.botPrefix.length + module.exports.help.name.length).trim().toLowerCase();
     return findTheClub(newData, searchValue)
       .then(club => {
         const { guildDescription, guildName, guildRepresentative, guildRequirements } = club;
