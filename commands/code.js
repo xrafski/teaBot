@@ -32,7 +32,7 @@ module.exports.run = async (bot, message, args) => {
                     return botReply('Database error, try again later!', message);
                 }
                 logger('log', `code.js:2 switch enable() ${res.message}`);
-                botReply(res.message + `\nEvent commands (${config.botPrefix}claim, ${config.botPrefix}event) are now **enabled**.`, message);
+                botReply(res.message + `\nEvent command (${config.botPrefix}event) is now **enabled**.`, message);
             });
         }
 
@@ -43,7 +43,7 @@ module.exports.run = async (bot, message, args) => {
                     return botReply('Database error, try again later!', message);
                 }
                 logger('log', `code.js:2 switch disable() ${res.message}`);
-                botReply(res.message + `\nEvent commands (${config.botPrefix}claim, ${config.botPrefix}event) are now **disabled**.`, message);
+                botReply(res.message + `\nEvent command (${config.botPrefix}event) is now **disabled**.`, message);
             });
         }
 
