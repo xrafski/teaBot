@@ -1,5 +1,5 @@
 const config = require("../bot-settings.json");
-const { updateEventStatus, checkEventCache, updateCodeCache, blockEventWhileProcessing } = require("../cache/tea-event-cache");
+const { updateEventStatus, checkEventCache, updateCodeCache, blockEventWhileProcessing, codeValidation } = require("../cache/tea-event-cache");
 const { MongoClient } = require("../functions/mongodb-connection");
 const { eventFixedCodeModel } = require("../schema/event-codes-fixed");
 const { eventPriorityCodeModel } = require("../schema/event-codes-priority");
@@ -9,7 +9,7 @@ const { botReply, logger, embedMessage } = require('../teaBot');
 module.exports.help = {
     name: "code",
     description: "Manage codes for event system.",
-    type: "administrator",
+    type: "eventmanager",
     usage: `ℹ️ Format: multiple formats (check examples below)\nℹ️ Example(s):\n**${config.botPrefix}code status** - check event status\n**${config.botPrefix}code enable** - enable event system\n**${config.botPrefix}code disable** - disable event system\n**${config.botPrefix}code add** - interactive menu to add codes\n**${config.botPrefix}code del codeStr codeType** - remove codes\n**${config.botPrefix}code prize add** - interactive menu to add priority prizes\n**${config.botPrefix}code unlock** - in case of a bug, manual command to unlock ${config.botPrefix}event command`
 };
 
@@ -278,7 +278,7 @@ module.exports.run = async (bot, message, args) => {
             });
     }
 
-    function codeStrQuestion(additionalText) { // both types
+    function codeStrQuestion(additionalText) { // fixed/priority
         if (!additionalText) additionalText = '';
         else additionalText = additionalText + '\n(you can type **exit** to cancel)\n';
         return botReply(`${additionalText}\n[single word][lower case alphanumeric][3-69 characters long]\n> **Type the custom code for people to use.**`, message)
@@ -289,6 +289,7 @@ module.exports.run = async (bot, message, args) => {
                             if (Answer.first().content.startsWith(config.botPrefix)) return; // exit if other command was typed
                             else if (Answer.first().content.toLowerCase() === 'exit' || Answer.first().content.toLowerCase() === 'cancel') return botReply(`❌ Cancelled.`, message);
                             else if (!Answer.first().content.match(/^[a-z0-9]{3,69}$/)) return codeStrQuestion(`❌ Invalid code text format`);
+                            else if (codeValidation(Answer.first().content).code != 'invalid_code') return codeStrQuestion(`❌ This code already exist!`)
                             else {
                                 menuCodeStr = Answer.first().content;
                                 return codeHintQuestion();

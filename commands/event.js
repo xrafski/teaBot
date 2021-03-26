@@ -38,7 +38,7 @@ module.exports.run = async (bot, message, args) => {
                         .then(codeDocument => {
 
                             if (codeDocument) {  // document with 'userCode' id is found
-                                updateCodeCache(userCode, null); // remove key from cache
+                                updateCodeCache(userCode, { available: false }); // disable key from cache
                                 logger('event', `event.js:2 switch fixed() Document '${codeDocument.id}' has been successfully updated by the '${author.tag}'(${author.id}).`);
                                 botReply(`Congratulations, you won: **${codeDocument.prize.item}**!\n${getEmoji(config.TEAserverID, 'TEA')} After the event, we will contact you to claim your prize!`, message);
                                 sendEmbedLog(`<@${codeDocument.prize.userID}> | ${codeDocument.prize.userTag} | ${codeDocument.prize.userID}\nUser has claimed **${codeDocument.prize.item}** (${codeDocument.type} prize type) using **${codeDocument.id}** code on the **${guild?.name}** server.`, config.eventLogs.channelID, config.eventLogs.loggerName);
@@ -88,13 +88,13 @@ module.exports.run = async (bot, message, args) => {
                                             const updatedCodeDoc = await codeDocument.save(); // save code document
 
                                             if (updatedCodeDoc === codeDocument && updatedPrizeDoc === highPrize) { // when both documents are update correctly
-                                                updateCodeCache(userCode, null);
+                                                updateCodeCache(userCode, { available: false }); // disable key from cache
                                                 logger('event', `event.js:2 switch priority() Document '${codeDocument.id}' and '${highPrize.timestamp}' has been successfully updated by the '${author.tag}'(${author.id}).`);
                                                 botReply(`Congratulations, you won: **${highPrize.name}**!\n${getEmoji(config.TEAserverID, 'TEA')} After the event, we will contact you to claim your prize!`, message);
                                                 sendEmbedLog(`<@${codeDocument.userID}> | ${codeDocument.userTag} | ${codeDocument.userID}\nUser has claimed **${highPrize.name}** (${highPrize.priority} ${codeDocument.type} prize type) using **${codeDocument.id}** code on the **${guild?.name}** server.`, config.eventLogs.channelID, config.eventLogs.loggerName);
                                             }
                                             else { // when one of documents failed to update
-                                                updateCodeCache(userCode, null);
+                                                updateCodeCache(userCode, { available: false }); // disable key from cache
                                                 logger('error', `event.js:3 switch priority() Failed to update '${codeDocument.id}' or '${highPrize.timestamp}' document request by '${author.tag}'(${author.id}) user.`);
                                                 botReply(`Congratulations, you won: **${highPrize.name}**!\n${getEmoji(config.TEAserverID, 'TEA')} After the event, we will contact you to claim your prize!\nHowever, there was an issue with saving document changes.\nPlease make a screenshot of this message and report it to **${config.ownerTag}**\nTimestamp: \`${Date.now()}\``, message);
                                                 sendEmbedLog(`<@${codeDocument.userID}> | ${codeDocument.userTag} | ${codeDocument.userID}\nUser has claimed **${highPrize.name}** (${highPrize.priority} ${codeDocument.type} prize type) using **${codeDocument.id}** code on the **${guild?.name}** server.\n_However, there was an issue with saving document changes._`, config.eventLogs.channelID, config.eventLogs.loggerName);
@@ -134,13 +134,13 @@ module.exports.run = async (bot, message, args) => {
                                                         const updatedCodeDoc = await codeDocument.save(); // save code document
 
                                                         if (updatedCodeDoc === codeDocument && updatedPrizeDoc === lowPrize) { // when both documents are update correctly
-                                                            updateCodeCache(userCode, null);
+                                                            updateCodeCache(userCode, { available: false }); // disable key from cache
                                                             logger('event', `event.js:6 switch priority() Document '${codeDocument.id}' and '${lowPrize.timestamp}' has been updated successfully by the '${author.tag}'(${author.id}).`);
                                                             botReply(`Congratulations! You won: **${lowPrize.name}**!\n${getEmoji(config.TEAserverID, 'TEA')} After the event, we will contact you to claim your prize!`, message);
                                                             sendEmbedLog(`<@${codeDocument.userID}> | ${codeDocument.userTag} | ${codeDocument.userID}\nUser has claimed **${lowPrize.name}** (${lowPrize.priority} ${codeDocument.type} prize type) using **${codeDocument.id}** code on the **${guild?.name}** server.`, config.eventLogs.channelID, config.eventLogs.loggerName);
                                                         }
                                                         else { // when one of documents failed to update
-                                                            updateCodeCache(userCode, null);
+                                                            updateCodeCache(userCode, { available: false }); // disable key from cache
                                                             logger('error', `event.js:7 switch priority() Failed to update '${codeDocument.id}' or '${lowPrize.timestamp}' document request by '${author.tag}'(${author.id}) user.`);
                                                             botReply(`Congratulations! You won: **${lowPrize.name}**!\n${getEmoji(config.TEAserverID, 'TEA')} After the event, we will contact you to claim your prize!\nHowever, there was an issue with saving document changes.\nPlease make a screenshot of this message and report it to **${config.ownerTag}**\nTimestamp: \`${Date.now()}\``, message);
                                                             sendEmbedLog(`<@${codeDocument.userID}> | ${codeDocument.userTag} | ${codeDocument.userID}\nUser has claimed **${lowPrize.name}** (${lowPrize.priority} ${codeDocument.type} prize type) using **${codeDocument.id}** code on the **${guild?.name}** server.\n_However, there was an issue with saving document changes._`, config.eventLogs.channelID, config.eventLogs.loggerName);
@@ -164,7 +164,7 @@ module.exports.run = async (bot, message, args) => {
                                                 .then(codeDoc => {
 
                                                     if (codeDoc) { // check if document exist and updated
-                                                        updateCodeCache(userCode, null);
+                                                        updateCodeCache(userCode, { available: false }); // disable key from cache
                                                         logger('error', `event.js:11 switch priority() Updated '${userCode}' document, but without prize assigned to it.`);
                                                         botReply(`Congratulations! You won **something**, but due to a bug, I can't show exactly what it is.\nPlease make a screenshot of this message and report it to **${config.ownerTag}**\nTimestamp: \`${Date.now()}\``, message);
                                                         sendEmbedLog(`<@${codeDoc.userID}> | ${codeDoc.userTag} | ${codeDoc.userID}\nUser has claimed **undefined prize** using **${codeDoc.id}** code on the **${guild?.name}** server.\n_There wasn't a document with the prize to assign to this code._`, config.eventLogs.channelID, config.eventLogs.loggerName);
@@ -210,7 +210,8 @@ module.exports.run = async (bot, message, args) => {
         }
 
     } else {
-        if (codeValidation(userCode).code === 'invalid_code') botReply(`This code has already been redeemed or is not valid.`, message);
+        if (codeValidation(userCode).code === 'invalid_code') botReply(`This code seems to be invalid. Make sure to type it correctly!`, message);
+        else if (codeValidation(userCode).code === 'used_code') botReply(`This code is already redeemed by the other member.`, message);
         else botReply(`**Your code could not be redeemed**, invalid code status 🐛\nContact **${config.ownerTag}** to investigate.`, message);
     }
 };

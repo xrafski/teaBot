@@ -111,13 +111,14 @@ async function loadEventCodes(codeType, callback) {
         switch (codeType?.toLowerCase()) {
             case 'fixed': {
 
-                return await eventFixedCodeModel.find({ available: true }).exec()
+                return await eventFixedCodeModel.find({ available: { $exists: true } }).exec()
                     .then(docs => {
 
                         let cacheNumber = 0;
                         for (const code of docs) {
-                            eventCodeCache[code.id] = { available: code.available, type: code.type, hint: code.hint };
                             cacheNumber++;
+                            if (code.available === true) eventCodeCache[code.id] = { available: code.available, type: code.type, hint: code.hint };
+                            else eventCodeCache[code.id] = { available: code.available };
                         }
                         callback(null, { message: `'eventCodeCache Object' successfully loaded '${cacheNumber}' codes from the 'event-codes-fixed' collection.`, eventCodeCache, length: cacheNumber });
                     }).catch(err => callback(err, null));
@@ -125,12 +126,14 @@ async function loadEventCodes(codeType, callback) {
 
             case 'priority': {
 
-                return await eventPriorityCodeModel.find({ available: true }).exec()
+                return await eventPriorityCodeModel.find({ available: { $exists: true } }).exec()
                     .then(docs => {
+                        
                         let cacheNumber = 0;
                         for (const code of docs) {
-                            eventCodeCache[code.id] = { available: code.available, type: code.type, hint: code.hint };
                             cacheNumber++;
+                            if (code.available === true) eventCodeCache[code.id] = { available: code.available, type: code.type, hint: code.hint };
+                            else eventCodeCache[code.id] = { available: code.available };
                         }
                         callback(null, { message: `'eventCodeCache Object' successfully loaded '${cacheNumber}' codes from the 'event-codes-priority' collection.`, eventCodeCache, length: cacheNumber });
                     })
@@ -166,7 +169,7 @@ function remainingCodes() {
 
 /**
  * Validate code with the cache.
- * 'missing_code'/'invalid_code'
+ * 'missing_code'/'invalid_code'/'used_code'/'correct_code'
  * code: 'correct_code' type: fixed
  * @param {String} codeStr - Event code ID.
  * @returns object { code: 'status', type: 'codeType' }
@@ -174,7 +177,7 @@ function remainingCodes() {
 function codeValidation(codeStr) {
     if (!codeStr) return { code: 'missing_code' };
     else if (!eventCodeCache[codeStr]) return { code: 'invalid_code' };
-    // else if (eventCodeCache[codeStr].available === false) return { code: 'used_code' };
+    else if (eventCodeCache[codeStr].available === false) return { code: 'used_code' };
     else if (eventCodeCache[codeStr].available === true) return { code: 'correct_code', type: eventCodeCache[codeStr].type };
     else return { code: 'unknown_error' };
 }

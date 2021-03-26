@@ -1,5 +1,5 @@
 const { bot, botReply, ownerDM, logger } = require('../teaBot');
-const { botPrefix, botOwnerID, TEAserverID } = require('../bot-settings.json');
+const { botPrefix, botOwnerID, TEAserverID, accessRole } = require('../bot-settings.json');
 
 bot.on("message", async message => {
     const { content, channel, guild, author } = message;
@@ -22,6 +22,12 @@ bot.on("message", async message => {
             case "administrator": { // TEA Main Server user with ADMINISTRATOR permission
                 if (channel.type != "dm") {
                     if (guild.id === TEAserverID && message.member.hasPermission('ADMINISTRATOR')) return cmdFile.run(bot, message, args);
+                    else return botReply(`You don't have access to run **${botPrefix}${cmdFile.help.name}**!`, message);
+                } else return botReply(`**${botPrefix}${cmdFile.help.name}** is not available on DM!`, message);
+            }
+            case "eventmanager": { // TEA Event Manager Access
+                if (channel.type != "dm") {
+                    if (guild.id === TEAserverID && guild.members.cache.get(author.id)?.roles.cache.some(role => role.id === accessRole.eventManagerID)) return cmdFile.run(bot, message, args);
                     else return botReply(`You don't have access to run **${botPrefix}${cmdFile.help.name}**!`, message);
                 } else return botReply(`**${botPrefix}${cmdFile.help.name}** is not available on DM!`, message);
             }
