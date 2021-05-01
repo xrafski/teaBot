@@ -241,7 +241,7 @@ function embedMessage(text, user) {
 }
 
 function getEmoji(serverID, emojiName) {
-	let getEmoji = bot.guilds.cache.get(serverID).emojis.cache.find(emoji => emoji.name === emojiName);
+	let getEmoji = bot.guilds.cache.get(serverID)?.emojis.cache.find(emoji => emoji.name === emojiName);
 	if (getEmoji) return getEmoji;
 	else return getEmoji = '🐛';
 	// else return undefined;
