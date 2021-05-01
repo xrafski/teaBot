@@ -28,7 +28,7 @@ bot.on('guildMemberAdd', member => {
                             { name: 'Alternate accounts', value: `\`${userAlternate = userAlternate || 'No other known accounts'}\``, inline: false },
                             { name: 'Evidence(s)', value: userEvidence, inline: false },
                             { name: 'Additional notes', value: userNotes = userNotes || 'No notes', inline: false },
-                            { name: 'Links', value: `Appeal is avaiable over [here](https://forms.gle/oR78HXAJcdSHBEvx7 'Appeal Google Form')\nPlayer report [here](https://forms.gle/8jR6NCXeZZPAsQPf6 'Report Google Form')`, inline: false },
+                            { name: 'Links', value: `Appeal is available over [here](https://forms.gle/oR78HXAJcdSHBEvx7 'Appeal Google Form')\nPlayer report [here](https://forms.gle/8jR6NCXeZZPAsQPf6 'Report Google Form')`, inline: false },
                         )
                         .setThumbnail(TEAlogo)
                         .setTimestamp();
