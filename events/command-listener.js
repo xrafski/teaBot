@@ -15,8 +15,8 @@ bot.on("message", async message => {
         switch (cmdFile.help.type?.toLowerCase()) {
             case 'botowner': { // only me
                 if (channel.type != "dm") {
-                    if (author.id === botOwnerID) return cmdFile.run(bot, message, args);
-                    else return botReply(`Insufficient permissions!\nOnly the bot owner can use **${botPrefix}${cmdFile.help.name}** command!`, message);
+                    if (author.id === botOwnerID || guild.members.cache.get(author.id)?.roles.cache.some(role => role.id === accessRole.projectDirectorID)) return cmdFile.run(bot, message, args);
+                    else return botReply(`Insufficient permissions!\nOnly the bot owner/director can use **${botPrefix}${cmdFile.help.name}** command!`, message);
                 } else return botReply(`**${botPrefix}${cmdFile.help.name}** is not available on DM!`, message);
             }
             case "administrator": { // TEA Main Server user with ADMINISTRATOR permission

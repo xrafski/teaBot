@@ -11,7 +11,7 @@ const bot = new Discord.Client({ partials: ['MESSAGE', 'REACTION'] });
 const BotVersion = '1.0.11';
 
 // define icon image url for embeds
-const TEAlogo = 'https://skillez.eu/images/discord/teabanner.png';
+const TEAlogo = 'https://i.imgur.com/7VUCJ75.png';
 
 const emojiCharacters = { // some ASCII emojis to make my life easier
 	a: '🇦', b: '🇧', c: '🇨', d: '🇩',
@@ -280,7 +280,7 @@ function sendEmbedLog(MessageTest, channelID, webHookName) {
 					const existingHook = hooks.find(hook => hook.owner === bot.user && hook.name === webHookName);
 					if (!existingHook) {
 						logChannel.createWebhook(webHookName, {
-							avatar: 'https://skillez.eu/images/discord/teaicon.png',
+							avatar: 'https://i.imgur.com/XqgWBtL.png',
 							reason: 'Webhook required to send log messages.'
 						})
 							.then(hook => {
