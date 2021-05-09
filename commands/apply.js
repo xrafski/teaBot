@@ -245,6 +245,7 @@ module.exports.run = async (bot, message) => {
                     { name: 'Discord Invite ▼', value: `<https://discord.gg/${clubDiscordVar}>`, inline: false },
                     { name: 'Requester ▼', value: `${cRequesterVar} • ${cRequesterVar.tag} • ${cRequesterVar.id}`, inline: false },
                 )
+                .setFooter('TEA Registry Request')
 
             registryChannel.send(embed_registry_message)
                 .then(() => {
