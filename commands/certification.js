@@ -34,17 +34,16 @@ module.exports.run = async (bot, message, args) => {
                 botReply(embed_certification_details, message);
                 // .then(msg => messageRemoverWithReact(msg, message.author));
 
-            } else return printResultsMessage(null);
-        } else if (JSON.parse(data).find(club => club.guildDiscordID === message.guild.id)) {
-            return printResultsMessage(message.guild.id);
-        } else return printResultsMessage(null);
+            } else return printResultsMessage(undefined);
+        } else if (JSON.parse(data).find(club => club.guildDiscordID === message.guild.id)) return printResultsMessage(message.guild.id);
+        else return printResultsMessage(undefined);
     });
 
     function printResultsMessage(guildID) {
         switch (guildID) {
             case config.TEAserverID: return botReply(embedMessage(`${getEmoji(config.TEAserverID, 'verified')} **${message.guild.name}** is a primary server of the ${getEmoji(config.TEAserverID, 'TEA')} Trove Ethics Alliance.`, message.author), message);
             case undefined: return botReply(embedMessage(`❌ This club is not a certified member of the ${getEmoji(config.TEAserverID, 'TEA')} **Trove Ethics Alliance**`, message.author), message);
-            default: return botReply(embedMessage(`${getEmoji(config.TEAserverID, 'verified')} **${message.guild.name}** is a certified member of the ${getEmoji(config.TEAserverID, 'TEA')} Trove Ethics Alliance.`, message.author), message);
+            default: return botReply(`Error to get data, try again later!`, message);
         }
     }
 };
