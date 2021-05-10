@@ -18,6 +18,7 @@ module.exports.run = async (bot, message) => {
     let clubRepresentativeVar; // representative ✅
     let clubDiscordVar; // discord invite code ✅
     let cRequesterVar; // person who used this command ✅
+    let clubMemberCountVar; // server member count
 
     const questionResponseTime = 600000; // 10 mins
     const filter = m => m.author.id === message.author.id; // await message filter
@@ -26,7 +27,10 @@ module.exports.run = async (bot, message) => {
     if (guild.id != config.TEAserverID) { // check if its not TEA server
         if (member.hasPermission('ADMINISTRATOR')) { // check if user is an admin
             if (guild.memberCount < 100) return botReply(`Unfortunately, your discord server doesn't meet your minimal member requirements (${guild.memberCount}/**100**), try again later.`, message);
-            else ClubNameQ(); // run the question chain
+            else {
+                clubMemberCountVar = guild.memberCount;
+                ClubNameQ(); // run the question chain
+            }
         } else botReply(`This command is only available for server admins!`, message);
     } else ClubNameQ(); // run the question chain
 
@@ -234,7 +238,7 @@ module.exports.run = async (bot, message) => {
             // define the embed: send apply to registry channel with provided information
             const embed_registry_message = new Discord.MessageEmbed()
                 .setColor('GREEN')
-                .setAuthor(`New alliance registry: '${clubNameVar}'`, TEAlogo)
+                .setAuthor(`New alliance registry: '${clubNameVar}' ${clubMemberCountVar? `(${clubMemberCountVar})` : ''}`, TEAlogo)
                 .setDescription(clubDescriptionVar)
                 .addFields(
                     { name: 'Club Name ▼', value: clubNameVar, inline: true },

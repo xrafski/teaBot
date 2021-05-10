@@ -7,7 +7,7 @@ bot.on('message', async message => {
         const notifChannel = bot.channels.cache.get(notificationPings.notificationChannelID);
         if (!notifChannel) return logger('warn', `notifications.js:1 Notification channel is not found.`);
 
-        notifChannel.send(`${getEmoji(TEAserverID, 'TEA')} <@&${notificationPings.registryNotifRoleID}>\nClub **${embeds[0].fields[0].value}** by ${embeds[0].fields[6].value}\n${message.url}`)
+        notifChannel.send(`${getEmoji(TEAserverID, 'TEA')} Club **${embeds[0].fields[0].value}** has send a registry request for the alliance!\n${message.url}\n<@&${notificationPings.registryNotifRoleID}>`)
             .catch(err => logger('warn', `notifications.js:2 Send notification message.`, err));
     } else return;
 });
