@@ -8,7 +8,7 @@ const { MongoClient } = require('./functions/mongodb-connection');
 const bot = new Discord.Client({ partials: ['MESSAGE', 'REACTION'] });
 
 // define current bot version.
-const BotVersion = '1.0.13a';
+const BotVersion = '1.0.14';
 
 // define icon image url for embeds
 const TEAlogo = 'https://i.imgur.com/7VUCJ75.png';

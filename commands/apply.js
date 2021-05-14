@@ -22,7 +22,7 @@ module.exports.run = async (bot, message) => {
 
     const questionResponseTime = 600000; // 10 mins
     const filter = m => m.author.id === message.author.id; // await message filter
-    const { guild, member } = message;
+    const { guild, member, author } = message;
 
     if (guild.id != config.TEAserverID) { // check if its not TEA server
         if (member.hasPermission('ADMINISTRATOR')) { // check if user is an admin
@@ -218,7 +218,7 @@ module.exports.run = async (bot, message) => {
                             clubDiscordVar = answerContent;
                             // return userInputSummary();
                             // message.reply(userInputSummary());
-                            return postResults();
+                            return ConfirmationPromt();
                         }
 
                     }).catch(error => {
@@ -226,6 +226,59 @@ module.exports.run = async (bot, message) => {
                         else logger('error', 'apply.js:2 clubDiscordQ() Answer error', error);
                     });
             });
+    }
+
+    function ConfirmationPromt() {
+        const embed_test = new Discord.MessageEmbed()
+            .setColor('GREEN')
+            .setDescription(`Description ▼\n${clubDescriptionVar}`)
+            .setFooter('Click ✅ to confirm and send the form.')
+                .addFields(
+                    { name: 'Club Name ▼', value: clubNameVar, inline: true },
+                    { name: 'Level ▼', value: clubLevelVar, inline: false },
+                    { name: 'Joinworld ▼', value: clubJoinworldVar, inline: false },
+                    { name: 'Requirements ▼', value: clubRequirementsVar, inline: false },
+                    { name: 'Representative ▼', value: `\`${clubRepresentativeVar}\``, inline: false },
+                    { name: 'Discord Invite ▼', value: `<https://discord.gg/${clubDiscordVar}>`, inline: false },
+                    { name: 'Requester ▼', value: `${cRequesterVar} • ${cRequesterVar?.tag} • ${cRequesterVar?.id}`, inline: false },
+                )
+
+        return message.reply(`\n> Are you **sure** to send this form?`, embed_test)
+            .then(async Question => {
+                if (Question) { // check if the bot sent question to the user, if so, collect one reply from the message.author.
+                    const emojiFilter = (reaction, user) => { // accept interaction only from the message author
+                        return ['✅', '❌'].includes(reaction.emoji.name) && !user.bot && author === user;
+                    }
+
+                    Question.awaitReactions(emojiFilter, { max: 1, time: questionResponseTime })
+                        .then(collected => {
+                            const reaction = collected.first();
+
+                            switch (reaction.emoji.name) {
+                                case '✅': return postResults();
+                                case '❌': return botReply('As you wish, cancelled!', message);
+                                default: return;
+                            }
+                        })
+                        .catch(error => {
+                            if (error.message === "Cannot read property 'emoji' of undefined") return botReply(`❌ There was no reaction within the time limit (${Math.round(questionResponseTime / 60000)}mins)! - Cancelled.`, message);
+                            errorLog(`apply.js:1 ConfirmationPromt() Error when user answered the question.`, error);
+                        });
+
+                    try {
+                        await Question.react('✅');
+                        await Question.react('❌');
+                    } catch (error) {
+                        if (error.message === 'Unknown Message') return;
+                        botReply(`An unknown error occured ;(`, message);
+                        errorLog(`apply.js:2 ConfirmationPromt() Error to add reactions probably wrong emojis or missing permissions.`, error);
+                    }
+                } else return logger('warn', `apply.js:3 ConfirmationPromt() Error to send the message`);
+            }).catch(error => {
+                botReply(`❌ An unknown error occured, try again later!`, message);
+                logger(`apply.js:4 ConfirmationPromt() Error`, error);
+            });
+
     }
 
     function postResults() {
@@ -245,16 +298,14 @@ module.exports.run = async (bot, message) => {
                     { name: 'Level ▼', value: clubLevelVar, inline: false },
                     { name: 'Joinworld ▼', value: clubJoinworldVar, inline: false },
                     { name: 'Requirements ▼', value: clubRequirementsVar, inline: false },
-                    { name: 'Representative ▼', value: clubRepresentativeVar, inline: false },
+                    { name: 'Representative ▼', value: `\`${clubRepresentativeVar}\``, inline: false },
                     { name: 'Discord Invite ▼', value: `<https://discord.gg/${clubDiscordVar}>`, inline: false },
-                    { name: 'Requester ▼', value: `${cRequesterVar} • ${cRequesterVar.tag} • ${cRequesterVar.id}`, inline: false },
+                    { name: 'Requester ▼', value: `${cRequesterVar} • ${cRequesterVar?.tag} • ${cRequesterVar?.id}`, inline: false },
                 )
                 .setFooter('TEA Registry Request')
 
             registryChannel.send(embed_registry_message)
-                .then(() => {
-                    botReply(`${getEmoji(config.TEAserverID, 'TEA')}TEA club registry request has been sent!`, message);
-                })
+                .then(() => botReply(`${getEmoji(config.TEAserverID, 'TEA')}TEA club registry request has been sent!`, message))
                 .catch(err => {
                     logger('error', 'apply.js:2 postResults() Error to send embed message', err);
                     botReply('Error to send club registry request, try again later ;-(', message);
