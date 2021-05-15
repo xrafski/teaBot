@@ -10,17 +10,19 @@ module.exports.help = {
 
 module.exports.run = async (bot, message) => {
     let clubList = '';
+    let memberCount = 0;
     bot.guilds.cache.forEach(guild => {
+        memberCount = memberCount + guild.memberCount;
 
         for (const hidden of config.certification.hiddenServers) {
             if (guild.id === hidden.guildDiscordID) return;
         }
-        clubList = clubList + `\n${guild.name} • '${guild.id}'`;
+        clubList = clubList + `\n**${guild.name}**(${guild.memberCount}) ► ${guild.id}`;
     });
 
     const embed_club_list = new Discord.MessageEmbed()
         .setColor('#0095ff')
-        .setAuthor(`Club List`, TEAlogo)
+        .setAuthor(`Club List (${bot.guilds.cache.size} servers with ${memberCount} users)`, TEAlogo)
         .setDescription(clubList = (clubList.length > 2000 ? `${clubList.slice(0, 2000)}...` : `${clubList}`) || 'No clubs found.')
         .setThumbnail(TEAlogo)
         .setTimestamp();
