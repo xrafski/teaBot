@@ -1,16 +1,16 @@
+const { botReply, logger, embedMessage } = require('../teaBot');
 const config = require("../bot-settings.json");
 const { updateEventStatus, checkEventCache, updateCodeCache, blockEventWhileProcessing, codeValidation } = require("../cache/tea-event-cache");
 const { MongoClient } = require("../functions/mongodb-connection");
 const { eventFixedCodeModel } = require("../schema/event-codes-fixed");
 const { eventPriorityCodeModel } = require("../schema/event-codes-priority");
 const { eventPriorityPrizeModel } = require("../schema/event-priority-prizes");
-const { botReply, logger, embedMessage } = require('../teaBot');
 
 module.exports.help = {
     name: "code",
     description: "Manage codes for event system.",
     type: "eventmanager",
-    usage: `ℹ️ Format: multiple formats (check examples below)\nℹ️ Example(s):\n**${config.botPrefix}code status** - check event status\n**${config.botPrefix}code enable** - enable event system\n**${config.botPrefix}code disable** - disable event system\n**${config.botPrefix}code add** - interactive menu to add codes\n**${config.botPrefix}code del codeStr codeType** - remove codes\n**${config.botPrefix}code prize add** - interactive menu to add priority prizes\n**${config.botPrefix}code unlock** - in case of a bug, manual command to unlock ${config.botPrefix}event command`
+    usage: `ℹ️ Format: multiple formats (check examples below)\nℹ️ Example(s):\n**${config.botDetails.prefix}code status** - check event status\n**${config.botDetails.prefix}code enable** - enable event system\n**${config.botDetails.prefix}code disable** - disable event system\n**${config.botDetails.prefix}code add** - interactive menu to add codes\n**${config.botDetails.prefix}code del codeStr codeType** - remove codes\n**${config.botDetails.prefix}code prize add** - interactive menu to add priority prizes\n**${config.botDetails.prefix}code unlock** - in case of a bug, manual command to unlock ${config.botDetails.prefix}event command`
 };
 
 module.exports.run = async (bot, message, args) => {
@@ -32,7 +32,7 @@ module.exports.run = async (bot, message, args) => {
                     return botReply('Database error, try again later!', message);
                 }
                 logger('log', `code.js:2 switch enable() ${res.message}`);
-                botReply(res.message + `\nEvent command (${config.botPrefix}event) is now **enabled**.`, message);
+                botReply(res.message + `\nEvent command (${config.botDetails.prefix}event) is now **enabled**.`, message);
             });
         }
 
@@ -43,19 +43,19 @@ module.exports.run = async (bot, message, args) => {
                     return botReply('Database error, try again later!', message);
                 }
                 logger('log', `code.js:2 switch disable() ${res.message}`);
-                botReply(res.message + `\nEvent command (${config.botPrefix}event) is now **disabled**.`, message);
+                botReply(res.message + `\nEvent command (${config.botDetails.prefix}event) is now **disabled**.`, message);
             });
         }
 
         case 'unlock': {
             blockEventWhileProcessing(false);
-            return botReply(`Unlocked **${config.botPrefix}event** command.`, message);
+            return botReply(`Unlocked **${config.botDetails.prefix}event** command.`, message);
         }
 
         case 'add': return codeTypeQuestion();
 
         case 'del': {
-            if (!codeType) return botReply(`Missing code type: 'fixed'/'priority'/'prize'`, message);
+            if (!codeType) return botReply(`Not enough arguments, missing either codeString or its type ('fixed'/'priority'/'prize').`, message);
 
             if (codeType.toLowerCase() === 'fixed') {
 
@@ -137,29 +137,29 @@ module.exports.run = async (bot, message, args) => {
                 });
             }
 
-            else return botReply(`Invalid code type, available types: fixed/priority/prize`, message);
+            else return botReply(`Invalid code type, available types: fixed/priority/prize.`, message);
         }
 
         case 'prize': {
             if (codeStr?.toLowerCase() === 'add') return prizeItemName();
-            else return botReply(`Wrong command format, type **${config.botPrefix}help ${module.exports.help.name}** to see usage and examples!`, message);
+            else return botReply(`Wrong command format, type **${config.botDetails.prefix}help ${module.exports.help.name}** to see usage and examples!`, message);
         }
 
         default: {
-            if (config.botDebug) console.log({ message: 'code.js eventCodeCache Object', eventCodeCache: checkEventCache('eventcodes'), eventStatus: checkEventCache('eventstatus'), blockEventCommand: checkEventCache('blockevent') });
-            return botReply(`Wrong command format, type **${config.botPrefix}help ${module.exports.help.name}** to see usage and examples!`, message);
+            if (config.botDetails.debugTest) console.log({ message: 'code.js eventCodeCache Object', eventCodeCache: checkEventCache('eventcodes'), eventStatus: checkEventCache('eventstatus'), blockEventCommand: checkEventCache('blockevent') });
+            return botReply(`Wrong command format, type **${config.botDetails.prefix}help ${module.exports.help.name}** to see usage and examples!`, message);
         }
     }
 
     function prizeItemName(additionalText) { // prize chain
         if (!additionalText) additionalText = '';
         else additionalText = additionalText + '\n(you can type **exit** to cancel)\n';
-        return botReply(`${additionalText}\n> **Enter prize name**:`, message)
+        return botReply(`${additionalText}> ${author} **Enter prize name**:`, message)
             .then(Question => {
                 if (Question) { // check if the bot sent question to the user, if so, collect next reply from the message.author.
                     message.channel.awaitMessages(m => m.author.id === message.author.id, { max: 1, time: 60000 })
                         .then(Answer => {
-                            if (Answer.first().content.startsWith(config.botPrefix)) return; // exit if other command was typed
+                            if (Answer.first().content.startsWith(config.botDetails.prefix)) return; // exit if other command was typed
                             else if (Answer.first().content.toLowerCase() === 'exit' || Answer.first().content.toLowerCase() === 'cancel') return botReply(`❌ Cancelled.`, message);
                             else if (Answer.first().content.length < 3 || Answer.first().content.length > 50) return codeItemName('❌ Prize name [3-50] characters long.');
                             else {
@@ -174,7 +174,7 @@ module.exports.run = async (bot, message, args) => {
                 }
             })
             .catch(error => {
-                botReply(`❌ An unknown error occured, please contact **${config.ownerTag}** to fix this issue!`, message);
+                botReply(`❌ An unknown error occured, please contact **${config.botDetails.owner.tag}** to fix this issue!`, message);
                 errorLog(`code.js:1 codeItemNameQuestion() Error`, error);
             });
     }
@@ -182,12 +182,12 @@ module.exports.run = async (bot, message, args) => {
     function prizePriorityQuestion(additionalText) { // prize chain
         if (!additionalText) additionalText = '';
         else additionalText = additionalText + '\n(you can type **exit** to cancel)\n';
-        return botReply(`${additionalText}\n> **Select priority type**: **high** or **low**`, message)
+        return botReply(`${additionalText}> ${author} **Select priority type**: **high** or **low**`, message)
             .then(Question => {
                 if (Question) { // check if the bot sent question to the user, if so, collect next reply from the message.author.
                     message.channel.awaitMessages(m => m.author.id === message.author.id, { max: 1, time: 60000 })
                         .then(async Answer => {
-                            if (Answer.first().content.startsWith(config.botPrefix)) return; // exit if other command was typed
+                            if (Answer.first().content.startsWith(config.botDetails.prefix)) return; // exit if other command was typed
 
                             switch (Answer.first().content.toLowerCase()) {
                                 case 'exit': case 'cancel': return botReply(`❌ Cancelled.`, message);
@@ -210,7 +210,7 @@ module.exports.run = async (bot, message, args) => {
                 }
             })
             .catch(error => {
-                botReply(`❌ An unknown error occured, please contact **${config.ownerTag}** to fix this issue!`, message);
+                botReply(`❌ An unknown error occured, please contact **${config.botDetails.owner.tag}** to fix this issue!`, message);
                 errorLog(`code.js:1 prizePriorityQuestion() Error`, error);
             });
     }
@@ -218,12 +218,12 @@ module.exports.run = async (bot, message, args) => {
     function codeItemNameQuestion(additionalText) { // fixed chain
         if (!additionalText) additionalText = '';
         else additionalText = additionalText + '\n(you can type **exit** to cancel)\n';
-        return botReply(`${additionalText}\n> **Enter prize name**:`, message)
+        return botReply(`${additionalText}> ${author} **Enter prize name**:`, message)
             .then(Question => {
                 if (Question) { // check if the bot sent question to the user, if so, collect next reply from the message.author.
                     message.channel.awaitMessages(m => m.author.id === message.author.id, { max: 1, time: 60000 })
                         .then(Answer => {
-                            if (Answer.first().content.startsWith(config.botPrefix)) return; // exit if other command was typed
+                            if (Answer.first().content.startsWith(config.botDetails.prefix)) return; // exit if other command was typed
                             else if (Answer.first().content.toLowerCase() === 'exit' || Answer.first().content.toLowerCase() === 'cancel') return botReply(`❌ Cancelled.`, message);
                             else if (Answer.first().content.length < 3 || Answer.first().content.length > 50) return codeItemName('❌ Prize name [3-50] characters long.');
                             else {
@@ -237,7 +237,7 @@ module.exports.run = async (bot, message, args) => {
                 }
             })
             .catch(error => {
-                botReply(`❌ An unknown error occured, please contact **${config.ownerTag}** to fix this issue!`, message);
+                botReply(`❌ An unknown error occured, please contact **${config.botDetails.owner.tag}** to fix this issue!`, message);
                 errorLog(`code.js:1 codeItemNameQuestion() Error`, error);
             });
     }
@@ -245,12 +245,12 @@ module.exports.run = async (bot, message, args) => {
     function codeTypeQuestion(additionalText) { // fixed/priority
         if (!additionalText) additionalText = '';
         else additionalText = additionalText + '\n(you can type **exit** to cancel)\n';
-        return botReply(`${additionalText}\n> **Select code type**: [**fixed** or **priority**]`, message)
+        return botReply(`${additionalText}> ${author} **Select code type**: [**fixed** or **priority**]`, message)
             .then(Question => {
                 if (Question) { // check if the bot sent question to the user, if so, collect next reply from the message.author.
                     message.channel.awaitMessages(m => m.author.id === message.author.id, { max: 1, time: 60000 })
                         .then(Answer => {
-                            if (Answer.first().content.startsWith(config.botPrefix)) return; // exit if other command was typed
+                            if (Answer.first().content.startsWith(config.botDetails.prefix)) return; // exit if other command was typed
 
                             switch (Answer.first().content.toLowerCase()) {
                                 case 'exit': case 'cancel': return botReply(`❌ Cancelled.`, message);
@@ -273,7 +273,7 @@ module.exports.run = async (bot, message, args) => {
                 }
             })
             .catch(error => {
-                botReply(`❌ An unknown error occured, please contact **${config.ownerTag}** to fix this issue!`, message);
+                botReply(`❌ An unknown error occured, please contact **${config.botDetails.owner.tag}** to fix this issue!`, message);
                 errorLog(`code.js:1 codeTypeQuestion() Error`, error);
             });
     }
@@ -281,12 +281,12 @@ module.exports.run = async (bot, message, args) => {
     function codeStrQuestion(additionalText) { // fixed/priority
         if (!additionalText) additionalText = '';
         else additionalText = additionalText + '\n(you can type **exit** to cancel)\n';
-        return botReply(`${additionalText}\n[single word][lower case alphanumeric][3-69 characters long]\n> **Type the custom code for people to use.**`, message)
+        return botReply(`${additionalText}[single word][lower case alphanumeric][3-69 characters long]\n> ${author} **Type the custom code for people to use.**`, message)
             .then(Question => {
                 if (Question) { // check if the bot sent question to the user, if so, collect next reply from the message.author.
                     message.channel.awaitMessages(m => m.author.id === message.author.id, { max: 1, time: 60000 })
                         .then(Answer => {
-                            if (Answer.first().content.startsWith(config.botPrefix)) return; // exit if other command was typed
+                            if (Answer.first().content.startsWith(config.botDetails.prefix)) return; // exit if other command was typed
                             else if (Answer.first().content.toLowerCase() === 'exit' || Answer.first().content.toLowerCase() === 'cancel') return botReply(`❌ Cancelled.`, message);
                             else if (!Answer.first().content.match(/^[a-z0-9]{3,69}$/)) return codeStrQuestion(`❌ Invalid code text format`);
                             else if (codeValidation(Answer.first().content).code != 'invalid_code') return codeStrQuestion(`❌ This code already exist!`)
@@ -301,7 +301,7 @@ module.exports.run = async (bot, message, args) => {
                 }
             })
             .catch(error => {
-                botReply(`❌ An unknown error occured, please contact **${config.ownerTag}** to fix this issue!`, message);
+                botReply(`❌ An unknown error occured, please contact **${config.botDetails.owner.tag}** to fix this issue!`, message);
                 errorLog(`code.js:1 codeStrQuestion() Error`, error);
             });
     }
@@ -309,12 +309,12 @@ module.exports.run = async (bot, message, args) => {
     function codeHintQuestion(additionalText) { // fixed/priority
         if (!additionalText) additionalText = '';
         else additionalText = additionalText + '\n(you can type **exit** to cancel)\n';
-        return botReply(`${additionalText}\nIf you dont want to add hint type **none**\nExamples: \`<https://skillez.eu/> | /joinworld RNG\` or \`<https://link.to.image>\`\n> **Type hint text**: [4-100 characters long].`, message)
+        return botReply(`${additionalText}> ${author} If you dont want to add hint type **none**\nExamples: \`<https://skillez.eu/> | /joinworld RNG\` or \`<https://link.to.image>\`\n> **Type hint text**: [4-100 characters long].`, message)
             .then(Question => {
                 if (Question) { // check if the bot sent question to the user, if so, collect next reply from the message.author.
                     message.channel.awaitMessages(m => m.author.id === message.author.id, { max: 1, time: 60000 })
                         .then(async Answer => {
-                            if (Answer.first().content.startsWith(config.botPrefix)) return; // exit if other command was typed
+                            if (Answer.first().content.startsWith(config.botDetails.prefix)) return; // exit if other command was typed
                             else if (Answer.first().content.length < 4 || Answer.first().content.length > 100) return codeHintQuestion(`❌ Your hint is either too short or too long.`);
                             else if (Answer.first().content.toLowerCase() === 'exit' || Answer.first().content.toLowerCase() === 'cancel') return botReply(`❌ Cancelled.`, message);
                             else if (Answer.first().content.toLowerCase() === 'none') return await addCode(menuCodeStr, menuCodeType, menuItemName, menuCodeHint, menuPrizePriority);
@@ -329,7 +329,7 @@ module.exports.run = async (bot, message, args) => {
                 }
             })
             .catch(error => {
-                botReply(`❌ An unknown error occured, please contact **${config.ownerTag}** to fix this issue!`, message);
+                botReply(`❌ An unknown error occured, please contact **${config.botDetails.owner.tag}** to fix this issue!`, message);
                 errorLog(`code.js:1 codeHintQuestion() Error`, error);
             });
     }

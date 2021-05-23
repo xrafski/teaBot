@@ -5,11 +5,11 @@ module.exports.help = {
     name: "reload",
     description: "Reload a command.",
     type: "administrator",
-    usage: `ℹ️ Format: **${config.botPrefix}reload commandName**\n\nℹ️ Example(s):\n${config.botPrefix}reload uptime`
+    usage: `ℹ️ Format: **${config.botDetails.prefix}reload commandName**\n\nℹ️ Example(s):\n${config.botDetails.prefix}reload uptime`
 };
 
 module.exports.run = async (bot, message, args) => {
-    if (!args.length) return botReply(`Wrong command format, type **${config.botPrefix}help ${module.exports.help.name}** to see usage and examples!`, message);
+    if (!args.length) return botReply(`Wrong command format, type **${config.botDetails.prefix}help ${module.exports.help.name}** to see usage and examples!`, message);
 
     const commandName = args[0].toLowerCase();
     const command = getCommand(commandName);

@@ -1,12 +1,12 @@
-const config = require("../bot-settings.json");
 const { getEmoji, botReply, embedMessage, TEAlogo, Discord, logger } = require("../teaBot");
+const config = require("../bot-settings.json");
 const fs = require('fs');
 
 module.exports.help = {
     name: "certification",
     description: "Check if this club is certified TEA member.",
     type: "public",
-    usage: `ℹ️ Format: **${config.botPrefix}certification** details(optional)`
+    usage: `ℹ️ Format: **${config.botDetails.prefix}certification** details(optional)`
 };
 
 module.exports.run = async (bot, message, args) => {
@@ -22,7 +22,7 @@ module.exports.run = async (bot, message, args) => {
                 const embed_certification_details = new Discord.MessageEmbed()
                     .setColor('#fcec03')
                     .setAuthor(`Certification Details`, TEAlogo)
-                    .setTitle(`${message.guild.name} ${getEmoji(config.TEAserverID, 'verified')}`)
+                    .setTitle(`${message.guild.name} ${getEmoji(config.botDetails.TEAserverID, 'verified')}`)
                     .setDescription(`**Club Name:** ${guildName}\n**Representative:** ${guildRepresentative}\n**In-game club world:** ${guildJoinworld = (guildJoinworld ? `\`/joinworld ${guildJoinworld?.toLowerCase()}\`` : 'Data is not provided')}\n**Discord Invite:** ${guildDiscordLink = guildDiscordLink || "Club has not provided a link"}\n**Discord Server ID:** ${guildDiscordID}`)
                     .addFields(
                         { name: 'Description', value: guildDescription, inline: false },
@@ -41,8 +41,8 @@ module.exports.run = async (bot, message, args) => {
 
     function printResultsMessage(guildID) {
         switch (guildID) {
-            case config.TEAserverID: return botReply(embedMessage(`${getEmoji(config.TEAserverID, 'verified')} **${message.guild.name}** is a primary server of the ${getEmoji(config.TEAserverID, 'TEA')} Trove Ethics Alliance.`, message.author), message);
-            case undefined: return botReply(embedMessage(`❌ This club is not a certified member of the ${getEmoji(config.TEAserverID, 'TEA')} **Trove Ethics Alliance**`, message.author), message);
+            case config.botDetails.TEAserverID: return botReply(embedMessage(`${getEmoji(config.botDetails.TEAserverID, 'verified')} **${message.guild.name}** is a primary server of the ${getEmoji(config.botDetails.TEAserverID, 'TEA')} Trove Ethics Alliance.`, message.author), message);
+            case undefined: return botReply(embedMessage(`❌ This club is not a certified member of the ${getEmoji(config.botDetails.TEAserverID, 'TEA')} **Trove Ethics Alliance**`, message.author), message);
             default: return botReply(`Error to get data, try again later!`, message);
         }
     }

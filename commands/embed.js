@@ -1,11 +1,11 @@
-const config = require("../bot-settings.json");
 const { botReply, logger } = require("../teaBot");
+const config = require("../bot-settings.json");
 
 module.exports.help = {
     name: "embed",
     description: "Send an embed message with RAW JSON data - <https://carl.gg/>",
     type: "administrator",
-    usage: `ℹ️ Format: **${config.botPrefix}embed JSONdata** | message content\nℹ️ Example(s):\n${config.botPrefix}embed {"description":"embed message","author":{"name":"Test"},"color":1174281}\n${config.botPrefix}embed {"description":"embed message","author":{"name":"Test"},"color":62708} | My Test Embed`
+    usage: `ℹ️ Format: **${config.botDetails.prefix}embed JSONdata** | message content\nℹ️ Example(s):\n${config.botDetails.prefix}embed {"description":"embed message","author":{"name":"Test"},"color":1174281}\n${config.botDetails.prefix}embed {"description":"embed message","author":{"name":"Test"},"color":62708} | My Test Embed`
 };
 
 module.exports.run = async (bot, message, args) => {
@@ -37,7 +37,7 @@ module.exports.run = async (bot, message, args) => {
         };
         return message.channel.send(messageBot)
             .catch(error => logger(`embed.js:3 () Send the message`, error));
-    } else return botReply(`Wrong command format, type **${config.botPrefix}help ${module.exports.help.name}** to see usage and examples!`, message);
+    } else return botReply(`Wrong command format, type **${config.botDetails.prefix}help ${module.exports.help.name}** to see usage and examples!`, message);
 
 
     // // for webhook

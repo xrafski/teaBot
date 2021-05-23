@@ -1,11 +1,11 @@
-const config = require("../bot-settings.json");
 const { TEAlogo, Discord, getEmoji, botReply, ownerDM, logger } = require('../teaBot');
+const config = require("../bot-settings.json");
 
 module.exports.help = {
     name: "bug",
     description: "Report trove game bugs.",
     type: "dm",
-    usage: `ℹ️ Format: **${config.botPrefix}bug** on direct message with the bot.`
+    usage: `ℹ️ Format: **${config.botDetails.prefix}bug** on direct message with the bot.`
 };
 
 module.exports.run = async (bot, message) => {
@@ -57,14 +57,14 @@ module.exports.run = async (bot, message) => {
     }
 
     function nicknameQuestion(additionalText) {
-        additionalText = (additionalText ? `**${additionalText}**` : '');
+        additionalText = (additionalText ? `**${additionalText}**\n` : '');
 
-        return botReply(`${additionalText}\n${message.author} ${getEmoji(config.TEAserverID, 'TEA')} Type \`cancel\` to exit.\n\n**Character Details**\n\`\`\`Please provide your in-game name.\`\`\``, message)
+        return botReply(`${additionalText}> ${message.author} ${getEmoji(config.botDetails.TEAserverID, 'TEA')} Type \`cancel\` to exit.\n\n**Character Details**\n\`\`\`Please provide your in-game name.\`\`\``, message)
             .then(Question => {
                 message.channel.awaitMessages(filter, { max: 1, time: questionResponseTime })
                     .then(Answer => {
                         if (Question.deletable) Question.delete().catch((error) => logger('error', 'bug.js:1 nicknameQuestion() Remove question', error));
-                        if (Answer.first().content.toLowerCase().startsWith(config.botPrefix.toLowerCase()) || Answer.first().content.startsWith(`<@!${bot.user.id}>`)) return;
+                        if (Answer.first().content.toLowerCase().startsWith(config.botDetails.prefix.toLowerCase()) || Answer.first().content.startsWith(`<@!${bot.user.id}>`)) return;
 
                         else if (Answer.first().content.toLowerCase() === 'exit' || Answer.first().content.toLowerCase() === 'cancel')
                             return botReply(`❌ Cancelled`, message);
@@ -89,14 +89,14 @@ module.exports.run = async (bot, message) => {
     }
 
     function platformQuestion(additionalText) {
-        additionalText = (additionalText ? `**${additionalText}**` : '');
+        additionalText = (additionalText ? `**${additionalText}**\n` : '');
 
-        return botReply(`${additionalText}\n${message.author} ${getEmoji(config.TEAserverID, 'TEA')} Type \`cancel\` to exit.\n\n**Platform**\n\`\`\`Please, specify the platform you play on (PC, Xbox, PS4 NA, PS4 EU).\`\`\``, message)
+        return botReply(`${additionalText}> ${message.author} ${getEmoji(config.botDetails.TEAserverID, 'TEA')} Type \`cancel\` to exit.\n\n**Platform**\n\`\`\`Please, specify the platform you play on (PC, Xbox, PS4 NA, PS4 EU).\`\`\``, message)
             .then(Question => {
                 message.channel.awaitMessages(filter, { max: 1, time: questionResponseTime })
                     .then(Answer => {
                         if (Question.deletable) Question.delete().catch((error) => logger('error', 'bug.js:1 platformQuestion() Remove question', error));
-                        if (Answer.first().content.toLowerCase().startsWith(config.botPrefix.toLowerCase()) || Answer.first().content.startsWith(`<@!${bot.user.id}>`)) return;
+                        if (Answer.first().content.toLowerCase().startsWith(config.botDetails.prefix.toLowerCase()) || Answer.first().content.startsWith(`<@!${bot.user.id}>`)) return;
 
                         else if (Answer.first().content.toLowerCase() === 'exit' || Answer.first().content.toLowerCase() === 'cancel')
                             return botReply(`❌ Cancelled`, message);
@@ -120,14 +120,14 @@ module.exports.run = async (bot, message) => {
     }
 
     function characterQuestion(additionalText) {
-        additionalText = (additionalText ? `**${additionalText}**` : '');
+        additionalText = (additionalText ? `**${additionalText}**\n` : '');
 
-        return botReply(`${additionalText}\n${message.author} ${getEmoji(config.TEAserverID, 'TEA')} Type \`cancel\` to exit.\n\n**Character Details**\n\`\`\`Please provide your basic in-game details.\ncharacter/level/power rank/mastery etc.\`\`\``, message)
+        return botReply(`${additionalText}> ${message.author} ${getEmoji(config.botDetails.TEAserverID, 'TEA')} Type \`cancel\` to exit.\n\n**Character Details**\n\`\`\`Please provide your basic in-game details.\ncharacter/level/power rank/mastery etc.\`\`\``, message)
             .then(Question => {
                 message.channel.awaitMessages(filter, { max: 1, time: questionResponseTime })
                     .then(Answer => {
                         if (Question.deletable) Question.delete().catch((error) => logger('error', 'bug.js:1 characterQuestion() Remove question', error));
-                        if (Answer.first().content.toLowerCase().startsWith(config.botPrefix.toLowerCase()) || Answer.first().content.startsWith(`<@!${bot.user.id}>`)) return;
+                        if (Answer.first().content.toLowerCase().startsWith(config.botDetails.prefix.toLowerCase()) || Answer.first().content.startsWith(`<@!${bot.user.id}>`)) return;
 
                         else if (Answer.first().content.toLowerCase() === 'exit' || Answer.first().content.toLowerCase() === 'cancel')
                             return botReply(`❌ Cancelled`, message);
@@ -151,14 +151,14 @@ module.exports.run = async (bot, message) => {
     }
 
     function dateQuestion(additionalText) {
-        additionalText = (additionalText ? `**${additionalText}**` : '');
+        additionalText = (additionalText ? `**${additionalText}**\n` : '');
 
-        return botReply(`${additionalText}\n${message.author} ${getEmoji(config.TEAserverID, 'TEA')} Type \`cancel\` to exit.\n\n**Time and Date**\n\`\`\`When did this happen? Give as specific a timeframe as possible (please include timezone).\nIf it's always bugged, that's helpful too, so you can just say that.\`\`\``, message)
+        return botReply(`${additionalText}> ${message.author} ${getEmoji(config.botDetails.TEAserverID, 'TEA')} Type \`cancel\` to exit.\n\n**Time and Date**\n\`\`\`When did this happen? Give as specific a timeframe as possible (please include timezone).\nIf it's always bugged, that's helpful too, so you can just say that.\`\`\``, message)
             .then(Question => {
                 message.channel.awaitMessages(filter, { max: 1, time: questionResponseTime })
                     .then(Answer => {
                         if (Question.deletable) Question.delete().catch((error) => logger('error', `bug.js:1 dateQuestion() Remove question`, error));
-                        if (Answer.first().content.toLowerCase().startsWith(config.botPrefix.toLowerCase()) || Answer.first().content.startsWith(`<@!${bot.user.id}>`)) return;
+                        if (Answer.first().content.toLowerCase().startsWith(config.botDetails.prefix.toLowerCase()) || Answer.first().content.startsWith(`<@!${bot.user.id}>`)) return;
 
                         else if (Answer.first().content.toLowerCase() === 'exit' || Answer.first().content.toLowerCase() === 'cancel')
                             return botReply(`❌ Cancelled`, message);
@@ -182,14 +182,14 @@ module.exports.run = async (bot, message) => {
     }
 
     function contextQuestion(additionalText) {
-        additionalText = (additionalText ? `**${additionalText}**` : '');
+        additionalText = (additionalText ? `**${additionalText}**\n` : '');
 
-        return botReply(`${additionalText}\n${message.author} ${getEmoji(config.TEAserverID, 'TEA')} Type \`cancel\` to exit.\n\n**Context**\n\`\`\`Where did you find this bug? Was it in a specific biome? Which? A specific lair? Which?\nIf the bug is with a costume, which specific costume?\nThe more details you provide, the more quickly we'll be able to replicate the issue.\`\`\``, message)
+        return botReply(`${additionalText}> ${message.author} ${getEmoji(config.botDetails.TEAserverID, 'TEA')} Type \`cancel\` to exit.\n\n**Context**\n\`\`\`Where did you find this bug? Was it in a specific biome? A specific lair?\nIf the bug is with a costume, which specific costume?\nThe more details you provide, the more quickly we'll be able to replicate the issue.\`\`\``, message)
             .then(Question => {
                 message.channel.awaitMessages(filter, { max: 1, time: questionResponseTime })
                     .then(Answer => {
                         if (Question.deletable) Question.delete().catch((error) => logger('error', `bug.js:1 contextQuestion() Remove question`, error));
-                        if (Answer.first().content.toLowerCase().startsWith(config.botPrefix.toLowerCase()) || Answer.first().content.startsWith(`<@!${bot.user.id}>`)) return;
+                        if (Answer.first().content.toLowerCase().startsWith(config.botDetails.prefix.toLowerCase()) || Answer.first().content.startsWith(`<@!${bot.user.id}>`)) return;
 
                         else if (Answer.first().content.toLowerCase() === 'exit' || Answer.first().content.toLowerCase() === 'cancel')
                             return botReply(`❌ Cancelled`, message);
@@ -213,14 +213,14 @@ module.exports.run = async (bot, message) => {
     }
 
     function gameQuestion(additionalText) {
-        additionalText = (additionalText ? `**${additionalText}**` : '');
+        additionalText = (additionalText ? `**${additionalText}**\n` : '');
 
-        return botReply(`${additionalText}\n${message.author} ${getEmoji(config.TEAserverID, 'TEA')} Type \`cancel\` to exit.\n\n**Game Details**\n\`\`\`What are the name(s) of any involved quest/badges/item/clubs?\nPlease attempt to provide exact names as shown in-game or type none.\`\`\``, message)
+        return botReply(`${additionalText}> ${message.author} ${getEmoji(config.botDetails.TEAserverID, 'TEA')} Type \`cancel\` to exit.\n\n**Game Details**\n\`\`\`What are the name(s) of any involved quest/badges/item/clubs?\nPlease attempt to provide exact names as shown in-game or type none.\`\`\``, message)
             .then(Question => {
                 message.channel.awaitMessages(filter, { max: 1, time: questionResponseTime })
                     .then(Answer => {
                         if (Question.deletable) Question.delete().catch((error) => logger('error', `bug.js:1 gameQuestion() Remove question`, error));
-                        if (Answer.first().content.toLowerCase().startsWith(config.botPrefix.toLowerCase()) || Answer.first().content.startsWith(`<@!${bot.user.id}>`)) return;
+                        if (Answer.first().content.toLowerCase().startsWith(config.botDetails.prefix.toLowerCase()) || Answer.first().content.startsWith(`<@!${bot.user.id}>`)) return;
 
                         else if (Answer.first().content.toLowerCase() === 'exit' || Answer.first().content.toLowerCase() === 'cancel')
                             return botReply(`❌ Cancelled`, message);
@@ -244,14 +244,14 @@ module.exports.run = async (bot, message) => {
     }
 
     function expectedQuestion(additionalText) {
-        additionalText = (additionalText ? `**${additionalText}**` : '');
+        additionalText = (additionalText ? `**${additionalText}**\n` : '');
 
-        return botReply(`${additionalText}\n${message.author} ${getEmoji(config.TEAserverID, 'TEA')} Type \`cancel\` to exit.\n\n**Expected**\n\`\`\`What did you expect to happen?\nExample: I summoned my mount and expected to spawn Slow Sebastion.\`\`\``, message)
+        return botReply(`${additionalText}> ${message.author} ${getEmoji(config.botDetails.TEAserverID, 'TEA')} Type \`cancel\` to exit.\n\n**Expected**\n\`\`\`What did you expect to happen?\nExample: I summoned my mount and expected to spawn Slow Sebastion.\`\`\``, message)
             .then(Question => {
                 message.channel.awaitMessages(filter, { max: 1, time: questionResponseTime })
                     .then(Answer => {
                         if (Question.deletable) Question.delete().catch((error) => logger('error', `bug.js:1 expectedQuestion() Remove question`, error));
-                        if (Answer.first().content.toLowerCase().startsWith(config.botPrefix.toLowerCase()) || Answer.first().content.startsWith(`<@!${bot.user.id}>`)) return;
+                        if (Answer.first().content.toLowerCase().startsWith(config.botDetails.prefix.toLowerCase()) || Answer.first().content.startsWith(`<@!${bot.user.id}>`)) return;
 
                         else if (Answer.first().content.toLowerCase() === 'exit' || Answer.first().content.toLowerCase() === 'cancel')
                             return botReply(`❌ Cancelled`, message);
@@ -275,14 +275,14 @@ module.exports.run = async (bot, message) => {
     }
 
     function observedQuestion(additionalText) {
-        additionalText = (additionalText ? `**${additionalText}**` : '');
+        additionalText = (additionalText ? `**${additionalText}**\n` : '');
 
-        return message.reply(`${additionalText}\n${message.author} ${getEmoji(config.TEAserverID, 'TEA')} Type \`cancel\` to exit.\n\n**Observed**\n\`\`\`What happened instead?\nExample: My character threw a bomb.\`\`\``)
+        return message.reply(`${additionalText}> ${message.author} ${getEmoji(config.botDetails.TEAserverID, 'TEA')} Type \`cancel\` to exit.\n\n**Observed**\n\`\`\`What happened instead?\nExample: My character threw a bomb.\`\`\``)
             .then(Question => {
                 message.channel.awaitMessages(filter, { max: 1, time: questionResponseTime })
                     .then(Answer => {
                         if (Question.deletable) Question.delete().catch((error) => logger('error', `bug.js:1 observedQuestion() Remove question`, error));
-                        if (Answer.first().content.toLowerCase().startsWith(config.botPrefix.toLowerCase()) || Answer.first().content.startsWith(`<@!${bot.user.id}>`)) return;
+                        if (Answer.first().content.toLowerCase().startsWith(config.botDetails.prefix.toLowerCase()) || Answer.first().content.startsWith(`<@!${bot.user.id}>`)) return;
 
                         else if (Answer.first().content.toLowerCase() === 'exit' || Answer.first().content.toLowerCase() === 'cancel')
                             return botReply(`❌ Cancelled`, message);
@@ -306,14 +306,14 @@ module.exports.run = async (bot, message) => {
     }
 
     function reproductionQuestion(additionalText) {
-        additionalText = (additionalText ? `**${additionalText}**` : '');
+        additionalText = (additionalText ? `**${additionalText}**\n` : '');
 
-        return botReply(`${additionalText}\n${message.author} ${getEmoji(config.TEAserverID, 'TEA')} Type \`cancel\` to exit.\n\n**Reproduction Steps**\n\`\`\`Most importantly, if possible, please include a list of specific steps we can take to reproduce this issue on our end. \nThese steps need to be something we can reproduce on a new character, not isolated to your character only.\`\`\``, message)
+        return botReply(`${additionalText}> ${message.author} ${getEmoji(config.botDetails.TEAserverID, 'TEA')} Type \`cancel\` to exit.\n\n**Reproduction Steps**\n\`\`\`Most importantly, if possible, please include a list of specific steps we can take to reproduce this issue on our end. \nThese steps need to be something we can reproduce on a new character, not isolated to your character only.\`\`\``, message)
             .then(Question => {
                 message.channel.awaitMessages(filter, { max: 1, time: questionResponseTime })
                     .then(Answer => {
                         if (Question.deletable) Question.delete().catch((error) => logger('error', `bug.js:1 reproductionQuestion() Remove question`, error));
-                        if (Answer.first().content.toLowerCase().startsWith(config.botPrefix.toLowerCase()) || Answer.first().content.startsWith(`<@!${bot.user.id}>`)) return;
+                        if (Answer.first().content.toLowerCase().startsWith(config.botDetails.prefix.toLowerCase()) || Answer.first().content.startsWith(`<@!${bot.user.id}>`)) return;
 
                         else if (Answer.first().content.toLowerCase() === 'exit' || Answer.first().content.toLowerCase() === 'cancel')
                             return botReply(`❌ Cancelled`, message);
@@ -337,14 +337,14 @@ module.exports.run = async (bot, message) => {
     }
 
     function mediaQuestion(additionalText) {
-        additionalText = (additionalText ? `**${additionalText}**` : '');
+        additionalText = (additionalText ? `**${additionalText}**\n` : '');
 
-        return botReply(`${additionalText}\n${message.author} ${getEmoji(config.TEAserverID, 'TEA')} Type \`cancel\` to exit.\n\n**Image/Video Documentation**\n\`\`\`Often the most useful information we can get for bugs will be screenshots or video documentation of the bug occurring.\nThese can be uploaded to 3rd party websites (youtube/imgur) and you just have to include the link to them or type none if you don't have any.\`\`\``, message)
+        return botReply(`${additionalText}> ${message.author} ${getEmoji(config.botDetails.TEAserverID, 'TEA')} Type \`cancel\` to exit.\n\n**Image/Video Documentation**\n\`\`\`Often the most useful information we can get for bugs will be screenshots or video documentation of the bug occurring.\nThese can be uploaded to 3rd party websites (youtube/imgur) and you just have to include the link to them or type none if you don't have any.\`\`\``, message)
             .then(Question => {
                 message.channel.awaitMessages(filter, { max: 1, time: questionResponseTime })
                     .then(Answer => {
                         if (Question.deletable) Question.delete().catch((error) => logger('error', `bug.js:1 mediaQuestion() Remove question`, error));
-                        if (Answer.first().content.toLowerCase().startsWith(config.botPrefix.toLowerCase()) || Answer.first().content.startsWith(`<@!${bot.user.id}>`)) return;
+                        if (Answer.first().content.toLowerCase().startsWith(config.botDetails.prefix.toLowerCase()) || Answer.first().content.startsWith(`<@!${bot.user.id}>`)) return;
 
                         else if (Answer.first().content.toLowerCase() === 'exit' || Answer.first().content.toLowerCase() === 'cancel')
                             return botReply(`❌ Cancelled`, message);
@@ -368,14 +368,14 @@ module.exports.run = async (bot, message) => {
     }
 
     function noteQuestion(additionalText) {
-        additionalText = (additionalText ? `**${additionalText}**` : '');
+        additionalText = (additionalText ? `**${additionalText}**\n` : '');
 
-        return botReply(`${additionalText}\n${message.author} ${getEmoji(config.TEAserverID, 'TEA')} Type \`cancel\` to exit.\n\n**Note**\n\`\`\`Now you can insert a note. It might be your idea to fix this bug or anything else.\nYou can also type 'none' to proceed without this note.\`\`\``, message)
+        return botReply(`${additionalText}> ${message.author} ${getEmoji(config.botDetails.TEAserverID, 'TEA')} Type \`cancel\` to exit.\n\n**Note**\n\`\`\`Now you can insert a note. It might be your idea to fix this bug or anything else.\nYou can also type 'none' to proceed without this note.\`\`\``, message)
             .then(Question => {
                 message.channel.awaitMessages(filter, { max: 1, time: questionResponseTime })
                     .then(Answer => {
                         if (Question.deletable) Question.delete().catch((error) => logger('error', `bug.js:1 noteQuestion() Remove question`, error));
-                        if (Answer.first().content.toLowerCase().startsWith(config.botPrefix.toLowerCase()) || Answer.first().content.startsWith(`<@!${bot.user.id}>`)) return;
+                        if (Answer.first().content.toLowerCase().startsWith(config.botDetails.prefix.toLowerCase()) || Answer.first().content.startsWith(`<@!${bot.user.id}>`)) return;
 
                         else if (Answer.first().content.toLowerCase() === 'exit' || Answer.first().content.toLowerCase() === 'cancel')
                             return botReply(`❌ Cancelled`, message);
@@ -399,7 +399,7 @@ module.exports.run = async (bot, message) => {
     }
 
     function postToMods(dmMessage) {
-        const TEAchannel = bot.guilds.cache.get(config.report.hidenBugServerID).channels.cache.get(config.report.bugQueueChannelID);
+        const TEAchannel = bot.guilds.cache.get(config.reportSystem.hidenBugServerID).channels.cache.get(config.reportSystem.bugQueueChannelID);
         if (TEAchannel) {
             //define the embed: tip embed message summary
             let embed_tip_summary = new Discord.MessageEmbed()
@@ -423,16 +423,16 @@ module.exports.run = async (bot, message) => {
                 .setTimestamp();
             return TEAchannel.send(embed_tip_summary)
                 .then(async message => {
-                    if (message) botReply(`${getEmoji(config.TEAserverID, 'TEA')} Your bug report has been successfully sent!`, dmMessage);
+                    if (message) botReply(`> ${getEmoji(config.botDetails.TEAserverID, 'TEA')} Your bug report has been successfully sent!`, dmMessage);
                 })
                 .catch(error => {
-                    botReply(`${getEmoji(config.TEAserverID, 'TEA')} Error to send bug report, try again later...`, dmMessage);
+                    botReply(`${getEmoji(config.botDetails.TEAserverID, 'TEA')} Error to send bug report, try again later...`, dmMessage);
                     logger('error', 'bug.js:1 postToMods() Send the message (SEND_MESSAGES/READ_MESSAGES/READ_MESSAGE_HISTORY/EMBED_LINKS)', error);
                     ownerDM(`Error with ${bot.user} application\n bug.js postToMods() Error to post bug report, check out console for more info.`);
                 });
         } else {
-            botReply(`${getEmoji(config.TEAserverID, 'TEA')} Error to send bug report, try again later...`, dmMessage);
-            logger('error', `bug.js:2 postToMods() Bug report queue channel is missing or maybe wrong channelID in 'bugQueueChannelID' conf file: ${config.report.bugQueueChannelID}`);
+            botReply(`${getEmoji(config.botDetails.TEAserverID, 'TEA')} Error to send bug report, try again later...`, dmMessage);
+            logger('error', `bug.js:2 postToMods() Bug report queue channel is missing or maybe wrong channelID in 'bugQueueChannelID' conf file: ${config.reportSystem.bugQueueChannelID}`);
             ownerDM(`Error with ${bot.user} application\n bug.js postToMods() Bug report queue channel is missing check out bot configuration, more info in terminal.`);
         }
     }

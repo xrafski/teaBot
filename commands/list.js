@@ -5,7 +5,7 @@ module.exports.help = {
     name: "list",
     description: "List all guilds including its ID.",
     type: "botowner",
-    usage: `ℹ️ Format: **${config.botPrefix}list**`
+    usage: `ℹ️ Format: **${config.botDetails.prefix}list**`
 };
 
 module.exports.run = async (bot, message) => {

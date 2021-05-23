@@ -6,7 +6,7 @@ module.exports.help = {
     name: "clearance",
     description: "Request access to the TEA discord server",
     type: "public",
-    usage: `ℹ️ Format: **${config.botPrefix}clearance**`
+    usage: `ℹ️ Format: **${config.botDetails.prefix}clearance**`
 };
 
 module.exports.run = async (bot, message) => {
@@ -20,20 +20,20 @@ module.exports.run = async (bot, message) => {
     const filter = m => m.author.id === message.author.id; // await message filter
     const { guild, author } = message;
 
-    if (guild.id != config.TEAserverID) return botReply(`This command is only available on the primary TEA discord server.`, message);
+    if (guild.id != config.botDetails.TEAserverID) return botReply(`This command is only available on the primary TEA discord server.`, message);
     else ClubNameQ(); // run the question chain
 
 
     function ClubNameQ(additionalText) {
         additionalText = (additionalText ? `**${additionalText}**\n` : '');
 
-        return botReply(`${additionalText}${getEmoji(config.TEAserverID, 'TEA')} Type \`cancel\` to exit.\n\n**Clearance Information**\n\`\`\`Please enter club name.\`\`\``, message)
+        return botReply(`${additionalText}> ${author} ${getEmoji(config.botDetails.TEAserverID, 'TEA')} Type \`cancel\` to exit.\n\n**Clearance Information**\n\`\`\`Please enter club name.\`\`\``, message)
             .then(Question => {
                 message.channel.awaitMessages(filter, { max: 1, time: questionResponseTime })
                     .then(Answer => {
                         const answerContent = Answer.first().content;
                         // if (Question.deletable) Question.delete().catch((error) => logger('error', 'clearance.js:1 ClubNameQ() Remove question', error));
-                        if (answerContent.toLowerCase().startsWith(config.botPrefix.toLowerCase()) || answerContent.startsWith(`<@!${bot.user.id}>`)) return;
+                        if (answerContent.toLowerCase().startsWith(config.botDetails.prefix.toLowerCase()) || answerContent.startsWith(`<@!${bot.user.id}>`)) return;
                         else if (answerContent.toLowerCase() === 'exit' || answerContent.toLowerCase() === 'cancel') return botReply(`❌ Cancelled`, message);
                         else if (answerContent.length < 3) return ClubNameQ('❌ Club name is too short [3 characters].');
                         else if (answerContent.length > 20) return ClubNameQ('❌ Club name is too long [20 characters].');
@@ -57,7 +57,7 @@ module.exports.run = async (bot, message) => {
                     return botReply('❌ Error to parse the data, try again later.', message);
                 }
                 if (JSON.parse(data).find(club => club.guildName?.toLowerCase() === clubName.toLowerCase())) return NicknameQ();
-                else return botReply(`This club is not registered.`, message)
+                else return botReply(`Not found. This club is either not registered or typed incorrectly!`, message)
             });
         }
     }
@@ -65,13 +65,13 @@ module.exports.run = async (bot, message) => {
     function NicknameQ(additionalText) {
         additionalText = (additionalText ? `**${additionalText}**\n` : '');
 
-        return botReply(`${additionalText}${getEmoji(config.TEAserverID, 'TEA')} Type \`cancel\` to exit.\n\n**Clearance Information**\n\`\`\`What's your in-game name?\`\`\``, message)
+        return botReply(`${additionalText}> ${author} ${getEmoji(config.botDetails.TEAserverID, 'TEA')} Type \`cancel\` to exit.\n\n**Clearance Information**\n\`\`\`What's your in-game name?\`\`\``, message)
             .then(Question => {
                 message.channel.awaitMessages(filter, { max: 1, time: questionResponseTime })
                     .then(Answer => {
                         const answerContent = Answer.first().content;
                         // if (Question.deletable) Question.delete().catch((error) => logger('error', 'clearance.js:1 NicknameQ() Remove question', error));
-                        if (answerContent.toLowerCase().startsWith(config.botPrefix.toLowerCase()) || answerContent.startsWith(`<@!${bot.user.id}>`)) return;
+                        if (answerContent.toLowerCase().startsWith(config.botDetails.prefix.toLowerCase()) || answerContent.startsWith(`<@!${bot.user.id}>`)) return;
                         else if (answerContent.toLowerCase() === 'exit' || answerContent.toLowerCase() === 'cancel') return botReply(`❌ Cancelled`, message);
                         else if (answerContent.length < 3) return NicknameQ('❌ Nickname is too short [3 characters].');
                         else if (answerContent.length > 20) return NicknameQ('❌ Nickname too long [20 characters].');
@@ -90,13 +90,13 @@ module.exports.run = async (bot, message) => {
     function ClubRoleQ(additionalText) {
         additionalText = (additionalText ? `**${additionalText}**\n` : '');
 
-        return botReply(`${additionalText}${getEmoji(config.TEAserverID, 'TEA')} Type \`cancel\` to exit.\n\n**Clearance Information**\n\`\`\`What's your role in ${clubNameVar ? clubNameVar : 'unknown'}?\`\`\``, message)
+        return botReply(`${additionalText}> ${author} ${getEmoji(config.botDetails.TEAserverID, 'TEA')} Type \`cancel\` to exit.\n\n**Clearance Information**\n\`\`\`What's your role in ${clubNameVar ? clubNameVar : 'unknown'}?\`\`\``, message)
             .then(Question => {
                 message.channel.awaitMessages(filter, { max: 1, time: questionResponseTime })
                     .then(Answer => {
                         const answerContent = Answer.first().content;
                         // if (Question.deletable) Question.delete().catch((error) => logger('error', 'clearance.js:1 ClubRoleQ() Remove question', error));
-                        if (answerContent.toLowerCase().startsWith(config.botPrefix.toLowerCase()) || answerContent.startsWith(`<@!${bot.user.id}>`)) return;
+                        if (answerContent.toLowerCase().startsWith(config.botDetails.prefix.toLowerCase()) || answerContent.startsWith(`<@!${bot.user.id}>`)) return;
                         else if (answerContent.toLowerCase() === 'exit' || answerContent.toLowerCase() === 'cancel') return botReply(`❌ Cancelled`, message);
                         else if (answerContent.length < 3) return ClubRoleQ('❌ Asnwer is too short [3 characters].');
                         else if (answerContent.length > 30) return ClubRoleQ('❌ Answer too long [30 characters].');
@@ -115,13 +115,13 @@ module.exports.run = async (bot, message) => {
     function ReasonQ(additionalText) {
         additionalText = (additionalText ? `**${additionalText}**\n` : '');
 
-        return botReply(`${additionalText}${getEmoji(config.TEAserverID, 'TEA')} Type \`cancel\` to exit.\n\n**Clearance Information**\n\`\`\`Reason for joining?\`\`\``, message)
+        return botReply(`${additionalText}> ${author} ${getEmoji(config.botDetails.TEAserverID, 'TEA')} Type \`cancel\` to exit.\n\n**Clearance Information**\n\`\`\`Reason for joining?\`\`\``, message)
             .then(Question => {
                 message.channel.awaitMessages(filter, { max: 1, time: questionResponseTime })
                     .then(Answer => {
                         const answerContent = Answer.first().content;
                         // if (Question.deletable) Question.delete().catch((error) => logger('error', 'clearance.js:1 ReasonQ() Remove question', error));
-                        if (answerContent.toLowerCase().startsWith(config.botPrefix.toLowerCase()) || answerContent.startsWith(`<@!${bot.user.id}>`)) return;
+                        if (answerContent.toLowerCase().startsWith(config.botDetails.prefix.toLowerCase()) || answerContent.startsWith(`<@!${bot.user.id}>`)) return;
                         else if (answerContent.toLowerCase() === 'exit' || answerContent.toLowerCase() === 'cancel') return botReply(`❌ Cancelled`, message);
                         else if (answerContent.length < 3) return ReasonQ('❌ Asnwer is too short [3 characters].');
                         else if (answerContent.length > 300) return ReasonQ('❌ Answer too long [300 characters].');
@@ -149,7 +149,7 @@ module.exports.run = async (bot, message) => {
                 { name: 'Requester ▼', value: `${requesterVar} • ${requesterVar?.tag} • ${requesterVar?.id}`, inline: false },
             )
 
-        return message.reply(`\n> Are you **sure** to send this form?`, embed_test)
+        return message.channel.send(`> ${author} Are you **sure** to send this form?`, embed_test)
             .then(async Question => {
                 if (Question) { // check if the bot sent question to the user, if so, collect one reply from the message.author.
                     const emojiFilter = (reaction, user) => { // accept interaction only from the message author
@@ -188,7 +188,7 @@ module.exports.run = async (bot, message) => {
     }
 
     function postResults() {
-        const clearanceChannel = bot.guilds.cache.get(config.TEAserverID).channels.cache.get(config.notificationPings.clearanceChannelID); // find clearance channel on the main server
+        const clearanceChannel = bot.guilds.cache.get(config.botDetails.TEAserverID).channels.cache.get(config.channels.requestChannelID); // find request channel on the main server
         if (!clearanceChannel) {
             logger('error', 'clearance.js:1 postResults() Missing clearance channel on TEA main server');
             return botReply('Error to send club clearance request, try again later ;-(', message);
@@ -197,7 +197,7 @@ module.exports.run = async (bot, message) => {
             // define the embed: send apply to clearance channel with provided information
             const embed_clearance_message = new Discord.MessageEmbed()
                 .setColor('#0095ff')
-                .setAuthor(`New clearance request to '${clubNameVar}' club!`, TEAlogo)
+                .setAuthor(`Clearance request to '${clubNameVar}' club!`, TEAlogo)
                 .setDescription(reasonVar)
                 .addFields(
                     { name: 'Nickname ▼', value: `\`${nicknameVar}\``, inline: false },
@@ -207,8 +207,8 @@ module.exports.run = async (bot, message) => {
                 )
                 .setFooter('TEA Clearance Request')
 
-            clearanceChannel.send(embed_clearance_message)
-                .then(() => botReply(`${getEmoji(config.TEAserverID, 'TEA')}TEA clearance request has been sent!`, message))
+            clearanceChannel.send(`${requesterVar} • ${requesterVar?.tag} • ${requesterVar?.id}`, embed_clearance_message)
+                .then(() => botReply(`> ${author} ${getEmoji(config.botDetails.TEAserverID, 'TEA')}TEA clearance request has been sent!`, message))
                 .catch(err => {
                     logger('error', 'clearance.js:2 postResults() Error to send embed message', err);
                     botReply('Error to send clearance request, try again later ;-(', message);

@@ -1,15 +1,15 @@
-const config = require("../bot-settings.json");
 const { getEmoji, botReply } = require("../teaBot");
+const config = require("../bot-settings.json");
 
 module.exports.help = {
     name: "uptime",
     description: "Current uptime of the bot.",
     type: "public",
-    usage: `ℹ️ Format: **${config.botPrefix}uptime**`
+    usage: `ℹ️ Format: **${config.botDetails.prefix}uptime**`
 };
 
 module.exports.run = async (bot, message) => {
-    return botReply(`${getEmoji(config.TEAserverID, 'TEA')} Current TEA bot uptime: **${convertMiliseconds(bot.uptime)}**.`, message);
+    return botReply(`${getEmoji(config.botDetails.TEAserverID, 'TEA')} Current TEA bot uptime: **${convertMiliseconds(bot.uptime)}**.`, message);
 
     function convertMiliseconds(miliseconds) {
         var days, hours, minutes, seconds, total_hours, total_minutes, total_seconds;

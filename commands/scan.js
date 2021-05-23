@@ -6,12 +6,12 @@ module.exports.help = {
     name: "scan",
     description: "Scan the entire server to find threat users.",
     type: "serverstaff",
-    usage: `ℹ️ Format: **${config.botPrefix}scan**`
+    usage: `ℹ️ Format: **${config.botDetails.prefix}scan**`
 };
 
 module.exports.run = async (bot, message, args) => {
-    const logChannel = message.guild.channels.cache.find(channel => channel.name === config.logs.channelName);
-    if (!logChannel) return botReply(embedMessage(`**Log channel is not detected!**\nPlease, create a new channel '**${config.logs.channelName}**' or fix permissions if already exists.\n\nSet the following permissions for the bot:\n✅ Manage Webhooks\n✅ Read Messages\n✅ Send Messages\n✅ Embed Links\n✅ Read Message History\n✅ Use External Emoji`, message.author), message);
+    const logChannel = message.guild.channels.cache.find(channel => channel.name === config.webhooks.logs.channelName);
+    if (!logChannel) return botReply(embedMessage(`**Log channel is not detected!**\nPlease, create a new channel '**${config.webhooks.logs.channelName}**' or fix permissions if already exists.\n\nSet the following permissions for the bot:\n✅ Manage Webhooks\n✅ Read Messages\n✅ Send Messages\n✅ Embed Links\n✅ Read Message History\n✅ Use External Emoji`, message.author), message);
     if (message.channel != logChannel) return botReply(`You can use this command **only** in the ${logChannel} channel for security reasons.`, message);
     // if (!logChannel.permissionsFor(bot.user).has('MANAGE_WEBHOOKS')) return botReply(`❌ Missing '**Manage Webhooks**' permissions for ${logChannel}.`, message);
 
@@ -48,9 +48,9 @@ module.exports.run = async (bot, message, args) => {
                 .setTitle(`Detected ${detectedNumber} threat(s) in total!`)
                 .setDescription(detectedThreats)
                 .setTimestamp()
-                .setFooter(`Type ${config.botPrefix}check nickname for details.`, TEAlogo);
+                .setFooter(`Type ${config.botDetails.prefix}check nickname for details.`, TEAlogo);
 
-            sendEmbedLog(embed_scan_results, logChannel.id, config.logs.loggerName)
+            sendEmbedLog(embed_scan_results, logChannel.id, config.webhooks.logs.loggerName)
                 .catch(error => {
                     botReply(`${error.info}\n**Reason**: ${error.data.message}`, message);
                     logger('error', `scan.js:2 () ${error.info} in the ${message.guild.name}.`);
@@ -63,7 +63,7 @@ module.exports.run = async (bot, message, args) => {
                 .setThumbnail(TEAlogo)
                 .setTimestamp();
 
-            sendEmbedLog(embed_scan_results, logChannel.id, config.logs.loggerName)
+            sendEmbedLog(embed_scan_results, logChannel.id, config.webhooks.logs.loggerName)
                 .catch(error => {
                     if (error.data.message === 'Missing Permissions') {
                         botReply(`Not enough permissions, missing '**Manage Webhooks**' for the ${logChannel} channel.`, message);

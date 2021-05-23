@@ -1,12 +1,12 @@
+const { botReply, TEAlogo, Discord, logger, getEmoji } = require("../teaBot");
 const config = require("../bot-settings.json");
 const fs = require('fs');
-const { botReply, TEAlogo, Discord, logger, getEmoji } = require("../teaBot");
 
 module.exports.help = {
   name: "club",
   description: "Show information about the club.",
   type: "public",
-  usage: `ℹ️ Format: **${config.botPrefix}club clubName**\nℹ️ Example(s):\n${config.botPrefix}club laez\n${config.botPrefix}club henort`
+  usage: `ℹ️ Format: **${config.botDetails.prefix}club clubName**\nℹ️ Example(s):\n${config.botDetails.prefix}club laez\n${config.botDetails.prefix}club henort`
 };
 
 module.exports.run = async (bot, message, args) => {
@@ -17,9 +17,9 @@ module.exports.run = async (bot, message, args) => {
     }
 
     const newData = JSON.parse(data);
-    if (!args[0] || args[0].length < 3) return botReply(`Wrong command format, type **${config.botPrefix}help ${module.exports.help.name}** to see usage and examples!`, message);
+    if (!args[0] || args[0].length < 3) return botReply(`Wrong command format, type **${config.botDetails.prefix}help ${module.exports.help.name}** to see usage and examples!`, message);
 
-    const searchValue = message.content.slice(config.botPrefix.length + module.exports.help.name.length).trim().toLowerCase();
+    const searchValue = message.content.slice(config.botDetails.prefix.length + module.exports.help.name.length).trim().toLowerCase();
     return findTheClub(newData, searchValue)
       .then(club => {
         const { guildDescription, guildName, guildRepresentative, guildRequirements } = club;
@@ -44,7 +44,7 @@ module.exports.run = async (bot, message, args) => {
       })
       .catch(error => {
         switch (error) {
-          case 'no_club': return botReply(`❌ This club is not part of ${getEmoji(config.TEAserverID, 'TEA')}**Trove Ethics Alliance**.`, message);
+          case 'no_club': return botReply(`❌ This club is not part of ${getEmoji(config.botDetails.TEAserverID, 'TEA')}**Trove Ethics Alliance**.`, message);
           case 'invalid_regex': return botReply('❌ Invalid club name, make sure to type only alphanumeric characters!', message);
           default: {
             logger('error', 'club.js:2 () Check for the club', error);

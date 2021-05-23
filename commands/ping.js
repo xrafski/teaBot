@@ -5,7 +5,7 @@ module.exports.help = {
     name: "ping",
     description: "Pong!",
     type: "public",
-    usage: `ℹ️ Format: **${config.botPrefix}ping**`
+    usage: `ℹ️ Format: **${config.botDetails.prefix}ping**`
 };
 
 module.exports.run = async (bot, message) => {

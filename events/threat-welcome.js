@@ -1,10 +1,10 @@
 const { bot, Discord, TEAlogo, sendEmbedLog, logger } = require("../teaBot");
-const fs = require('fs');
 const config = require('../bot-settings.json');
+const fs = require('fs');
 
 bot.on('guildMemberAdd', member => {
     const { guild, user } = member;
-    const logChannel = guild.channels.cache.find(channel => channel.name === config.logs.channelName);
+    const logChannel = guild.channels.cache.find(channel => channel.name === config.webhooks.logs.channelName);
     if (!logChannel) return;
 
     if (logChannel) {
@@ -55,7 +55,7 @@ function findThreat(object, userID) {
                 "userlastName": "Overwatch System Test",
                 "userReason": "This is a test of the overwatch system.",
                 "userStatus": null,
-                "userEvidence": `<#${config.other.officialChannelID}>`,
+                "userEvidence": `<#${config.channels.officialChannelID}>`,
                 "userAlternate": "TEA",
                 "userDiscord": bot.user.id,
                 "userNotes": '☑ If you see this message, it means that everything is fine.',

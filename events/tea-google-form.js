@@ -1,7 +1,7 @@
 const { bot, Discord, TEAlogo, sendEmbedLog, logger } = require('../teaBot');
+const config = require("../bot-settings.json");
 const cron = require('node-cron');
 const { google } = require('googleapis');
-const config = require("../bot-settings.json");
 const keys = require('../Laezaria-Bot-292d692ec77c.json');
 
 bot.on('ready', () => { // https://crontab.guru/examples.html
@@ -48,7 +48,7 @@ bot.on('ready', () => { // https://crontab.guru/examples.html
             )
             .setFooter(`• ${reportsheet[1][0]} ${reportsheet[0][0]}`)
             .setThumbnail(TEAlogo);
-        sendEmbedLog(embed_reports_sheet_information, config.formAppealReport.TEAreportChannel, 'TEA - Report')
+        sendEmbedLog(embed_reports_sheet_information, config.channels.reportChannelGformID, 'TEA - Report')
             .then(async () => {
                 // Remove 1st row if not empty
                 await gsapi.spreadsheets.batchUpdate(
@@ -99,7 +99,7 @@ bot.on('ready', () => { // https://crontab.guru/examples.html
             )
             .setFooter(`• ${appealsheet[1][0]} ${appealsheet[0][0]}`)
             .setThumbnail(TEAlogo);
-        sendEmbedLog(embed_appeals_sheet_information, config.formAppealReport.TEAappealChannel, 'TEA - Appeal')
+        sendEmbedLog(embed_appeals_sheet_information, config.channels.appealChannelGformID, 'TEA - Appeal')
             .then(async () => {
                 // Remove 1st row if not empty
                 await gsapi.spreadsheets.batchUpdate(

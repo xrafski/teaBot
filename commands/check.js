@@ -1,12 +1,12 @@
+const { botReply, TEAlogo, Discord, logger, embedMessage } = require("../teaBot");
 const config = require("../bot-settings.json");
 const fs = require('fs');
-const { botReply, TEAlogo, Discord, logger, embedMessage } = require("../teaBot");
 
 module.exports.help = {
   name: "check",
   description: "Check if user is in threat database.",
   type: "public",
-  usage: `ℹ️ Format: **${config.botPrefix}check userName**\nℹ️ Example(s):\n${config.botPrefix}user RNG\n${config.botPrefix}check Surge\n**Nickname must contain at least 3 characters!**`
+  usage: `ℹ️ Format: **${config.botDetails.prefix}check userName**\nℹ️ Example(s):\n${config.botDetails.prefix}user RNG\n${config.botDetails.prefix}check Surge\n**Nickname must contain at least 3 characters!**`
 };
 
 module.exports.run = async (bot, message, args) => {
@@ -17,9 +17,9 @@ module.exports.run = async (bot, message, args) => {
     }
 
     const newData = JSON.parse(data);
-    if (!args[0] || args[0].length < 3) return botReply(`Wrong command format, type **${config.botPrefix}help ${module.exports.help.name}** to see usage and examples!`, message);
+    if (!args[0] || args[0].length < 3) return botReply(`Wrong command format, type **${config.botDetails.prefix}help ${module.exports.help.name}** to see usage and examples!`, message);
 
-    const searchValue = message.content.slice(config.botPrefix.length + module.exports.help.name.length).trim().toLowerCase();
+    const searchValue = message.content.slice(config.botDetails.prefix.length + module.exports.help.name.length).trim().toLowerCase();
     return findTheUser(newData, searchValue)
       .then(threatUser => {
 
@@ -34,27 +34,7 @@ module.exports.run = async (bot, message, args) => {
           if (threatFound) threatInServer = threatInServer + `\n${threatFound.tag} (${threatFound.toString()})`;
         });
 
-        if (threatInServer) {
-          const embed_user_details = new Discord.MessageEmbed()
-            .setColor(setThreatColor(userWarning))
-            .setAuthor(`Threat Details`, TEAlogo)
-            .setTitle(`Nickname: \`${userName}\``)
-            .setDescription(`**Reason:** ${userReason}\n‏‏‎ ‎‎`)
-            .addFields(
-              { name: 'Discord User ID(s)', value: userDiscord = userDiscord || 'Data is not provided', inline: false },
-              { name: 'Last known nickname', value: `\`${userlastName = userlastName || userName}\``, inline: false },
-              { name: 'Alternate accounts', value: `\`${userAlternate = userAlternate || 'No other known accounts'}\``, inline: false },
-              { name: 'Evidence(s)', value: userEvidence, inline: false },
-              { name: 'Additional notes', value: userNotes = userNotes || 'No notes', inline: false },
-              { name: 'Server Scan', value: `The following threat account(s) have been identified on this server:${threatInServer}`, inline: false },
-              { name: 'Links', value: `Appeal is available over [here](https://forms.gle/oR78HXAJcdSHBEvx7 'Appeal Google Form')\nPlayer report [here](https://forms.gle/8jR6NCXeZZPAsQPf6 'Report Google Form')`, inline: false },
-            )
-            .setThumbnail(TEAlogo)
-            .setTimestamp();
-          botReply(embed_user_details, message);
-          // .then(msg => messageRemoverWithReact(msg, message.author));
-        } else {
-          const embed_user_details = new Discord.MessageEmbed()
+        const embed_user_details = new Discord.MessageEmbed()
             .setColor(setThreatColor(userWarning))
             .setAuthor(`Threat Details`, TEAlogo)
             .setTitle(`Nickname: \`${userName}\``)
@@ -65,14 +45,13 @@ module.exports.run = async (bot, message, args) => {
               { name: 'Alternate accounts', value: `\`${userAlternate = userAlternate || 'No other known accounts'}\``, inline: false },
               { name: 'Evidence(s)', value: userEvidence, inline: false },
               { name: 'Additional notes', value: userNotes = userNotes || 'No notes', inline: false },
-              { name: 'Server Scan', value: `There is no associated user on this server with this threat.`, inline: false },
+              { name: 'Server Scan', value: threatInServer ? `The following threat account(s) have been identified on this server:${threatInServer}`: `There is no associated user on this server with this threat.`, inline: false },
               { name: 'Links', value: `Appeal is available over [here](https://forms.gle/oR78HXAJcdSHBEvx7 'Appeal Google Form')\nPlayer report [here](https://forms.gle/8jR6NCXeZZPAsQPf6 'Report Google Form')`, inline: false },
             )
             .setThumbnail(TEAlogo)
             .setTimestamp();
           botReply(embed_user_details, message);
           // .then(msg => messageRemoverWithReact(msg, message.author));
-        }
       })
       .catch(error => {
         switch (error) {
