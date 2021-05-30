@@ -8,7 +8,7 @@ const { MongoClient } = require('./functions/mongodb-connection');
 const bot = new Discord.Client({ partials: ['MESSAGE', 'REACTION'] });
 
 // define current bot version.
-const BotVersion = '1.0.15';
+const BotVersion = '1.0.16';
 
 // define icon image url for embeds
 const TEAlogo = 'https://i.imgur.com/7VUCJ75.png';
@@ -332,6 +332,94 @@ function logger(type, text, error) {
 	}
 }
 
+function convertMsToTime(miliseconds) {
+	let days, hours, minutes, seconds, total_hours, total_minutes, total_seconds;
+
+	total_seconds = parseInt(Math.floor(miliseconds / 1000));
+	total_minutes = parseInt(Math.floor(total_seconds / 60));
+	total_hours = parseInt(Math.floor(total_minutes / 60));
+	days = parseInt(Math.floor(total_hours / 24));
+
+	seconds = parseInt(total_seconds % 60);
+	minutes = parseInt(total_minutes % 60);
+	hours = parseInt(total_hours % 24);
+
+	if (days > 1) {
+		if (hours > 1) {
+			if (minutes === 1 && seconds === 1) return `${days} days ${hours} hours ${minutes} minute ${seconds} second`;
+			if (minutes === 1) return `${days} days ${hours} hours ${minutes} minute ${seconds} seconds`;
+			if (seconds === 1) return `${days} days ${hours} hours ${minutes} minutes ${seconds} second`;
+			return `${days} days ${hours} hours ${minutes} minutes ${seconds} seconds`;
+		}
+
+		if (hours === 1) {
+			if (minutes === 1 && seconds === 1) return `${days} days ${hours} hour ${minutes} minute ${seconds} second`;
+			if (minutes === 1) return `${days} days ${hours} hour ${minutes} minute ${seconds} seconds`;
+			if (seconds === 1) return `${days} days ${hours} hour ${minutes} minutes ${seconds} second`;
+			return `${days} days ${hours} hour ${minutes} minutes ${seconds} seconds`;
+		}
+
+		if (hours < 1) {
+			if (minutes === 1 && seconds === 1) return `${days} days ${hours} hours ${minutes} minute ${seconds} second`;
+			if (minutes === 1) return `${days} days ${hours} hours ${minutes} minute ${seconds} seconds`;
+			if (seconds === 1) return `${days} days ${hours} hours ${minutes} minutes ${seconds} second`;
+			return `${days} days ${hours} hours ${minutes} minutes ${seconds} seconds`;
+		}
+	}
+
+	if (days === 1) {
+		if (hours > 1) {
+			if (minutes === 1 && seconds === 1) return `${days} day ${hours} hours ${minutes} minute ${seconds} second`;
+			if (minutes === 1) return `${days} day ${hours} hours ${minutes} minute ${seconds} seconds`;
+			if (seconds === 1) return `${days} day ${hours} hours ${minutes} minutes ${seconds} second`;
+			return `${days} day ${hours} hours ${minutes} minutes ${seconds} seconds`;
+		}
+
+		if (hours === 1) {
+			if (minutes === 1 && seconds === 1) return `${days} day ${hours} hour ${minutes} minute ${seconds} second`;
+			if (minutes === 1) return `${days} day ${hours} hour ${minutes} minute ${seconds} seconds`;
+			if (seconds === 1) return `${days} day ${hours} hour ${minutes} minutes ${seconds} second`;
+			return `${days} day ${hours} hour ${minutes} minutes ${seconds} seconds`;
+		}
+
+		if (hours < 1) {
+
+			if (minutes === 1 && seconds === 1) return `${days} day ${hours} hours ${minutes} minute ${seconds} second`;
+			if (minutes === 1) return `${days} day ${hours} hours ${minutes} minute ${seconds} seconds`;
+			if (seconds === 1) return `${days} day ${hours} hours ${minutes} minutes ${seconds} second`;
+			return `${days} day ${hours} hours ${minutes} minutes ${seconds} seconds`;
+		}
+	}
+
+	if (days < 1) {
+		if (hours > 1) {
+			if (minutes === 1 && seconds === 1) return `${hours} hours ${minutes} minute ${seconds} second`;
+			if (minutes === 1) return `${hours} hours ${minutes} minute ${seconds} seconds`;
+			if (seconds === 1) return `${hours} hours ${minutes} minutes ${seconds} second`;
+			return `${hours} hours ${minutes} minutes ${seconds} seconds`;
+		}
+
+		if (hours === 1) {
+			if (minutes === 1 && seconds === 1) return `${hours} hour ${minutes} minute ${seconds} second`;
+			if (minutes === 1) return `${hours} hour ${minutes} minute ${seconds} seconds`;
+			if (seconds === 1) return `${hours} hour ${minutes} minutes ${seconds} second`;
+			return `${hours} hour ${minutes} minutes ${seconds} seconds`;
+		}
+
+		if (hours < 1) {
+			if (minutes < 1) {
+				if (seconds === 1) return `${seconds} second`;
+				if (seconds > 1) return `${seconds} seconds`;
+			}
+
+			if (minutes === 1 && seconds === 1) return `${minutes} minute ${seconds} second`;
+			if (minutes === 1) return `${minutes} minute ${seconds} seconds`;
+			if (seconds === 1) return `${minutes} minutes ${seconds} second`;
+			return `${minutes} minutes ${seconds} seconds`;
+		}
+	}
+}
+
 module.exports = {
 	bot, // bot client object.
 	Discord, // discord module.
@@ -347,5 +435,6 @@ module.exports = {
 	messageRemoverWithReact, // a function to manage await reactions much easier.
 	sendEmbedLog, // a function to manage sending webhooks automatically and create a new one if necessary.
 	removeUserLastMessage, // a function to remove last user message after 2 seconds.
-	logger // a function to manage logs.
+	logger, // a function to manage logs.
+	convertMsToTime // a function to convert milliseconds to human readable format.
 };
