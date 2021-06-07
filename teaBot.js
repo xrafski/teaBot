@@ -8,7 +8,7 @@ const { MongoClient } = require('./functions/mongodb-connection');
 const bot = new Discord.Client({ partials: ['MESSAGE', 'REACTION'] });
 
 // define current bot version.
-const BotVersion = '1.0.16';
+const BotVersion = '1.0.17';
 
 // define icon image url for embeds
 const TEAlogo = 'https://i.imgur.com/7VUCJ75.png';
@@ -311,6 +311,12 @@ function removeUserLastMessage(message) {
 		.catch(error => logger('error', `teaBot.js:2 removeUserLastMessage() Fetch user last message in '${message.guild.name}' server`, error));
 }
 
+/**
+ * Custom log file.
+ * @param {String} type - debug/log/info/warn/error/event/mongo/trace/update
+ * @param {String} text - any message included in the log.
+ * @param {Object} error - error object to display in the log.
+ */
 function logger(type, text, error) {
 	if (type?.toLowerCase() === 'debug' && config.botDetails.debugTest === false) return; // check if debug is enabled
 	text = text?.replace(/\s+/g, ' ');
