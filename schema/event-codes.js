@@ -5,11 +5,13 @@ const eventCodeModel = new Schema({
     type: { type: String, required: true, lowercase: true },
     hint: { type: String },
     available: { type: Boolean, required: true },
+    group: { type: String, default: 'global', lowercase: true },
+    club: { type: String, default: '' },
     prize: {
         claimed: { type: Boolean, required: true },
-        item: { type: String },
-        userID: { type: String },
-        userTag: { type: String }
+        item: { type: String, default: '' },
+        userID: { type: String, default: '' },
+        userTag: { type: String, default: '' }
     }
 }, {
     versionKey: false

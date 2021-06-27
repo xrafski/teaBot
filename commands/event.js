@@ -1,9 +1,13 @@
-const { botReply, logger, sendEmbedLog, getEmoji } = require('../teaBot');
+const { botReply, logger, sendEmbedLog, getEmoji, calculatePercentage } = require('../teaBot');
 const config = require("../bot-settings.json");
 const { checkEventCache, blockEventWhileProcessing, updateEventStatus } = require("../cache/tea-event-cache");
 const { MongoClient } = require("../functions/mongodb-connection");
 const { eventPriorityPrizeModel } = require("../schema/event-priority-prizes");
 const { eventCodeModel } = require('../schema/event-codes');
+const { eventRaffleTier0 } = require('../schema/event-raffle-tier0');
+const { eventRaffleTier1 } = require('../schema/event-raffle-tier1');
+const { eventRaffleTier2 } = require('../schema/event-raffle-tier2');
+
 
 module.exports.help = {
     name: "event",
@@ -13,6 +17,19 @@ module.exports.help = {
 };
 
 module.exports.run = async (bot, message, args) => {
+
+    // Sample aggregate to pick random documents
+    // await MongoClient().then(async () => { // Connect to the MongoDB server.
+
+    //     eventRaffleTier0.aggregate([{ $sample: { size: 1 } }])
+    //         .then(rngDocs => {
+    //             if (rngDocs[0].tag === 'Skillez#3311') console.warn(rngDocs[0].tag + ' ' + index)
+    //             else console.log(rngDocs[0].tag + ' ' + index)
+    //         })
+    //         .catch(err => console.error(err));
+    // })
+    //     .catch(err => console.error(err));
+
     if (checkEventCache('eventstatus') === false) return botReply(`> ${message.author} There is no active event to participate, good luck next time 💙`, message);
     if (checkEventCache('blockevent') === true) return botReply(`> ${message.author}, I'm busy processing a request from someone else. Please try again in a few seconds.`, message);
 
@@ -45,7 +62,7 @@ module.exports.run = async (bot, message, args) => {
     blockEventWhileProcessing(true); // block command at the start to prevent other people use at this same time.
     await MongoClient().then(async () => { // connect to the MongoDB
 
-        await eventCodeModel.findOne({ id: userCode, available: true })
+        await eventCodeModel.findOne({ group: { "$in": ["global", guild.id] }, id: userCode, available: true }) // find available document with provided code that is in group 'global' or 'serverID'
             .then(async code => {
 
                 if (code) { // If the document is found.
@@ -117,7 +134,58 @@ module.exports.run = async (bot, message, args) => {
                             await checkAmountOfDocumentsAndDisableIfZero(); // Check if any available codes left, if so disable the system.
                             return blockEventWhileProcessing(false); // Unlock the command.
                         }
-                        default: return logger('error', `event.js:1 default switch() This case not should be fired.`);
+                        case 'raffle': { // Raffle type of code.
+
+                            await AddUserToTier0Basic(author, code).then(async basicEntry => {
+                                // console.log(basicEntry);
+                                const { amountOfClubCodes, promoteToClubTier, totalUserBasicEntries, currentUserBasicEntries, totalRaffleCodes } = basicEntry;
+                                const basicInformation = `> ${getEmoji(config.botDetails.TEAserverID, 'TEA')} Congratulations ${author}, entry has been registered to the **basic tier raffle** successfully! (**${calculatePercentage(totalUserBasicEntries, totalRaffleCodes)}** of available entries found).\n> __**${calculatePercentage(currentUserBasicEntries, amountOfClubCodes)}** of codes for **${code.club}** found so far.__`;
+
+                                if (promoteToClubTier) { // if user is promoted to the club tier raffle.
+
+                                    await AddUserToTier1Club(author, code)
+                                        .then(async clubEntry => {
+                                            // console.log(clubEntry);
+                                            const { amountOfClubs, totalUserClubEntries, promoteToGrandTier } = clubEntry;
+                                            const userUpgradedToClubTier = `\n> \`You have found all club codes in ${code.club}!\`\n> _Registered one entry ticket for **club tier raffle**! (**${calculatePercentage(totalUserClubEntries, amountOfClubs)}** of possible entries)._`;
+                                            infoString = userUpgradedToClubTier;
+
+                                            if (promoteToGrandTier) { // if user is promoted to the grand tier raffle
+                                                await AddUserToTier2Grand(author)
+                                                    .then(grandEntry => {
+                                                        // console.log(grandEntry);
+                                                        const { totalGrandEntries } = grandEntry;
+                                                        infoString = basicInformation + userUpgradedToClubTier + `\n\`\`\`less\n[+] You have found all event codes in all clubs!\`\`\`\n> Registered a final entry ticket to the **grand tier raffle** you have around **${calculatePercentage(1, totalGrandEntries)}** chances to win at this moment!\n> **Good Luck**, We really appreciate your work during this event 💙`;
+                                                    }).catch(err => {
+                                                        logger('error', `event.js:1 raffle switch() MongoDB query error.`, err);
+                                                        botReply(`> ${author} ❌ Database error, please try again later.`, message);
+                                                    });
+                                            } else infoString = basicInformation + userUpgradedToClubTier + `\n\n> Find all the codes in the different club(s) to register another raffle ticket and increase your chances of winning the **club tier raffle**.\n> If you manage to find all event codes in all clubs you will enter the **grand tier raffle**!`;;
+
+                                        }).catch(err => {
+                                            logger('error', `event.js:2 raffle switch() MongoDB query error.`, err);
+                                            botReply(`> ${author} ❌ Database error, please try again later.`, message);
+                                        });
+
+                                } else infoString = basicInformation + `\n\n> Find more codes to increase your chances of winning the **basic tier raffle**, find all **${code.club}** codes to enter the **club tier raffle**!`;
+
+                                botReply(infoString, message); // Send a message with the entry information.
+
+                            }).catch(err => {
+                                if (err.code === 11000) botReply(`> ${author} You already in the basic raffle with this code.`, message);
+                                else {
+                                    logger('error', `event.js:3 raffle switch() MongoDB query error.`, err);
+                                    botReply(`> ${author} ❌ Database error, please try again later.`, message);
+                                }
+                            });
+
+                            // await checkAmountOfDocumentsAndDisableIfZero(); // Check if any available codes left, if so disable the system.
+                            return blockEventWhileProcessing(false); // Unlock the command.
+                        }
+                        default: {
+                            logger('error', `event.js:1 default switch() This case not should be fired. (${code.id} | ${code.type})`);
+                            return blockEventWhileProcessing(false); // Unlock the command.
+                        }
                     }
 
                 } else { // When findOne function didn't find anything.
@@ -127,7 +195,7 @@ module.exports.run = async (bot, message, args) => {
 
             }).catch(err => {
                 // query error to findOne
-                logger('error', `event.js:1 switch main() Query error to MongoDB.`, err);
+                logger('error', `event.js:1 switch() Query error to MongoDB.`, err);
                 botReply(`Database query error, try again later!`, message);
             });
 
@@ -136,15 +204,103 @@ module.exports.run = async (bot, message, args) => {
         botReply(`> ${author} Database connection error, try again later!`, message);
     });
 
+    /**
+     * A function to check amount of available codes
+     * 
+     * Disable the system if no available codes are found..
+     */
     async function checkAmountOfDocumentsAndDisableIfZero() {
         await eventCodeModel.countDocuments({ available: true })
             .then(async docsAmount => {
                 if (docsAmount === 0) {
                     await updateEventStatus(false, (err, res) => {
-                        if (err) logger('error', `event.js:1 checkAmountOfDocumentsAndDisableIfZero() ${err}`);
+                        if (err) logger('error', `event.js:1 checkAmountOfDocumentsAndDisableIfZero() Failed.`, err);
                         else logger('log', `event.js:2 checkAmountOfDocumentsAndDisableIfZero() ${res.message}`);
                     });
                 }
             }).catch(err => logger('error', `event.js:3 checkAmountOfDocumentsAndDisableIfZero() Query error to MongoDB.`, err));
+    }
+
+    /**
+    * A function to add a user to tier0 (basic) raffle.
+    * @param {Object} user User object with user.id/user.tag etc.
+    * @param {Object} code A document Object from MongoDB eventCodeModel query.
+    * @returns Objects with a new document, amount of club participants, the current amount of user entries and if user should be promoted to the next tier.
+    */
+    function AddUserToTier0Basic(user, code) {
+        return new Promise(async (resolve, reject) => {
+
+            const newRaffleEntry = new eventRaffleTier0({
+                id: user.id,
+                tag: user.tag,
+                code: code.id,
+                club: code.club,
+                entry: user.id + '-' + code.id + '-' + code.club
+            }); // Create MongoDB document.
+
+            await Promise.all([eventRaffleTier0.create(newRaffleEntry), eventCodeModel.find({ type: 'raffle', club: code.club })])
+                .then(async ([entryDoc, amountOfClubCodes]) => {
+                    const currentUserBasicEntries = await eventRaffleTier0.find({ id: user.id, club: code.club }).catch(reject);
+                    const totalUserBasicEntries = await eventRaffleTier0.find({ id: user.id }).catch(reject);
+                    const totalRaffleCodes = await eventCodeModel.find({ type: 'raffle' }).catch(reject);
+
+                    let promoteToClubTier = false;
+                    if (amountOfClubCodes.length === currentUserBasicEntries.length) promoteToClubTier = true;
+
+                    resolve({ basicEntryDoc: entryDoc._doc, amountOfClubCodes: amountOfClubCodes.length, currentUserBasicEntries: currentUserBasicEntries.length, totalUserBasicEntries: totalUserBasicEntries.length, totalRaffleCodes: totalRaffleCodes.length, promoteToClubTier });
+                }).catch(reject);
+        });
+    }
+
+    /**
+    * A function to add a user to tier1 (club) raffle.
+    * @param {Object} user User Object with user.id/user.tag etc.
+    * @param {Object} code A document Object from MongoDB eventCodeModel query.
+    * @returns Objects with a new document, amount of clubs and the current amount of user entries.
+    */
+    function AddUserToTier1Club(user, code) {
+        return new Promise(async (resolve, reject) => {
+
+            const newRaffleEntry = new eventRaffleTier0({
+                id: user.id,
+                tag: user.tag,
+                club: code.club,
+                entry: user.id + '-' + code.club
+            }); // Create MongoDB document.
+
+
+            await Promise.all([eventRaffleTier1.create(newRaffleEntry), eventCodeModel.distinct("club")])
+                .then(async ([entryDoc, amountOfClubs]) => {
+
+                    const totalUserClubEntries = await eventRaffleTier1.find({ id: user.id }).catch(reject);
+
+                    let promoteToGrandTier = false;
+                    if (totalUserClubEntries.length === amountOfClubs.length) promoteToGrandTier = true;
+
+                    resolve({ clubEntryDoc: entryDoc._doc, amountOfClubs: amountOfClubs.length, totalUserClubEntries: totalUserClubEntries.length, promoteToGrandTier });
+                }).catch(reject);
+        });
+    }
+
+    /**
+    * A function to add a user to tier2 (top) raffle.
+    * @param {Object} user User Object with user.id/user.tag etc.
+    * @returns Object with a new document.
+    */
+    function AddUserToTier2Grand(user) {
+        return new Promise(async (resolve, reject) => {
+
+            const newRaffleEntry = new eventRaffleTier0({
+                id: user.id,
+                tag: user.tag,
+                entry: user.id + '-grand'
+            }); // Create MongoDB document.
+
+            await eventRaffleTier2.create(newRaffleEntry)
+                .then(async newEntryDoc => {
+                    const totalGrandEntries = await eventRaffleTier2.countDocuments().catch(reject);
+                    resolve({ grandEntryDoc: newEntryDoc._doc, totalGrandEntries })
+                }).catch(reject);
+        });
     }
 };

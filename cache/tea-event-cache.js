@@ -7,7 +7,7 @@ let blockEventCommand = { status: false }; // switch to disable event command wh
 
 /**
  * Return event cache data 'eventstatus'/'blockevent'.
- * @param {string} type - 'eventstatus' - returns boolean from eventStatus Object | 'eventcodes' returns eventCodeCache Object | 'blockevent' returns boolean from blockEventCommand Object
+ * @param {string} type - 'eventstatus' - returns boolean from eventStatus Object | 'blockevent' returns boolean from blockEventCommand Object
  */
 function checkEventCache(type) {
     if (type === 'eventstatus') return eventStatus.status;
@@ -66,12 +66,19 @@ async function loadEventStatus(callback) {
     await MongoClient().then(async () => { // connect to MongoDB
 
         await eventSettingsModel.findOne({ id: 'event-status' }).exec()
-            .then(doc => {
+            .then(async doc => {
 
                 if (doc) {
                     eventStatus = { status: doc.status };
-                    callback(null, { message: `Successfully loaded '${doc.id}' with '${doc.status}' status from the 'event-settings' collection.`, eventStatus });
-                } else callback(new Error(`'event-status' document is not found.`), null);
+                    callback(null, { message: `Successfully loaded '${doc.id}' with '${doc.status}' status from the '${eventSettingsModel.collection.name}' collection.`, eventStatus });
+                } else {
+                    await eventSettingsModel.create({ id: 'event-status' })
+                        .then(doc => {
+                            eventStatus = { status: doc.status };
+                            callback(null, { message: `Successfully created and loaded '${doc.id}' with '${doc.status}' status from the '${eventSettingsModel.collection.name}' collection.`, eventStatus })
+                        })
+                        .catch(err => callback(err, null));
+                }
 
             }).catch(err => callback(err, null));
     }).catch(err => callback(err, null));

@@ -8,7 +8,7 @@ const { MongoClient } = require('./functions/mongodb-connection');
 const bot = new Discord.Client({ partials: ['MESSAGE', 'REACTION'] });
 
 // define current bot version.
-const BotVersion = '1.0.17';
+const BotVersion = '1.0.19';
 
 // define icon image url for embeds
 const TEAlogo = 'https://i.imgur.com/7VUCJ75.png';
@@ -426,6 +426,20 @@ function convertMsToTime(miliseconds) {
 	}
 }
 
+    /**
+     * Calculate percentage of the two numbers.
+     * @param {*} partialValue current number
+     * @param {*} totalValue total number
+     * @returns returns a value in pertentage
+     */
+	 function calculatePercentage(partialValue, totalValue, allowOver100Percent) {
+        if (isNaN((100 * partialValue) / totalValue)) return '0%';
+        else if ((100 * partialValue) / totalValue === Infinity) return '100%';
+		else if (allowOver100Percent) return ((100 * partialValue) / totalValue).toFixed(1) + '%';
+        else if (Math.round((100 * partialValue) / totalValue).toFixed(0) > 100) return '100%';
+		else return ((100 * partialValue) / totalValue).toFixed(1) + '%';
+    }
+
 module.exports = {
 	bot, // bot client object.
 	Discord, // discord module.
@@ -442,5 +456,6 @@ module.exports = {
 	sendEmbedLog, // a function to manage sending webhooks automatically and create a new one if necessary.
 	removeUserLastMessage, // a function to remove last user message after 2 seconds.
 	logger, // a function to manage logs.
-	convertMsToTime // a function to convert milliseconds to human readable format.
+	convertMsToTime, // a function to convert milliseconds to human readable format.
+	calculatePercentage // returns percentage
 };

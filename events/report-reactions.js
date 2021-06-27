@@ -2,7 +2,7 @@ const { bot, botReply, embedMessage, Discord, TEAlogo, emojiCharacters, getEmoji
 const config = require("../bot-settings.json");
 
 bot.on('messageReactionAdd', async (reaction, user) => {
-    const channelArray = [config.reportSystem.bugQueueChannelID, config.reportSystem.bugGraphicalChannelID, config.reportSystem.bugCombatChannelID, config.reportSystem.bugUIChannelID, config.reportSystem.bugBuildingChannelID, config.reportSystem.bugCriticalChannelID, config.reportSystem.bugMiscalculationChannelID, config.reportSystem.bugInsufficientDataChannelID];
+    const channelArray = [config.reportSystem.bugQueueChannelID, config.reportSystem.bugGraphicalChannelID, config.reportSystem.bugCombatChannelID, config.reportSystem.bugUIChannelID, config.reportSystem.bugBuildingChannelID, config.reportSystem.bugCriticalChannelID, config.reportSystem.bugMiscalculationChannelID, config.reportSystem.bugInsufficientDataChannelID, config.reportSystem.bugObjectivesChannelID, config.reportSystem.bugTyposChannelID, config.reportSystem.bugResolvedChannelID];
     if (channelArray.includes(reaction.message.channel.id)) {
         if (user.id === bot.user.id) return;
 
@@ -21,13 +21,13 @@ bot.on('messageReactionAdd', async (reaction, user) => {
             const menuEmbed = new Discord.MessageEmbed()
                 .setColor('#0095ff')
                 .setAuthor('Reaction Menu', TEAlogo)
-                .setDescription(`${user} You have reacted on this **[report message](${message.url})**.\nPlease react under this message to move to the appropriate category.\n\nLegend:\n❌ • Exit\n${emojiCharacters[1]} • <#${config.reportSystem.bugGraphicalChannelID}>\n${emojiCharacters[2]} • <#${config.reportSystem.bugUIChannelID}>\n${emojiCharacters[3]} • <#${config.reportSystem.bugCombatChannelID}>\n${emojiCharacters[4]} • <#${config.reportSystem.bugBuildingChannelID}>\n${emojiCharacters[5]} • <#${config.reportSystem.bugCriticalChannelID}>\n${emojiCharacters[6]} • <#${config.reportSystem.bugMiscalculationChannelID}>\n${emojiCharacters[7]} • <#${config.reportSystem.bugInsufficientDataChannelID}>`);
+                .setDescription(`${user} You have reacted on this **[report message](${message.url})**.\nPlease react under this message to move to the appropriate category.\n\nLegend:\n❌ • Exit\n${emojiCharacters[1]} • <#${config.reportSystem.bugGraphicalChannelID}>\n${emojiCharacters[2]} • <#${config.reportSystem.bugUIChannelID}>\n${emojiCharacters[3]} • <#${config.reportSystem.bugCombatChannelID}>\n${emojiCharacters[4]} • <#${config.reportSystem.bugBuildingChannelID}>\n${emojiCharacters[5]} • <#${config.reportSystem.bugCriticalChannelID}>\n${emojiCharacters[6]} • <#${config.reportSystem.bugMiscalculationChannelID}>\n${emojiCharacters[7]} • <#${config.reportSystem.bugInsufficientDataChannelID}>\n${emojiCharacters[8]} • <#${config.reportSystem.bugObjectivesChannelID}>\n${emojiCharacters[9]} • <#${config.reportSystem.bugTyposChannelID}>\n${emojiCharacters[10]} • <#${config.reportSystem.bugResolvedChannelID}>`);
             return botReply(menuEmbed, message)
                 .then(async msg => {
 
                     if (msg) {
                         const emojiFilter = (reaction, user) => { // accept interaction only from the message author
-                            return ['❌', emojiCharacters[1], emojiCharacters[2], emojiCharacters[3], emojiCharacters[4], emojiCharacters[5], emojiCharacters[6], emojiCharacters[7]].includes(reaction.emoji.name) && !user.bot && reactUser === user;
+                            return ['❌', emojiCharacters[1], emojiCharacters[2], emojiCharacters[3], emojiCharacters[4], emojiCharacters[5], emojiCharacters[6], emojiCharacters[7], emojiCharacters[8], emojiCharacters[9], emojiCharacters[10]].includes(reaction.emoji.name) && !user.bot && reactUser === user;
                         };
 
                         msg.awaitReactions(emojiFilter, { max: 1, time: 60000 })
@@ -44,6 +44,9 @@ bot.on('messageReactionAdd', async (reaction, user) => {
                                     case emojiCharacters[5]: return moveTheReport(config.reportSystem.bugCriticalChannelID, 'critical');
                                     case emojiCharacters[6]: return moveTheReport(config.reportSystem.bugMiscalculationChannelID, 'miscalculations');
                                     case emojiCharacters[7]: return moveTheReport(config.reportSystem.bugInsufficientDataChannelID, 'insufficient_data');
+                                    case emojiCharacters[8]: return moveTheReport(config.reportSystem.bugObjectivesChannelID, 'objectives');
+                                    case emojiCharacters[9]: return moveTheReport(config.reportSystem.bugTyposChannelID, 'typos-and-tag-errors');
+                                    case emojiCharacters[10]: return moveTheReport(config.reportSystem.bugResolvedChannelID, 'resolved');
                                     default: return;
                                 }
                             })
@@ -52,14 +55,21 @@ bot.on('messageReactionAdd', async (reaction, user) => {
                                 else logger('error', `report-reactions.js:2 emojiReactionMenu() Reaction error`, error);
                             });
 
-                        await msg.react(emojiCharacters[1]);
-                        await msg.react(emojiCharacters[2]);
-                        await msg.react(emojiCharacters[3]);
-                        await msg.react(emojiCharacters[4]);
-                        await msg.react(emojiCharacters[5]);
-                        await msg.react(emojiCharacters[6]);
-                        await msg.react(emojiCharacters[7]);
-                        await msg.react('❌');
+                        try {
+                            await msg.react(emojiCharacters[1]);
+                            await msg.react(emojiCharacters[2]);
+                            await msg.react(emojiCharacters[3]);
+                            await msg.react(emojiCharacters[4]);
+                            await msg.react(emojiCharacters[5]);
+                            await msg.react(emojiCharacters[6]);
+                            await msg.react(emojiCharacters[7]);
+                            await msg.react(emojiCharacters[8]);
+                            await msg.react(emojiCharacters[9]);
+                            await msg.react(emojiCharacters[10]);
+                            await msg.react('❌');
+                        } catch (error) {
+                            return;
+                        }
                     }
                 }).catch(error => logger('error', `report-reactions.js:4 emojiReactionMenu() (READ_MESSAGES/READ_MESSAGE_HISTORY/ADD_REACTIONS)`, error));
         }
