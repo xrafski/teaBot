@@ -17,18 +17,7 @@ module.exports.help = {
 };
 
 module.exports.run = async (bot, message, args) => {
-
-    // Sample aggregate to pick random documents
-    // await MongoClient().then(async () => { // Connect to the MongoDB server.
-
-    //     eventRaffleTier0.aggregate([{ $sample: { size: 1 } }])
-    //         .then(rngDocs => {
-    //             if (rngDocs[0].tag === 'Skillez#3311') console.warn(rngDocs[0].tag + ' ' + index)
-    //             else console.log(rngDocs[0].tag + ' ' + index)
-    //         })
-    //         .catch(err => console.error(err));
-    // })
-    //     .catch(err => console.error(err));
+    message.delete().catch(err => logger('warn', `event.js:1 () Error to remove the message.`, err));
 
     if (checkEventCache('eventstatus') === false) return botReply(`> ${message.author} There is no active event to participate, good luck next time 💙`, message);
     if (checkEventCache('blockevent') === true) return botReply(`> ${message.author}, I'm busy processing a request from someone else. Please try again in a few seconds.`, message);
