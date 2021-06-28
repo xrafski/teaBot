@@ -33,9 +33,9 @@ bot.on('ready', () => { // https://crontab.guru/examples.html
 
                     if (dateDoc.getTime() <= Date.now()) { // When raffle should end.
                         await updateEventStatus(false, async (err, res) => {
-                            if (err) logger('error', `raffleCron.js:x updateEventStatus() Failed.`, err);
+                            if (err) logger('error', `raffleCron.js:1 updateEventStatus() Failed.`, err);
                             else {
-                                logger('update', `raffleCron.js:x updateEventStatus() Raffle ended and ${res.message}`);
+                                logger('update', `raffleCron.js:2 updateEventStatus() Raffle ended and ${res.message}`);
                                 await updateRaffleInfoMessage(null, true); // Update raffle message data and pick winners.
                             }
                         });
@@ -54,7 +54,7 @@ bot.on('ready', () => { // https://crontab.guru/examples.html
                 .then(async ([tier0, tier1, tier2, eventDoc, uniqClubs, amountOfCodes]) => {
                     // console.log(tier0, tier1, tier2, eventDoc.raffleMessageID, uniqClubs);
 
-                    const raffleMessage = await bot.guilds.cache.get(config.servers.eventServerID)?.channels.cache.get(config.channels.raffleInfoChannelID)?.messages.fetch(eventDoc.raffleMessageID).catch(err => logger('warn', `raffleCron.js:X Promise.all() Failed to get raffleMessage Object`, err));
+                    const raffleMessage = await bot.guilds.cache.get(config.servers.eventServerID)?.channels.cache.get(config.channels.raffleInfoChannelID)?.messages.fetch(eventDoc.raffleMessageID).catch(err => logger('warn', `raffleCron.js:1 Promise.all() Failed to get raffleMessage Object`, err));
                     if (raffleMessage) {
                         let messageContent = `${getEmoji(config.botDetails.TEAserverID, 'TEA')} Event Raffle Information:\n\n\`\`\`cs\n[${tier0}]x Basic Tier Raffle Entries (up to ${calculatePercentage(amountOfCodes, tier0)} to win)\`\`\`\n\`\`\`css\n[${tier1}]x Club Tier Raffle Entries (up to ${calculatePercentage(uniqClubs.length, tier1)} to win)\`\`\`\n\`\`\`less\n[${tier2}]x Grand Prize Tier Raffle Entries (${calculatePercentage(1, tier2)} to win)\`\`\``;
 
@@ -76,15 +76,15 @@ bot.on('ready', () => { // https://crontab.guru/examples.html
 
                                     await disableRaffleDate(); // Disable raffle module.
 
-                                }).catch(err => logger('error', `raffleCron.js:x asdasdsa`, err));
+                                }).catch(err => logger('error', `raffleCron.js:2 Promise.all() Error with promise all function.`, err));
 
                         }
-                        raffleMessage.edit(msgcnt ? msgcnt : messageContent).then(msg => logger('debug', `raffleCron.js:0 Promise.all() Raffle info message has been modified (${msg.content.length}).`)).catch(err => logger('warn', `raffleCron.js:x Promise.all() Failed to edit raffleMessage`, err));
+                        raffleMessage.edit(msgcnt ? msgcnt : messageContent).then(msg => logger('debug', `raffleCron.js:0 Promise.all() Raffle info message has been modified (${msg.content.length}).`)).catch(err => logger('warn', `raffleCron.js:3 Promise.all() Failed to edit raffleMessage`, err));
                     }
 
-                }).catch(err => logger('error', `raffleCron.js:3 Promise.all() MongoDB query error.`, err));
+                }).catch(err => logger('error', `raffleCron.js:4 Promise.all() MongoDB query error.`, err));
 
-        }).catch(err => logger('error', `raffleCron.js:3 updateRaffleInfoMessage() MongoDB connection error.`, err));
+        }).catch(err => logger('error', `raffleCron.js:1 updateRaffleInfoMessage() MongoDB connection error.`, err));
     }
 
     async function disableRaffleDate() {
