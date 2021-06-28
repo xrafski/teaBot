@@ -8,7 +8,6 @@ const { eventRaffleTier0 } = require('../schema/event-raffle-tier0');
 const { eventRaffleTier1 } = require('../schema/event-raffle-tier1');
 const { eventRaffleTier2 } = require('../schema/event-raffle-tier2');
 
-
 module.exports.help = {
     name: "event",
     description: "Participate command in the TEA events.",
