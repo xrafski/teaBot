@@ -33,7 +33,7 @@ module.exports.run = async (bot, message, args) => {
 
                     let codeHints = '';
                     availableCodes.forEach(code => codeHints = codeHints + `${code?.hint ? `\n${code.hint}` : ''}`); // Update codeHints string.
-                    botReply(`${getEmoji(config.botDetails.TEAserverID, 'TEA')} Event Codes Information\nEvent code pool: **${allCodes.length}**\nRemaining codes: **${availableCodes.length}**\n\n${codeHints ? `Hint(s): ${codeHints}` : ''}`, message);
+                    botReply(`${getEmoji(config.botDetails.TEAserverID, 'TEA')} ${author} Event Codes Information\n> Event code pool: **${allCodes.length}**\n> Remaining codes: **${availableCodes.length}**\n\n${codeHints ? `Hint(s): ${codeHints}` : ''}`, message);
                 })
                 .catch(err => {
                     logger('error', `event.js:1 remaining() Query error to MongoDB.`, err);
