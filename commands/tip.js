@@ -1,4 +1,4 @@
-const { TEAlogo, Discord, errorLog, getEmoji } = require('../teaBot');
+const { TEAlogo, Discord, getEmoji, logger } = require('../teaBot');
 const config = require("../bot-settings.json");
 
 module.exports.help = {
@@ -318,11 +318,11 @@ module.exports.run = async (bot, message) => {
                 })
                 .catch(error => {
                     dmMessage.channel.send(`${getEmoji(config.botDetails.TEAserverID, 'TEA')} Error to send tip, try again later...`);
-                    errorLog(`tip.js:1 postToMods() Error in the function - probably missing permissions (READ/SEND/REACT)\n-------------------------------------------------\nUser tip summary:\nqUser: ${qUser}\nqDescription: ${qDescription}\nqDate: ${qDate}\nqServer: ${qServer}\nqWorld: ${qWorld}\nqProof: ${qProof}\nqNote: ${qNote}\nqRequester: ${qRequester} - ${qRequester.tag} - ${qRequester.id}`, error)
+                    logger('error', `tip.js:1 postToMods() Error in the function - probably missing permissions (READ/SEND/REACT)\n-------------------------------------------------\nUser tip summary:\nqUser: ${qUser}\nqDescription: ${qDescription}\nqDate: ${qDate}\nqServer: ${qServer}\nqWorld: ${qWorld}\nqProof: ${qProof}\nqNote: ${qNote}\nqRequester: ${qRequester} - ${qRequester.tag} - ${qRequester.id}`, error)
                 })
         } else {
             dmMessage.channel.send(`${getEmoji(config.botDetails.TEAserverID, 'TEA')} Error to send tip, try again later...`);
-            errorLog(`tip.js:2 postToMods() TEA official chat channel is missing - maybe wrong channel ID in 'TEAofficialChannel' conf file: ${config.channels.officialChannelID}\n-------------------------------------------------\nUser tip summary:\nqUser: ${qUser}\nqDescription: ${qDescription}\nqDate: ${qDate}\nqServer: ${qServer}\nqWorld: ${qWorld}\nqProof: ${qProof}\nqNote: ${qNote}\nqRequester: ${qRequester} - ${qRequester.tag} - ${qRequester.id}`);
+            logger('error', `tip.js:2 postToMods() TEA official chat channel is missing - maybe wrong channel ID in 'TEAofficialChannel' conf file: ${config.channels.officialChannelID}\n-------------------------------------------------\nUser tip summary:\nqUser: ${qUser}\nqDescription: ${qDescription}\nqDate: ${qDate}\nqServer: ${qServer}\nqWorld: ${qWorld}\nqProof: ${qProof}\nqNote: ${qNote}\nqRequester: ${qRequester} - ${qRequester.tag} - ${qRequester.id}`);
         }
     }
 

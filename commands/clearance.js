@@ -168,7 +168,7 @@ module.exports.run = async (bot, message) => {
                         })
                         .catch(error => {
                             if (error.message === "Cannot read property 'emoji' of undefined") return botReply(`❌ There was no reaction within the time limit (${Math.round(questionResponseTime / 60000)}mins)! - Cancelled.`, message);
-                            errorLog(`clearance.js:1 ConfirmationPromt() Error when user answered the question.`, error);
+                            logger('error', `clearance.js:1 ConfirmationPromt() Error when user answered the question.`, error);
                         });
 
                     try {
@@ -177,7 +177,7 @@ module.exports.run = async (bot, message) => {
                     } catch (error) {
                         if (error.message === 'Unknown Message') return;
                         botReply(`An unknown error occured ;(`, message);
-                        errorLog(`clearance.js:2 ConfirmationPromt() Error to add reactions probably wrong emojis or missing permissions.`, error);
+                        logger('error', `clearance.js:2 ConfirmationPromt() Error to add reactions probably wrong emojis or missing permissions.`, error);
                     }
                 } else return logger('warn', `clearance.js:3 ConfirmationPromt() Error to send the message`);
             }).catch(error => {

@@ -233,15 +233,15 @@ module.exports.run = async (bot, message) => {
             .setColor('GREEN')
             .setDescription(`Description ▼\n${clubDescriptionVar}`)
             .setFooter('Click ✅ to confirm and send the form.')
-                .addFields(
-                    { name: 'Club Name ▼', value: clubNameVar, inline: true },
-                    { name: 'Level ▼', value: clubLevelVar, inline: false },
-                    { name: 'Joinworld ▼', value: clubJoinworldVar, inline: false },
-                    { name: 'Requirements ▼', value: clubRequirementsVar, inline: false },
-                    { name: 'Representative ▼', value: `\`${clubRepresentativeVar}\``, inline: false },
-                    { name: 'Discord Invite ▼', value: `<https://discord.gg/${clubDiscordVar}>`, inline: false },
-                    { name: 'Requester ▼', value: `${cRequesterVar} • ${cRequesterVar?.tag} • ${cRequesterVar?.id}`, inline: false },
-                )
+            .addFields(
+                { name: 'Club Name ▼', value: clubNameVar, inline: true },
+                { name: 'Level ▼', value: clubLevelVar, inline: false },
+                { name: 'Joinworld ▼', value: clubJoinworldVar, inline: false },
+                { name: 'Requirements ▼', value: clubRequirementsVar, inline: false },
+                { name: 'Representative ▼', value: `\`${clubRepresentativeVar}\``, inline: false },
+                { name: 'Discord Invite ▼', value: `<https://discord.gg/${clubDiscordVar}>`, inline: false },
+                { name: 'Requester ▼', value: `${cRequesterVar} • ${cRequesterVar?.tag} • ${cRequesterVar?.id}`, inline: false },
+            )
 
         return message.channel.send(`> ${author} Are you **sure** to send this form?`, embed_test)
             .then(async Question => {
@@ -262,7 +262,7 @@ module.exports.run = async (bot, message) => {
                         })
                         .catch(error => {
                             if (error.message === "Cannot read property 'emoji' of undefined") return botReply(`${author} ❌ There was no reaction within the time limit (${Math.round(questionResponseTime / 60000)}mins)! - Cancelled.`, message);
-                            errorLog(`apply.js:1 ConfirmationPromt() Error when user answered the question.`, error);
+                            logger('error', `apply.js:1 ConfirmationPromt() Error when user answered the question.`, error);
                         });
 
                     try {
@@ -271,7 +271,7 @@ module.exports.run = async (bot, message) => {
                     } catch (error) {
                         if (error.message === 'Unknown Message') return;
                         botReply(`${author} An unknown error occured ;(`, message);
-                        errorLog(`apply.js:2 ConfirmationPromt() Error to add reactions probably wrong emojis or missing permissions.`, error);
+                        logger('error', `apply.js:2 ConfirmationPromt() Error to add reactions probably wrong emojis or missing permissions.`, error);
                     }
                 } else return logger('warn', `apply.js:3 ConfirmationPromt() Error to send the message`);
             }).catch(error => {
@@ -291,7 +291,7 @@ module.exports.run = async (bot, message) => {
             // define the embed: send apply to registry channel with provided information
             const embed_registry_message = new Discord.MessageEmbed()
                 .setColor('GREEN')
-                .setAuthor(`Alliance registry: '${clubNameVar}' ${clubMemberCountVar? `(${clubMemberCountVar})` : ''}`, TEAlogo)
+                .setAuthor(`Alliance registry: '${clubNameVar}' ${clubMemberCountVar ? `(${clubMemberCountVar})` : ''}`, TEAlogo)
                 .setDescription(clubDescriptionVar)
                 .addFields(
                     { name: 'Club Name ▼', value: clubNameVar, inline: true },

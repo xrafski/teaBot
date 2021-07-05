@@ -81,7 +81,7 @@ module.exports.run = async (bot, message, args) => {
             })
             .catch(error => { // Error handler when message itself or .then() fails.
                 botReply(`> ${author} ❌ An unknown error occured, please contact **${config.botDetails.owner.tag}** to fix this issue!`, message);
-                errorLog(`code.js:1 requestTypeQ() Error`, error);
+                logger('error', `code.js:1 requestTypeQ() Error`, error);
             });
     }
 
@@ -108,7 +108,7 @@ module.exports.run = async (bot, message, args) => {
             })
             .catch(error => { // Error handler when message itself or .then() fails.
                 botReply(`> ${author} ❌ An unknown error occured, please contact **${config.botDetails.owner.tag}** to fix this issue!`, message);
-                errorLog(`code.js:1 prizeNameQ() Error`, error);
+                logger('error', `code.js:1 prizeNameQ() Error`, error);
             });
     }
 
@@ -134,7 +134,7 @@ module.exports.run = async (bot, message, args) => {
             })
             .catch(error => { // Error handler when message itself or .then() fails.
                 botReply(`> ${author} ❌ An unknown error occured, please contact **${config.botDetails.owner.tag}** to fix this issue!`, message);
-                errorLog(`code.js:1 prizeTypeQ() Error`, error);
+                logger('error', `code.js:1 prizeTypeQ() Error`, error);
             });
     }
 
@@ -165,7 +165,7 @@ module.exports.run = async (bot, message, args) => {
             })
             .catch(error => { // Error handler when message itself or .then() fails.
                 botReply(`> ${author} ❌ An unknown error occured, please contact **${config.botDetails.owner.tag}** to fix this issue!`, message);
-                errorLog(`code.js:1 codeNameQ() Error`, error);
+                logger('error', `code.js:1 codeNameQ() Error`, error);
             });
     }
 
@@ -192,7 +192,7 @@ module.exports.run = async (bot, message, args) => {
             })
             .catch(error => { // Error handler when message itself or .then() fails.
                 botReply(`> ${author} ❌ An unknown error occured, please contact **${config.botDetails.owner.tag}** to fix this issue!`, message);
-                errorLog(`code.js:1 codeHintQ() Error`, error);
+                logger('error', `code.js:1 codeHintQ() Error`, error);
             });
     }
 
@@ -225,7 +225,7 @@ module.exports.run = async (bot, message, args) => {
             })
             .catch(error => { // Error handler when message itself or .then() fails.
                 botReply(`> ${author} ❌ An unknown error occured, please contact **${config.botDetails.owner.tag}** to fix this issue!`, message);
-                errorLog(`code.js:1 codeGroupQ() Error`, error);
+                logger('error', `code.js:1 codeGroupQ() Error`, error);
             });
     }
 
@@ -253,7 +253,7 @@ module.exports.run = async (bot, message, args) => {
             })
             .catch(error => { // Error handler when message itself or .then() fails.
                 botReply(`> ${author} ❌ An unknown error occured, please contact **${config.botDetails.owner.tag}** to fix this issue!`, message);
-                errorLog(`code.js:1 requestCodeTypeQ() Error`, error);
+                logger('error', `code.js:1 requestCodeTypeQ() Error`, error);
             });
     }
 
@@ -279,7 +279,7 @@ module.exports.run = async (bot, message, args) => {
             })
             .catch(error => { // Error handler when message itself or .then() fails.
                 botReply(`> ${author} ❌ An unknown error occured, please contact **${config.botDetails.owner.tag}** to fix this issue!`, message);
-                errorLog(`code.js:1 codeRaffleClubQ() Error`, error);
+                logger('error', `code.js:1 codeRaffleClubQ() Error`, error);
             });
     }
 
@@ -338,7 +338,7 @@ module.exports.run = async (bot, message, args) => {
             })
             .catch(error => { // Error handler when message itself or .then() fails.
                 botReply(`> ${author} ❌ An unknown error occured, please contact **${config.botDetails.owner.tag}** to fix this issue!`, message);
-                errorLog(`code.js:1 deleteDocQ() Error`, error);
+                logger('error', `code.js:1 deleteDocQ() Error`, error);
             });
     }
 
