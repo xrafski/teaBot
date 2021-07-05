@@ -1,6 +1,6 @@
 {
   "name": "trove-ethics-alliance-bot",
-  "version": "1.0.21",
+  "version": "1.0.22",
   "description": "Private discord bot for Trove Ethics Alliance",
   "main": "teaBot.js",
   "repository": {

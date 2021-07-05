@@ -16,7 +16,7 @@ module.exports.help = {
 };
 
 module.exports.run = async (bot, message, args) => {
-    message.delete().catch(err => logger('warn', `event.js:1 () Error to remove the message.`, err));
+    // message.delete().catch(err => logger('warn', `event.js:1 () Error to remove the message.`, err));
 
     if (checkEventCache('eventstatus') === false) return botReply(`> ${message.author} There is no active event to participate, good luck next time 💙`, message);
     if (checkEventCache('blockevent') === true) return botReply(`> ${message.author}, I'm busy processing a request from someone else. Please try again in a few seconds.`, message);
@@ -123,6 +123,7 @@ module.exports.run = async (bot, message, args) => {
                             return blockEventWhileProcessing(false); // Unlock the command.
                         }
                         case 'raffle': { // Raffle type of code.
+                            message.delete().catch(err => logger('warn', `event.js:1 raffle switch() Error to remove event attempt message.`, err));
 
                             await AddUserToTier0Basic(author, code).then(async basicEntry => {
                                 // console.log(basicEntry);
@@ -145,13 +146,13 @@ module.exports.run = async (bot, message, args) => {
                                                         const { totalGrandEntries } = grandEntry;
                                                         infoString = basicInformation + userUpgradedToClubTier + `\n\`\`\`less\n[+] You have found all event codes in all clubs!\`\`\`\n> Registered a final entry ticket to the **grand tier raffle** you have around **${calculatePercentage(1, totalGrandEntries)}** chances to win at this moment!\n> **Good Luck**, We really appreciate your work during this event 💙`;
                                                     }).catch(err => {
-                                                        logger('error', `event.js:1 raffle switch() MongoDB query error.`, err);
+                                                        logger('error', `event.js:2 raffle switch() MongoDB query error.`, err);
                                                         botReply(`> ${author} ❌ Database error, please try again later.`, message);
                                                     });
                                             } else infoString = basicInformation + userUpgradedToClubTier + `\n\n> Find all the codes in the different club(s) to register another raffle ticket and increase your chances of winning the **club tier raffle**.\n> If you manage to find all event codes in all clubs you will enter the **grand tier raffle**!`;;
 
                                         }).catch(err => {
-                                            logger('error', `event.js:2 raffle switch() MongoDB query error.`, err);
+                                            logger('error', `event.js:3 raffle switch() MongoDB query error.`, err);
                                             botReply(`> ${author} ❌ Database error, please try again later.`, message);
                                         });
 
@@ -162,7 +163,7 @@ module.exports.run = async (bot, message, args) => {
                             }).catch(err => {
                                 if (err.code === 11000) botReply(`> ${author} You already in the basic raffle with this code.`, message);
                                 else {
-                                    logger('error', `event.js:3 raffle switch() MongoDB query error.`, err);
+                                    logger('error', `event.js:4 raffle switch() MongoDB query error.`, err);
                                     botReply(`> ${author} ❌ Database error, please try again later.`, message);
                                 }
                             });
@@ -177,6 +178,7 @@ module.exports.run = async (bot, message, args) => {
                     }
 
                 } else { // When findOne function didn't find anything.
+                    message.delete().catch(err => logger('warn', `event.js:1 code switch() Error to remove event attempt message.`, err));
                     botReply(`> ${author} ❌ Failed to redeem, this code is invalid or already claimed.`, message);
                     blockEventWhileProcessing(false); // unlock the command.
                 }
@@ -257,7 +259,7 @@ module.exports.run = async (bot, message, args) => {
             }); // Create MongoDB document.
 
 
-            await Promise.all([eventRaffleTier1.create(newRaffleEntry), eventCodeModel.distinct("club")])
+            await Promise.all([eventRaffleTier1.create(newRaffleEntry), eventCodeModel.distinct("club", { "club": { $nin: ["", null] } })])
                 .then(async ([entryDoc, amountOfClubs]) => {
 
                     const totalUserClubEntries = await eventRaffleTier1.find({ id: user.id }).catch(reject);
