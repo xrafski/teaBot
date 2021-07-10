@@ -1,17 +1,20 @@
 const { MongoClient } = require("../functions/mongodb-connection");
+const { eventCodeModel } = require("../schema/event-codes");
 const { eventSettingsModel } = require("../schema/event-settings");
 const { logger } = require("../teaBot");
 
 let eventStatus = { status: false }; // default: { status: false }
 let blockEventCommand = { status: false }; // switch to disable event command while processing requests | default: { status: false }
+let eventCodes = [];
 
 /**
- * Return event cache data 'eventstatus'/'blockevent'.
- * @param {string} type - 'eventstatus' - returns boolean from eventStatus Object | 'blockevent' returns boolean from blockEventCommand Object
+ * Return event cache data 'eventstatus'/'blockevent'/'eventcodes'.
+ * @param {string} type - 'eventstatus' - returns boolean from eventStatus Object | 'blockevent' returns boolean from blockEventCommand Object | 'eventcodes' returns array of available global codes ID
  */
 function checkEventCache(type) {
     if (type === 'eventstatus') return eventStatus.status;
     else if (type === 'blockevent') return blockEventCommand.status;
+    else if (type === 'eventcodes') return eventCodes;
 }
 
 /**
@@ -47,7 +50,7 @@ async function updateEventStatus(status, callback) {
                     callback(null, { message: `Status set to '${status}' in the '${doc.id}' document.`, doc });
                 } else callback(new Error(`'event-status' document was not found.`), null);
             }).catch(err => callback(err, null));
-    });
+    }).catch(err => callback(err, null));
 }
 
 /**
@@ -84,10 +87,30 @@ async function loadEventStatus(callback) {
     }).catch(err => callback(err, null));
 }
 
+/**
+ * Update 'eventCodes' array with code ID documents from code collection.
+ * @param {callbackInfo} callback A callback to run.
+ */
+async function updateCodeCache(callback) {
+    if (eventStatus.status === false) return;
+    eventCodes = [];
+
+    await MongoClient().then(async () => { // Connect to the MongoDB server.
+
+        await eventCodeModel.find({ available: true, group: 'global' }) // Run a query.
+            .then(docs => {
+                if (!docs) return callback(null, `Not found available global codes right now.`); // stop if no docs were found.
+                docs.forEach(doc => eventCodes.push(doc.id)); // Add codes ID to the array.
+                callback(null, `eventCodes array has been updated correctly (${eventCodes.length}).`, eventCodes);
+
+            }).catch(err => callback(err, null));
+    }).catch(err => callback(err, null));
+}
+
 module.exports = {
     checkEventCache,
     updateEventStatus,
     loadEventStatus,
-
-    blockEventWhileProcessing
+    blockEventWhileProcessing,
+    updateCodeCache
 }

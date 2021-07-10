@@ -3,7 +3,7 @@ const config = require("../bot-settings.json");
 const cron = require('node-cron');
 const { MongoClient } = require('../functions/mongodb-connection');
 const { eventSettingsModel } = require('../schema/event-settings');
-const { checkEventCache, updateEventStatus } = require('../cache/tea-event-cache');
+const { checkEventCache, updateEventStatus, updateCodeCache } = require('../cache/tea-event-cache');
 const { eventRaffleTier0 } = require('../schema/event-raffle-tier0');
 const { eventRaffleTier1 } = require('../schema/event-raffle-tier1');
 const { eventRaffleTier2 } = require('../schema/event-raffle-tier2');
@@ -11,9 +11,14 @@ const { eventCodeModel } = require('../schema/event-codes');
 
 bot.on('ready', () => { // https://crontab.guru/examples.html
 
-    cron.schedule('*/30 * * * *', async () => { // Run raffle check status every 30 minutes.
+    cron.schedule('0 * * * *', async () => { // Run raffle check status and update eventCodes array list every hour.
         if (checkEventCache('eventstatus') === false) return logger('debug', `raffleCron.js:0 Event cache status is set to false which means that event is disabled.`);
         await checkRaffleEndTime(); // Check if event should be disabled.
+
+        await updateCodeCache((err, res) => { // Update eventCodes array list
+            if (err) return logger('error', `raffleCron.js:1 cron() MongoDB error`, err);
+            logger('debug', `raffleCron.js:2 cron() ${res}`);
+        });
     });
 
 

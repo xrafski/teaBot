@@ -1,15 +1,17 @@
 const { bot, botReply, ownerDM, logger } = require('../teaBot');
 const config = require('../bot-settings.json');
+const { checkEventCache } = require('../cache/tea-event-cache');
 
 bot.on("message", async message => {
     const { content, channel, guild, author } = message;
-    if (!content.toLowerCase().startsWith(config.botDetails.prefix)) return;
+    // if (!content.toLowerCase().startsWith(config.botDetails.prefix)) return;
     if (author.bot) return;
 
     const args = content.slice(config.botDetails.prefix.length).trim().split(/ +/g);
     const command = args.shift().toLowerCase();
     const cmdFile = bot.commands.get(command);
-    if (cmdFile) {
+
+    if (content.toLowerCase().startsWith(config.botDetails.prefix) && cmdFile) {
         // removeUserLastMessage(message)
         logger('info', `command-listener.js:1 () '${author.tag}' used '${(content.length > 40 ? `${content.slice(0, 40)}...` : `${content}`)}' on the ${(channel?.name ? `#${channel.name} channel` : 'direct message')}${(guild?.name ? ` in '${guild.name}' server` : '')}.`);
         switch (cmdFile.help.type?.toLowerCase()) {
@@ -58,5 +60,12 @@ bot.on("message", async message => {
                 return logger('warn', `command-listener.js:2 command switch() default - incorrect type set for the '${config.botDetails.prefix}${cmdFile.help.name}' command.`);
             }
         }
+    } else { // Check for event codes that people might try to leak.
+        if (checkEventCache('eventstatus') === false) return;
+        if (author.bot) return;
+        if (checkEventCache('eventcodes').some(code => content?.toLowerCase().includes(code)))
+            message.delete()
+                .then(() => logger('event', `command-listener.js:3 () Detected event spoiler message sent by ${author.tag}(${author.id}) on the ${guild.name}(#${channel.name}) server!`))
+                .catch(err => logger('error', `command-listener.js:4 () Error to remove event spoiler sent by ${author.tag}(${author.id}) on the ${guild.name}(#${channel.name}) server (${message.url}).`, err));
     }
 });

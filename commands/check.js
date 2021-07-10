@@ -23,8 +23,7 @@ module.exports.run = async (bot, message, args) => {
     return findTheUser(newData, searchValue)
       .then(threatUser => {
 
-        const { userName, userWarning, userReason, userEvidence } = threatUser;
-        let { userlastName, userAlternate, userNotes, userDiscord } = threatUser;
+        const { userName, userlastName, userAlternate, userNotes, userDiscord, userWarning, userReason, userEvidence } = threatUser;
 
         const formatDiscordID = userDiscord?.replace(/[\\<>@#&?! ]/g, "").split(',');
         let threatInServer = '';
@@ -35,23 +34,23 @@ module.exports.run = async (bot, message, args) => {
         });
 
         const embed_user_details = new Discord.MessageEmbed()
-            .setColor(setThreatColor(userWarning))
-            .setAuthor(`Threat Details`, TEAlogo)
-            .setTitle(`Nickname: \`${userName}\``)
-            .setDescription(`**Reason:** ${userReason}\n‏‏‎ ‎‎`)
-            .addFields(
-              { name: 'Discord User ID(s)', value: userDiscord = userDiscord || 'Unknown', inline: false },
-              { name: 'Last known nickname', value: `\`${userlastName = userlastName || userName}\``, inline: false },
-              { name: 'Alternate accounts', value: `\`${userAlternate = userAlternate || 'No other known accounts'}\``, inline: false },
-              { name: 'Evidence(s)', value: userEvidence, inline: false },
-              { name: 'Additional notes', value: userNotes = userNotes || 'No notes', inline: false },
-              { name: 'Server Scan', value: threatInServer ? `The following threat account(s) have been identified on this server:${threatInServer}`: `There is no associated user on this server with this threat.`, inline: false },
-              { name: 'Links', value: `Appeal is available over [here](https://forms.gle/oR78HXAJcdSHBEvx7 'Appeal Google Form')\nPlayer report [here](https://forms.gle/8jR6NCXeZZPAsQPf6 'Report Google Form')`, inline: false },
-            )
-            .setThumbnail(TEAlogo)
-            .setTimestamp();
-          botReply(embed_user_details, message);
-          // .then(msg => messageRemoverWithReact(msg, message.author));
+          .setColor(setThreatColor(userWarning))
+          .setAuthor(`Threat Details`, TEAlogo)
+          .setTitle(`Nickname: \`${userName}\``)
+          .setDescription(`**Reason:** ${userReason}\n‏‏‎ ‎‎`)
+          .addFields(
+            { name: 'Discord User ID(s)', value: userDiscord ? userDiscord : 'Unknown', inline: false },
+            { name: 'Last known nickname', value: userlastName ? userlastName : userName, inline: false },
+            { name: 'Alternate accounts', value: userAlternate ? userAlternate : 'No other known accounts', inline: false },
+            { name: 'Evidence(s)', value: userEvidence ? userEvidence : 'No evidence provided', inline: false },
+            { name: 'Additional notes', value: userNotes ? userNotes : 'No notes', inline: false },
+            { name: 'Server Scan', value: threatInServer ? `The following threat account(s) have been identified on this server:${threatInServer}` : `There is no associated user on this server with this threat.`, inline: false },
+            { name: 'Links', value: `Appeal is available over [here](https://forms.gle/oR78HXAJcdSHBEvx7 'Appeal Google Form')\nPlayer report [here](https://forms.gle/8jR6NCXeZZPAsQPf6 'Report Google Form')`, inline: false },
+          )
+          .setThumbnail(TEAlogo)
+          .setTimestamp();
+        botReply(embed_user_details, message);
+        // .then(msg => messageRemoverWithReact(msg, message.author));
       })
       .catch(error => {
         switch (error) {
