@@ -98,7 +98,7 @@ module.exports.run = async (bot, message) => {
                         // if (Question.deletable) Question.delete().catch((error) => logger('error', 'clearance.js:1 ClubRoleQ() Remove question', error));
                         if (answerContent.toLowerCase().startsWith(config.botDetails.prefix.toLowerCase()) || answerContent.startsWith(`<@!${bot.user.id}>`)) return;
                         else if (answerContent.toLowerCase() === 'exit' || answerContent.toLowerCase() === 'cancel') return botReply(`❌ Cancelled`, message);
-                        else if (answerContent.length < 3) return ClubRoleQ('❌ Asnwer is too short [3 characters].');
+                        else if (answerContent.length < 1) return ClubRoleQ('❌ Asnwer is too short [1 character].');
                         else if (answerContent.length > 30) return ClubRoleQ('❌ Answer too long [30 characters].');
                         else {
                             clubRoleVar = answerContent;
