@@ -2,7 +2,7 @@ const { bot, Discord, TEAlogo, sendEmbedLog, logger } = require('../teaBot');
 const config = require("../bot-settings.json");
 const cron = require('node-cron');
 const { google } = require('googleapis');
-const keys = require('../Laezaria-Bot-292d692ec77c.json');
+const keys = require('../trove-ethics-alliance-service-account.json');
 
 bot.on('ready', () => { // https://crontab.guru/examples.html
     cron.schedule('30 */3 * * *', () => { checkTEAspreadsheet(); }); // Check TEA spreadsheet for new responses “At minute 30 past every 3rd hour.” (Reports/Appeals).

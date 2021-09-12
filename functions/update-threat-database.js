@@ -3,7 +3,7 @@
 
 const config = require("../bot-settings.json");
 const { google } = require('googleapis');
-const keys = require('../Laezaria-Bot-292d692ec77c.json');
+const keys = require('../trove-ethics-alliance-service-account.json');
 const fs = require('fs');
 
 function threatUpdate() {
