@@ -1,5 +1,5 @@
 #!/bin/bash
 
 echo Starting TEA-Bot...
-cd /home/discord/teaBot/
+cd /home/ubuntu/teaBot/
 node teaBot.js

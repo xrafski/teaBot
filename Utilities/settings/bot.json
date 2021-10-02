@@ -1,0 +1,12 @@
+{
+    "TEAserverID": "551785335638589451",
+    "bot": {
+        "version": "v13.1",
+        "prefix": "tea!",
+        "owner": {
+            "id": "121018858042556416",
+            "tag": "Skillez#3311"
+        },
+        "debug": true
+    }
+}

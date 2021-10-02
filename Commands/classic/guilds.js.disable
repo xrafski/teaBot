@@ -1,0 +1,21 @@
+const { Message, Client } = require("discord.js");
+const { getEmoji } = require("../../Utilities/replaceMeLater");
+// const client = require('../../teaBot');
+// const config = require('../../Utilities/settings/bot.json');
+
+module.exports = {
+    name: "guilds",
+    aliases: ['g'],
+    description: "Amount of clubs the bot is in.",
+    permissions: [],
+    /**
+     *
+     * @param {Client} client
+     * @param {Message} message
+     * @param {String[]} args
+     */
+    run: async (client, message, args) => {
+        return message.reply({ content: `${getEmoji(client.config.bot.TEAserverID)} TEA bot is watching **${client.guilds.cache.size}** clubs.` });
+        // CREATE AN EMBED MESSAGE OBJECT TO RETURN TO THE USER
+    },
+};
