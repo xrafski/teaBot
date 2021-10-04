@@ -21,43 +21,11 @@ require('./Handlers/Error'); // Load some application process listeners.
     require(`./Handlers/${handler}`)(client);
 });
 
-// Login the bot
+// Client login
 setTimeout(() => {
-
-
     MongoClient()
         .then(() => client.login(token))
         .catch(error => { logger('error', `teaBot.js (x) Error to initialize client.`, error) });
-
-
-    // client.login(token)
-    //     .then(cl => MongoClient())
-    //     .catch(error => { });
-
-    // console.log(client.slashCommands);
 }, 2000);
-
-
-
-// client.login(token)
-//     .then(cl => {
-//         logger('debug', `teaBot.js (2) Client logged in successfully`) && console.log(cl);
-
-//         MongoClient() // Connect to MongoDB
-//             .then(() => {
-
-//             })
-//             .catch(error => {
-//                 logger('error', 'teaBot.js (1) MongoClient() Error to connect to the MongoDB', error);
-//             });
-
-//     })
-//     .catch(console.error);
-
-
-
-
-
-
 
 module.exports = client;
