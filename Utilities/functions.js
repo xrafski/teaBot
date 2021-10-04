@@ -1,15 +1,16 @@
 const dateFormat = require("dateformat");
 const client = require('../teaBot');
+const config = require('./settings/bot.json')
 
 /**
  * logger system!
- * @param {string} type - debug/log/info/warn/error/event/mongo/trace/update
+ * @param {string} type - debug/log/info/warn/error/event/mongo/trace/update/startup
  * @param {string} text - any text with to include with the log
  * @param {string} error - error string or object to include with the log
  * @returns console log with current date and message.
  */
 function logger(type, text, error) {
-    if (type?.toLowerCase() === 'debug' && client.config.bot.debug === false) return; // check if debug is enabled
+    if (type?.toLowerCase() === 'debug' && config.bot.debug === false) return; // check if debug is enabled
     text = text?.replace(/\s+/g, ' ');
 
     const logDate = dateFormat(new Date(), "UTC:dd/mm/yyyy - hh:MM:ss TT");
@@ -25,6 +26,7 @@ function logger(type, text, error) {
         case 'mongo': return console.log(`[${logDate} UTC] [MONGODB] 📝 ${text}${(error ? ` | ${error}` : '')}`);
         case 'trace': return console.trace(`[${logDate} UTC] [TRACE] 🟡 ${text}${(error ? ` | ${error}` : '')}`);
         case 'update': return console.log(`[${logDate} UTC] [UPDATE] 🟤 ${text}${(error ? ` | ${error}` : '')}`);
+        case 'startup': return console.log(`[${logDate} UTC] [STARTUP] 🔰 ${text}${(error ? ` | ${error}` : '')}`);
         default: return console.log(`[${logDate} UTC] [DEFAULT] ⚫ ${type} | ${text} | ${error}`);
     }
 }
@@ -76,10 +78,28 @@ function registerGuildCommands(guildObject, slashCommandsArray) {
 }
 
 
+/**
+ * Function to check which command should be hidden
+ * @param {string} commandName name of a command
+ * @returns boolean
+ */
+ function ephemeralToggle(commandName) {
+    const slashEphemeral = require('../Utilities/settings/slashEphemeral.json');
+    if (slashEphemeral.includes(commandName)) {
+        logger('debug', `Utilities/functions.js ephemeralToggle (1) Returned TRUE for ${commandName}`);
+        return true;
+    }
+    else {
+        logger('debug', `Utilities/functions.js ephemeralToggle (2) Returned FALSE for ${commandName}`);
+        return false;
+    }
+}
+
 
 module.exports = {
     logger,
     registerGuildCommands,
+    ephemeralToggle,
 
     /**
      * Find and return emoji by its name

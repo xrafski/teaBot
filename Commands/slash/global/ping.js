@@ -12,10 +12,10 @@ module.exports = {
      * @param {Client} client 1
      * @param {CommandInteraction} interaction 
      */
-    execute(client, interaction) {
+    async execute(client, interaction) {
         // const { guild, member, options } = interaction;
 
-        interaction.reply({ content: `API Latency is **${Math.round(client.ws.ping)}** ms.`, ephemeral: true });
-
+        await new Promise(resolve => setTimeout(resolve, 5000));
+        interaction.editReply({ content: `API Latency is **${Math.round(client.ws.ping)}** ms.` });
     }
 };

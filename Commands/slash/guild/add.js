@@ -2,10 +2,10 @@ const { Client, CommandInteraction } = require("discord.js");
 
 module.exports = {
     name: "add",
-    description: "This is a test add command",
+    description: "This is a test GUILD command",
     defaultPermission: true,
     perms: "",
-    category: "",
+    category: "GUILD",
     type: 'CHAT_INPUT',
     options: [
         {
@@ -27,6 +27,6 @@ module.exports = {
      */
     async execute(client, interaction, args) {
         const [num1, num2] = args;
-        await interaction.reply({ content: `The result is ${num1 + num2}`, ephemeral: true });
+        await interaction.editReply({ content: `The result is ${num1 + num2}`, ephemeral: true });
     }
 };

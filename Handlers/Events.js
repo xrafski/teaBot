@@ -1,8 +1,14 @@
+const AsciiTable = require('ascii-table');
 const { glob } = require('glob');
 const { promisify } = require('util');
+const { logger } = require('../Utilities/functions');
 const globPromise = promisify(glob);
-
 module.exports = async (client) => {
+    logger('startup', `Loaded '${__filename.split("\\").slice(-2).join('/')}' Handler.`);
+    
+    let table = new AsciiTable('Events Loaded');
+    table.setHeading('Name', 'File location');
+
     const eventFiles = await globPromise(`${process.cwd()}/Events/*/*.js`);
     eventFiles.map((file) => {
         const event = require(file);
@@ -13,7 +19,7 @@ module.exports = async (client) => {
         else
             client.on(event.name, (...args) => event.execute(client, ...args));
 
-        const C = file.split("/");
-        console.log(`🔷 Handlers/Events.js (1) Loaded '${event.name}' event from '${C[C.length - 2]}'.`);
+        table.addRow(event.name, file.split('/').slice(-3).join('/'));
     });
+    console.log(table.toString());
 };

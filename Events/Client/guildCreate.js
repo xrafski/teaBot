@@ -1,5 +1,5 @@
 const { Client, Guild } = require('discord.js');
-const { slashCommandsArray } = require('../../Handlers/Commands');
+const { guildSlashCommandsArray } = require('../../Handlers/Commands');
 const { getEmoji, logger, registerGuildCommands } = require('../../Utilities/functions');
 
 module.exports = {
@@ -10,7 +10,7 @@ module.exports = {
     * @param {Guild} guild
     */
     execute(client, guild) {
-        registerGuildCommands(guild, slashCommandsArray)
+        registerGuildCommands(guild, guildSlashCommandsArray)
             .then(res => logger('info', `Events/Client/guildCreate.js (1) '${client.user.username}' just joined '${guild.name}' server. ${res}`))
             .catch(error => logger('error', `Events/Client/guildCreate.js (2) '${client.user.username}' just joined '${guild.name}' server with an error to register slash commands.`, error));
 

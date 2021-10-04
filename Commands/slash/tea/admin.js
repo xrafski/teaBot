@@ -27,6 +27,6 @@ module.exports = {
      * @param {CommandInteraction} interaction 
      */
     execute(client, interaction, args) {
-        interaction.reply({ content: `${getEmoji(client.config.TEAserverID, 'TEA')} Response correctly handled!\nArguments: ${args.join(' | ')}\nAPI Latency is **${Math.round(client.ws.ping)}** ms.}`, ephemeral: true });
+        interaction.editReply({ content: `${getEmoji(client.config.TEAserverID, 'TEA')} Response correctly handled!\nArguments: ${args.join(' | ')}\nAPI Latency is **${Math.round(client.ws.ping)}** ms.}`, ephemeral: true });
     }
 };
