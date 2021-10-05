@@ -1,12 +1,11 @@
-const { CommandInteraction } = require("discord.js");
-const { getEmoji, logger } = require("../../../Utilities/functions");
+const { getEmoji } = require('../../../Utilities/functions');
 
 module.exports = {
-    name: "tea",
-    description: "GUILD command with ADMINISTRATOR permission",
+    name: 'tea',
+    description: 'GUILD command with ADMINISTRATOR permission',
     defaultPermission: false,
-    perms: "ADMINISTRATOR",
-    category: "GUILD",
+    perms: 'ADMINISTRATOR',
+    category: 'GUILD',
     type: 'CHAT_INPUT',
     options: [
         {
@@ -20,13 +19,16 @@ module.exports = {
             description: 'Type a test string',
             type: 'STRING',
             required: true,
-        }
+        },
     ],
     /**
      * @param {Client} client 1
-     * @param {CommandInteraction} interaction 
+     * @param {CommandInteraction} interaction
      */
     execute(client, interaction, args) {
-        interaction.editReply({ content: `${getEmoji(client.config.TEAserverID, 'TEA')} Response correctly handled!\nArguments: ${args.join(' | ')}\nAPI Latency is **${Math.round(client.ws.ping)}** ms.}`, ephemeral: true });
-    }
+        interaction.editReply({
+            content: `${getEmoji(client.config.TEAserverID, 'TEA')} Response correctly handled!\nArguments: ${args.join(' | ')}\nAPI Latency is **${Math.round(client.ws.ping)}** ms.}`,
+            ephemeral: true,
+        });
+    },
 };

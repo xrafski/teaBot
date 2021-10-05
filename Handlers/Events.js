@@ -4,22 +4,23 @@ const { promisify } = require('util');
 const { logger } = require('../Utilities/functions');
 const globPromise = promisify(glob);
 module.exports = async (client) => {
-    logger('startup', `Loaded '${__filename.split("\\").slice(-2).join('/')}' Handler.`);
-    
-    let table = new AsciiTable('Events Loaded');
-    table.setHeading('Name', 'File location');
+	logger('startup', `Loaded '${__filename.split('\\').slice(-2).join('/')}' Handler.`);
 
-    const eventFiles = await globPromise(`${process.cwd()}/Events/*/*.js`);
-    eventFiles.map((file) => {
-        const event = require(file);
-        if (!event.name) return;
+	const table = new AsciiTable('Events Loaded');
+	table.setHeading('Name', 'File location');
 
-        if (event.once)
-            client.once(event.name, (...args) => event.execute(client, ...args));
-        else
-            client.on(event.name, (...args) => event.execute(client, ...args));
+	const eventFiles = await globPromise(`${process.cwd()}/Events/*/*.js`);
+	eventFiles.map((file) => {
+		const event = require(file);
+		if (!event.name) return;
 
-        table.addRow(event.name, file.split('/').slice(-3).join('/'));
-    });
-    console.log(table.toString());
+		if (event.once) {
+			client.once(event.name, (...args) => event.execute(client, ...args));
+		} else {
+			client.on(event.name, (...args) => event.execute(client, ...args));
+		}
+
+		table.addRow(event.name, file.split('/').slice(-3).join('/'));
+	});
+	console.log(table.toString());
 };

@@ -1,8 +1,7 @@
-const { Client, Guild } = require('discord.js');
 const { logger } = require('../../Utilities/functions');
 
 module.exports = {
-    name: "guildDelete",
+    name: 'guildDelete',
     once: false,
     /**
     * @param {Client} client
@@ -10,5 +9,5 @@ module.exports = {
     */
     execute(client, guild) {
         logger('info', `Events/Client/guildDelete.js (1) ${client.user.username} just left '${guild.name}' server.`);
-    }
-}
+    },
+};

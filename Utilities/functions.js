@@ -1,6 +1,6 @@
-const dateFormat = require("dateformat");
+const dateFormat = require('dateformat');
 const client = require('../teaBot');
-const config = require('./settings/bot.json')
+const config = require('./settings/bot.json');
 
 /**
  * logger system!
@@ -10,25 +10,59 @@ const config = require('./settings/bot.json')
  * @returns console log with current date and message.
  */
 function logger(type, text, error) {
-    if (type?.toLowerCase() === 'debug' && config.bot.debug === false) return; // check if debug is enabled
-    text = text?.replace(/\s+/g, ' ');
+	// check if debug is enabled
+	if (type?.toLowerCase() === 'debug' && config.bot.debug === false) return;
+	text = text?.replace(/\s+/g, ' ');
 
-    const logDate = dateFormat(new Date(), "UTC:dd/mm/yyyy - hh:MM:ss TT");
-    if (!type) return logger('trace', 'logger.js:1 logger() Missing type for command in this trace');
+	const logDate = dateFormat(new Date(), 'UTC:dd/mm/yyyy - hh:MM:ss TT');
+	if (!type) return logger('trace', 'logger.js:1 logger() Missing type for command in this trace');
 
-    switch (type.toLowerCase()) {
-        case 'debug': return console.debug(`[${logDate} UTC] [DEBUG] 🟣 ${text}${(error ? ` | ${error}` : '')}`);
-        case 'log': return console.log(`[${logDate} UTC] [LOG] 🟢 ${text}${(error ? ` | ${error}` : '')}`);
-        case 'info': return console.info(`[${logDate} UTC] [INFO] 🔵 ${text}${(error ? ` | ${error}` : '')}`);
-        case 'warn': return console.warn(`[${logDate} UTC] [WARN] 🟠 ${text}${(error ? ` | ${error}` : '')}`);
-        case 'error': return console.error(`[${logDate} UTC] [ERROR] 🔴 ${text}${(error ? ` | ${error}` : '')}`);
-        case 'event': return console.log(`[${logDate} UTC] [EVENT] ⚪ ${text}${(error ? ` | ${error}` : '')}`);
-        case 'mongo': return console.log(`[${logDate} UTC] [MONGODB] 📝 ${text}${(error ? ` | ${error}` : '')}`);
-        case 'trace': return console.trace(`[${logDate} UTC] [TRACE] 🟡 ${text}${(error ? ` | ${error}` : '')}`);
-        case 'update': return console.log(`[${logDate} UTC] [UPDATE] 🟤 ${text}${(error ? ` | ${error}` : '')}`);
-        case 'startup': return console.log(`[${logDate} UTC] [STARTUP] 🔰 ${text}${(error ? ` | ${error}` : '')}`);
-        default: return console.log(`[${logDate} UTC] [DEFAULT] ⚫ ${type} | ${text} | ${error}`);
-    }
+	switch (type.toLowerCase()) {
+		case 'debug':
+			return console.debug(
+				`[${logDate} UTC] [DEBUG] 🟣 ${text}${error ? ` | ${error}` : ''}`
+			);
+		case 'log':
+			return console.log(
+				`[${logDate} UTC] [LOG] 🟢 ${text}${error ? ` | ${error}` : ''}`
+			);
+		case 'info':
+			return console.info(
+				`[${logDate} UTC] [INFO] 🔵 ${text}${error ? ` | ${error}` : ''}`
+			);
+		case 'warn':
+			return console.warn(
+				`[${logDate} UTC] [WARN] 🟠 ${text}${error ? ` | ${error}` : ''}`
+			);
+		case 'error':
+			return console.error(
+				`[${logDate} UTC] [ERROR] 🔴 ${text}${error ? ` | ${error}` : ''}`
+			);
+		case 'event':
+			return console.log(
+				`[${logDate} UTC] [EVENT] ⚪ ${text}${error ? ` | ${error}` : ''}`
+			);
+		case 'mongo':
+			return console.log(
+				`[${logDate} UTC] [MONGODB] 📝 ${text}${error ? ` | ${error}` : ''}`
+			);
+		case 'trace':
+			return console.trace(
+				`[${logDate} UTC] [TRACE] 🟡 ${text}${error ? ` | ${error}` : ''}`
+			);
+		case 'update':
+			return console.log(
+				`[${logDate} UTC] [UPDATE] 🟤 ${text}${error ? ` | ${error}` : ''}`
+			);
+		case 'startup':
+			return console.log(
+				`[${logDate} UTC] [STARTUP] 🔰 ${text}${error ? ` | ${error}` : ''}`
+			);
+		default:
+			return console.log(
+				`[${logDate} UTC] [DEFAULT] ⚫ ${type} | ${text} | ${error}`
+			);
+	}
 }
 
 /**
@@ -38,79 +72,88 @@ function logger(type, text, error) {
  * @returns message on success, and error on failure.
  */
 function registerGuildCommands(guildObject, slashCommandsArray) {
+	return new Promise((resolve, reject) => {
+		if (typeof guildObject !== 'object') {
+			return reject(new Error('Invalid guild object is provided'));
+		}
+		if (typeof slashCommandsArray !== 'object') {
+			return reject(new Error('Invalid slashCommandsArray is provided'));
+		}
+		// const guildObject = client.guilds.cache.get(guildID);
+		// if (!guildObject) return reject(`Error to get the guild Object from provided ID '${guildID}'.`);
 
-    return new Promise(async (resolve, reject) => {
+		guildObject.commands
+			.set(slashCommandsArray)
+			.then((command) => {
+				const Roles = (commandName) => {
+					const cmdPerms = slashCommandsArray.find(
+						(c) => c.name === commandName
+					).perms;
+					if (!cmdPerms) return null;
+					return guildObject.roles.cache.filter(
+						(r) => r.permissions.has(cmdPerms) && !r.managed
+					);
+				};
 
-        if (typeof guildObject !== 'object') return reject(new Error('Invalid guild object is provided'));
-        if (typeof slashCommandsArray !== 'object') return reject(new Error('Invalid slashCommandsArray is provided'));
-        // const guildObject = client.guilds.cache.get(guildID);
-        // if (!guildObject) return reject(`Error to get the guild Object from provided ID '${guildID}'.`);
+				const fullPermissions = command.reduce((ac, x) => {
+					const roles = Roles(x.name);
+					if (!roles) return ac;
 
-        guildObject.commands.set(slashCommandsArray)
-            .then(command => {
-                const Roles = commandName => {
-                    const cmdPerms = slashCommandsArray.find(c => c.name === commandName).perms;
-                    if (!cmdPerms) return null;
-                    return guildObject.roles.cache.filter(r => r.permissions.has(cmdPerms) && !r.managed);
-                };
+					const permissions = roles.reduce((a, v) => {
+						return [...a, { id: v.id, type: 'ROLE', permission: true }];
+					}, []);
 
-                const fullPermissions = command.reduce((ac, x) => {
-                    const roles = Roles(x.name);
-                    if (!roles) return ac;
+					return [...ac, { id: x.id, permissions }];
+				}, []);
 
-                    const permissions = roles.reduce((a, v) => {
-                        return [...a, { id: v.id, type: "ROLE", permission: true }];
-                    }, []);
-
-                    return [...ac, { id: x.id, permissions }];
-                }, []);
-
-                guildObject.commands.permissions.set({ fullPermissions })
-                    .then(resolve(`🆗 Registered and set permissions of '${guildObject.name}' Slash Commands successfully!`))
-                    .catch(reject);
-                // .then(console.log(`🆗 Handlers/Commands.js (2) Slash command permissions set for '${selectedGuild.name}' successfully!`))
-                // .catch(error => console.log(`❌ Handlers/Commands.js (3) Error to set guild slash commands permissions`, error));
-            })
-            .catch(reject);
-    });
-
-
+				guildObject.commands.permissions
+					.set({ fullPermissions })
+					.then(
+						resolve(
+							`🆗 Registered and set permissions of '${guildObject.name}' Slash Commands successfully!`
+						)
+					)
+					.catch(reject);
+				// .then(console.log(`🆗 Handlers/Commands.js (2) Slash command permissions set for '${selectedGuild.name}' successfully!`))
+				// .catch(error => console.log(`❌ Handlers/Commands.js (3) Error to set guild slash commands permissions`, error));
+			})
+			.catch(reject);
+	});
 }
-
 
 /**
  * Function to check which command should be hidden
  * @param {string} commandName name of a command
  * @returns boolean
  */
- function ephemeralToggle(commandName) {
-    const slashEphemeral = require('../Utilities/settings/slashEphemeral.json');
-    if (slashEphemeral.includes(commandName)) {
-        logger('debug', `Utilities/functions.js ephemeralToggle (1) Returned TRUE for ${commandName}`);
-        return true;
-    }
-    else {
-        logger('debug', `Utilities/functions.js ephemeralToggle (2) Returned FALSE for ${commandName}`);
-        return false;
-    }
+function ephemeralToggle(commandName) {
+	const slashEphemeral = require('../Utilities/settings/slashEphemeral.json');
+	if (slashEphemeral.includes(commandName)) {
+		logger('debug', `Utilities/functions.js ephemeralToggle (1) Returned TRUE for ${commandName}`);
+		return true;
+	} else {
+		logger('debug', `Utilities/functions.js ephemeralToggle (2) Returned FALSE for ${commandName}`);
+		return false;
+	}
 }
-
 
 module.exports = {
-    logger,
-    registerGuildCommands,
-    ephemeralToggle,
+	logger,
+	registerGuildCommands,
+	ephemeralToggle,
 
-    /**
-     * Find and return emoji by its name
-     * @param {number} serverID 
-     * @param {string} emojiName 
-     * @returns emoji object data
-     */
-    getEmoji: function (serverID, emojiName) {
-        let getEmoji = client.guilds.cache.get(serverID)?.emojis.cache.find(emoji => emoji.name === emojiName);
-        if (getEmoji) return getEmoji;
-        else return getEmoji = '🐛';
-        // else return undefined;
-    },
-}
+	/**
+	 * Find and return emoji by its name
+	 * @param {number} serverID
+	 * @param {string} emojiName
+	 * @returns emoji object data
+	 */
+	getEmoji: function (serverID, emojiName) {
+		let getEmoji = client.guilds.cache
+			.get(serverID)
+			?.emojis.cache.find((emoji) => emoji.name === emojiName);
+		if (getEmoji) return getEmoji;
+		else return (getEmoji = '🐛');
+		// else return undefined;
+	},
+};

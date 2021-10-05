@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 const { logger } = require('../Utilities/functions');
 
-logger('startup', `Loaded '${__filename.split("\\").slice(-2).join('/')}' Handler.`);
+logger('startup', `Loaded '${__filename.split('\\').slice(-2).join('/')}' Handler.`);
 
-process.on('unhandledRejection', error => {
+process.on('unhandledRejection', (error) => {
 	console.warn('[teaBot] Unhandled promise rejection:', error);
 });
 

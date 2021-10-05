@@ -1,9 +1,10 @@
+// eslint-disable-next-line no-unused-vars
 const { guildSlashCommandsArray, adminSlashCommandsArray, globalSlashCommandsArray } = require('../../Handlers/Commands');
 const { logger, registerGuildCommands } = require('../../Utilities/functions');
 const config = require('../../Utilities/settings/bot.json');
 
 module.exports = {
-    name: "ready",
+    name: 'ready',
     once: true,
     /**
     * @param {Client} client
@@ -27,28 +28,40 @@ module.exports = {
         //         .catch(error => console.trace(`${guild.name}`, error));
         // });
 
-        client.guilds.cache.forEach(guild => { // Set guild slash commands
-            if (guild.id === client.config.TEAserverID)
+        // Set guild slash commands
+        client.guilds.cache.forEach(guild => {
+            if (guild.id === client.config.TEAserverID) {
                 registerGuildCommands(guild, guildSlashCommandsArray.concat(adminSlashCommandsArray))
                     .then(msg => logger('startup', `Events/Client/ready.js (2) [TEA] ${msg}`))
                     .catch(error => logger('warn', `Events/Client/ready.js (3) [TEA] Error to set slash commands for ${guild.name}`, error));
-            else registerGuildCommands(guild, guildSlashCommandsArray)
-                .then(msg => logger('startup', `Events/Client/ready.js (4) ${msg}`))
-                .catch(error => logger('warn', `Events/Client/ready.js (5) Error to set slash commands for ${guild.name}`, error));
+            }
+            else {
+                registerGuildCommands(guild, guildSlashCommandsArray)
+                    .then(msg => logger('startup', `Events/Client/ready.js (4) ${msg}`))
+                    .catch(error => logger('warn', `Events/Client/ready.js (5) Error to set slash commands for ${guild.name}`, error));
+            }
         });
 
         // Set the client user's presence
         try {
-            client.user.setPresence({ activities: [{ name: ' ', type: 'WATCHING' }], status: 'idle' })
-        } catch (error) {
-            logger('error', `Events/Client/ready.js (6) Error to set the bot activity status.`, error);
+            client.user.setPresence({ activities: [{ name: ' ', type: 'WATCHING' }], status: 'idle' });
+        }
+        catch (error) {
+            logger('error', 'Events/Client/ready.js (6) Error to set the bot activity status.', error);
         }
 
-        setInterval(() => { // Update bot's setPresence every hour
+        // Update bot's setPresence every hour
+        setInterval(() => {
             let memberCount = 0;
             for (const guild of client.guilds.cache) memberCount = memberCount + guild[1].memberCount;
-            client.user.setPresence({ activities: [{ name: `${memberCount} users 👮‍♂️`, type: 'WATCHING' }], status: 'online' });
+
+            client.user.setPresence({
+                activities: [{
+                    name: `${memberCount} users 👮‍♂️`,
+                    type: 'WATCHING'
+                }], status: 'online'
+            });
         }, 3600000);
 
-    }
-}
+    },
+};
