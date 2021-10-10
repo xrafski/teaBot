@@ -1,4 +1,5 @@
-const { ephemeralToggle, logger } = require('../../Utilities/functions');
+const { ephemeralToggle } = require('../../Utilities/functions');
+const logger = require('../../Utilities/logger');
 
 module.exports = {
     name: 'interactionCreate',

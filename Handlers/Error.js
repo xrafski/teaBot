@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { logger } = require('../Utilities/functions');
+const logger = require('../Utilities/logger');
 
 logger('startup', `Loaded '${__filename.split('\\').slice(-2).join('/')}' Handler.`);
 

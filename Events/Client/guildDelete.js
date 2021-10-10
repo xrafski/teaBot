@@ -1,4 +1,4 @@
-const { logger } = require('../../Utilities/functions');
+const logger = require("../../Utilities/logger");
 
 module.exports = {
     name: 'guildDelete',

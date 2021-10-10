@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
+const logger = require('../Utilities/logger');
 mongoose.pluralize(null);
-const { logger } = require('../Utilities/functions');
 const { mongoURI } = require('../Utilities/settings/secret/settings.json'); // Secret file with bot's MongoDB Connection String
 logger('startup', `Loaded '${__filename.split('\\').slice(-2).join('/')}' Handler.`);
 

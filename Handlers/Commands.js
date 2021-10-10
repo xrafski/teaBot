@@ -1,7 +1,7 @@
-const { logger } = require('../Utilities/functions');
 const AsciiTable = require('ascii-table');
 const { glob } = require('glob');
 const { promisify } = require('util');
+const logger = require('../Utilities/logger');
 const PG = promisify(glob);
 
 const guildCommandsArray = []; // Public guild commands

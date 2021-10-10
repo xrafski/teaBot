@@ -1,8 +1,9 @@
 const AsciiTable = require('ascii-table');
 const { glob } = require('glob');
 const { promisify } = require('util');
-const { logger } = require('../Utilities/functions');
+const logger = require('../Utilities/logger');
 const globPromise = promisify(glob);
+
 module.exports = async (client) => {
 	logger('startup', `Loaded '${__filename.split('\\').slice(-2).join('/')}' Handler.`);
 

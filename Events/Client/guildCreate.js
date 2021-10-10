@@ -1,5 +1,6 @@
 const { guildSlashCommandsArray } = require('../../Handlers/Commands');
-const { getEmoji, logger, registerGuildCommands } = require('../../Utilities/functions');
+const { getEmoji, registerGuildCommands } = require('../../Utilities/functions');
+const logger = require('../../Utilities/logger');
 
 module.exports = {
     name: 'guildCreate',
