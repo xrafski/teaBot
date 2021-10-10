@@ -1,0 +1,21 @@
+const { Message, Client } = require("discord.js");
+
+module.exports = {
+    name: "ping",
+    aliases: ['p'],
+    description: "Pong!",
+    permissions: [],
+    /**
+     *
+     * @param {Client} client
+     * @param {Message} message
+     * @param {String[]} args
+     */
+    run: async (client, message, args) => {
+        const ping = await message.reply('🏓 Pinging...', message);
+
+        ping?.edit(`🏓 Pong! \nLatency is **${Math.floor(ping.createdAt - message.createdAt)}** ms\nAPI Latency is **${Math.round(client.ws.ping)}** ms.`)
+            // .then(msg => msg.delete({ timeout: 30000 }))
+            .catch(error => console.error('ping.js:1 () Error to edit the message', error));
+    },
+};
