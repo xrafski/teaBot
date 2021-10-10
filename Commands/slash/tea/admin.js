@@ -1,10 +1,10 @@
 const { getEmoji } = require('../../../Utilities/functions');
+const logger = require('../../../Utilities/logger');
 
 module.exports = {
     name: 'admin',
     description: 'TEA ONLY command with ADMINISTRATOR permission',
-    defaultPermission: false,
-    perms: 'ADMINISTRATOR',
+    defaultPermission: true,
     category: 'TEA',
     type: 'CHAT_INPUT',
     options: [
@@ -26,7 +26,10 @@ module.exports = {
      * @param {CommandInteraction} interaction
      */
     execute(client, interaction, args) {
-        interaction.editReply({
+        const { user, guild } = interaction;
+        logger('command', `${__filename.split('\\').slice(-4).join('/')} used by '${user?.tag}' in the '${guild?.name}' guild.`);
+
+        interaction.reply({
             content: `${getEmoji(client.config.TEAserverID, 'TEA')} Response correctly handled!\nArguments: ${args.join(' | ')}\nAPI Latency is **${Math.round(client.ws.ping)}** ms.}`,
             ephemeral: true
         });

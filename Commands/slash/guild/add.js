@@ -1,3 +1,5 @@
+const logger = require('../../../Utilities/logger');
+
 module.exports = {
 	name: 'add',
 	description: 'This is a test GUILD command',
@@ -24,8 +26,11 @@ module.exports = {
 	 * @param {CommandInteraction} interaction
 	 */
 	async execute(client, interaction, args) {
+		const { user, guild } = interaction;
+		logger('command', `${__filename.split('\\').slice(-4).join('/')} used by '${user?.tag}' in the '${guild?.name}' guild.`);
+
 		const [num1, num2] = args;
-		await interaction.editReply({
+		await interaction.reply({
 			content: `The result is ${num1 + num2}`,
 			ephemeral: true,
 		});

@@ -1,5 +1,4 @@
-const { ephemeralToggle } = require('../../Utilities/functions');
-const logger = require('../../Utilities/logger');
+// const logger = require('../../Utilities/logger');
 
 module.exports = {
     name: 'interactionCreate',
@@ -8,12 +7,11 @@ module.exports = {
     * @param {CommandInteraction} interaction
     */
     async execute(client, interaction) {
-        if (interaction.isCommand()) {
-            await interaction.deferReply({ ephemeral: ephemeralToggle(interaction.commandName) })
-                .catch(error => logger('error', 'Events/Interactions/interactionCreate.js (1) Error to send deferReply', error));
-
+        if (interaction.isCommand() || interaction.isContextMenu()) {
+            // await interaction.deferReply({ ephemeral: ephemeralToggle(interaction.commandName) })
+            //     .catch(error => logger('error', 'Events/Interactions/interactionCreate.js (1) Error to send deferReply', error));
             const command = client.slashCommands.get(interaction.commandName);
-            if (!command) return interaction.editReply({ content: '⛔ An error occured while trying to execute this command.' }) && client.slashCommands.delete(interaction.commandName);
+            if (!command) return interaction.reply({ content: '⛔ An error occured while trying to execute this command.' }); // && client.slashCommands.delete(interaction.commandName);
 
             const args = [];
 

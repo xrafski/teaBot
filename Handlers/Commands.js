@@ -20,7 +20,7 @@ module.exports = async (client) => {
 	const table = new AsciiTable('Commands Loaded');
 	table.setHeading('Category', 'Name', 'File');
 
-	(await PG(`${process.cwd()}/Commands/slash/*/*.js`)).map(async (file) => {
+	(await PG(`${process.cwd()}/Commands/Slash/*/*.js`)).map(async (file) => {
 		const command = require(file);
 		if (!command.name) return;
 		// if (command.permission) command.defaultPermission = false
@@ -32,11 +32,9 @@ module.exports = async (client) => {
 		} else if (command.category === 'GUILD') {
 			guildCommandsArray.push(command);
 		} else {
-			return logger(
-				'warn',
-				`Command '${command.name}' doesn't have a correct category '${command.category}'!`
-			);
+			return logger('warn', `Command '${command.name}' doesn't have a correct category '${command.category}'!`);
 		}
+
 
 		client.slashCommands.set(command.name, command);
 		table.addRow(

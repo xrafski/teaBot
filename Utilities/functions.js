@@ -20,42 +20,59 @@ function registerGuildCommands(guildObject, slashCommandsArray) {
 
 		guildObject.commands
 			.set(slashCommandsArray)
-			.then((command) => {
-				const Roles = (commandName) => {
-					const cmdPerms = slashCommandsArray.find(
-						(c) => c.name === commandName
-					).perms;
-					if (!cmdPerms) return null;
-					return guildObject.roles.cache.filter(
-						(r) => r.permissions.has(cmdPerms) && !r.managed
-					);
-				};
-
-				const fullPermissions = command.reduce((ac, x) => {
-					const roles = Roles(x.name);
-					if (!roles) return ac;
-
-					const permissions = roles.reduce((a, v) => {
-						return [...a, { id: v.id, type: 'ROLE', permission: true }];
-					}, []);
-
-					return [...ac, { id: x.id, permissions }];
-				}, []);
-
-				guildObject.commands.permissions
-					.set({ fullPermissions })
-					.then(
-						resolve(
-							`🆗 Registered and set permissions of '${guildObject.name}' Slash Commands successfully!`
-						)
-					)
-					.catch(reject);
-				// .then(console.log(`🆗 Handlers/Commands.js (2) Slash command permissions set for '${selectedGuild.name}' successfully!`))
-				// .catch(error => console.log(`❌ Handlers/Commands.js (3) Error to set guild slash commands permissions`, error));
-			})
+			.then(output => resolve(`🆗 Registered '${output.size}' (${output.map(cmd => cmd.name).join(' • ')}) Slash Commands for '${guildObject.name}' successfully!`) && console.log(output))
 			.catch(reject);
 	});
 }
+// function registerGuildCommands(guildObject, slashCommandsArray) {
+// 	return new Promise((resolve, reject) => {
+// 		if (typeof guildObject !== 'object') {
+// 			return reject(new Error('Invalid guild object is provided'));
+// 		}
+// 		if (typeof slashCommandsArray !== 'object') {
+// 			return reject(new Error('Invalid slashCommandsArray is provided'));
+// 		}
+// 		// const guildObject = client.guilds.cache.get(guildID);
+// 		// if (!guildObject) return reject(`Error to get the guild Object from provided ID '${guildID}'.`);
+
+// 		guildObject.commands
+// 			.set(slashCommandsArray)
+// 			.then((command) => {
+// 				const Roles = (commandName) => {
+// 					const cmdPerms = slashCommandsArray.find(
+// 						(c) => c.name === commandName
+// 					).perms;
+// 					if (!cmdPerms) return null;
+// 					return guildObject.roles.cache.filter(
+// 						(r) => r.permissions.has(cmdPerms) && !r.managed
+// 					);
+// 				};
+
+// 				const fullPermissions = command.reduce((ac, x) => {
+// 					const roles = Roles(x.name);
+// 					if (!roles) return ac;
+
+// 					const permissions = roles.reduce((a, v) => {
+// 						return [...a, { id: v.id, type: 'ROLE', permission: true }];
+// 					}, []);
+
+// 					return [...ac, { id: x.id, permissions }];
+// 				}, []);
+
+// 				guildObject.commands.permissions
+// 					.set({ fullPermissions })
+// 					.then(
+// 						resolve(
+// 							`🆗 Registered and set permissions of '${guildObject.name}' Slash Commands successfully!`
+// 						)
+// 					)
+// 					.catch(reject);
+// 				// .then(console.log(`🆗 Handlers/Commands.js (2) Slash command permissions set for '${selectedGuild.name}' successfully!`))
+// 				// .catch(error => console.log(`❌ Handlers/Commands.js (3) Error to set guild slash commands permissions`, error));
+// 			})
+// 			.catch(reject);
+// 	});
+// }
 
 /**
  * Function to check which command should be hidden
