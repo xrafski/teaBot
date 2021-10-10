@@ -3,8 +3,7 @@ const logger = require('../../../Utilities/logger');
 module.exports = {
 	name: 'add',
 	description: 'This is a test GUILD command',
-	defaultPermission: true,
-	perms: '',
+	// defaultPermission: true,
 	category: 'GUILD',
 	type: 'CHAT_INPUT',
 	options: [

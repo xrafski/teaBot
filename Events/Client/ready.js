@@ -30,8 +30,8 @@ module.exports = {
 
         // Set guild slash commands
         await client.guilds.cache.forEach(guild => {
-            if (guild.id === client.config.TEAserverID) {
-                registerGuildCommands(guild, guildSlashCommandsArray.concat(adminSlashCommandsArray))
+            if (guild.id === client.config.commandCenter.guildID) {
+                registerGuildCommands(guild, adminSlashCommandsArray)
                     .then(msg => logger('startup', `Events/Client/ready.js (4) [TEA] ${msg}`))
                     .catch(error => logger('warn', `Events/Client/ready.js (5) [TEA] Error to set slash commands for ${guild.name}`, error));
             }

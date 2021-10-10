@@ -11,5 +11,15 @@
 			"tag": "Skillez#3311"
 		},
 		"debug": true
+	},
+	"commandCenter": {
+		"guildID": "739519144344551497",
+		"payload": [
+			{
+				"id": "896879006845141072",
+				"type": "ROLE",
+				"permission": true
+			}
+		]
 	}
 }

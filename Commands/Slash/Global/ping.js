@@ -2,9 +2,8 @@ const logger = require('../../../Utilities/logger');
 
 module.exports = {
 	name: 'ping',
-	description: 'Returns websocket connection ping',
-	defaultPermission: true,
-	perms: '',
+	description: 'Returns websocket connection ping.',
+	// defaultPermission: true,
 	category: 'GLOBAL',
 	type: 'CHAT_INPUT',
 	options: [],

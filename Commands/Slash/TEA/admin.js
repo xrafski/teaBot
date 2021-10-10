@@ -3,8 +3,8 @@ const logger = require('../../../Utilities/logger');
 
 module.exports = {
     name: 'admin',
-    description: 'TEA ONLY command with ADMINISTRATOR permission',
-    defaultPermission: true,
+    description: 'TEA admin command with \'Command Access\' role.',
+    // defaultPermission: false,
     category: 'TEA',
     type: 'CHAT_INPUT',
     options: [

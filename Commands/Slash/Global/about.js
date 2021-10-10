@@ -4,9 +4,8 @@ const logger = require('../../../Utilities/logger');
 
 module.exports = {
     name: 'about',
-    description: 'Returns information about this application',
-    defaultPermission: true,
-    perms: '',
+    description: 'Returns information about this bot and TEA project.',
+    // defaultPermission: true,
     category: 'GLOBAL',
     type: 'CHAT_INPUT',
     options: [],

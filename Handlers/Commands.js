@@ -23,11 +23,12 @@ module.exports = async (client) => {
 	(await PG(`${process.cwd()}/Commands/Slash/*/*.js`)).map(async (file) => {
 		const command = require(file);
 		if (!command.name) return;
-		// if (command.permission) command.defaultPermission = false
+		// if (command.category === 'TEA') command.defaultPermission = false;
 
 		if (command.category === 'GLOBAL') {
 			globalCommandsArray.push(command);
 		} else if (command.category === 'TEA') {
+			command.defaultPermission = false;
 			adminCommandsArray.push(command);
 		} else if (command.category === 'GUILD') {
 			guildCommandsArray.push(command);

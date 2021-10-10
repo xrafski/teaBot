@@ -3,9 +3,8 @@ const logger = require('../../../Utilities/logger');
 module.exports = {
 	name: 'Get User Avatar',
 	// description: 'Embeds the target member\'s avatar.',
-	defaultPermission: true,
-	perms: '',
-	category: 'GUILD',
+	// defaultPermission: true,
+	category: 'GLOBAL',
 	type: 'USER',
 	/**
 	 * @param {Client} client 1

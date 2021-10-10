@@ -3,8 +3,8 @@ const logger = require('../../../Utilities/logger');
 
 module.exports = {
     name: 'tea',
-    description: 'GUILD command with ADMINISTRATOR permission',
-    defaultPermission: true,
+    description: 'test GUILD command',
+    // defaultPermission: true,
     category: 'GUILD',
     type: 'CHAT_INPUT',
     options: [
