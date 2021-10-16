@@ -46,55 +46,26 @@ function registerGuildCommands(guildObject, slashCommandsArray) {
 	});
 }
 
-// function registerGuildCommands(guildObject, slashCommandsArray) {
-// 	return new Promise((resolve, reject) => {
-// 		if (typeof guildObject !== 'object') {
-// 			return reject(new Error('Invalid guild object is provided'));
-// 		}
-// 		if (typeof slashCommandsArray !== 'object') {
-// 			return reject(new Error('Invalid slashCommandsArray is provided'));
-// 		}
-// 		// const guildObject = client.guilds.cache.get(guildID);
-// 		// if (!guildObject) return reject(`Error to get the guild Object from provided ID '${guildID}'.`);
+/**
+ * Convert miliseconds to a human readable string.
+ * @param {Number} miliseconds Integer in miliseconds
+ * @returns String total_days:total_hours:total_minutes:total_seconds:days:hours:minutes:seconds
+ */
+function convertMsToTime(miliseconds) {
+	if (typeof miliseconds !== 'number') return null;
 
-// 		guildObject.commands
-// 			.set(slashCommandsArray)
-// 			.then((command) => {
-// 				const Roles = (commandName) => {
-// 					const cmdPerms = slashCommandsArray.find(
-// 						(c) => c.name === commandName
-// 					).perms;
-// 					if (!cmdPerms) return null;
-// 					return guildObject.roles.cache.filter(
-// 						(r) => r.permissions.has(cmdPerms) && !r.managed
-// 					);
-// 				};
+	const total_seconds = Math.floor(miliseconds / 1000);
+	const total_minutes = Math.floor(total_seconds / 60);
+	const total_hours = Math.floor(total_minutes / 60);
+	const total_days = Math.floor(total_hours / 24);
+	const days = Math.floor(total_hours / 24);
 
-// 				const fullPermissions = command.reduce((ac, x) => {
-// 					const roles = Roles(x.name);
-// 					if (!roles) return ac;
+	const seconds = total_seconds % 60;
+	const minutes = total_minutes % 60;
+	const hours = total_hours % 24;
 
-// 					const permissions = roles.reduce((a, v) => {
-// 						return [...a, { id: v.id, type: 'ROLE', permission: true }];
-// 					}, []);
-
-// 					return [...ac, { id: x.id, permissions }];
-// 				}, []);
-
-// 				guildObject.commands.permissions
-// 					.set({ fullPermissions })
-// 					.then(
-// 						resolve(
-// 							`🆗 Registered and set permissions of '${guildObject.name}' Slash Commands successfully!`
-// 						)
-// 					)
-// 					.catch(reject);
-// 				// .then(console.log(`🆗 Handlers/Commands.js (2) Slash command permissions set for '${selectedGuild.name}' successfully!`))
-// 				// .catch(error => console.log(`❌ Handlers/Commands.js (3) Error to set guild slash commands permissions`, error));
-// 			})
-// 			.catch(reject);
-// 	});
-// }
+	return total_days + ':' + total_hours + ':' + total_minutes + ':' + total_seconds + ':' + days + ':' + hours + ':' + minutes + ':' + seconds;
+}
 
 /**
  * Function to check which command should be hidden
@@ -115,6 +86,7 @@ function ephemeralToggle(commandName) {
 module.exports = {
 	registerGuildCommands,
 	ephemeralToggle,
+	convertMsToTime,
 
 	/**
 	 * Find and return emoji by its name

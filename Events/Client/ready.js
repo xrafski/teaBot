@@ -11,15 +11,14 @@ module.exports = {
     * @param {Client} client
     */
     async execute(client) {
-        await logger('startup', `Events/Client/ready.js (1) Trove Ethics Alliance Bot ${config.bot.version} has logged in!`, `Version: ${config.bot.version}`);
+        await logger('startup', `Events/Client/ready.js (1) Trove Ethics Alliance Bot ${config.bot.version} has logged in at ${new Date()}!`, `Version: ${config.bot.version}`);
 
         // console.log(guildSlashCommandsArray, adminSlashCommandsArray, globalSlashCommandsArray);
         // console.log(client.slashCommands);
 
-        // Set global slash commands
-        // await client.application.commands.set(globalSlashCommandsArray)
+        // await client.application.commands.set(globalSlashCommandsArray) // Set global slash commands
         //     .then(res => logger('startup', `Events/Client/ready.js (2) Global client slash commands has been updated '${res.size}' ${res.map(ele => `/${ele.name}`).join(' • ')}`))
-        //     .catch(err => logger('error', 'Events/Client/ready.js (3) Error to register global client slash commands', err));
+        //     .catch(err => logger('error', 'Events/Client/ready.js (3) Error to register global client slash commands.', err));
 
         // Clear all guild slash commands.
         // await client.guilds.cache.forEach(guild => {

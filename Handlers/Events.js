@@ -5,7 +5,7 @@ const logger = require('../Utilities/logger');
 const globPromise = promisify(glob);
 
 module.exports = async (client) => {
-	logger('startup', `Loaded '${__filename.split('\\').slice(-2).join('/')}' Handler.`);
+	logger('startup', `Handlers/Events.js (1) Loaded '${__filename.split('\\').slice(-2).join('/')}' Handler.`);
 
 	const table = new AsciiTable('Events Loaded');
 	table.setHeading('Name', 'File location');
