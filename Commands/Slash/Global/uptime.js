@@ -21,9 +21,8 @@ module.exports = {
 		const timeDiffinMS = Math.floor(currMS - client.uptime);
 		const botStartDate = new Date(timeDiffinMS);
 
-		interaction.reply({
-			content: `${getEmoji(client.config.TEAserverID, 'TEA')} Last application downtime was **${moment(botStartDate).fromNow()}**.\n> at ${botStartDate.toUTCString()}/UTC`,
-			ephemeral: true,
+		interaction.editReply({
+			content: `${getEmoji(client.config.TEAserverID, 'TEA')} Last application downtime was **${moment(botStartDate).fromNow()}**.\n> at ${botStartDate.toUTCString()}/UTC`
 		});
 	},
 };

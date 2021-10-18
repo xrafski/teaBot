@@ -1,6 +1,7 @@
 const config = require('./settings/google.json');
 const { google } = require('googleapis');
 const keys = require('./settings/secret/trove-ethics-alliance-service-account.json');
+const { threatModel } = require('../Schema/treatDatabase');
 
 async function getSpreadSheetData() {
     const timer = process.hrtime();
@@ -11,13 +12,6 @@ async function getSpreadSheetData() {
             keys.private_key,
             ['https://www.googleapis.com/auth/spreadsheets']
         );
-
-        // spreadsheet.authorize(function (error, tokens) { // Login to spreadsheet service
-        //     if (error) return reject(error);
-        //     console.log('tokens', tokens);
-        //     gsrun(spreadsheet);
-        // });
-
 
         spreadsheet.authorize(error => {
             // Login to spreadsheet service
@@ -37,11 +31,120 @@ async function getSpreadSheetData() {
             if (!data) return reject(new Error('Couldn\'t get data from the spreadsheet.')); // Error if data object doesn't exist aka error above.
             // const TEA = data.data.values.filter(value => Object.keys(value).length != 0 && value[2] != '' && value[10] != ''); // filter out empty rows.
             const TEA = data.data.values.filter(row => row[2]?.length >= 3 && row[8]?.length >= 3); // filter out rows without requirements: nickname (3 characters), reason (3 characters).
-            console.log(TEA[0]);
 
-            const timeDiff = process.hrtime(timer);
-            resolve({ 'info': `Finished in ${timeDiff[0]}.${timeDiff[1].toString().slice(0, 3)}s.`, 'data': data, 'formatted': TEA });
-            //     const JSONobj = [];
+            const JSONobj = [];
+            TEA.forEach(element => { // create a forEach[spreadsheed row] loop and push data to JSONobj array.
+
+                // Transform undefined or empty cells into null object.
+                const userName = element[2];
+                const userWarning = (element[4] === '' || !element[4] ? null : element[4]);
+                const userlastName = (element[6] === '' || !element[6] ? null : element[6]);
+                const userReason = element[8];
+                const userStatus = (element[10] === '' || !element[10] ? null : element[10]);
+                const userEvidence = ([element[12], element[13], element[14], element[15]].filter(Boolean).join('\n') === '' ? null : [element[12], element[13], element[14], element[15]].filter(Boolean).join('\n'));
+                const userAlternate = (element[17] === '' || !element[17] ? null : element[17]);
+                const userDiscord = (element[19] === '' || !element[19] ? null : element[19]);
+                const userNotes = (element[21] === '' || !element[21] ? null : element[21]);
+                const userPersonal = (element[23] === '' || !element[23] ? null : element[23]);
+
+
+                // const dataFormat = { // Data object for document.
+                //     id: userName,
+                //     warning: userWarning,
+                //     lastname: userlastName,
+                //     reason: userReason,
+                //     status: userStatus,
+                //     evidence: userEvidence,
+                //     alternates: userAlternate,
+                //     discord: userDiscord,
+                //     notes: userNotes,
+                //     personal: userPersonal
+                // };
+                // // console.log(dataFormat);
+
+                // const newPrizeDocument = new threatModel(dataFormat); // Create MongoDB document.
+                // threatModel.create(newPrizeDocument) // Insert document to the database.
+                //     .then(codeDocInserted => { console.log(codeDocInserted._doc); })
+                //     .catch(err => { console.error(err); });
+
+                JSONobj.push({ id: userName, warning: userWarning, lastname: userlastName, reason: userReason, status: userStatus, evidence: userEvidence, alternates: userAlternate, discord: userDiscord, notes: userNotes, personal: userPersonal });
+
+
+            });
+
+            threatModel.deleteMany({})
+                .then(x => {
+                    console.log(x);
+
+                    threatModel.insertMany(JSONobj, (error, docs) => {
+                        if (error) return console.log(error);
+                        console.log('insertMany Results', docs);
+
+                        setTimeout(() => {
+                            const timeDiff = process.hrtime(timer);
+                            resolve({ 'info': `Finished in ${timeDiff[0]}.${timeDiff[1].toString().slice(0, 3)}s.`, 'data': data, 'formatted': TEA });
+                        }, 4000);
+
+                    });
+                })
+                .catch(console.error);
+
+
+            // Drop the current database and repopulate the connection.
+            // mongoose.connection.db.dropDatabase()
+            //     .then(dropRes => {
+            //         console.log(dropRes);
+            //         setTimeout(() => {
+            //             threatModel.insertMany(JSONobj, (error, docs) => {
+            //                 if (error) return console.log(error);
+            //                 console.log('insertMany Results', docs);
+            //             });
+            //         }, 2000);
+            //     })
+            //     .catch(console.error);
+
+
+            // await threatModel.insertMany(JSONobj, (error, docs) => {
+            //     if (error) console.log(error);
+            //     console.log('insertMany Results', docs);
+            // });
+
+            // console.log(JSONobj);
+            // const timeDiff = process.hrtime(timer);
+            // resolve({ 'info': `Finished in ${timeDiff[0]}.${timeDiff[1].toString().slice(0, 3)}s.`, 'data': data, 'formatted': TEA });
+
+
+            //
+            //
+            //
+            //
+            //
+            //
+            // const dataFormat = { // Data object for document.
+            //     id: 'RNG',
+            //     warning: 'y',
+            //     lastname: 'last-nickname',
+            //     reason: 'random reason for test',
+            //     status: 'super fresh',
+            //     evidence: 'no evidence xD',
+            //     alternates: 'DiscordTest',
+            //     discord: '@129837927834',
+            //     notes: 'some test notes',
+            //     personal: '/joinworld RNG'
+            // };
+
+            // const newPrizeDocument = new threatModel(dataFormat); // Create MongoDB document.
+            // await threatModel.create(newPrizeDocument) // Insert document to the database.
+            //     .then(codeDocInserted => { console.log(codeDocInserted); })
+            //     .catch(err => { console.error(err); });
+
+
+            // threatModel.insertMany(JSONobj, (error, docs) => {
+            //     if (error) console.log(error);
+            //     console.log(docs);
+            // });
+
+
             //     TEA.forEach(element => { // create a forEach[spreadsheed row] loop and push data to JSONobj array.
 
             //         // Transform undefined or empty cells into null object.

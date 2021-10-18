@@ -32,16 +32,17 @@ module.exports = {
 
         if (args[0] === 'spreadsheet') {
             getSpreadSheetData()
-                .then(console.log)
-                .catch(console.error);
+                .then(res => {
+                    console.log('getSpreadSheetData import.js', res);
+
+                    interaction.editReply({
+                        content: `${getEmoji(client.config.TEAserverID, 'TEA')} Response correctly handled for spreadsheets value!\n${res.info}`
+                    }).catch(console.error);
 
 
-            interaction.reply({
-                content: `${getEmoji(client.config.TEAserverID, 'TEA')} Response correctly handled for spreadsheets value!`,
-                ephemeral: true
-            });
+                });
         } else {
-            interaction.reply({
+            interaction.editReply({
                 content: `${getEmoji(client.config.TEAserverID, 'TEA')} Response correctly handled!`,
                 ephemeral: true
             });

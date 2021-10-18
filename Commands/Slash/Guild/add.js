@@ -29,9 +29,8 @@ module.exports = {
 		logger('command', `${__filename.split('\\').slice(-4).join('/')} used by '${user?.tag}' in the '${guild?.name}' guild.`);
 
 		const [num1, num2] = args;
-		await interaction.reply({
-			content: `The result is ${num1 + num2}`,
-			ephemeral: true,
+		await interaction.editReply({
+			content: `The result is ${num1 + num2}`
 		});
 	},
 };

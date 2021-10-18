@@ -15,8 +15,7 @@ module.exports = {
 		const target = options.getUser('user');
 		logger('command', `${__filename.split('\\').slice(-4).join('/')} used by '${user?.tag}' on '${target?.tag}' in the '${guild?.name}' guild.`);
 
-		interaction.reply({
-			ephemeral: true,
+		interaction.editReply({
 			embeds:
 				[new MessageEmbed()
 					.setAuthor(`${target.username}'s Avatar`, `${target.displayAvatarURL({ dynamic: true, size: 512 })}`)
