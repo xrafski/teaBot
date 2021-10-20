@@ -21,26 +21,17 @@ module.exports = {
         }
     ],
     /**
-     * @param {Client} client 1
+     * @param {Client} client
      * @param {CommandInteraction} interaction
      */
     execute(client, interaction, args) {
         const { user, guild } = interaction;
         logger('command', `${__filename.split('\\').slice(-4).join('/')} used by '${user?.tag}' in the '${guild?.name}' guild.`);
 
-        console.log(args, interaction);
-
         if (args[0] === 'spreadsheet') {
             getSpreadSheetData()
-                .then(res => {
-                    console.log('getSpreadSheetData import.js', res);
-
-                    interaction.editReply({
-                        content: `${getEmoji(client.config.TEAserverID, 'TEA')} Response correctly handled for spreadsheets value!\n${res.info}`
-                    }).catch(console.error);
-
-
-                });
+                .then(res => interaction.editReply({ content: `${getEmoji(client.config.TEAserverID, 'TEA')} **Threat Database** Spreadsheet Data has been imported successfully!\n> **${res.insertData.length}** documents updated in **${res.time}**.` }))
+                .catch(err => interaction.editReply({ content: `${getEmoji(client.config.TEAserverID, 'TEA')} Threat Database Spreadsheet Data import failed.\n\n**❌ Error details**:\`\`\`${err}\`\`\`` }));
         } else {
             interaction.editReply({
                 content: `${getEmoji(client.config.TEAserverID, 'TEA')} Response correctly handled!`,

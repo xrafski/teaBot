@@ -86,7 +86,7 @@ module.exports = {
                 .then(message => {
                     interaction.editReply({ content: `${getEmoji(client.config.TEAserverID, 'TEA')} Message has been send to ${target} in **${target.guild.name}** guild.\n> Content: ${message.content}` });
                 })
-                .catch(console.error);
+                .catch(console.error); //
         }
 
         if (args[0] === 'edit') {
