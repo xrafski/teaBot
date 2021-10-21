@@ -2,7 +2,7 @@ const { Schema, model } = require('mongoose');
 
 const threatModel = new Schema({
     // _id: { type: String, required: true },
-    id: { type: String, required: true, index: true, unique: true, dropDups: true, },
+    name: { type: String, required: true, index: true, unique: true, dropDups: true, },
     warning: { type: String, default: null },
     reason: { type: String, required: true },
     status: { type: String, default: null },

@@ -1,12 +1,12 @@
 {
 	"spreadsheet": {
-		"threatDatabase": {
+		"threatList": {
 			"id": "1oj78BWl1ZWw23hLJTt31PBa7e9OiCyGGfc02XwG5Rkg",
 			"range": "Blacklist!A5:Y5000"
 		},
 		"clubRoster": {
 			"id": "1u4GK4vNPwPng7cpuAag3mgTM-Doc1YxmSkoADPu-dTM",
-			"range": "Club list!A4:V5000"
+			"range": "Certification!A2:V5000"
 		}
 	}
 }
