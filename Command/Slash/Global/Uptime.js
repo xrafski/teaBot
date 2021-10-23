@@ -18,6 +18,6 @@ module.exports = {
 		const timeDiffinMS = Math.floor(currMS - client.uptime);
 		const botStartDate = new Date(timeDiffinMS);
 
-		interactionReply(interaction, `${getEmoji(client.config.TEAserverID, 'TEA')} Last application downtime was **${moment(botStartDate).fromNow()}**.\n>${botStartDate.toUTCString()}/UTC`, true, 'Command/Slash/Global/Uptime.js (1');
+		interactionReply(interaction, `${getEmoji(client.config.TEAserver.id, 'TEA')} Last application downtime was **${moment(botStartDate).fromNow()}**.\n>${botStartDate.toUTCString()}/UTC`, true, 'Command/Slash/Global/Uptime.js (1');
 	},
 };

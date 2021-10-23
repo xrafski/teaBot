@@ -1,5 +1,4 @@
 {
-	"TEAserverID": "551785335638589451",
 	"debug": true,
 	"bot": {
 		"version": "v13.1",
@@ -11,6 +10,10 @@
 			"id": "121018858042556416",
 			"tag": "Skillez#3311"
 		}
+	},
+	"TEAserver": {
+		"id": "551785335638589451",
+		"evidenceChannelID": "901568257578893344"
 	},
 	"commandCenter": {
 		"guildID": "739519144344551497",

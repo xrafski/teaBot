@@ -16,10 +16,24 @@ module.exports = {
 			ephemeral: true,
 			embeds:
 				[new MessageEmbed()
-					.setAuthor(`${target.username}'s Avatar`, `${target.displayAvatarURL({ dynamic: true, size: 512 })}`)
-					.setImage(`${target.displayAvatarURL({ dynamic: true, size: 512 })}`)
+					.setAuthor(`${target.username}'s Avatar`, target.displayAvatarURL({ dynamic: true, size: 128 }))
+					.setImage(target.displayAvatarURL({ dynamic: true, size: 512 }))
 					.setColor('#0095ff')
-				]
+				],
+			components: [
+				{
+					'type': 1,
+					'components': [
+						{
+							'style': 5,
+							'label': 'Click here to view an image.',
+							'url': target.displayAvatarURL({ dynamic: true, size: 512 }),
+							'disabled': false,
+							'type': 2
+						}
+					]
+				}
+			]
 		}).catch(err => logger.error('Command/Slash/UserInteraction/Get-User-Avatar.js (1) Error to send interaction reply.', err));
 
 
