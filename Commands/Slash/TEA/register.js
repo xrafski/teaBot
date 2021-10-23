@@ -1,7 +1,7 @@
 const { getEmoji } = require('../../../Utilities/functions');
 
 module.exports = {
-    name: 'register',
+    name: 'register-slash-commands',
     description: 'Register slash commands (\'Command Access\' role required).',
     // defaultPermission: false,
     category: 'TEA',

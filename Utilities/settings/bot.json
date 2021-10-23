@@ -21,5 +21,8 @@
 				"permission": true
 			}
 		]
+	},
+	"images": {
+		"logo": "https://kalinowski.app/images/discord/teaicon.png"
 	}
 }
