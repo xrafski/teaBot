@@ -13,7 +13,7 @@ module.exports = {
 	async execute(client, interaction) {
 		const { user, options, guild } = interaction;
 		const target = options.getUser('user');
-		logger('command', `${__filename.split('\\').slice(-4).join('/')} used by '${user?.tag}' on '${target?.tag}' in the '${guild?.name}' guild.`);
+		logger.command(`${__filename.split('\\').slice(-4).join('/')} used by '${user?.tag}' on '${target?.tag}' in the '${guild?.name}' guild.`);
 
 		interaction.editReply({
 			embeds:

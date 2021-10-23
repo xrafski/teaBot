@@ -11,35 +11,36 @@ module.exports = {
     * @param {Client} client
     */
     async execute(client) {
-        await logger('startup', `Events/Client/ready.js (1) Trove Ethics Alliance Bot ${config.bot.version} has logged in at ${new Date()}!`, `Version: ${config.bot.version}`);
-
+        logger.startup(`Events/Client/ready.js (1) Trove Ethics Alliance Bot ${config.bot.version} has logged in at ${new Date()}!`, `Version: ${config.bot.version}`);
         // console.log(guildSlashCommandsArray, adminSlashCommandsArray, globalSlashCommandsArray);
         // console.log(client.slashCommands);
 
+        // // Set global slash commands
         // await client.application.commands.set(globalSlashCommandsArray) // Set global slash commands
-        //     .then(res => logger('startup', `Events/Client/ready.js (2) Global client slash commands has been updated '${res.size}' ${res.map(ele => `/${ele.name}`).join(' • ')}`))
-        //     .catch(err => logger('error', 'Events/Client/ready.js (3) Error to register global client slash commands.', err));
+        //     .then(res => logger.startup(`Events/Client/ready.js (2) Global client slash commands has been updated '${res.size}' ${res.map(ele => `/${ele.name}`).join(' • ')}`))
+        //     .catch(err => logger.error('Events/Client/ready.js (3) Error to register global client slash commands.', err));
 
-        // Clear all guild slash commands.
+        // // Clear all guild slash commands.
         // await client.guilds.cache.forEach(guild => {
         //     guild.commands.set([])
-        //         .then(logger('info', `Events/Client/ready.js (x) Commands cleared for ${guild.name}!`))
-        //         .catch(error => logger('error', `Events/Client/ready.js (x) Error to clear '${guild.name}' guild slash commands.'`, error));
+        //         .then(logger.info(`Events/Client/ready.js (x) Commands cleared for ${guild.name}!`))
+        //         .catch(error => logger.error(`Events/Client/ready.js (x) Error to clear '${guild.name}' guild slash commands.'`, error));
         // });
 
         // Set guild slash commands
-        await client.guilds.cache.forEach(guild => {
+        client.guilds.cache.forEach(guild => {
             if (guild.id === client.config.commandCenter.guildID) {
                 registerGuildCommands(guild, adminSlashCommandsArray)
-                    .then(msg => logger('startup', `Events/Client/ready.js (4) [TEA] ${msg}`))
-                    .catch(error => logger('warn', `Events/Client/ready.js (5) [TEA] Error to set slash commands for ${guild.name}`, error));
+                    .then(msg => logger.startup(`Events/Client/ready.js (4) [TEA] ${msg}`))
+                    .catch(error => logger.warn(`Events/Client/ready.js (5) [TEA] Error to set slash commands for ${guild.name}`, error));
             }
             else {
                 registerGuildCommands(guild, guildSlashCommandsArray)
-                    .then(msg => logger('startup', `Events/Client/ready.js (6) ${msg}`))
-                    .catch(error => logger('warn', `Events/Client/ready.js (7) Error to set slash commands for ${guild.name}`, error));
+                    .then(msg => logger.startup(`Events/Client/ready.js (6) ${msg}`))
+                    .catch(error => logger.warn(`Events/Client/ready.js (7) Error to set slash commands for ${guild.name}`, error));
             }
         });
+
 
         // Set the client user's presence
         client.user.setPresence({ activities: [{ name: ' ', type: 'WATCHING' }], status: 'idle' });

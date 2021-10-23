@@ -27,7 +27,7 @@ function registerGuildCommands(guildObject, slashCommandsArray) {
 
 						if (client.slashCommands.find(slash => slash.name === cmd.name)?.category === 'TEA') {
 							await cmd.permissions.set({ permissions })
-								.catch(err => logger('warn', `Utilities/function.js registerGuildCommands (1) Error to set permissions for '${cmd.name}' in the '${guildObject.name}' guild.`, err));
+								.catch(err => logger.warn(`Utilities/function.js registerGuildCommands (1) Error to set permissions for '${cmd.name}' in the '${guildObject.name}' guild.`, err));
 						}
 					}
 					resolve(`🆗 Registered with permissions '${commands.size}' (${commands.map(cmd => cmd.name).join(' • ')}) Slash Commands for '${guildObject.name}' successfully!`);
@@ -75,10 +75,10 @@ function convertMsToTime(miliseconds) {
 function ephemeralToggle(commandName) {
 	const slashEphemeral = require('../Utilities/settings/slashEphemeral.json');
 	if (slashEphemeral.includes(commandName)) {
-		logger('debug', `Utilities/functions.js ephemeralToggle (1) Returned TRUE for ${commandName}`);
+		logger.debug(`Utilities/functions.js ephemeralToggle (1) Returned TRUE for ${commandName}`);
 		return true;
 	} else {
-		logger('debug', `Utilities/functions.js ephemeralToggle (2) Returned FALSE for ${commandName}`);
+		logger.debug(`Utilities/functions.js ephemeralToggle (2) Returned FALSE for ${commandName}`);
 		return false;
 	}
 }

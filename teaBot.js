@@ -28,7 +28,7 @@ function loadProjectHandlers() {
 		fs.readdir('./Handlers', (err, files) => {
 			if (err) return reject(err);
 			files.forEach(handler => require(`./Handlers/${handler}`)(client));
-			logger('debug', `teaBot.js (1) Application finished loading handlers (${files.length} files).`);
+			logger.debug(`teaBot.js (1) Application finished loading handlers (${files.length} files).`);
 			resolve(`Application finished loading handlers (${files.length} files).`);
 		});
 	});
@@ -43,11 +43,10 @@ loadProjectHandlers() // Initialize the project.
 				socketTimeoutMS: 30000,
 				serverSelectionTimeoutMS: 10000,
 			})
-				.then(() => client.login(token).catch(err => logger('error', 'teaBot.js(2) Error to login the bot', err)))
-				.catch(err => logger('error', 'teaBot.js (3) Project initial error to connect to MongoDB', err));
+				.then(() => client.login(token).catch(err => logger.error('teaBot.js(2) Error to login the bot', err)))
+				.catch(err => logger.error('teaBot.js (3) Project initial error to connect to MongoDB', err));
 		}, 5000);
 	})
-	.catch(err => logger('error', 'teaBot.js (4) Error to initialize the project handlers.', err));
-
+	.catch(err => logger.error('teaBot.js (4) Error to initialize the project handlers.', err));
 
 module.exports = client;

@@ -72,7 +72,7 @@ module.exports = {
      */
     async execute(client, interaction, args) {
         const { user, guild } = interaction;
-        logger('command', `${__filename.split('\\').slice(-4).join('/')} used by '${user?.tag}' in the '${guild?.name}' guild.`);
+        logger.command(`${__filename.split('\\').slice(-4).join('/')} used by '${user?.tag}' in the '${guild?.name}' guild.`);
 
 
         if (args[0] === 'send') {

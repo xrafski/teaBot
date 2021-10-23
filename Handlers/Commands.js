@@ -12,7 +12,7 @@ const globalCommandsArray = []; // Global commands
  * @param {Client} client
  */
 module.exports = async (client) => {
-	logger('startup', `Handlers/Commands.js (1) Loaded '${__filename.split('\\').slice(-2).join('/')}' Handler.`);
+	logger.startup(`Handlers/Commands.js (1) Loaded '${__filename.split('\\').slice(-2).join('/')}' Handler.`);
 
 	const table = new AsciiTable('Commands Loaded');
 	table.setHeading('Category', 'Name', 'File');
@@ -30,7 +30,7 @@ module.exports = async (client) => {
 		} else if (command.category === 'GUILD') {
 			guildCommandsArray.push(command);
 		} else {
-			return logger('warn', `Handlers/Commands.js (2) Command '${command.name}' doesn't have a correct category '${command.category}'!`);
+			return logger.warn(`Handlers/Commands.js (2) Command '${command.name}' doesn't have a correct category '${command.category}'!`);
 		}
 
 

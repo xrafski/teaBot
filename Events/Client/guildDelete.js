@@ -1,4 +1,4 @@
-const logger = require("../../Utilities/logger");
+const logger = require('../../Utilities/logger');
 
 module.exports = {
     name: 'guildDelete',
@@ -8,6 +8,6 @@ module.exports = {
     * @param {Guild} guild
     */
     execute(client, guild) {
-        logger('info', `Events/Client/guildDelete.js (1) ${client.user.username} just left '${guild.name}' server.`);
+        logger.info(`Events/Client/guildDelete.js (1) ${client.user.username} just left '${guild.name}' server.`);
     },
 };

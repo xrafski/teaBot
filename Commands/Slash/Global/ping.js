@@ -13,7 +13,7 @@ module.exports = {
 	 */
 	async execute(client, interaction) {
 		const { user, guild } = interaction;
-		logger('command', `${__filename.split('\\').slice(-4).join('/')} used by '${user?.tag}' in the '${guild?.name}' guild.`);
+		logger.command(`${__filename.split('\\').slice(-4).join('/')} used by '${user?.tag}' in the '${guild?.name}' guild.`);
 
 		new Promise((resolve) => setTimeout(resolve, 1000)); // Fake 1s delay to think the bot is doing something 😂
 		interaction.editReply({

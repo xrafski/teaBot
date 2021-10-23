@@ -15,7 +15,7 @@ module.exports = {
 	 */
 	async execute(client, interaction) {
 		const { user, guild } = interaction;
-		logger('command', `${__filename.split('\\').slice(-4).join('/')} used by '${user?.tag}' in the '${guild?.name}' guild.`);
+		logger.command(`${__filename.split('\\').slice(-4).join('/')} used by '${user?.tag}' in the '${guild?.name}' guild.`);
 
 		const currMS = moment().format('x');
 		const timeDiffinMS = Math.floor(currMS - client.uptime);

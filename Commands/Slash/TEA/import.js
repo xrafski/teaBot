@@ -32,7 +32,7 @@ module.exports = {
     execute(client, interaction, args) {
         const timer = process.hrtime();
         const { user, guild } = interaction;
-        logger('command', `${__filename.split('\\').slice(-4).join('/')} used by '${user?.tag}' in the '${guild?.name}' guild.`);
+        logger.command(`${__filename.split('\\').slice(-4).join('/')} used by '${user?.tag}' in the '${guild?.name}' guild.`);
 
         if (args[0] === 'spreadsheet') {
             getSpreadSheetData(google.spreadsheet.threatList.id, google.spreadsheet.threatList.range, serviceAccount)
