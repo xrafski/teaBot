@@ -15,11 +15,8 @@ module.exports = async (client) => {
 		const event = require(file);
 		if (!event.name) return;
 
-		if (event.once) {
-			client.once(event.name, (...args) => event.execute(client, ...args));
-		} else {
-			client.on(event.name, (...args) => event.execute(client, ...args));
-		}
+		if (event.once) client.once(event.name, (...args) => event.execute(client, ...args));
+		else client.on(event.name, (...args) => event.execute(client, ...args));
 
 		table.addRow(event.name, file.split('/').slice(-3).join('/'));
 	});
