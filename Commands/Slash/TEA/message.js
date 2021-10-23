@@ -79,12 +79,12 @@ module.exports = {
             const [, argGuildID, argChannelID, argMessage] = args;
 
             const target = client.guilds.cache.get(argGuildID)?.channels.cache.get(argChannelID);
-            if (!target) return interaction.editReply({ content: `${getEmoji(client.config.TEAserverID, 'TEA')} Target channel is not found.` });
+            if (!target) return interaction.reply({ content: `${getEmoji(client.config.TEAserverID, 'TEA')} Target channel is not found.` });
 
             // Send a basic message
             target.send(argMessage)
                 .then(message => {
-                    interaction.editReply({ content: `${getEmoji(client.config.TEAserverID, 'TEA')} Message has been send to ${target} in **${target.guild.name}** guild.\n> Content: ${message.content}` });
+                    interaction.reply({ content: `${getEmoji(client.config.TEAserverID, 'TEA')} Message has been send to ${target} in **${target.guild.name}** guild.\n> Content: ${message.content}` });
                 })
                 .catch(console.error); //
         }
@@ -93,15 +93,15 @@ module.exports = {
             const [, argGuildID, argChannelID, argMessageID, argMessage] = args;
 
             const target = client.guilds.cache.get(argGuildID)?.channels.cache.get(argChannelID);
-            if (!target) return interaction.editReply({ content: `${getEmoji(client.config.TEAserverID, 'TEA')} Target channel is not found.` });
+            if (!target) return interaction.reply({ content: `${getEmoji(client.config.TEAserverID, 'TEA')} Target channel is not found.` });
 
             const message = await target.messages.fetch(argMessageID);
-            if (!message) return interaction.editReply({ content: `${getEmoji(client.config.TEAserverID, 'TEA')} Target message is not found.` });
+            if (!message) return interaction.reply({ content: `${getEmoji(client.config.TEAserverID, 'TEA')} Target message is not found.` });
 
             // Update the content of a message
             message.edit(argMessage)
                 .then(msg => {
-                    interaction.editReply({ content: `${getEmoji(client.config.TEAserverID, 'TEA')} Message has been edited in ${target} in **${target.guild.name}** guild.\n> New content: ${msg.content}\nMessage URL: ${msg.url}` });
+                    interaction.reply({ content: `${getEmoji(client.config.TEAserverID, 'TEA')} Message has been edited in ${target} in **${target.guild.name}** guild.\n> New content: ${msg.content}\nMessage URL: ${msg.url}` });
                 })
                 .catch(console.error);
 

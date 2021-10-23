@@ -24,7 +24,7 @@ module.exports = {
      * @param {CommandInteraction} interaction
      */
     execute(client, interaction, args) {
-        interaction.editReply({ content: `${getEmoji(client.config.TEAserverID, 'TEA')} Response` });
+        interaction.reply({ content: `${getEmoji(client.config.TEAserverID, 'TEA')} Response` });
 
     }
 };
