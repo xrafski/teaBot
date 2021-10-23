@@ -9,10 +9,7 @@ module.exports = {
     category: 'GLOBAL',
     type: 'CHAT_INPUT',
     options: [],
-    /**
-     * @param {Client} client 1
-     * @param {CommandInteraction} interaction
-     */
+
     async execute(client, interaction) {
         const { user, guild } = interaction;
         logger.command(`${__filename.split('\\').slice(-4).join('/')} used by '${user?.tag}' in the '${guild?.name}' guild.`);
@@ -44,6 +41,6 @@ module.exports = {
                     ]
                 }
             ]
-        });
+        }).catch(err => logger.error('Commands/Slash/Global/About.js (1)', err));
     },
 };

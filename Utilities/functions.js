@@ -16,33 +16,30 @@ function registerGuildCommands(guildObject, slashCommandsArray) {
 			return reject(new Error('Invalid slashCommandsArray is provided'));
 		}
 
-		if (guildObject.id === client.config.commandCenter.guildID) {
-			guildObject.commands
-				.set(slashCommandsArray)
-				.then(async commands => {
-					const permissions = client.config.commandCenter.payload;
+		guildObject.commands
+			.set(slashCommandsArray)
+			.then(output => resolve(`🆗 Registered '${output.size}' (${output.map(cmd => cmd.name).join(' • ')}) Slash Commands for '${guildObject.name}' successfully!`))
+			.catch(reject);
+		// if (guildObject.id === client.config.commandCenter.guildID) {
+		// 	guildObject.commands
+		// 		.set(slashCommandsArray)
+		// 		.then(async commands => {
+		// 			const permissions = client.config.commandCenter.payload;
 
-					for (const command of commands) {
-						const cmd = command[1];
+		// 			for (const command of commands) {
+		// 				const cmd = command[1];
 
-						if (client.slashCommands.find(slash => slash.name === cmd.name)?.category === 'TEA') {
-							await cmd.permissions.set({ permissions })
-								.catch(err => logger.warn(`Utilities/function.js registerGuildCommands (1) Error to set permissions for '${cmd.name}' in the '${guildObject.name}' guild.`, err));
-						}
-					}
-					resolve(`🆗 Registered with permissions '${commands.size}' (${commands.map(cmd => cmd.name).join(' • ')}) Slash Commands for '${guildObject.name}' successfully!`);
-				})
-				.catch(reject);
-
-
-		} else {
-			guildObject.commands
-				.set(slashCommandsArray)
-				.then(output => resolve(`🆗 Registered '${output.size}' (${output.map(cmd => cmd.name).join(' • ')}) Slash Commands for '${guildObject.name}' successfully!`))
-				.catch(reject);
-		}
+		// 				if (client.slashCommands.find(slash => slash.name === cmd.name)?.category === 'TEA') {
+		// 					await cmd.permissions.set({ permissions })
+		// 						.catch(err => logger.warn(`Utilities/function.js registerGuildCommands (1) Error to set permissions for '${cmd.name}' in the '${guildObject.name}' guild.`, err));
+		// 				}
+		// 			}
+		// 			resolve(`🆗 Registered with permissions '${commands.size}' (${commands.map(cmd => cmd.name).join(' • ')}) Slash Commands for '${guildObject.name}' successfully!`);
+		// 		})
+		// 		.catch(reject);
 
 
+		// }
 	});
 }
 
@@ -83,10 +80,24 @@ function ephemeralToggle(commandName) {
 	}
 }
 
+/**
+ * Quick way to send an interaction reply.
+ * @param {Object} interaction - Interaction object tho.
+ * @param {String} content - Message content to reply.
+ * @param {Boolean} ephemeral - If the reply have to be ephemer.
+ * @param {String} log - Some unique text for logger.
+ */
+function interactionReply(interaction, content, ephemeral, log) {
+	interaction
+		.reply({ content, ephemeral })
+		.catch(err => logger.error(`${log} Error to send interaction reply.`, err));
+}
+
 module.exports = {
 	registerGuildCommands,
 	ephemeralToggle,
 	convertMsToTime,
+	interactionReply,
 
 	/**
 	 * Find and return emoji by its name

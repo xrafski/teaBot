@@ -5,12 +5,12 @@ const logger = require('../Utilities/logger');
 const globPromise = promisify(glob);
 
 module.exports = async (client) => {
-	logger.startup(`Handlers/Events.js (1) Loaded '${__filename.split('\\').slice(-2).join('/')}' Handler.`);
+	logger.startup(`Handler/Event.js (1) Loaded '${__filename.split('\\').slice(-2).join('/')}' Handler.`);
 
 	const table = new AsciiTable('Events Loaded');
 	table.setHeading('Name', 'File location');
 
-	const eventFiles = await globPromise(`${process.cwd()}/Events/*/*.js`);
+	const eventFiles = await globPromise(`${process.cwd()}/Event/*/*.js`);
 	eventFiles.map((file) => {
 		const event = require(file);
 		if (!event.name) return;

@@ -12,7 +12,7 @@ const globalCommandsArray = []; // Global commands
  * @param {Client} client
  */
 module.exports = async (client) => {
-	logger.startup(`Handlers/Commands.js (1) Loaded '${__filename.split('\\').slice(-2).join('/')}' Handler.`);
+	logger.startup(`Handler/Command.js (1) Loaded '${__filename.split('\\').slice(-2).join('/')}' Handler.`);
 
 	const table = new AsciiTable('Commands Loaded');
 	table.setHeading('Category', 'Name', 'File');
@@ -22,24 +22,30 @@ module.exports = async (client) => {
 		if (!command.name) return;
 		// if (command.category === 'TEA') command.defaultPermission = false;
 
-		if (command.category === 'GLOBAL') {
-			globalCommandsArray.push(command);
-		} else if (command.category === 'TEA') {
-			command.defaultPermission = false;
-			adminCommandsArray.push(command);
-		} else if (command.category === 'GUILD') {
-			guildCommandsArray.push(command);
-		} else {
-			return logger.warn(`Handlers/Commands.js (2) Command '${command.name}' doesn't have a correct category '${command.category}'!`);
-		}
-
-
 		client.slashCommands.set(command.name, command);
 		table.addRow(
 			command.category,
 			command.name,
 			file.split('/').slice(-4).join('/')
 		);
+
+		switch (command.category) {
+			case 'GLOBAL': return globalCommandsArray.push(command);
+			case 'TEA': return adminCommandsArray.push(command); // command.defaultPermission = false;
+			case 'GUILD': return guildCommandsArray.push(command);
+			default: return logger.warn(`Handler/Command.js (2) Command '${command.name}' doesn't have a correct category '${command.category}'!`);
+		}
+
+		// if (command.category === 'GLOBAL') {
+		// 	globalCommandsArray.push(command);
+		// } else if (command.category === 'TEA') {
+		// 	command.defaultPermission = false;
+		// 	adminCommandsArray.push(command);
+		// } else if (command.category === 'GUILD') {
+		// 	guildCommandsArray.push(command);
+		// } else {
+		// 	return logger.warn(`Handler/Command.js (2) Command '${command.name}' doesn't have a correct category '${command.category}'!`);
+		// }
 	});
 	console.log(table.toString());
 };

@@ -19,15 +19,15 @@ client.slashCommands = new Collection(); // Slash commands collector
 client.config = require('./Utilities/settings/bot.json');
 
 // Initializing the project
-// ['Commands', 'Error', 'Events', 'Mongoose'].forEach(handler => {
-// 	require(`./Handlers/${handler}`)(client);
+// ['Command', 'Error', 'Event', 'Mongoose'].forEach(handler => {
+// 	require(`./Handler/${handler}`)(client);
 // });
 
 function loadProjectHandlers() {
 	return new Promise((resolve, reject) => {
-		fs.readdir('./Handlers', (err, files) => {
+		fs.readdir('./Handler', (err, files) => {
 			if (err) return reject(err);
-			files.forEach(handler => require(`./Handlers/${handler}`)(client));
+			files.forEach(handler => require(`./Handler/${handler}`)(client));
 			logger.debug(`teaBot.js (1) Application finished loading handlers (${files.length} files).`);
 			resolve(`Application finished loading handlers (${files.length} files).`);
 		});
