@@ -20,7 +20,7 @@ module.exports = {
 					.setImage(`${target.displayAvatarURL({ dynamic: true, size: 512 })}`)
 					.setColor('#0095ff')
 				]
-		}).catch(err => logger.error('Commands/Slash/UserInteraction/Get-User-Avatar.js (1) Error to send interaction reply.', err));
+		}).catch(err => logger.error('Command/Slash/UserInteraction/Get-User-Avatar.js (1) Error to send interaction reply.', err));
 
 
 	}

@@ -17,10 +17,9 @@ module.exports = async (client) => {
 	const table = new AsciiTable('Commands Loaded');
 	table.setHeading('Category', 'Name', 'File');
 
-	(await PG(`${process.cwd()}/Commands/Slash/*/*.js`)).map(async (file) => {
+	(await PG(`${process.cwd()}/Command/Slash/*/*.js`)).map(async (file) => {
 		const command = require(file);
 		if (!command.name) return;
-		// if (command.category === 'TEA') command.defaultPermission = false;
 
 		client.slashCommands.set(command.name, command);
 		table.addRow(

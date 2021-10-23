@@ -29,15 +29,15 @@ module.exports = {
 		if (args[0] === 'cert_info') {
 			certificationModel.findOne({ 'discord.id': guild.id })
 				.then(document => {
-					if (!document) return interactionReply(interaction, `> ❌ This club is not certified member of ${getEmoji(client.config.TEAserverID, 'TEA')} **Trove Ethics Alliance**!`, false, 'Commands/Slash/Global/Certification.js (1)');
-					interactionReply(interaction, `${getEmoji(client.config.TEAserverID, 'verified')} ${guild.name} is certified member of ${getEmoji(client.config.TEAserverID, 'TEA')} **Trove Ethics Alliance**!`, false, 'Commands/Slash/Global/Certification.js (2)');
-				}).catch(err => logger.error('Commands/Slash/Global/certification.js (3) Error to get document from MongoDB.', err));
+					if (!document) return interactionReply(interaction, `> ❌ This club is not certified member of ${getEmoji(client.config.TEAserverID, 'TEA')} **Trove Ethics Alliance**!`, false, 'Command/Slash/Global/Certification.js (1)');
+					interactionReply(interaction, `${getEmoji(client.config.TEAserverID, 'verified')} ${guild.name} is certified member of ${getEmoji(client.config.TEAserverID, 'TEA')} **Trove Ethics Alliance**!`, false, 'Command/Slash/Global/Certification.js (2)');
+				}).catch(err => logger.error('Command/Slash/Global/certification.js (3) Error to get document from MongoDB.', err));
 		}
 
 		if (args[0] === 'cert_details') {
 			certificationModel.findOne({ 'discord.id': guild.id })
 				.then(document => {
-					if (!document) return interactionReply(interaction, `> ❌ This club is not certified member of ${getEmoji(client.config.TEAserverID, 'TEA')} **Trove Ethics Alliance**!`, false, 'Commands/Slash/TEA/Register.js (3)');
+					if (!document) return interactionReply(interaction, `> ❌ This club is not certified member of ${getEmoji(client.config.TEAserverID, 'TEA')} **Trove Ethics Alliance**!`, false, 'Command/Slash/TEA/Register.js (4)');
 
 					interaction
 						.reply({
@@ -46,7 +46,7 @@ module.exports = {
 									.setColor('#0095ff')
 									.setAuthor('Certification Details', client.config.images.logo, 'https://kalinowski.app/tea')
 									.setTitle(`${guild.name} ${getEmoji(client.config.TEAserverID, 'verified')}`)
-									.setDescription(`**Club Name**: ${document.club ? document.club : 'Club name is not available'}\n**Representative**: ${document.representative ? document.representative : 'Representative is not available.'}\n**In-Game Club World**: ${document.world ? '/joinworld ' + document.world : 'Joinworld command is not available.'}\n\n**Discord Invite Link**: ${document.discord.invite ? document.discord.invite : 'Discord Invite link is not provided.'}\n**Discord Server ID**: ${document.discord.id ? document.discord.id : 'Discord Server ID is not provided'}`)
+									.setDescription(`**Club Name**: ${document.club ? document.club : 'Club name is not available'}\n**Representative**: ${document.representative ? document.representative : 'Representative is not available.'}\n**In-Game Club World**: ${document.world ? '/joinworld ' + document.world : 'Joinworld command is not available.'}\n\n**Discord Invite Link**: ${document.discord.invite ? document.discord.invite : 'Discord Invite link is not provided.'}\n**Discord Server ID**: ${document.discord.id ? document.discord.id : 'Discord Server ID is not provided.'}`)
 									.addFields(
 										{ name: 'Description', value: document.description ? document.description : 'Description is not provided.', inline: false },
 										{ name: 'Requirements', value: document.requirements ? document.requirements : 'Requirements are not provided.', inline: false },
@@ -56,9 +56,9 @@ module.exports = {
 									.setTimestamp()
 								]
 						})
-						.catch(err => logger.error('Commands/Slash/Global/certification.js (4) Error to send interaction reply.', err));
+						.catch(err => logger.error('Command/Slash/Global/certification.js (5) Error to send interaction reply.', err));
 				})
-				.catch(err => logger.error('Commands/Slash/Global/certification.js (5) Error to get document from MongoDB.', err));
+				.catch(err => logger.error('Command/Slash/Global/certification.js (6) Error to get document from MongoDB.', err));
 		}
 	}
 };

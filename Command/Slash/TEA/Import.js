@@ -74,11 +74,11 @@ module.exports = {
                     threatModel.insertMany(JSONobj) // Insert to the threat model all data inside JSONobj.
                         .then(docs => {
                             const timeDiff = process.hrtime(timer);
-                            interactionReply(interaction, `${getEmoji(client.config.TEAserverID, 'TEA')} **Threat Database** data has been imported successfully!\n> **${docs.length}** documents updated in **${timeDiff[0]}.${timeDiff[1].toString().slice(0, 2)}s**.`, false, 'Commands/Slash/TEA/Import.js (1)');
+                            interactionReply(interaction, `${getEmoji(client.config.TEAserverID, 'TEA')} **Threat Database** data has been imported successfully!\n> **${docs.length}** documents updated in **${timeDiff[0]}.${timeDiff[1].toString().slice(0, 2)}s**.`, false, 'Command/Slash/TEA/Import.js (1)');
                         })
-                        .catch(err => interactionReply(interaction, `${getEmoji(client.config.TEAserverID, 'TEA')} **Threat Database** data import failed.\n\n**❌ Error details**:\`\`\`${err}\`\`\``, false, 'Commands/Slash/TEA/Import.js (2)'));
+                        .catch(err => interactionReply(interaction, `${getEmoji(client.config.TEAserverID, 'TEA')} **Threat Database** data import failed.\n\n**❌ Error details**:\`\`\`${err}\`\`\``, false, 'Command/Slash/TEA/Import.js (2)'));
                 })
-                .catch(err => interactionReply(interaction, `${getEmoji(client.config.TEAserverID, 'TEA')} **Threat Database** data import failed.\n\n**❌ Error details**:\`\`\`${err}\`\`\``, false, 'Commands/Slash/TEA/Import.js (3)'));
+                .catch(err => interactionReply(interaction, `${getEmoji(client.config.TEAserverID, 'TEA')} **Threat Database** data import failed.\n\n**❌ Error details**:\`\`\`${err}\`\`\``, false, 'Command/Slash/TEA/Import.js (3)'));
         }
 
         /**
@@ -108,11 +108,11 @@ module.exports = {
                     certificationModel.insertMany(JSONobj) // Insert to the certification model all data inside JSONobj.
                         .then(docs => {
                             const timeDiff = process.hrtime(timer);
-                            interactionReply(interaction, `${getEmoji(client.config.TEAserverID, 'TEA')} **Certification Database** data has been imported successfully!\n> **${docs.length}** documents updated in **${timeDiff[0]}.${timeDiff[1].toString().slice(0, 2)}s**.`, false, 'Commands/Slash/TEA/Import.js (4)');
+                            interactionReply(interaction, `${getEmoji(client.config.TEAserverID, 'TEA')} **Certification Database** data has been imported successfully!\n> **${docs.length}** documents updated in **${timeDiff[0]}.${timeDiff[1].toString().slice(0, 2)}s**.`, false, 'Command/Slash/TEA/Import.js (4)');
                         })
-                        .catch(err => interactionReply(interaction, `${getEmoji(client.config.TEAserverID, 'TEA')} **Certification Database** data import failed.\n\n**❌ Error details**:\`\`\`${err}\`\`\``, false, 'Commands/Slash/TEA/Import.js (5)'));
+                        .catch(err => interactionReply(interaction, `${getEmoji(client.config.TEAserverID, 'TEA')} **Certification Database** data import failed.\n\n**❌ Error details**:\`\`\`${err}\`\`\``, false, 'Command/Slash/TEA/Import.js (5)'));
                 })
-                .catch(err => interactionReply(interaction, `${getEmoji(client.config.TEAserverID, 'TEA')} **Certification Database** data import failed.\n\n**❌ Error details**:\`\`\`${err}\`\`\``, false, 'Commands/Slash/TEA/Import.js (6)'));
+                .catch(err => interactionReply(interaction, `${getEmoji(client.config.TEAserverID, 'TEA')} **Certification Database** data import failed.\n\n**❌ Error details**:\`\`\`${err}\`\`\``, false, 'Command/Slash/TEA/Import.js (6)'));
         }
 
     }

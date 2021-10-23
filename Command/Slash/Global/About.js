@@ -41,6 +41,6 @@ module.exports = {
                     ]
                 }
             ]
-        }).catch(err => logger.error('Commands/Slash/Global/About.js (1)', err));
+        }).catch(err => logger.error('Command/Slash/Global/About.js (1)', err));
     },
 };

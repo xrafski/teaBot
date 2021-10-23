@@ -29,8 +29,8 @@ module.exports = {
         async function regGlobalSlash() {
             // Set global slash commands
             await client.application.commands.set(globalSlashCommandsArray)
-                .then(res => interactionReply(interaction, `${getEmoji(client.config.TEAserverID, 'TEA')} Bot's global slash commands has been updated/registered (**${res.size}** slash in total).\n> ${res.map(ele => `/${ele.name}`).join(' • ')}\n\nNOTE: It might take an hour to see the changes.`, false, 'Commands/Slash/TEA/Register.js (1)'))
-                .catch(err => logger.error('Commands/Slash/TEA/Register.js (2) Error to register global client slash commands.', err));
+                .then(res => interactionReply(interaction, `${getEmoji(client.config.TEAserverID, 'TEA')} Bot's global slash commands has been updated/registered (**${res.size}** slash in total).\n> ${res.map(ele => `/${ele.name}`).join(' • ')}\n\nNOTE: It might take an hour to see the changes.`, false, 'Command/Slash/TEA/Register.js (1)'))
+                .catch(err => logger.error('Command/Slash/TEA/Register.js (2) Error to register global client slash commands.', err));
         }
     }
 };

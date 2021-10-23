@@ -14,12 +14,12 @@ module.exports = {
 
 		interaction
 			.deferReply({ ephemeral: true })
-			.catch(err => logger.error('Commands/Slash/Global/Ping.js (1) Error to send interaction defer reply', err));
+			.catch(err => logger.error('Command/Slash/Global/Ping.js (1) Error to send interaction defer reply', err));
 
 		await new Promise((resolve) => setTimeout(resolve, 3000)); // Fake 1s delay to think the bot is doing something 😂
 
 		interaction
 			.editReply({ content: `API Latency is **${Math.round(client.ws.ping)}** ms.`, })
-			.catch(err => logger.error('Commands/Slash/Global/Ping.js (2) Errot to edit interaction defer reply.', err));
+			.catch(err => logger.error('Command/Slash/Global/Ping.js (2) Errot to edit interaction defer reply.', err));
 	}
 };
