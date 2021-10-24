@@ -1,10 +1,10 @@
+const { MessageEmbed } = require('discord.js');
 const { getEmoji } = require('../../../Utilities/functions');
 const logger = require('../../../Utilities/logger');
 
 module.exports = {
     name: 'tea',
     description: 'test GUILD command',
-    // defaultPermission: true,
     category: 'GUILD',
     type: 'CHAT_INPUT',
     options: [
@@ -21,16 +21,22 @@ module.exports = {
             required: true,
         },
     ],
-    /**
-     * @param {Client} client 1
-     * @param {CommandInteraction} interaction
-     */
+
     execute(client, interaction, args) {
         const { user, guild } = interaction;
         logger.command(`${__filename.split('\\').slice(-4).join('/')} used by '${user?.tag}' in the '${guild?.name}' guild.`);
 
+        const testEmbed = new MessageEmbed()
+            .setAuthor('RNG')
+            .setDescription('Some description for this embed')
+            .setColor('YELLOW')
+            .setTitle('Embed title');
+        console.log(testEmbed);
+
+
         interaction.reply({
-            content: `${getEmoji(client.config.TEAserver.id, 'TEA')} Response correctly handled!\nArguments: ${args.join(' | ')}\nAPI Latency is **${Math.round(client.ws.ping)}** ms.}`
-        });
-    },
+            content: `${getEmoji(client.config.TEAserver.id, 'TEA')} Response correctly handled!\nArguments: ${args.join(' | ')}\nAPI Latency is **${Math.round(client.ws.ping)}** ms.}`,
+            embeds: [testEmbed]
+        }).catch(console.error);
+    }
 };

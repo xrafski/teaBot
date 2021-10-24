@@ -5,7 +5,6 @@ const logger = require('../../../Utilities/logger');
 module.exports = {
     name: 'about',
     description: 'Returns information about this bot and TEA project.',
-    // defaultPermission: true,
     category: 'GLOBAL',
     type: 'CHAT_INPUT',
     options: [],
@@ -42,5 +41,5 @@ module.exports = {
                 }
             ]
         }).catch(err => logger.error('Command/Slash/Global/About.js (1)', err));
-    },
+    }
 };

@@ -16,8 +16,8 @@ module.exports = {
 			ephemeral: true,
 			embeds:
 				[new MessageEmbed()
-					.setAuthor(`${target.username}'s Avatar`, target.displayAvatarURL({ dynamic: true, size: 128 }))
-					.setImage(target.displayAvatarURL({ dynamic: true, size: 512 }))
+					.setAuthor(`${target.username}'s Avatar`, target.displayAvatarURL({ dynamic: true, size: 32, format: 'png' }))
+					.setImage(target.displayAvatarURL({ dynamic: true, size: 256, format: 'png' }))
 					.setColor('#0095ff')
 				],
 			components: [
@@ -26,8 +26,8 @@ module.exports = {
 					'components': [
 						{
 							'style': 5,
-							'label': 'Click here to view an image.',
-							'url': target.displayAvatarURL({ dynamic: true, size: 512 }),
+							'label': 'Click to view an image in full resolution.',
+							'url': target.displayAvatarURL({ dynamic: true, size: 4096, format: 'png' }),
 							'disabled': false,
 							'type': 2
 						}
@@ -35,7 +35,5 @@ module.exports = {
 				}
 			]
 		}).catch(err => logger.error('Command/Slash/UserInteraction/Get-User-Avatar.js (1) Error to send interaction reply.', err));
-
-
 	}
 };

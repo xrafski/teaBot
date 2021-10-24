@@ -6,7 +6,6 @@ const logger = require('../../../Utilities/logger');
 module.exports = {
 	name: 'certification',
 	description: 'Check if this club is certified as a member of Trove Ethics Alliance',
-	// defaultPermission: true,
 	category: 'GLOBAL',
 	type: 'CHAT_INPUT',
 	options: [
@@ -31,7 +30,8 @@ module.exports = {
 				.then(document => {
 					if (!document) return interactionReply(interaction, `> ❌ This club is not certified member of ${getEmoji(client.config.TEAserver.id, 'TEA')} **Trove Ethics Alliance**!`, false, 'Command/Slash/Global/Certification.js (1)');
 					interactionReply(interaction, `${getEmoji(client.config.TEAserver.id, 'verified')} ${guild.name} is certified member of ${getEmoji(client.config.TEAserver.id, 'TEA')} **Trove Ethics Alliance**!`, false, 'Command/Slash/Global/Certification.js (2)');
-				}).catch(err => logger.error('Command/Slash/Global/certification.js (3) Error to get document from MongoDB.', err));
+				})
+				.catch(err => interactionReply(interaction, `❌ Failed to receive data from the database\n> ${err.message}`, false, 'Command/Slash/Global/certification.js (3)'));
 		}
 
 		if (args[0] === 'cert_details') {
@@ -58,7 +58,8 @@ module.exports = {
 						})
 						.catch(err => logger.error('Command/Slash/Global/certification.js (5) Error to send interaction reply.', err));
 				})
-				.catch(err => logger.error('Command/Slash/Global/certification.js (6) Error to get document from MongoDB.', err));
+				.catch(err => interactionReply(interaction, `❌ Failed to receive data from the database\n> ${err.message}`, false, 'Command/Slash/Global/certification.js (6)'));
+
 		}
 	}
 };

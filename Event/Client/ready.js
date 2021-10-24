@@ -15,7 +15,6 @@ module.exports = {
         // console.log(guildSlashCommandsArray, adminSlashCommandsArray, globalSlashCommandsArray);
         // console.log(client.slashCommands);
 
-
         // Set guild slash commands
         client.guilds.cache.forEach(guild => {
             if (guild.id === client.config.commandCenter.guildID) {

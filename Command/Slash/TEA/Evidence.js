@@ -89,7 +89,7 @@ module.exports = {
                         })
                         .catch(err => logger.error('Command/Slash/TEA/Evidence.js (2) Error to send interaction reply.', err));
                 })
-                .catch(err => interactionReply(interaction, `${getEmoji(client.config.TEAserver.id, 'TEA')} Failed to send a message to the evidence channel.\n> ${err.message}`, false, 'Command/Slash/TEA/Evidence.js (3)'));
+                .catch(err => interactionReply(interaction, `❌ Failed to send a message to the evidence channel.\n> ${err.message}`, false, 'Command/Slash/TEA/Evidence.js (3)'));
         }
 
         function editEvidence() {
