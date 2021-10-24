@@ -1,9 +1,7 @@
 const { MessageEmbed } = require('discord.js');
 const logger = require('../../../Utilities/logger');
 module.exports = {
-	name: 'Get User Avatar',
-	// description: 'Embeds the target member\'s avatar.',
-	// defaultPermission: true,
+	name: 'Get user avatar',
 	category: 'GLOBAL',
 	type: 'USER',
 

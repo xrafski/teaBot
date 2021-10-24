@@ -15,19 +15,34 @@ module.exports = {
         // console.log(guildSlashCommandsArray, adminSlashCommandsArray, globalSlashCommandsArray);
         // console.log(client.slashCommands);
 
+
+        // Clear slash guild slash commands
+        // client.guilds.cache.forEach(guild => {
+        //     guild.commands.set([])
+        //         .then(res => console.log(`guild: ${guild.name} commands cleared`, res))
+        //         .catch(console.error);
+        // });
+
         // Set guild slash commands
-        client.guilds.cache.forEach(guild => {
-            if (guild.id === client.config.commandCenter.guildID) {
-                registerGuildCommands(guild, adminSlashCommandsArray)
-                    .then(msg => logger.startup(`Event/Client/ready.js (1) [TEA] ${msg}`))
-                    .catch(error => logger.warn(`Event/Client/ready.js (2) [TEA] Error to set slash commands for ${guild.name}`, error));
-            }
-            else {
-                registerGuildCommands(guild, guildSlashCommandsArray)
-                    .then(msg => logger.startup(`Event/Client/ready.js (3) ${msg}`))
-                    .catch(error => logger.warn(`Event/Client/ready.js (4) Error to set slash commands for ${guild.name}`, error));
-            }
-        });
+        const commandCenter = client.guilds.cache.get(client.config.commandCenter.guildID);
+        if (commandCenter) {
+            registerGuildCommands(commandCenter, adminSlashCommandsArray)
+                .then(msg => logger.startup(`Event/Client/ready.js (1) [TEA] ${msg}`))
+                .catch(error => logger.error(`Event/Client/ready.js (2) [TEA] Error to set slash commands for ${commandCenter.name}`, error));
+        }
+
+        // client.guilds.cache.forEach(guild => {
+        //     if (guild.id === client.config.commandCenter.guildID) {
+        //         registerGuildCommands(guild, adminSlashCommandsArray)
+        //             .then(msg => logger.startup(`Event/Client/ready.js (1) [TEA] ${msg}`))
+        //             .catch(error => logger.warn(`Event/Client/ready.js (2) [TEA] Error to set slash commands for ${guild.name}`, error));
+        //     }
+        //     else {
+        //         registerGuildCommands(guild, guildSlashCommandsArray)
+        //             .then(msg => logger.startup(`Event/Client/ready.js (3) ${msg}`))
+        //             .catch(error => logger.warn(`Event/Client/ready.js (4) Error to set slash commands for ${guild.name}`, error));
+        //     }
+        // });
 
 
         // Set the client user's presence

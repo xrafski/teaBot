@@ -2,6 +2,7 @@ const { MessageEmbed } = require('discord.js');
 const { certificationModel } = require('../../../Schema/certificationCollection');
 const { getEmoji, interactionReply } = require('../../../Utilities/functions');
 const logger = require('../../../Utilities/logger');
+const links = require('../../../Utilities/settings/links.json');
 
 module.exports = {
 	name: 'certification',
@@ -44,7 +45,7 @@ module.exports = {
 							embeds:
 								[new MessageEmbed()
 									.setColor('#0095ff')
-									.setAuthor('Certification Details', client.config.images.logo, 'https://kalinowski.app/tea')
+									.setAuthor('Certification Details', links.icon, 'https://kalinowski.app/tea')
 									.setTitle(`${guild.name} ${getEmoji(client.config.TEAserver.id, 'verified')}`)
 									.setDescription(`**Club Name**: ${document.club ? document.club : 'Club name is not available'}\n**Representative**: ${document.representative ? document.representative : 'Representative is not available.'}\n**In-Game Club World**: ${document.world ? '/joinworld ' + document.world : 'Joinworld command is not available.'}\n\n**Discord Invite Link**: ${document.discord.invite ? document.discord.invite : 'Discord Invite link is not provided.'}\n**Discord Server ID**: ${document.discord.id ? document.discord.id : 'Discord Server ID is not provided.'}`)
 									.addFields(
