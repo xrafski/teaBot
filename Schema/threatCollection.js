@@ -15,6 +15,7 @@ const threatModel = new Schema({
     versionKey: false,
     autoCreate: true, // auto create collection
     autoIndex: true, // auto create indexes
+    collection: 'threat'
 });
 
 // define indexes to be create

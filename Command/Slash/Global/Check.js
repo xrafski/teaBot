@@ -1,7 +1,5 @@
 const { MessageEmbed } = require('discord.js');
-const { certificationModel } = require('../../../Schema/certificationCollection');
-const { threatModel } = require('../../../Schema/threatCollection');
-const { getEmoji, interactionReply } = require('../../../Utilities/functions');
+const { getEmoji, interactionReply, apiCall } = require('../../../Utilities/functions');
 const logger = require('../../../Utilities/logger');
 const links = require('../../../Utilities/settings/links.json');
 
@@ -20,58 +18,46 @@ module.exports = {
         }
     ],
 
-    execute(client, interaction, args) {
+    async execute(client, interaction, args) {
         const { user, guild } = interaction;
         logger.command(`${__filename.split('\\').slice(-4).join('/')} used by '${user?.tag}' in the '${guild?.name}' guild.`);
 
-        certificationModel.findOne({ 'discord.id': guild.id })
-            .then(certDoc => {
-                if (!certDoc) return interactionReply(interaction, `> This command is only available for registered members of ${getEmoji(client.config.TEAserver.id, 'TEA')} Trove Ethics Alliance!`, false, 'Command/Slash/Global/Check.js (1)');
+        await apiCall('GET', `https://api.kalinowski.app/certification/${guild.id}`) // Check if guild is certified.
+            .then(async certResponse => {
+                if (!certResponse) return interactionReply(interaction, `> This command is only available for registered members of ${getEmoji(client.config.TEAserver.id, 'TEA')} Trove Ethics Alliance!`, false, 'Command/Slash/Global/Check.js (1)');
 
-                const query = { $or: [{ name: { $regex: args[0], $options: 'i' } }, { alternates: { $regex: args[0], $options: 'i' } }, { discord: { $regex: args[0], $options: 'i' } }] };
-                threatModel.findOne(query)
-                    .then(document => {
-                        if (!document) return noThreatFound();
-                        else return formatDocument(document);
-                    }).catch(err => interactionReply(interaction, `❌ Failed to receive data from the database\n> ${err.message}`, false, 'Command/Slash/Global/Check.js (2)'));
-            }).catch(err => interactionReply(interaction, `❌ Failed to receive data from the database\n> ${err.message}`, false, 'Command/Slash/Global/Check.js (3)'));
+                await apiCall('GET', `https://api.kalinowski.app/threat/${args[0]}`) // Check for threat.
+                    .then(threatResonse => formatDocument(threatResonse))
+                    .catch(error => interactionReply(interaction, `❌ Failed to receive data from API.\n> ${error.message}`, false, 'Command/Slash/Global/Check.js (3)'));
 
-
-        function setThreatColor(color) {
-            switch (color) {
-                case 'g': return '#45ff24';
-                case 'y': return '#ffff24';
-                case 'r': return '#ff1a1a';
-                case 'b': return '#0f0f0f';
-                default: return '#fcfcfc';
-            }
-        }
-
-        function noThreatFound() {
-            const notFoundEmbed = new MessageEmbed()
-                .setDescription('❌ This user is not detected as a threat in our database!')
-                .setAuthor('Trove Ethics Alliance - Results', links.icon)
-                .setColor('#0095ff');
-
-            return interaction.reply({
-                embeds: [notFoundEmbed],
-                components: [
-                    {
-                        type: 1,
-                        components: [
-                            {
-                                type: 2,
-                                url: links.formReport,
-                                label: 'If you think that user is a threat, please report here.',
-                                style: 5
-                            }
-                        ]
-                    }
-                ]
-            }).catch(err => logger.error('Command/Slash/Global/Check.js (4) Error to send interaction reply.', err));
-        }
+            })
+            .catch(error => interactionReply(interaction, `❌ Failed to receive data from API.\n> ${error.message}`, false, 'Command/Slash/Global/Check.js (3)'));
 
         async function formatDocument(document) {
+            if (!document) {
+                const notFoundEmbed = new MessageEmbed()
+                    .setDescription('❌ This user is not detected as a threat in our database!')
+                    .setAuthor('Trove Ethics Alliance - Results', links.icon)
+                    .setColor('#0095ff');
+
+                return interaction.reply({
+                    embeds: [notFoundEmbed],
+                    components: [
+                        {
+                            type: 1,
+                            components: [
+                                {
+                                    type: 2,
+                                    url: links.formReport,
+                                    label: 'If you think that user is a threat, please report here.',
+                                    style: 5
+                                }
+                            ]
+                        }
+                    ]
+                }).catch(err => logger.error('Command/Slash/Global/Check.js (4) Error to send interaction reply.', err));
+            }
+
             const checkedIDs = await lookForThreat(document.discord);
             const resultEmbed = new MessageEmbed()
                 .setColor(setThreatColor(document.warning))
@@ -111,6 +97,16 @@ module.exports = {
                     }
                 ]
             }).catch(err => logger.error('Command/Slash/Global/Check.js (5) Error to send interaction reply.', err));
+        }
+
+        function setThreatColor(color) {
+            switch (color) {
+                case 'g': return '#45ff24';
+                case 'y': return '#ffff24';
+                case 'r': return '#ff1a1a';
+                case 'b': return '#0f0f0f';
+                default: return '#fcfcfc';
+            }
         }
 
         async function lookForThreat(docDiscord) {

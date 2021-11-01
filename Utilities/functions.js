@@ -1,5 +1,7 @@
+const axios = require('axios');
 const client = require('../teaBot');
 const logger = require('./logger');
+const apiAuth = require('../Utilities/settings/secret/api.json');
 
 /**
  * Function to set guild commands and its required permissions.
@@ -93,11 +95,50 @@ function interactionReply(interaction, content, ephemeral, log) {
 		.catch(err => logger.error(`${log} Error to send interaction reply.`, err));
 }
 
+/**
+ * Function to send API request to backend.
+ * @param {String} method - POST, GET, PUT, PATCH, DELETE, etc.
+ * @param {String} endpoint - URL to send API request to.
+ * @returns Either error or response.
+ */
+async function apiCall(method, endpoint) {
+	return new Promise((resolve, reject) => {
+		const availableMethods = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'];
+		if (typeof method !== 'string') return reject(new Error('Used method is not a string.'));
+		if (typeof endpoint !== 'string') return reject(new Error('Used endpoint is not a string.'));
+
+		if (!availableMethods.includes(method.toUpperCase())) return reject(new Error(`Invalid method '${method.toUpperCase()}'.`));
+		if (!endpoint) return reject(new Error('Missing API endpoint.'));
+
+		if (method.toUpperCase() === 'POST' || method.toUpperCase() === 'PUT' || method.toUpperCase() === 'PATCH') {
+			axios({
+				method,
+				url: endpoint,
+				data: { username: apiAuth.login, password: apiAuth.password }, // Body data with auth
+			})
+				.then(response => resolve(response.data))
+				.catch(error => reject(error));
+		}
+
+		if (method.toUpperCase() === 'GET' || method.toUpperCase() === 'DELETE') {
+			axios({
+				method,
+				url: endpoint,
+				auth: { username: apiAuth.login, password: apiAuth.password }, // Header with auth
+				timeout: 5000
+			})
+				.then(response => resolve(response.data))
+				.catch(error => reject(error));
+		}
+	});
+}
+
 module.exports = {
 	registerGuildCommands,
 	ephemeralToggle,
 	convertMsToTime,
 	interactionReply,
+	apiCall,
 
 	/**
 	 * Find and return emoji by its name

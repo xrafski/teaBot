@@ -16,6 +16,7 @@ const certificationModel = new Schema({
     versionKey: false,
     autoCreate: true, // auto create collection
     autoIndex: true, // auto create indexes
+    collection: 'certification'
 });
 
 // define indexes to be create
