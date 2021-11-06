@@ -12,7 +12,7 @@ const globalCommandsArray = []; // Global commands
  * @param {Client} client
  */
 module.exports = async (client) => {
-	logger.startup(`Handler/Command.js (1) Loaded '${__filename.split('\\').slice(-2).join('/')}' Handler.`);
+	logger.startup(`Handler/Command.js (1) Loaded '${__filename.split('\\').slice(-2).join('/')}' Handler.`); // Log handler being loaded.
 
 	const table = new AsciiTable('Commands Loaded');
 	table.setHeading('Category', 'Name', 'File');
@@ -32,19 +32,8 @@ module.exports = async (client) => {
 			case 'GLOBAL': return globalCommandsArray.push(command);
 			case 'TEA': return adminCommandsArray.push(command); // command.defaultPermission = false;
 			case 'GUILD': return guildCommandsArray.push(command);
-			default: return logger.warn(`Handler/Command.js (2) Command '${command.name}' doesn't have a correct category '${command.category}'!`);
+			default: return logger.info(`Handler/Command.js (2) Command '${command.name}' doesn't have a correct category '${command.category}'!`);
 		}
-
-		// if (command.category === 'GLOBAL') {
-		// 	globalCommandsArray.push(command);
-		// } else if (command.category === 'TEA') {
-		// 	command.defaultPermission = false;
-		// 	adminCommandsArray.push(command);
-		// } else if (command.category === 'GUILD') {
-		// 	guildCommandsArray.push(command);
-		// } else {
-		// 	return logger.warn(`Handler/Command.js (2) Command '${command.name}' doesn't have a correct category '${command.category}'!`);
-		// }
 	});
 	console.log(table.toString());
 };

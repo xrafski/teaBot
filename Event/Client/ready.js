@@ -6,7 +6,7 @@ const config = require('../../Utilities/settings/bot.json');
 
 module.exports = {
     name: 'ready',
-    once: true,
+    once: false,
     /**
     * @param {Client} client
     */
@@ -35,12 +35,12 @@ module.exports = {
         //     if (guild.id === client.config.commandCenter.guildID) {
         //         registerGuildCommands(guild, adminSlashCommandsArray)
         //             .then(msg => logger.startup(`Event/Client/ready.js (1) [TEA] ${msg}`))
-        //             .catch(error => logger.warn(`Event/Client/ready.js (2) [TEA] Error to set slash commands for ${guild.name}`, error));
+        //             .catch(error => logger.info(`Event/Client/ready.js (2) [TEA] Error to set slash commands for ${guild.name}`, error));
         //     }
         //     else {
         //         registerGuildCommands(guild, guildSlashCommandsArray)
         //             .then(msg => logger.startup(`Event/Client/ready.js (3) ${msg}`))
-        //             .catch(error => logger.warn(`Event/Client/ready.js (4) Error to set slash commands for ${guild.name}`, error));
+        //             .catch(error => logger.info(`Event/Client/ready.js (4) Error to set slash commands for ${guild.name}`, error));
         //     }
         // });
 
@@ -51,8 +51,9 @@ module.exports = {
         // Update bot's setPresence every hour
         setInterval(() => {
             let memberCount = 0;
-            for (const guild of client.guilds.cache) memberCount = memberCount + guild[1].memberCount;
+            for (const guild of client.guilds.cache) memberCount = memberCount + guild[1].memberCount; // Count all members in guilds.
 
+            // Set client presence status.
             client.user.setPresence({
                 activities: [{
                     name: `${memberCount} users 👮‍♂️`,

@@ -33,7 +33,7 @@ function registerGuildCommands(guildObject, slashCommandsArray) {
 
 		// 				if (client.slashCommands.find(slash => slash.name === cmd.name)?.category === 'TEA') {
 		// 					await cmd.permissions.set({ permissions })
-		// 						.catch(err => logger.warn(`Utilities/function.js registerGuildCommands (1) Error to set permissions for '${cmd.name}' in the '${guildObject.name}' guild.`, err));
+		// 						.catch(err => logger.info(`Utilities/function.js registerGuildCommands (1) Error to set permissions for '${cmd.name}' in the '${guildObject.name}' guild.`, err));
 		// 				}
 		// 			}
 		// 			resolve(`🆗 Registered with permissions '${commands.size}' (${commands.map(cmd => cmd.name).join(' • ')}) Slash Commands for '${guildObject.name}' successfully!`);
