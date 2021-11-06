@@ -9,12 +9,12 @@ module.exports = {
 	category: 'GLOBAL',
 	type: 'USER',
 
-	async execute(client, interaction) {
+	execute(client, interaction) {
 		const { user, options, guild } = interaction;
 		const target = options.getUser('user');
 		logger.command(`${__filename.split('\\').slice(-4).join('/')} used by '${user?.tag}' on '${target?.tag}' in the '${guild?.name}' guild.`);
 
-		await apiCall('GET', `https://api.kalinowski.app/threat/${target.id}`) // Check for threat.
+		apiCall('GET', `https://api.kalinowski.app/threat/${target.id}`) // Check for threat.
 			.then(threatResonse => formatDocument(threatResonse))
 			.catch(error => interactionReply(interaction, `❌ Failed to receive data from API.\n> ${error.message}`, true, 'Command/Slash/UserInteraction/Check-For-Threat.js (1)'));
 

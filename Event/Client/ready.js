@@ -1,4 +1,3 @@
-// eslint-disable-next-line no-unused-vars
 const { guildSlashCommandsArray, adminSlashCommandsArray } = require('../../Handler/Command');
 const { registerGuildCommands } = require('../../Utilities/functions');
 const logger = require('../../Utilities/logger');
@@ -11,7 +10,7 @@ module.exports = {
     * @param {Client} client
     */
     async execute(client) {
-        logger.startup(`Event/Client/ready.js (1) Trove Ethics Alliance Bot ${config.bot.version} has logged in at ${new Date()}!`, `Version: ${config.bot.version}`);
+        logger.startup(`Event/Client/ready.js (1) Trove Ethics Alliance Bot ${config.bot.version} has logged in}!`, `Version: ${config.bot.version}`);
         // console.log(guildSlashCommandsArray, adminSlashCommandsArray, globalSlashCommandsArray);
         // console.log(client.slashCommands);
 

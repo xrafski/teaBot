@@ -110,20 +110,21 @@ async function apiCall(method, endpoint) {
 		if (!availableMethods.includes(method.toUpperCase())) return reject(new Error(`Invalid method '${method.toUpperCase()}'.`));
 		if (!endpoint) return reject(new Error('Missing API endpoint.'));
 
-		if (method.toUpperCase() === 'POST' || method.toUpperCase() === 'PUT' || method.toUpperCase() === 'PATCH') {
+		if (method.toUpperCase() === 'POST' || method.toUpperCase() === 'PATCH') {
 			axios({
 				method,
-				url: endpoint,
+				url: apiAuth.url + endpoint,
 				data: { username: apiAuth.login, password: apiAuth.password }, // Body data with auth
+				timeout: 5000
 			})
 				.then(response => resolve(response.data))
 				.catch(error => reject(error));
 		}
 
-		if (method.toUpperCase() === 'GET' || method.toUpperCase() === 'DELETE') {
+		if (method.toUpperCase() === 'GET' || method.toUpperCase() === 'PUT' || method.toUpperCase() === 'DELETE') {
 			axios({
 				method,
-				url: endpoint,
+				url: apiAuth.url + endpoint,
 				auth: { username: apiAuth.login, password: apiAuth.password }, // Header with auth
 				timeout: 5000
 			})

@@ -18,15 +18,15 @@ module.exports = {
         }
     ],
 
-    async execute(client, interaction, args) {
+    execute(client, interaction, args) {
         const { user, guild } = interaction;
         logger.command(`${__filename.split('\\').slice(-4).join('/')} used by '${user?.tag}' in the '${guild?.name}' guild.`);
 
-        await apiCall('GET', `https://api.kalinowski.app/certification/${guild.id}`) // Check if guild is certified.
-            .then(async certResponse => {
+        apiCall('GET', `certificate/${guild.id}`) // Check if guild is certified.
+            .then(certResponse => {
                 if (!certResponse) return interactionReply(interaction, `> This command is only available for registered members of ${getEmoji(client.config.TEAserver.id, 'TEA')} Trove Ethics Alliance!`, false, 'Command/Slash/Global/Check.js (1)');
 
-                await apiCall('GET', `https://api.kalinowski.app/threat/${args[0]}`) // Check for threat.
+                apiCall('GET', `threat/${args[0]}`) // Check for threat.
                     .then(threatResonse => formatDocument(threatResonse))
                     .catch(error => interactionReply(interaction, `❌ Failed to receive data from API.\n> ${error.message}`, false, 'Command/Slash/Global/Check.js (3)'));
 

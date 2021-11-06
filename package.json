@@ -16,7 +16,6 @@
         "discord.js": "^13.1.0",
         "glob": "^7.1.7",
         "googleapis": "^88.2.0",
-        "moment": "^2.29.1",
-        "mongoose": "^6.0.2"
+        "moment": "^2.29.1"
     }
 }

@@ -1,4 +1,3 @@
-const mongoose = require('mongoose');
 const logger = require('../Utilities/logger');
 
 module.exports = async () => {
@@ -8,9 +7,7 @@ module.exports = async () => {
 	});
 
 	process.on('SIGINT', () => {
-		mongoose.connection.close({}, () => {
-			process.exit(0);
-		});
+		process.exit(0);
 	});
 
 	process.on('exit', (code) => {

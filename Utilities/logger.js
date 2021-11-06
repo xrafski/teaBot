@@ -49,13 +49,6 @@ const logger = {
 	 */
 	event: function (text, errObj) { console.log(`[${logDate} UTC] [EVENT] ⚪ ${text}${errObj ? ` | ${errObj}` : ''}`); },
 	/**
-	 * Regular mongo log message
-	 * @param {String} text - Any test for logging
-	 * @param {String} errObj - Text or error Object to include in the log
-	 * @returns formatted console.log()
-	 */
-	mongo: function (text, errObj) { console.log(`[${logDate} UTC] [MONGODB] 📝 ${text}${errObj ? ` | ${errObj}` : ''}`); },
-	/**
 	 * Regular trace log message
 	 * @param {String} text - Any test for logging
 	 * @param {String} errObj - Text or error Object to include in the log
