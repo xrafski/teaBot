@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 const { guildSlashCommandsArray, adminSlashCommandsArray } = require('../../Handler/Command');
 const { registerGuildCommands } = require('../../Utilities/functions');
 const logger = require('../../Utilities/logger');
@@ -27,7 +28,7 @@ module.exports = {
         if (commandCenter) {
             registerGuildCommands(commandCenter, adminSlashCommandsArray)
                 .then(msg => logger.startup(`Event/Client/ready.js (1) [TEA] ${msg}`))
-                .catch(error => logger.error(`Event/Client/ready.js (2) [TEA] Error to set slash commands for ${commandCenter.name}`, error));
+                .catch(error => logger.startup(`Event/Client/ready.js (2) [TEA] Error to set slash commands for ${commandCenter.name}`, error));
         }
 
         // client.guilds.cache.forEach(guild => {

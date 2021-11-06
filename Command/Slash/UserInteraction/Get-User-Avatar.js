@@ -8,8 +8,9 @@ module.exports = {
 	async execute(client, interaction) {
 		const { user, options, guild } = interaction;
 		const target = options.getUser('user');
-		logger.command(`${__filename.split('\\').slice(-4).join('/')} used by '${user?.tag}' on '${target?.tag}' in the '${guild?.name}' guild.`);
+		logger.command(`${__filename.split('\\').slice(-4).join('/')} used by '${user?.tag}' on '${target?.tag}' in the '${guild?.name}' guild.`); // Log who used this command.
 
+		// Send interaction reply with the results.
 		interaction.reply({
 			ephemeral: true,
 			embeds:
@@ -32,6 +33,7 @@ module.exports = {
 					]
 				}
 			]
-		}).catch(err => logger.error('Command/Slash/UserInteraction/Get-User-Avatar.js (1) Error to send interaction reply.', err));
+		})
+			.catch(err => logger.log('Command/Slash/UserInteraction/Get-User-Avatar.js (1) Error to send interaction reply.', err));
 	}
 };

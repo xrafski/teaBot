@@ -92,7 +92,7 @@ function ephemeralToggle(commandName) {
 function interactionReply(interaction, content, ephemeral, log) {
 	interaction
 		.reply({ content, ephemeral })
-		.catch(err => logger.error(`${log} Error to send interaction reply.`, err));
+		.catch(err => logger.log(`${log} Error to send interaction reply.`, err));
 }
 
 /**

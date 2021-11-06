@@ -1,5 +1,5 @@
 const { MessageEmbed } = require('discord.js');
-const { getEmoji, interactionReply, apiCall } = require('../../../Utilities/functions');
+const { getEmoji, apiCall } = require('../../../Utilities/functions');
 const logger = require('../../../Utilities/logger');
 const links = require('../../../Utilities/settings/links.json');
 
@@ -18,29 +18,60 @@ module.exports = {
         }
     ],
 
-    execute(client, interaction, args) {
+    async execute(client, interaction, args) {
         const { user, guild } = interaction;
-        logger.command(`${__filename.split('\\').slice(-4).join('/')} used by '${user?.tag}' in the '${guild?.name}' guild.`);
+        logger.command(`${__filename.split('\\').slice(-4).join('/')} used by '${user?.tag}' in the '${guild?.name}' guild.`); // Log who used this command.
 
-        apiCall('GET', `certificate/${guild.id}`) // Check if guild is certified.
+        // Create defer reply, because reply might exceed 3 seconds limit of discord interaction.
+        await interaction
+            .deferReply({ ephemeral: false })
+            .catch(err => logger.log('Command/Slash/Global/Check.js (1) Error to send interaction defer reply', err));
+
+        // Call API to get required information about club certificate.
+        apiCall('GET', `certificate/${guild.id}`)
             .then(certResponse => {
-                if (!certResponse) return interactionReply(interaction, `> This command is only available for registered members of ${getEmoji(client.config.TEAserver.id, 'TEA')} Trove Ethics Alliance!`, false, 'Command/Slash/Global/Check.js (1)');
 
-                apiCall('GET', `threat/${args[0]}`) // Check for threat.
-                    .then(threatResonse => formatDocument(threatResonse))
-                    .catch(error => interactionReply(interaction, `❌ Failed to receive data from API.\n> ${error.message}`, false, 'Command/Slash/Global/Check.js (3)'));
+                // Check if guild is certified.
+                if (!certResponse) {
+                    return interaction.editReply({ content: `> This command is only available for registered members of ${getEmoji(client.config.TEAserver.id, 'TEA')} Trove Ethics Alliance!` })
+                        .catch(err => logger.log('Command/Slash/Global/Check.js (2) Error to send interaction defer reply', err));
+                }
 
+                // Run another API call to get required data for threat user.
+                apiCall('GET', `threat/${args[0]}`)
+                    .then(threatResonse => formatDocument(threatResonse)) // Run a function to format document and send reply back.
+                    .catch(err => {
+                        logger.log('Command/Slash/Global/Check.js (3) Error to get API response', err); // Log that event in the console.
+
+                        // Send interaction reply to front end about API error.
+                        interaction.editReply({ content: '❌ Failed to receive data from API.\n> Try again later ;(' })
+                            .catch(err => logger.log('Command/Slash/Global/Check.js (4) Error to send interaction defer reply', err)); // Catch interaction reply error.
+                    });
             })
-            .catch(error => interactionReply(interaction, `❌ Failed to receive data from API.\n> ${error.message}`, false, 'Command/Slash/Global/Check.js (3)'));
+            .catch(err => {
+                logger.log('Command/Slash/Global/Check.js (5) Error to get API response', err); // Log that event in the console.
 
+                // Send interaction reply to front end about API error.
+                interaction.editReply({ content: '❌ Failed to receive data from API.\n> Try again later ;(' })
+                    .catch(err => logger.log('Command/Slash/Global/Check.js (6) Error to send interaction defer reply', err)); // Catch interaction reply error.
+            });
+
+        /**
+         * Format documment as a function to make it more readable.
+         * @param {*} document mongoDB document
+         * @returns interaction defer reply with formatted document.
+         */
         async function formatDocument(document) {
+            // Check if document is found.
             if (!document) {
+                // Create discord embed element.
                 const notFoundEmbed = new MessageEmbed()
                     .setDescription('❌ This user is not detected as a threat in our database!')
                     .setAuthor('Trove Ethics Alliance - Results', links.icon)
                     .setColor('#0095ff');
 
-                return interaction.reply({
+                // Return interaction reply with formatted response about user not found..
+                return interaction.editReply({
                     embeds: [notFoundEmbed],
                     components: [
                         {
@@ -55,7 +86,8 @@ module.exports = {
                             ]
                         }
                     ]
-                }).catch(err => logger.error('Command/Slash/Global/Check.js (4) Error to send interaction reply.', err));
+                })
+                    .catch(err => logger.log('Command/Slash/Global/Check.js (7) Error to send interaction defer reply', err)); // Catch interaction reply error.
             }
 
             const checkedIDs = await lookForThreat(document.discord);
@@ -75,7 +107,8 @@ module.exports = {
                 .setTimestamp()
                 .setFooter('Trove Ethics Alliance', links.icon);
 
-            interaction.reply({
+            // Send interaction reply about threat user with fommatted message.
+            interaction.editReply({
                 embeds: [resultEmbed],
                 components: [
                     {
@@ -96,25 +129,36 @@ module.exports = {
                         ]
                     }
                 ]
-            }).catch(err => logger.error('Command/Slash/Global/Check.js (5) Error to send interaction reply.', err));
+            })
+                .catch(err => logger.log('Command/Slash/Global/Check.js (8) Error to send interaction defer reply', err)); // Catch interaction reply error.
         }
 
+        /**
+         * Simple function to return color code provided by a letter or something idk.
+         * @param {String} color Threat color (g, y, r, b)
+         * @returns html color code for specified color code.
+         */
         function setThreatColor(color) {
             switch (color) {
-                case 'g': return '#45ff24';
-                case 'y': return '#ffff24';
-                case 'r': return '#ff1a1a';
-                case 'b': return '#0f0f0f';
-                default: return '#fcfcfc';
+                case 'g': return '#45ff24'; // Green threat level.
+                case 'y': return '#ffff24'; // Yellow threat level.
+                case 'r': return '#ff1a1a'; // Red threat level.
+                case 'b': return '#0f0f0f'; // Black threat level.
+                default: return '#fcfcfc'; // Default threat level which is almost white (cant be entirely #fff due to discord might define this color as transparent)
             }
         }
 
+        /**
+         * Function to check guild members and try to match with provided document from MongoDB.
+         * @param {Object} docDiscord data from document.discord.
+         * @returns A string with formatted fetched guild mambers that has been matched.
+         */
         async function lookForThreat(docDiscord) {
-            const formatDiscordID = docDiscord?.replace(/[\\<>@#&?! ]/g, '').split(',');
+            const formatDiscordID = docDiscord?.replace(/[\\<>@#&?! ]/g, '').split(','); // Replace some symbols from document and split to make an array.
 
-            const promises = [];
+            const promises = []; // Promise array to deal later on.
 
-            // all promises will be added to array
+            // All promises will be added to array
             for (let index = 0; index < formatDiscordID.length; index++) {
                 const userID = formatDiscordID[index];
                 promises.push(
@@ -122,7 +166,7 @@ module.exports = {
                         .then(member => {
                             return `\n> ${member?.user?.tag} (${member?.toString()})`;
                         })
-                        .catch(() => { return; })
+                        .catch(() => { return; }) // Ignore error here because it's not important.
                 );
             }
 

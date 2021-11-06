@@ -1,11 +1,10 @@
 const { globalSlashCommandsArray } = require('../../../Handler/Command');
-const { getEmoji, interactionReply } = require('../../../Utilities/functions');
+const { getEmoji } = require('../../../Utilities/functions');
 const logger = require('../../../Utilities/logger');
 
 module.exports = {
     name: 'register',
     description: 'Register slash commands.',
-    // defaultPermission: false,
     category: 'TEA',
     type: 'CHAT_INPUT',
     options: [
@@ -23,16 +22,24 @@ module.exports = {
 
     async execute(client, interaction, args) {
         const { user, guild } = interaction;
-        logger.command(`${__filename.split('\\').slice(-4).join('/')} (1) used by '${user?.tag}' in the '${guild?.name}' guild.`);
+        logger.command(`${__filename.split('\\').slice(-4).join('/')} (1) used by '${user?.tag}' in the '${guild?.name}' guild.`); // Log who used the command.
 
-        if (args[0] === 'global') return regGlobalSlash();
-        if (args[0] === 'registered') return checkRegistered();
+        if (args[0] === 'global') return regGlobalSlash(); // Run a function for 'global' argument.
+        if (args[0] === 'registered') return checkRegistered(); // Run a function for 'registered' argument.
 
-        async function regGlobalSlash() {
+        function regGlobalSlash() {
             // Set global slash commands
-            await client.application.commands.set(globalSlashCommandsArray)
-                .then(res => interactionReply(interaction, `${getEmoji(client.config.TEAserver.id, 'TEA')} Bot's global slash commands has been updated/registered (**${res.size}** slash in total).\n> ${res.map(ele => `/${ele.name}`).join(' • ')}\n\nNOTE: It might take an hour to see the changes.`, false, 'Command/Slash/TEA/Register.js (1)'))
-                .catch(err => interactionReply(interaction, `${getEmoji(client.config.TEAserver.id, 'TEA')} Failed to set global slash commands.\n> ${err.message}`, false, 'Command/Slash/TEA/Register.js (2)'));
+            client.application.commands.set(globalSlashCommandsArray)
+                .then(res => {
+                    // Send interaction reply as a confirmation
+                    interaction.reply({ content: `${getEmoji(client.config.TEAserver.id, 'TEA')} Bot's global slash commands has been updated/registered (**${res.size}** slash in total).\n> ${res.map(ele => `/${ele.name}`).join(' • ')}\n\nNOTE: It might take an hour to see changes.` })
+                        .catch(err => logger.log('Command/Slash/TEA/Register.js (1) Error to send interaction reply', err)); // Catch interaction reply error.
+                })
+                .catch(err => {
+                    // Send interaction reply when there is and error to set global commands.
+                    interaction.reply({ content: `${getEmoji(client.config.TEAserver.id, 'TEA')} Failed to set global slash commands.\n> ${err.message}` })
+                        .catch(err => logger.log('Command/Slash/TEA/Register.js (2) Error to send interaction reply', err)); // Catch interaction reply error.
+                });
         }
 
         function checkRegistered() {
@@ -40,9 +47,15 @@ module.exports = {
             client.application.commands.fetch()
                 .then(cmds => {
                     const commands = cmds.map(cmd => cmd.name);
-                    interactionReply(interaction, `${getEmoji(client.config.TEAserver.id, 'TEA')} List of registered global slash commands:\n> \n> /${commands.join('\n> /')}`, false, 'Command/Slash/TEA/Register.js (3)');
+                    // Send interaction reply as a confirmation
+                    interaction.reply({ content: `${getEmoji(client.config.TEAserver.id, 'TEA')} List of registered global slash commands:\n> \n> /${commands.join('\n> /')}` })
+                        .catch(err => logger.log('Command/Slash/TEA/Register.js (3) Error to send interaction reply', err)); // Catch interaction reply error.
                 })
-                .catch(err => interactionReply(interaction, `${getEmoji(client.config.TEAserver.id, 'TEA')} Failed to fetch slash commands data.\n> ${err.message}`, false, 'Command/Slash/TEA/Register.js (4)'));
+                .catch(err => {
+                    // Send interaction reply when there is and error to fetch global commands.
+                    interaction.reply({ content: `${getEmoji(client.config.TEAserver.id, 'TEA')} Failed to fetch slash commands data.\n> ${err.message}` })
+                        .catch(err => logger.log('Command/Slash/TEA/Register.js (4) Error to send interaction reply', err)); // Catch interaction reply error.
+                });
         }
     }
 };
@@ -52,5 +65,5 @@ module.exports = {
         // await client.guilds.cache.forEach(guild => {
         //     guild.commands.set([])
         //         .then(logger.info(`Event/Client/ready.js (x) Commands cleared for ${guild.name}!`))
-        //         .catch(error => logger.error(`Event/Client/ready.js (x) Error to clear '${guild.name}' guild slash commands.'`, error));
+        //         .catch(error => logger.log(`Event/Client/ready.js (x) Error to clear '${guild.name}' guild slash commands.'`, error));
         // });

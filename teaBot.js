@@ -34,9 +34,9 @@ function loadProjectHandlers() {
 loadProjectHandlers() // Initialize the project.
 	.then(() => {
 		setTimeout(async () => { // After 5 seconds try to log the bot
-			client.login(token).catch(err => logger.error('teaBot.js(2) Error to login the bot', err));
+			client.login(token).catch(err => logger.startup('teaBot.js(2) Error to login the bot', err));
 		}, 5000);
 	})
-	.catch(err => logger.error('teaBot.js (3) Error to initialize the project handlers.', err));
+	.catch(err => logger.startup('teaBot.js (3) Error to initialize the project handlers.', err));
 
 module.exports = client;

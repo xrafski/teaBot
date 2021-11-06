@@ -1,6 +1,6 @@
-const dateFormat = require('dateformat');
 const config = require('./settings/bot.json');
-const logDate = dateFormat(new Date(), 'UTC:dd/mm/yyyy - hh:MM:ss TT');
+const moment = require('moment');
+const format = 'DD/MM/YYYY - hh:mm:ss A z';
 
 const logger = {
 	/**
@@ -9,73 +9,73 @@ const logger = {
 	 * @param {String} errObj - Text or error Object to include in the log
 	 * @returns formatted console.debug()
 	 */
-	debug: function (text, errObj) {
+	debug: (text, errObj) => {
 		if (config.bot.debug === false) return;
-		console.debug(`[${logDate} UTC] [DEBUG] 🟣 ${text}${errObj ? ` | ${errObj}` : ''}`);
+		console.debug(`[${moment(Date.now()).utc().format(format)}] [DEBUG] 🟣 ${text}${errObj ? ` | ${errObj}` : ''}`);
 	},
+
 	/**
 	 * Regular log message
 	 * @param {String} text - Any test for logging
 	 * @param {String} errObj - Text or error Object to include in the log
-	 * @returns formatted console.log()
+	 * @returns formatted console.info() or console.error() depending if errObj is provided.
 	 */
-	log: function (text, errObj) { console.log(`[${logDate} UTC] [LOG] 🟢 ${text}${errObj ? ` | ${errObj}` : ''}`); },
+	log: (text, errObj) => {
+		if (errObj) console.error(`[${moment(Date.now()).utc().format(format)}] [ERROR] 🔴 ${text}${errObj ? ` | ${errObj}` : ''}`);
+		else console.log(`[${moment(Date.now()).utc().format(format)}] [LOG] 🟢 ${text}${errObj ? ` | ${errObj}` : ''}`);
+	},
+
 	/**
 	 * Regular info log message
 	 * @param {String} text - Any test for logging
 	 * @param {String} errObj - Text or error Object to include in the log
-	 * @returns formatted console.info()
+	 * @returns formatted console.info() or console.warn() depending if errObj is provided.
 	 */
-	info: function (text, errObj) { console.info(`[${logDate} UTC] [INFO] 🔵 ${text}${errObj ? ` | ${errObj}` : ''}`); },
-	/**
-	 * Regular warn log message
-	 * @param {String} text - Any test for logging
-	 * @param {String} errObj - Text or error Object to include in the log
-	 * @returns formatted console.warn()
-	 */
-	warn: function (text, errObj) { console.warn(`[${logDate} UTC] [WARN] 🟠 ${text}${errObj ? ` | ${errObj}` : ''}`); },
-	/**
-	 * Regular error log message
-	 * @param {String} text - Any test for logging
-	 * @param {String} errObj - Text or error Object to include in the log
-	 * @returns formatted console.error()
-	 */
-	error: function (text, errObj) { console.error(`[${logDate} UTC] [ERROR] 🔴 ${text}${errObj ? ` | ${errObj}` : ''}`); },
+	info: (text, errObj) => {
+		if (errObj) console.warn(`[${moment(Date.now()).utc().format(format)}] [WARN] 🟠 ${text}${errObj ? ` | ${errObj}` : ''}`);
+		else console.info(`[${moment(Date.now()).utc().format(format)}] [INFO] 🔵 ${text}${errObj ? ` | ${errObj}` : ''}`);
+	},
+
 	/**
 	 * Regular event log message
 	 * @param {String} text - Any test for logging
 	 * @param {String} errObj - Text or error Object to include in the log
 	 * @returns formatted console.log()
 	 */
-	event: function (text, errObj) { console.log(`[${logDate} UTC] [EVENT] ⚪ ${text}${errObj ? ` | ${errObj}` : ''}`); },
+	event: (text, errObj) => { console.log(`[${moment(Date.now()).utc().format(format)}] [EVENT] ⚪ ${text}${errObj ? ` | ${errObj}` : ''}`); },
+
 	/**
 	 * Regular trace log message
 	 * @param {String} text - Any test for logging
 	 * @param {String} errObj - Text or error Object to include in the log
 	 * @returns formatted console.trace()
 	 */
-	trace: function (text, errObj) { console.trace(`[${logDate} UTC] [TRACE] 🟡 ${text}${errObj ? ` | ${errObj}` : ''}`); },
+	trace: (text, errObj) => { console.trace(`[${moment(Date.now()).utc().format(format)}] [TRACE] 🟡 ${text}${errObj ? ` | ${errObj}` : ''}`); },
+
 	/**
 	 * Regular update log message
 	 * @param {String} text - Any test for logging
 	 * @param {String} errObj - Text or error Object to include in the log
 	 * @returns formatted console.log()
 	 */
-	update: function (text, errObj) { console.log(`[${logDate} UTC] [UPDATE] 🟤 ${text}${errObj ? ` | ${errObj}` : ''}`); },
+	update: (text, errObj) => { console.log(`[${moment(Date.now()).utc().format(format)}] [UPDATE] 🟤 ${text}${errObj ? ` | ${errObj}` : ''}`); },
+
 	/**
 	 * Regular startup log message
 	 * @param {String} text - Any test for logging
 	 * @param {String} errObj - Text or error Object to include in the log
 	 * @returns formatted console.log()
 	 */
-	startup: function (text, errObj) { console.log(`[${logDate} UTC] [STARTUP] 🔰 ${text}${errObj ? ` | ${errObj}` : ''}`); },
+	startup: (text, errObj) => { console.log(`[${moment(Date.now()).utc().format(format)}] [STARTUP] 🔰 ${text}${errObj ? ` | ${errObj}` : ''}`); },
+
 	/**
 	 * Regular command log message
 	 * @param {String} text - Any test for logging
 	 * @param {String} errObj - Text or error Object to include in the log
 	 * @returns formatted console.log()
 	 */
-	command: function (text, errObj) { console.log(`[${logDate} UTC] [COMMAND] 🍵 ${text}${errObj ? ` | ${errObj}` : ''}`); },
+	command: (text, errObj) => { console.log(`[${moment(Date.now()).utc().format(format)}] [COMMAND] 🍵 ${text}${errObj ? ` | ${errObj}` : ''}`); },
+
 };
 
 
