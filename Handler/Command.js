@@ -17,30 +17,63 @@ module.exports = async (client) => {
 	const table = new AsciiTable('Commands Loaded');
 	table.setHeading('Category', 'Name', 'File');
 
+
+	// Classic Commands Handler
+	const commandFiles = await PG(`${process.cwd()}/Command/Classic/*.js`);
+	commandFiles.map(file => {
+
+		// Assign variable to a command file.
+		const classicCommand = require(file);
+
+		// Split the classicCommand file path on '/' to create an array.
+		const splitted = file.split('/');
+
+		// Get directory from the splitted file (Classic).
+		const directory = splitted[splitted.length - 2];
+
+		// Check if classicCommand has name property.
+		if (classicCommand.name && classicCommand.enabled === true) {
+
+			// Assign properties variable.
+			const properties = { directory, ...classicCommand };
+
+			// Add to classicCommand collector new command with properties.
+			client.classicCommands.set(classicCommand.name, properties);
+
+			// Add table row for this command.
+			table.addRow(
+				'CLASSIC PREFIX',
+				classicCommand.name,
+				file.split('/').slice(-3).join('/')
+			);
+		}
+	});
+
+	// Slash Commands Handler
 	(await PG(`${process.cwd()}/Command/Slash/*/*.js`)).map(async (file) => {
 
 		// Assign variable to a command file.
-		const command = require(file);
+		const slashCommand = require(file);
 
 		// Check if command has name
-		if (!command.name) return;
+		if (!slashCommand.name) return;
 
 		// Set command into slashCommands collector.
-		client.slashCommands.set(command.name, command);
+		client.slashCommands.set(slashCommand.name, slashCommand);
 
 		// Add table row for this command.
 		table.addRow(
-			command.category,
-			command.name,
+			`SLASH (${slashCommand.category})`,
+			slashCommand.name,
 			file.split('/').slice(-4).join('/')
 		);
 
 		// Finally split slashCommands into separate categories.
-		switch (command.category) {
-			case 'GLOBAL': return globalCommandsArray.push(command);
-			case 'TEA': return adminCommandsArray.push(command); // command.defaultPermission = false;
-			case 'GUILD': return guildCommandsArray.push(command);
-			default: return logger.info(`Handler/Command.js (2) Command '${command.name}' doesn't have a correct category '${command.category}'!`);
+		switch (slashCommand.category) {
+			case 'GLOBAL': return globalCommandsArray.push(slashCommand);
+			case 'TEA': return adminCommandsArray.push(slashCommand); // command.defaultPermission = false;
+			case 'GUILD': return guildCommandsArray.push(slashCommand);
+			default: return logger.info(`Handler/Command.js (2) Command '${slashCommand.name}' doesn't have a correct category '${slashCommand.category}'!`);
 		}
 	});
 

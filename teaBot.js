@@ -12,7 +12,7 @@ const client = new Client({
 });
 
 // Global Variables
-client.commands = new Collection(); // Regular commands collector
+client.classicCommands = new Collection(); // Regular commands collector
 client.slashCommands = new Collection(); // Slash commands collector
 client.config = require('./Utilities/settings/bot.json');
 
