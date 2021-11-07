@@ -13,11 +13,17 @@ module.exports = {
 		const { user, guild } = interaction;
 		logger.command(`${__filename.split('\\').slice(-4).join('/')} used by '${user?.tag}' in the '${guild?.name}' guild.`); // Log who used the command.
 
-		const currMS = moment().format('x'); // Get current time in milliseconds.
-		const timeDiffinMS = Math.floor(currMS - client.uptime); // Calculate difference between current time and bot startup date.
-		const botStartDate = new Date(timeDiffinMS); // Create a new date object with the results.
+		// Get current time in milliseconds.
+		const currMS = moment().format('x');
 
-		const format = 'dddd, Do MMMM YYYY @ hh:mm A z'; // Moment format string
+		// Calculate difference between current time and bot startup date.
+		const timeDiffinMS = Math.floor(currMS - client.uptime);
+
+		// Create a new date object with the results.
+		const botStartDate = new Date(timeDiffinMS);
+
+		// Moment format string
+		const format = 'dddd, Do MMMM YYYY @ hh:mm A z';
 
 		// Send interaction reply message.
 		interaction.reply({ ephemeral: true, content: `${getEmoji(client.config.TEAserver.id, 'TEA')} Last application downtime was **${moment(botStartDate).fromNow()}**.\n> ${moment(botStartDate).utc().format(format)}.` })
