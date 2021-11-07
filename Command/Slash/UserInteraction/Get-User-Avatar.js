@@ -34,6 +34,6 @@ module.exports = {
 				}
 			]
 		})
-			.catch(err => logger.log('Command/Slash/UserInteraction/Get-User-Avatar.js (1) Error to send interaction reply.', err));
+			.catch(err => logger.log('Command/Slash/UserInteraction/Get-User-Avatar.js (1) Error to send interaction reply.', err)); // Catch interaction reply error.
 	}
 };
