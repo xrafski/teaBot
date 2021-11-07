@@ -11,7 +11,7 @@ module.exports = {
     * @param {Client} client
     */
     async execute(client) {
-        logger.startup(`Event/Client/ready.js (1) Trove Ethics Alliance Bot ${config.bot.version} has logged in}!`, `Version: ${config.bot.version}`);
+        logger.startup(`Trove Ethics Alliance Bot ${config.bot.version} has logged in!`, `Version: ${config.bot.version}`);
         // console.log(guildSlashCommandsArray, adminSlashCommandsArray, globalSlashCommandsArray);
         // console.log(client.slashCommands);
 
@@ -23,12 +23,15 @@ module.exports = {
         //         .catch(console.error);
         // });
 
+
         // Set guild slash commands
-        const commandCenter = client.guilds.cache.get(client.config.commandCenter.guildID);
+        const commandCenter = client.guilds.cache.get(client.config.commandCenter.guildID); // Find TEA command center guild.
+        // If TEA CC found
         if (commandCenter) {
+            // Run a function to register admin guild slash commands.
             registerGuildCommands(commandCenter, adminSlashCommandsArray)
-                .then(msg => logger.startup(`Event/Client/ready.js (1) [TEA] ${msg}`))
-                .catch(error => logger.startup(`Event/Client/ready.js (2) [TEA] Error to set slash commands for ${commandCenter.name}`, error));
+                .then(msg => logger.startup(`Event/Client/ready.js (1) ${msg}`))
+                .catch(error => logger.startup(`Event/Client/ready.js (2) Error to set slash commands for ${commandCenter.name}`, error));
         }
 
         // client.guilds.cache.forEach(guild => {
