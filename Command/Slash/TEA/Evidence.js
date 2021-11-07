@@ -110,6 +110,7 @@ module.exports = {
                         .catch(err => logger.log('Command/Slash/TEA/Evidence.js (2) Error to send interaction reply', err)); // Catch interaction reply error.
                 })
                 .catch(err => {
+
                     // Send interaction reply if there is an error to send the evidence message.
                     interaction.reply({ content: `❌ Failed to send a message to the evidence channel.\n> ${err.message}` })
                         .catch(err => logger.log('Command/Slash/TEA/Evidence.js (3) Error to send interaction reply', err)); // Catch interaction reply error.
@@ -160,18 +161,20 @@ module.exports = {
                                     }
                                 ]
                             })
-                                .catch(err => logger.log('Command/Slash/TEA/Evidence.js (5) Error to send interaction reply.', err)); // Catch interaction reply error.
+                                .catch(err => logger.log('Command/Slash/TEA/Evidence.js (4) Error to send interaction reply.', err)); // Catch interaction reply error.
                         })
                         .catch(err => {
+
                             // Send interaction reply if there is an error to modify the message.
                             interaction.reply({ content: `${getEmoji(client.config.TEAserver.id, 'TEA')} Failed to edit the message.\n> ${err.message}` })
-                                .catch(err => logger.log('Command/Slash/TEA/Evidence.js (6) Error to send interaction reply', err)); // Catch interaction reply error.
+                                .catch(err => logger.log('Command/Slash/TEA/Evidence.js (5) Error to send interaction reply', err)); // Catch interaction reply error.
                         });
                 })
                 .catch(err => {
+
                     // Send interaction reply if there is an error to fetch the message.
                     interaction.reply({ content: `${getEmoji(client.config.TEAserver.id, 'TEA')} Failed to find the message.\n> ${err.message}` })
-                        .catch(err => logger.log('Command/Slash/TEA/Evidence.js (7) Error to send interaction reply', err)); // Catch interaction reply error.
+                        .catch(err => logger.log('Command/Slash/TEA/Evidence.js (6) Error to send interaction reply', err)); // Catch interaction reply error.
                 });
         }
     }
