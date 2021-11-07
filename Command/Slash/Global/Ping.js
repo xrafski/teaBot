@@ -16,7 +16,8 @@ module.exports = {
 			.deferReply({ ephemeral: true })
 			.catch(err => logger.log('Command/Slash/Global/Ping.js (1) Error to send interaction defer reply', err)); // Catch interaction reply error.
 
-		await new Promise((resolve) => setTimeout(resolve, 2000)); // Fake 2s delay to think the bot is doing something 😂
+		// Fake 2s delay to think the bot is doing something 😂
+		await new Promise((resolve) => setTimeout(resolve, 2000));
 
 		// Send interaction defer reply with latency delay.
 		await interaction
