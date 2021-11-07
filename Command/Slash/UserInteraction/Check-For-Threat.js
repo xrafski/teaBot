@@ -28,6 +28,7 @@ module.exports = {
 
 		async function formatDocument(document) {
 			if (!document) {
+
 				// Create embed object.
 				const notFoundEmbed = new MessageEmbed()
 					.setDescription('❌ This user is not detected as a threat in our database!')
@@ -52,7 +53,7 @@ module.exports = {
 						}
 					]
 				})
-					.catch(err => logger.log('Command/Slash/UserInteraction/Check-For-Threat.js (2) Error to send interaction reply.', err)); // Catch interaction reply error.
+					.catch(err => logger.log('Command/Slash/UserInteraction/Check-For-Threat.js (3) Error to send interaction reply.', err)); // Catch interaction reply error.
 			}
 
 			const checkedIDs = await lookForThreat(document.discord);
@@ -72,6 +73,7 @@ module.exports = {
 				.setTimestamp()
 				.setFooter('Trove Ethics Alliance', links.icon);
 
+			// Send interaction reply message with formatted mesage.
 			interaction.reply({
 				embeds: [resultEmbed],
 				ephemeral: true,
@@ -95,7 +97,7 @@ module.exports = {
 					}
 				]
 			})
-				.catch(err => logger.log('Command/Slash/Global/Check.js (3) Error to send interaction reply.', err));
+				.catch(err => logger.log('Command/Slash/Global/Check.js (4) Error to send interaction reply.', err)); // Catch interaction reply error.
 		}
 
 		/**
