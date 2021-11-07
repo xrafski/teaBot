@@ -75,7 +75,6 @@ const logger = {
 	 * @returns formatted console.log()
 	 */
 	command: (text, errObj) => { console.log(`[${moment(Date.now()).utc().format(format)}] [COMMAND] 🍵 ${text}${errObj ? ` | ${errObj}` : ''}`); },
-
 };
 
 
