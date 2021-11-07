@@ -35,11 +35,13 @@ module.exports = {
 			apiCall('GET', `certificate/${guild.id}`) // Call API to get basic information about the certificate.
 				.then(response => {
 					if (!response) { // Check if club exists in DB.
+
 						// Send interaction reply back with information about club not being a member of TEA.
 						interaction.editReply({ content: `> ❌ This club is not certified member of ${getEmoji(client.config.TEAserver.id, 'TEA')} **Trove Ethics Alliance**!` })
 							.catch(err => logger.log('Command/Slash/Global/Certificate.js (2) Error to send interaction defer reply', err)); // Catch interaction response error.
 					}
 					else { // When club is certified.
+
 						// Send interaction reply with basic certificate information.
 						interaction.editReply({ content: `${getEmoji(client.config.TEAserver.id, 'verified')} ${guild.name} is certified member of ${getEmoji(client.config.TEAserver.id, 'TEA')} **Trove Ethics Alliance**!` })
 							.catch(err => logger.log('Command/Slash/Global/Certificate.js (3) Error to send interaction defer reply', err)); // Catch interaction response error.
@@ -47,7 +49,9 @@ module.exports = {
 				})
 				.catch(err => { // API call error handler.
 					logger.log('Command/Slash/Global/Certificate.js (4) Error to get API response', err); // Log API error.
-					interaction.editReply({ content: '❌ Failed to receive data from API.\n> Try again later ;(' }) // Send message to front end about the error.
+
+					// Send message to front end about the error.
+					interaction.editReply({ content: '❌ Failed to receive data from API.\n> Try again later ;(' })
 						.catch(err => logger.log('Command/Slash/Global/Certificate.js (5) Error to send interaction defer reply', err)); // Catch interaction response error.
 				});
 		}
@@ -57,11 +61,13 @@ module.exports = {
 			apiCall('GET', `certificate/${guild.id}`) // Call API to get required data from MongoDB.
 				.then(response => {
 					if (!response) { // Check if club exists in DB.
+
 						// Send interaction reply with information that club is not assigned with TEA.
 						interaction.editReply({ content: `> ❌ This club is not certified member of ${getEmoji(client.config.TEAserver.id, 'TEA')} **Trove Ethics Alliance**!` })
 							.catch(err => logger.log('Command/Slash/Global/Certificate.js (6) Error to send interaction defer reply', err)); // Catch interaction response error.
 					}
 					else { // When club is found in DB.
+
 						// Send interaction reply with formatted embed message.
 						interaction.editReply({
 							embeds:
@@ -84,7 +90,9 @@ module.exports = {
 				})
 				.catch(err => { // API call error handler.
 					logger.log('Command/Slash/Global/Certificate.js (8) Error to get API response', err); // Log API error.
-					interaction.editReply({ content: '❌ Failed to receive data from API.\n> Try again later ;(' }) // Send interaction reply about API error.
+
+					// Send interaction reply about API error.
+					interaction.editReply({ content: '❌ Failed to receive data from API.\n> Try again later ;(' })
 						.catch(err => logger.log('Command/Slash/Global/Certificate.js (9) Error to send interaction defer reply', err)); // Catch interaction reply error.
 				});
 		}
