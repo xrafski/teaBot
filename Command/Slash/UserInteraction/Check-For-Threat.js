@@ -39,19 +39,19 @@ module.exports = {
 				return interaction.reply({
 					embeds: [notFoundEmbed],
 					ephemeral: true,
-					components: [
-						{
-							type: 1,
-							components: [
-								{
-									type: 2,
-									url: links.formReport,
-									label: 'If you think that user is a threat, please report here.',
-									style: 5
-								}
-							]
-						}
-					]
+					// components: [
+					// 	{
+					// 		type: 1,
+					// 		components: [
+					// 			{
+					// 				type: 2,
+					// 				url: links.formReport,
+					// 				label: 'If you think that user is a threat, please report here.',
+					// 				style: 5
+					// 			}
+					// 		]
+					// 	}
+					// ]
 				})
 					.catch(err => logger.log('Command/Slash/UserInteraction/Check-For-Threat.js (3) Error to send interaction reply.', err)); // Catch interaction reply error.
 			}
@@ -77,25 +77,25 @@ module.exports = {
 			interaction.reply({
 				embeds: [resultEmbed],
 				ephemeral: true,
-				components: [
-					{
-						type: 1,
-						components: [
-							{
-								type: 2,
-								url: links.formReport,
-								label: 'Report players here',
-								style: 5
-							},
-							{
-								type: 2,
-								url: links.formAppeal,
-								label: 'Appeal is available over here',
-								style: 5
-							}
-						]
-					}
-				]
+				// components: [
+				// 	{
+				// 		type: 1,
+				// 		components: [
+				// 			{
+				// 				type: 2,
+				// 				url: links.formReport,
+				// 				label: 'Report players here',
+				// 				style: 5
+				// 			},
+				// 			{
+				// 				type: 2,
+				// 				url: links.formAppeal,
+				// 				label: 'Appeal is available over here',
+				// 				style: 5
+				// 			}
+				// 		]
+				// 	}
+				// ]
 			})
 				.catch(err => logger.log('Command/Slash/Global/Check.js (4) Error to send interaction reply.', err)); // Catch interaction reply error.
 		}

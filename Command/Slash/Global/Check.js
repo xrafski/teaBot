@@ -73,19 +73,19 @@ module.exports = {
                 // Return interaction reply with formatted response about user not found..
                 return interaction.editReply({
                     embeds: [notFoundEmbed],
-                    components: [
-                        {
-                            type: 1,
-                            components: [
-                                {
-                                    type: 2,
-                                    url: links.formReport,
-                                    label: 'If you think that user is a threat, please report here.',
-                                    style: 5
-                                }
-                            ]
-                        }
-                    ]
+                    // components: [
+                    //     {
+                    //         type: 1,
+                    //         components: [
+                    //             {
+                    //                 type: 2,
+                    //                 url: links.formReport,
+                    //                 label: 'If you think that user is a threat, please report here.',
+                    //                 style: 5
+                    //             }
+                    //         ]
+                    //     }
+                    // ]
                 })
                     .catch(err => logger.log('Command/Slash/Global/Check.js (7) Error to send interaction defer reply', err)); // Catch interaction reply error.
             }
@@ -110,25 +110,25 @@ module.exports = {
             // Send interaction reply about threat user with fommatted message.
             interaction.editReply({
                 embeds: [resultEmbed],
-                components: [
-                    {
-                        type: 1,
-                        components: [
-                            {
-                                type: 2,
-                                url: links.formReport,
-                                label: 'Report players here',
-                                style: 5
-                            },
-                            {
-                                type: 2,
-                                url: links.formAppeal,
-                                label: 'Appeal is available over here',
-                                style: 5
-                            }
-                        ]
-                    }
-                ]
+                // components: [
+                //     {
+                //         type: 1,
+                //         components: [
+                //             {
+                //                 type: 2,
+                //                 url: links.formReport,
+                //                 label: 'Report players here',
+                //                 style: 5
+                //             },
+                //             {
+                //                 type: 2,
+                //                 url: links.formAppeal,
+                //                 label: 'Appeal is available over here',
+                //                 style: 5
+                //             }
+                //         ]
+                //     }
+                // ]
             })
                 .catch(err => logger.log('Command/Slash/Global/Check.js (8) Error to send interaction defer reply', err)); // Catch interaction reply error.
         }
