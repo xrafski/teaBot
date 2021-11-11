@@ -26,9 +26,7 @@ module.exports = {
         let varDiscordCountInt; // Server member count ✅
 
         // Set variable with time to answer each question.
-        // const questionResponseTime = 1000 * 60 * 5; // 5 minutes.
-        const questionResponseTime = 10000; // CHANGEME
-
+        const questionResponseTime = 1000 * 60 * 5; // 5 minutes.
 
         // Allow to answer question only from command user.
         const filter = msg => msg.author.id === message.author.id;
@@ -36,19 +34,42 @@ module.exports = {
         // Deconstruct object.
         const { guild, member, author } = message;
 
+        // Check if command used in TEA main server.
+        if (client.guilds.cache.get(client.config.TEAserver.id) === guild) {
+
+            // Return a message saying that command is not available in main server.
+            return message.reply({
+                content: `> ${author} You can't use this here.\n> Please, invite our ${getEmoji(client.config.TEAserver.id, 'TEA')} bot to your server and to use this command over there.`, allowedMentions: { parse: [] }, 'components': [
+                    {
+                        type: 1,
+                        components: [
+                            {
+                                style: 5,
+                                label: 'Click here to invite TEA Bot!',
+                                url: links.teaBotInvite,
+                                disabled: false,
+                                type: 2
+                            }
+                        ]
+                    }
+                ]
+            })
+                .catch(err => logger.log('Command/Classic/Apply.js (1) Error to send message reply', err)); // Catch message reply error.
+        }
+
         // Check if used is allowed to use this command (SERVER ADMIN).
         if (!member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)) {
             return message.reply({ content: `> ${author} This command is only available for server admins!`, allowedMentions: { parse: [] } })
-                .catch(err => logger.log('Command/Classic/Apply.js (1) Error to send message reply', err));
+                .catch(err => logger.log('Command/Classic/Apply.js (2) Error to send message reply', err));
         }
 
-        // // Check if guild has meet minimal member count requirements to join TEA.
-        // if (guild.memberCount < 100) {
+        // Check if guild has meet minimal member count requirements to join TEA.
+        if (guild.memberCount < 100) {
 
-        //     // Send a reply message about the minimal member requirement.
-        //     return message.reply({ content: `> Unfortunately ${author}, This discord server doesn't meet our minimal requirements (${guild.memberCount}/**100** members), try again later.`, allowedMentions: { parse: [] } })
-        //         .catch(err => logger.log('Command/Classic/Apply.js (2) Error to send message reply', err)); // Catch message reply error.
-        // }
+            // Send a reply message about the minimal member requirement.
+            return message.reply({ content: `> Unfortunately ${author}, This discord server doesn't meet our minimal requirements (${guild.memberCount}/**100** members), try again later.`, allowedMentions: { parse: [] } })
+                .catch(err => logger.log('Command/Classic/Apply.js (3) Error to send message reply', err)); // Catch message reply error.
+        }
 
         // Check if guild is already certified via API.
         apiCall('GET', `certificate/${guild.id}`)
@@ -59,7 +80,7 @@ module.exports = {
 
                     // Send a reply message about guild certificate.
                     return message.reply({ content: `> ${author} **${guild.name}** is already **certified** as a member of **Trove Ethics Alliance**.\n> ${getEmoji(client.config.TEAserver.id, 'verified')} You can check certificate with \`/certificate\` command.`, allowedMentions: { parse: [] } })
-                        .catch(err => logger.log('Command/Classic/Apply.js (3) Error to send message reply', err)); // Catch message reply error.
+                        .catch(err => logger.log('Command/Classic/Apply.js (4) Error to send message reply', err)); // Catch message reply error.
                 }
                 // Else if guild is not certified.
                 else {
@@ -70,11 +91,11 @@ module.exports = {
                 }
             })
             .catch(err => { // API call error handler.
-                logger.log('Command/Classic/Apply.js (4) Error to get API response', err); // Log API error.
+                logger.log('Command/Classic/Apply.js (5) Error to get API response', err); // Log API error.
 
                 // Send message to front end about the error.
                 message.reply({ content: '❌ Failed to receive data from API.\n> Try again later ;(' })
-                    .catch(err => logger.log('Command/Classic/Apply.js (5) Error to send message reply', err)); // Catch message reply error.
+                    .catch(err => logger.log('Command/Classic/Apply.js (6) Error to send message reply', err)); // Catch message reply error.
             });
 
 
@@ -93,7 +114,7 @@ module.exports = {
                     // If variable doesn't get answer.
                     if (awaitMsgCollector.size === 0) {
                         return message.reply({ content: `${author} ❌ There was no message within the time limit (${Math.round(questionResponseTime / 60000)}mins)! - Cancelled.` })
-                            .catch(err => logger.log('Command/Classic/Apply.js (6) Error to send message reply', err));
+                            .catch(err => logger.log('Command/Classic/Apply.js (7) Error to send message reply', err));
                     }
 
                     // Assing variable to answer content.
@@ -107,7 +128,7 @@ module.exports = {
                     // Check if user want to exit form.
                     if (userAnswer.toLowerCase() === 'exit' || userAnswer.toLowerCase() === 'cancel') {
                         return message.reply({ content: `${author} ❌ Cancelled...`, allowedMentions: { parse: [] } })
-                            .catch(err => logger.log('Command/Classic/Apply.js (7) Error to send message reply', err));
+                            .catch(err => logger.log('Command/Classic/Apply.js (8) Error to send message reply', err));
                     }
 
                     // Check if answer is at least 3 characters long.
@@ -124,7 +145,7 @@ module.exports = {
                     varClubNameStr = userAnswer;
                     return clubLevelQuestion();
                 })
-                .catch(err => logger.log('Command/Classic/Apply.js (8) Error to send message reply', err)); // Catch message reply error.
+                .catch(err => logger.log('Command/Classic/Apply.js (9) Error to send message reply', err)); // Catch message reply error.
         }
 
         function clubLevelQuestion(additionalText) {
@@ -142,7 +163,7 @@ module.exports = {
                     // If variable doesn't get answer.
                     if (awaitMsgCollector.size === 0) {
                         return message.reply({ content: `${author} ❌ There was no message within the time limit (${Math.round(questionResponseTime / 60000)}mins)! - Cancelled.` })
-                            .catch(err => logger.log('Command/Classic/Apply.js (9) Error to send message reply', err));
+                            .catch(err => logger.log('Command/Classic/Apply.js (10) Error to send message reply', err));
                     }
 
                     // Assing variable to answer content.
@@ -156,7 +177,7 @@ module.exports = {
                     // Check if user want to exit form.
                     if (userAnswer.toLowerCase() === 'exit' || userAnswer.toLowerCase() === 'cancel') {
                         return message.reply({ content: `${author} ❌ Cancelled...`, allowedMentions: { parse: [] } })
-                            .catch(err => logger.log('Command/Classic/Apply.js (10) Error to send message reply', err));
+                            .catch(err => logger.log('Command/Classic/Apply.js (11) Error to send message reply', err));
                     }
 
                     // Check if answer is a valid number.
@@ -178,7 +199,7 @@ module.exports = {
                     varClubLevelStr = userAnswer;
                     return clubJoinworldCommand();
                 })
-                .catch(err => logger.log('Command/Classic/Apply.js (11) Error to send message reply', err)); // Catch message reply error.
+                .catch(err => logger.log('Command/Classic/Apply.js (12) Error to send message reply', err)); // Catch message reply error.
         }
 
         function clubJoinworldCommand(additionalText) {
@@ -196,7 +217,7 @@ module.exports = {
                     // If variable doesn't get answer.
                     if (awaitMsgCollector.size === 0) {
                         return message.reply({ content: `${author} ❌ There was no message within the time limit (${Math.round(questionResponseTime / 60000)}mins)! - Cancelled.` })
-                            .catch(err => logger.log('Command/Classic/Apply.js (12) Error to send message reply', err));
+                            .catch(err => logger.log('Command/Classic/Apply.js (13) Error to send message reply', err));
                     }
 
                     // Assing variable to answer content.
@@ -210,7 +231,7 @@ module.exports = {
                     // Check if user want to exit form.
                     if (userAnswer.toLowerCase() === 'exit' || userAnswer.toLowerCase() === 'cancel') {
                         return message.reply({ content: `${author} ❌ Cancelled...`, allowedMentions: { parse: [] } })
-                            .catch(err => logger.log('Command/Classic/Apply.js (13) Error to send message reply', err));
+                            .catch(err => logger.log('Command/Classic/Apply.js (14) Error to send message reply', err));
                     }
 
                     // Check if answer starts with '/joinworld' word.
@@ -232,7 +253,7 @@ module.exports = {
                     varClubJoinworldStr = userAnswer;
                     return clubDescriptionQuestion();
                 })
-                .catch(err => logger.log('Command/Classic/Apply.js (14) Error to send message reply', err)); // Catch message reply error.
+                .catch(err => logger.log('Command/Classic/Apply.js (15) Error to send message reply', err)); // Catch message reply error.
         }
 
         function clubDescriptionQuestion(additionalText) {
@@ -250,7 +271,7 @@ module.exports = {
                     // If variable doesn't get answer.
                     if (awaitMsgCollector.size === 0) {
                         return message.reply({ content: `${author} ❌ There was no message within the time limit (${Math.round(questionResponseTime / 60000)}mins)! - Cancelled.` })
-                            .catch(err => logger.log('Command/Classic/Apply.js (15) Error to send message reply', err));
+                            .catch(err => logger.log('Command/Classic/Apply.js (16) Error to send message reply', err));
                     }
 
                     // Assing variable to answer content.
@@ -264,7 +285,7 @@ module.exports = {
                     // Check if user want to exit form.
                     if (userAnswer.toLowerCase() === 'exit' || userAnswer.toLowerCase() === 'cancel') {
                         return message.reply({ content: `${author} ❌ Cancelled...`, allowedMentions: { parse: [] } })
-                            .catch(err => logger.log('Command/Classic/Apply.js (16) Error to send message reply', err));
+                            .catch(err => logger.log('Command/Classic/Apply.js (17) Error to send message reply', err));
                     }
 
                     // Check if answer is at least 3 characters long.
@@ -281,7 +302,7 @@ module.exports = {
                     varClubDescriptionStr = userAnswer;
                     return clubRequirementsQuestion();
                 })
-                .catch(err => logger.log('Command/Classic/Apply.js (17) Error to send message reply', err)); // Catch message reply error.
+                .catch(err => logger.log('Command/Classic/Apply.js (18) Error to send message reply', err)); // Catch message reply error.
         }
 
         function clubRequirementsQuestion(additionalText) {
@@ -299,7 +320,7 @@ module.exports = {
                     // If variable doesn't get answer.
                     if (awaitMsgCollector.size === 0) {
                         return message.reply({ content: `${author} ❌ There was no message within the time limit (${Math.round(questionResponseTime / 60000)}mins)! - Cancelled.` })
-                            .catch(err => logger.log('Command/Classic/Apply.js (18) Error to send message reply', err));
+                            .catch(err => logger.log('Command/Classic/Apply.js (19) Error to send message reply', err));
                     }
 
                     // Assing variable to answer content.
@@ -313,7 +334,7 @@ module.exports = {
                     // Check if user want to exit form.
                     if (userAnswer.toLowerCase() === 'exit' || userAnswer.toLowerCase() === 'cancel') {
                         return message.reply({ content: `${author} ❌ Cancelled...`, allowedMentions: { parse: [] } })
-                            .catch(err => logger.log('Command/Classic/Apply.js (19) Error to send message reply', err));
+                            .catch(err => logger.log('Command/Classic/Apply.js (20) Error to send message reply', err));
                     }
 
                     // Check if answer is at least 3 characters long.
@@ -330,7 +351,7 @@ module.exports = {
                     varClubRequirementStr = userAnswer;
                     return clubRepresentativeQuestion();
                 })
-                .catch(err => logger.log('Command/Classic/Apply.js (20) Error to send message reply', err)); // Catch message reply error.
+                .catch(err => logger.log('Command/Classic/Apply.js (21) Error to send message reply', err)); // Catch message reply error.
         }
 
         function clubRepresentativeQuestion(additionalText) {
@@ -348,7 +369,7 @@ module.exports = {
                     // If variable doesn't get answer.
                     if (awaitMsgCollector.size === 0) {
                         return message.reply({ content: `${author} ❌ There was no message within the time limit (${Math.round(questionResponseTime / 60000)}mins)! - Cancelled.` })
-                            .catch(err => logger.log('Command/Classic/Apply.js (21) Error to send message reply', err));
+                            .catch(err => logger.log('Command/Classic/Apply.js (22) Error to send message reply', err));
                     }
 
                     // Assing variable to answer content.
@@ -362,7 +383,7 @@ module.exports = {
                     // Check if user want to exit form.
                     if (userAnswer.toLowerCase() === 'exit' || userAnswer.toLowerCase() === 'cancel') {
                         return message.reply({ content: `${author} ❌ Cancelled...`, allowedMentions: { parse: [] } })
-                            .catch(err => logger.log('Command/Classic/Apply.js (22) Error to send message reply', err));
+                            .catch(err => logger.log('Command/Classic/Apply.js (23) Error to send message reply', err));
                     }
 
                     // Check if answer is at least 3 characters long.
@@ -379,7 +400,7 @@ module.exports = {
                     varClubRepresentativeStr = userAnswer;
                     return clubDiscordQuestion();
                 })
-                .catch(err => logger.log('Command/Classic/Apply.js (23) Error to send message reply', err)); // Catch message reply error.
+                .catch(err => logger.log('Command/Classic/Apply.js (24) Error to send message reply', err)); // Catch message reply error.
         }
 
         function clubDiscordQuestion(additionalText) {
@@ -397,7 +418,7 @@ module.exports = {
                     // If variable doesn't get answer.
                     if (awaitMsgCollector.size === 0) {
                         return message.reply({ content: `${author} ❌ There was no message within the time limit (${Math.round(questionResponseTime / 60000)}mins)! - Cancelled.` })
-                            .catch(err => logger.log('Command/Classic/Apply.js (24) Error to send message reply', err));
+                            .catch(err => logger.log('Command/Classic/Apply.js (25) Error to send message reply', err));
                     }
 
                     // Assing variable to answer content.
@@ -411,7 +432,7 @@ module.exports = {
                     // Check if user want to exit form.
                     if (userAnswer.toLowerCase() === 'exit' || userAnswer.toLowerCase() === 'cancel') {
                         return message.reply({ content: `${author} ❌ Cancelled...`, allowedMentions: { parse: [] } })
-                            .catch(err => logger.log('Command/Classic/Apply.js (25) Error to send message reply', err));
+                            .catch(err => logger.log('Command/Classic/Apply.js (26) Error to send message reply', err));
                     }
 
                     // Check if asnwer starts with URL
@@ -433,14 +454,14 @@ module.exports = {
                     varDiscordInviteStr = userAnswer;
                     return ConfirmationPromt();
                 })
-                .catch(err => logger.log('Command/Classic/Apply.js (26) Error to send message reply', err)); // Catch message reply error.
+                .catch(err => logger.log('Command/Classic/Apply.js (27) Error to send message reply', err)); // Catch message reply error.
         }
 
         async function ConfirmationPromt() {
 
             // Fetch a user information.
             const fetchedUser = await guild.members.fetch(varRequestUserObj.id)
-                .catch(err => logger.log('Command/Classic/Apply.js (27) Error to fetch a user', err)); // Catch fetch member error.
+                .catch(err => logger.log('Command/Classic/Apply.js (28) Error to fetch a user', err)); // Catch fetch member error.
 
             // Create embed message.
             const prompt_embed = new MessageEmbed()
@@ -467,7 +488,7 @@ module.exports = {
                         await promptQuestion.react('❌');
                     } catch (err) {
                         if (err.message === 'Unknown Message') return;
-                        logger.log('Command/Classic/Apply.js (28) Error to add reaction to the message', err);
+                        logger.log('Command/Classic/Apply.js (29) Error to add reaction to the message', err);
                     }
 
                     // Accept interaction only from command author.
@@ -481,7 +502,7 @@ module.exports = {
                     // If MessageCollector doesn't get answer.
                     if (awaitReactCollector.size === 0) {
                         return message.reply({ content: `${author} ❌ There was no reaction within the time limit (${Math.round(questionResponseTime / 60000)}mins)! - Cancelled.` })
-                            .catch(err => logger.log('Command/Classic/Apply.js (29) Error to send message reply', err));
+                            .catch(err => logger.log('Command/Classic/Apply.js (30) Error to send message reply', err));
                     }
 
                     // Assign first reaction as a variable.
@@ -494,7 +515,7 @@ module.exports = {
                         default: return;
                     }
                 })
-                .catch(err => logger.log('Command/Classic/Apply.js (30) Error to send message reply', err)); // Catch message reply error.
+                .catch(err => logger.log('Command/Classic/Apply.js (31) Error to send message reply', err)); // Catch message reply error.
         }
 
         async function postRegistry() {
@@ -504,14 +525,14 @@ module.exports = {
 
             // Check if channel exists.
             if (!registryChannel) {
-                logger.log('Command/Classic/Apply.js (31) Missing registry channel on TEA main server', '.');
+                logger.log('Command/Classic/Apply.js (32) Missing registry channel on TEA main server', '.');
                 return message.reply({ content: `> ${author} Error to send club registry request, try again later ;(`, allowedMentions: { parse: [] } })
-                    .catch(err => logger.log('Command/Classic/Apply.js (32) Error to send message reply', err)); // Catch message reply error.
+                    .catch(err => logger.log('Command/Classic/Apply.js (33) Error to send message reply', err)); // Catch message reply error.
             }
 
             // Fetch the user information.
             const fetchedUser = await guild.members.fetch(varRequestUserObj.id)
-                .catch(err => logger.log('Command/Classic/Apply.js (33) Error to fetch a user', err)); // Catch fetch member error.
+                .catch(err => logger.log('Command/Classic/Apply.js (34) Error to fetch a user', err)); // Catch fetch member error.
 
             // Define the embed to be sent to the registry channel.
             const embed_registry = new MessageEmbed()
@@ -533,7 +554,7 @@ module.exports = {
             registryChannel.send({ content: `\`${varClubNameStr}\``, embeds: [embed_registry] })
                 .then(registryMsg => {
                     message.reply({
-                        content: `> ${author} ${getEmoji(client.config.TEAserver.id, 'TEA')} Club registry request has been sent!`, allowedMentions: { parse: [] }, 'components': [
+                        content: `> ${author} ${getEmoji(client.config.TEAserver.id, 'TEA')} Club registry request successfully sent!`, allowedMentions: { parse: [] }, 'components': [
                             {
                                 type: 1,
                                 components: [
@@ -543,21 +564,28 @@ module.exports = {
                                         url: registryMsg.url,
                                         disabled: false,
                                         type: 2
+                                    },
+                                    {
+                                        style: 5,
+                                        label: 'Make sure you are a member of our server.',
+                                        url: links.teaServerInvite,
+                                        disabled: false,
+                                        type: 2
                                     }
                                 ]
                             }
                         ]
                     })
-                        .catch(err => logger.log('Command/Classic/Apply.js (34) Error to send message reply', err)); // Catch message reply error.
+                        .catch(err => logger.log('Command/Classic/Apply.js (35) Error to send message reply', err)); // Catch message reply error.
                 })
                 .catch(err => {
 
                     // Log that event in console.
-                    logger.log('Command/Classic/Apply.js (35) Error to send registry message', err);
+                    logger.log('Command/Classic/Apply.js (36) Error to send registry message', err);
 
                     // Send a reply message about failure.
                     message.reply(`> ${author} Error to send club registry request, try again later ;-(`, message)
-                        .catch(err => logger.log('Command/Classic/Apply.js (36) Error to send message reply', err)); // Catch message reply error.
+                        .catch(err => logger.log('Command/Classic/Apply.js (37) Error to send message reply', err)); // Catch message reply error.
                 });
         }
     }

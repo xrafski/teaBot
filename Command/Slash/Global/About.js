@@ -1,5 +1,6 @@
 const { getEmoji } = require('../../../Utilities/functions');
 const logger = require('../../../Utilities/logger');
+const links = require('../../../Utilities/settings/links.json');
 
 
 module.exports = {
@@ -22,19 +23,19 @@ module.exports = {
                     components: [
                         {
                             type: 2,
-                            url: client.config.bot.inviteURL,
+                            url: links.teaBotInvite,
                             label: 'TEA Bot invitation link',
                             style: 5
                         },
                         {
                             type: 2,
-                            url: client.config.bot.authorURL,
+                            url: links.author,
                             label: 'Visit bot\'s author page!',
                             style: 5
                         },
                         {
                             type: 2,
-                            url: client.config.bot.githubURL,
+                            url: links.github,
                             label: 'GitHub repository',
                             style: 5
                         }
