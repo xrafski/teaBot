@@ -19,13 +19,13 @@ module.exports = {
         }
     ],
 
-    execute(client, interaction, args) {
+    async execute(client, interaction, args) {
         const timer = process.hrtime();
         const { user, guild } = interaction;
         logger.command(`${__filename.split('\\').slice(-4).join('/')} used by '${user?.tag}' in the '${guild?.name}' guild.`); // Log who used the command.
 
         // Create interaction defer message.
-        interaction
+        await interaction
             .deferReply({ ephemeral: false })
             .catch(err => logger.log('Command/Slash/TEA/Import.js (1) Error to send interaction defer reply', err)); // Catch interaction reply error.
 
