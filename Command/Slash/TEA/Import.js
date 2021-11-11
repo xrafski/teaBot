@@ -41,10 +41,10 @@ module.exports = {
                         .catch(err => logger.log('Command/Slash/TEA/Import.js (2) Error to send interaction defer reply.', err)); // Catch interaction reply error.
                 })
                 .catch(err => { // API Error handler.
-                    logger.log('Command/Slash/TEA/Import.js (3) Error to receive API response.', err); // Log API response error.
+                    logger.log('Command/Slash/TEA/Import.js (3) API Response error', err); // Log API response error.
 
                     // Send interaction defer reply about the API error.
-                    interaction.editReply({ content: `${getEmoji(client.config.TEAserver.id, 'TEA')} Error to receive API response.\n> Try again later ;(` })
+                    interaction.editReply({ content: '❌ Failed to receive data from API.\n> Try again later ;(' })
                         .catch(err => logger.log('Command/Slash/TEA/Import.js (4) Error to send interaction defer reply.', err)); // Catch interaction reply error.
                 });
         }
@@ -61,10 +61,10 @@ module.exports = {
                         .catch(err => logger.log('Command/Slash/TEA/Import.js (5) Error to send interaction defer reply.', err)); // Catch interaction reply error.
                 })
                 .catch(err => { // API Error handler.
-                    logger.log('Command/Slash/TEA/Import.js (6) Error to receive API response.', err); // Log API response error.
+                    logger.log('Command/Slash/TEA/Import.js (6) API Response error', err); // Log API response error.
 
                     // Send interaction defer reply about the API error.
-                    interaction.editReply({ content: `${getEmoji(client.config.TEAserver.id, 'TEA')} Error to receive API response.\n> Try again later ;(` })
+                    interaction.editReply({ content: '❌ Failed to receive data from API.\n> Try again later ;(' })
                         .catch(err => logger.log('Command/Slash/TEA/Import.js (7) Error to send interaction defer reply.', err)); // Catch interaction reply error.
                 });
         }
