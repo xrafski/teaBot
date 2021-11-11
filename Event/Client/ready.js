@@ -32,6 +32,8 @@ module.exports = {
             registerGuildCommands(commandCenter, adminSlashCommandsArray)
                 .then(msg => logger.startup(`Event/Client/ready.js (1) ${msg}`))
                 .catch(error => logger.startup(`Event/Client/ready.js (2) Error to set slash commands for ${commandCenter.name}`, error));
+        } else {
+            return logger.startup('Event/Client/ready.js (3) Command Center Server if not found');
         }
 
         // client.guilds.cache.forEach(guild => {
