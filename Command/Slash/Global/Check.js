@@ -20,7 +20,7 @@ module.exports = {
 
     async execute(client, interaction, args) {
         const { user, guild } = interaction;
-        logger.command(`${__filename.split('\\').slice(-4).join('/')} used by '${user?.tag}' in the '${guild?.name}' guild.`); // Log who used this command.
+        logger.command(`${__filename.replace(/\\/g, '/').split('/').slice(-4).join('/')} used by '${user?.tag}' in the '${guild?.name}' guild.`); // Log who used this command.
 
         // Check if arg is alphanumeric.
         if (/^[a-z0-9_ ]+$/i.test(args[0]) === false) {

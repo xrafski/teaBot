@@ -58,7 +58,7 @@ module.exports = {
 
     async execute(client, interaction, args) {
         const { user, guild } = interaction;
-        logger.command(`${__filename.split('\\').slice(-4).join('/')} used by '${user?.tag}' in the '${guild?.name}' guild.`); // Log who used the command.
+        logger.command(`${__filename.replace(/\\/g, '/').split('/').slice(-4).join('/')} used by '${user?.tag}' in the '${guild?.name}' guild.`); // Log who used the command.
 
         if (args[0] === 'create') return createEvidence(); // Run a function if 'create' as argument.
         if (args[0] === 'edit') return editEvidence(); // Run a different function if 'edit' as argument.

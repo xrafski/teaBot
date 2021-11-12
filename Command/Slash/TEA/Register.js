@@ -22,7 +22,7 @@ module.exports = {
 
     async execute(client, interaction, args) {
         const { user, guild } = interaction;
-        logger.command(`${__filename.split('\\').slice(-4).join('/')} (1) used by '${user?.tag}' in the '${guild?.name}' guild.`); // Log who used the command.
+        logger.command(`${__filename.replace(/\\/g, '/').split('/').slice(-4).join('/')} (1) used by '${user?.tag}' in the '${guild?.name}' guild.`); // Log who used the command.
 
         if (args[0] === 'global') return regGlobalSlash(); // Run a function for 'global' argument.
         if (args[0] === 'registered') return checkRegistered(); // Run a function for 'registered' argument.

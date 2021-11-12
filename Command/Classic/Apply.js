@@ -11,7 +11,7 @@ module.exports = {
     enabled: true, // Whether to enable this command.
 
     run: async (client, message) => {
-        logger.command(`${__filename.split('\\').slice(-3).join('/')} used by '${message.author.tag}' in the '${message.guild.name}' guild.`); // Log who used the command.
+        logger.command(`${__filename.replace(/\\/g, '/').split('/').slice(-3).join('/')} used by '${message.author.tag}' in the '${message.guild.name}' guild.`); // Log who used the command.
 
         let varClubNameStr; // Club Name ✅
         let varClubLevelStr; // Level ✅

@@ -12,7 +12,7 @@ module.exports = {
 	execute(client, interaction) {
 		const { user, options, guild } = interaction;
 		const target = options.getUser('user');
-		logger.command(`${__filename.split('\\').slice(-4).join('/')} used by '${user?.tag}' on '${target?.tag}' in the '${guild?.name}' guild.`); // Log who used the command.
+		logger.command(`${__filename.replace(/\\/g, '/').split('/').slice(-4).join('/')} used by '${user?.tag}' on '${target?.tag}' in the '${guild?.name}' guild.`); // Log who used the command.
 
 		// API call to get required data to run the command.
 		apiCall('GET', `threat/${target.id}`)

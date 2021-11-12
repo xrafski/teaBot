@@ -12,7 +12,7 @@ module.exports = {
 
     async execute(client, interaction) {
         const { user, guild } = interaction;
-        logger.command(`${__filename.split('\\').slice(-4).join('/')} used by '${user?.tag}' in the '${guild?.name}' guild.`); // Log who used this command.
+        logger.command(`${__filename.replace(/\\/g, '/').split('/').slice(-4).join('/')} used by '${user?.tag}' in the '${guild?.name}' guild.`); // Log who used this command.
 
         // Send interaction reply with basic information about this application.
         interaction.reply({

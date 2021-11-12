@@ -11,7 +11,7 @@ module.exports = {
 
 	async execute(client, interaction) {
 		const { user, guild } = interaction;
-		logger.command(`${__filename.split('\\').slice(-4).join('/')} used by '${user?.tag}' in the '${guild?.name}' guild.`); // Log who used the command.
+		logger.command(`${__filename.replace(/\\/g, '/').split('/').slice(-4).join('/')} used by '${user?.tag}' in the '${guild?.name}' guild.`); // Log who used the command.
 
 		// Get current time in milliseconds.
 		const currMS = moment().format('x');

@@ -9,7 +9,7 @@ module.exports = {
 
 	async execute(client, interaction) {
 		const { user, guild } = interaction;
-		logger.command(`${__filename.split('\\').slice(-4).join('/')} used by '${user?.tag}' in the '${guild?.name}' guild.`); // Log who used the command.
+		logger.command(`${__filename.replace(/\\/g, '/').split('/').slice(-4).join('/')} used by '${user?.tag}' in the '${guild?.name}' guild.`); // Log who used the command.
 
 		// Create defer reply, because reply might exceed 3 seconds limit of discord interaction.
 		await interaction
