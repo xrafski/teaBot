@@ -6,7 +6,7 @@ const links = require('../../../Utilities/settings/links.json');
 
 module.exports = {
     name: 'check',
-    description: 'Check is a specific Trove Nickname or User Discord ID if is flaged as a threat.',
+    description: 'Check if a specific Trove Nickname or User Discord ID if is flaged as a threat.',
     category: 'GLOBAL',
     type: 'CHAT_INPUT',
     options: [
@@ -22,10 +22,16 @@ module.exports = {
         const { user, guild } = interaction;
         logger.command(`${__filename.split('\\').slice(-4).join('/')} used by '${user?.tag}' in the '${guild?.name}' guild.`); // Log who used this command.
 
+        // Check if arg is alphanumeric.
+        if (/^[a-z0-9_ ]+$/i.test(args[0]) === false) {
+            return interaction.reply({ content: '❌ Only alphanumeric characters are allowed.' })
+                .catch(err => logger.log('Command/Slash/Global/Check.js (1) Error to send interaction reply', err)); // Catch interaction reply error.
+        }
+
         // Create defer reply, because reply might exceed 3 seconds limit of discord interaction.
         await interaction
             .deferReply({ ephemeral: false })
-            .catch(err => logger.log('Command/Slash/Global/Check.js (1) Error to send interaction defer reply', err));
+            .catch(err => logger.log('Command/Slash/Global/Check.js (2) Error to send interaction defer reply', err));
 
         // Call API to get required information about club certificate.
         apiCall('GET', `certificate/${guild.id}`)
@@ -34,26 +40,26 @@ module.exports = {
                 // Check if guild is certified.
                 if (!certResponse) {
                     return interaction.editReply({ content: `> This command is only available for registered members of ${getEmoji(client.config.TEAserver.id, 'TEA')} Trove Ethics Alliance!` })
-                        .catch(err => logger.log('Command/Slash/Global/Check.js (2) Error to send interaction defer reply', err));
+                        .catch(err => logger.log('Command/Slash/Global/Check.js (3) Error to send interaction defer reply', err));
                 }
 
                 // Run another API call to get required data for threat user.
                 apiCall('GET', `threat/${args[0]}`)
                     .then(threatResonse => formatDocument(threatResonse)) // Run a function to format document and send reply back.
                     .catch(err => {
-                        logger.log('Command/Slash/Global/Check.js (3) Error to get API response', err); // Log that event in the console.
+                        logger.log('Command/Slash/Global/Check.js (4) Error to get API response', err); // Log that event in the console.
 
                         // Send interaction reply to front end about API error.
                         interaction.editReply({ content: '❌ Failed to receive data from API.\n> Try again later ;(' })
-                            .catch(err => logger.log('Command/Slash/Global/Check.js (4) Error to send interaction defer reply', err)); // Catch interaction reply error.
+                            .catch(err => logger.log('Command/Slash/Global/Check.js (5) Error to send interaction defer reply', err)); // Catch interaction reply error.
                     });
             })
             .catch(err => {
-                logger.log('Command/Slash/Global/Check.js (5) Error to get API response', err); // Log that event in the console.
+                logger.log('Command/Slash/Global/Check.js (6) Error to get API response', err); // Log that event in the console.
 
                 // Send interaction reply to front end about API error.
                 interaction.editReply({ content: '❌ Failed to receive data from API.\n> Try again later ;(' })
-                    .catch(err => logger.log('Command/Slash/Global/Check.js (6) Error to send interaction defer reply', err)); // Catch interaction reply error.
+                    .catch(err => logger.log('Command/Slash/Global/Check.js (7) Error to send interaction defer reply', err)); // Catch interaction reply error.
             });
 
         /**
@@ -87,7 +93,7 @@ module.exports = {
                     //     }
                     // ]
                 })
-                    .catch(err => logger.log('Command/Slash/Global/Check.js (7) Error to send interaction defer reply', err)); // Catch interaction reply error.
+                    .catch(err => logger.log('Command/Slash/Global/Check.js (8) Error to send interaction defer reply', err)); // Catch interaction reply error.
             }
 
             const checkedIDs = await lookForThreat(document.discord);
@@ -130,7 +136,7 @@ module.exports = {
                 //     }
                 // ]
             })
-                .catch(err => logger.log('Command/Slash/Global/Check.js (8) Error to send interaction defer reply', err)); // Catch interaction reply error.
+                .catch(err => logger.log('Command/Slash/Global/Check.js (9) Error to send interaction defer reply', err)); // Catch interaction reply error.
         }
 
         /**
