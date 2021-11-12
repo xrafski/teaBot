@@ -6,7 +6,7 @@ const links = require('../../../Utilities/settings/links.json');
 
 module.exports = {
     name: 'check',
-    description: 'Check if a specific Trove Nickname or User Discord ID if is flaged as a threat.',
+    description: 'Check if a specific Trove Nickname or User Discord ID is flaged as a threat.',
     category: 'GLOBAL',
     type: 'CHAT_INPUT',
     options: [
