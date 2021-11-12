@@ -141,7 +141,7 @@ module.exports = {
                         return clubNameQuestion('❌ Club name is too long [20 characters].');
                     }
 
-                    // If all if statments passed then assing variable to values and run another question.
+                    // Assing variable to user answer and run another question if all statements passed.
                     varClubNameStr = userAnswer;
                     return clubLevelQuestion();
                 })
@@ -195,7 +195,7 @@ module.exports = {
                         return clubLevelQuestion('❌ Club level is too high.');
                     }
 
-                    // If all if statments passed then assing variable to values and run another question.
+                    // Assing variable to user answer and run another question if all statements passed.
                     varClubLevelStr = userAnswer;
                     return clubJoinworldCommand();
                 })
@@ -249,7 +249,7 @@ module.exports = {
                         return clubJoinworldCommand('❌ Answer is too long [30 characters].');
                     }
 
-                    // If all if statments passed then assing variable to values and run another question.
+                    // Assing variable to user answer and run another question if all statements passed.
                     varClubJoinworldStr = userAnswer;
                     return clubDescriptionQuestion();
                 })
@@ -298,7 +298,7 @@ module.exports = {
                         return clubDescriptionQuestion('❌ Description is too long [1000 characters].');
                     }
 
-                    // If all if statments passed then assing variable to values and run another question.
+                    // Assing variable to user answer and run another question if all statements passed.
                     varClubDescriptionStr = userAnswer;
                     return clubRequirementsQuestion();
                 })
@@ -347,7 +347,7 @@ module.exports = {
                         return clubRequirementsQuestion('❌ Requirements are too long [50 characters].');
                     }
 
-                    // If all if statments passed then assing variable to values and run another question.
+                    // Assing variable to user answer and run another question if all statements passed.
                     varClubRequirementStr = userAnswer;
                     return clubRepresentativeQuestion();
                 })
@@ -396,7 +396,7 @@ module.exports = {
                         return clubRepresentativeQuestion('❌ Representative is too long [70 characters].');
                     }
 
-                    // If all if statments passed then assing variable to values and run another question.
+                    // Assing variable to user answer and run another question if all statements passed.
                     varClubRepresentativeStr = userAnswer;
                     return clubDiscordQuestion();
                 })
@@ -450,7 +450,7 @@ module.exports = {
                         return clubDiscordQuestion('❌ Invite code is too long [40 characters].');
                     }
 
-                    // If all if statments passed then assing variable to values and run confirmation prompt.
+                    // Assing variable to user answer and run confirmation prompt if all statements passed.
                     varDiscordInviteStr = userAnswer;
                     return ConfirmationPromt();
                 })
@@ -479,7 +479,7 @@ module.exports = {
                 );
 
             // Send a message to confirm action.
-            return message.reply({ content: `> ${author} Are you **sure** to send this form?`, embeds: [prompt_embed], allowedMentions: { parse: [] } })
+            return message.reply({ content: `> ${author} Are you **sure** to send this form?`, embeds: [prompt_embed] })
                 .then(async promptQuestion => {
 
                     // Try to add reactions to the message.
@@ -521,10 +521,10 @@ module.exports = {
         async function postRegistry() {
 
             // Find registry channel on the main TEA server.
-            const registryChannel = await client.guilds.cache.get(client.config.TEAserver.id).channels.cache.get(client.config.TEAserver.registryChannelID);
+            const entryChannel = await client.guilds.cache.get(client.config.TEAserver.id).channels.cache.get(client.config.TEAserver.entryChannelID);
 
             // Check if channel exists.
-            if (!registryChannel) {
+            if (!entryChannel) {
                 logger.log('Command/Classic/Apply.js (32) Missing registry channel on TEA main server', '.');
                 return message.reply({ content: `> ${author} Error to send club registry request, try again later ;(`, allowedMentions: { parse: [] } })
                     .catch(err => logger.log('Command/Classic/Apply.js (33) Error to send message reply', err)); // Catch message reply error.
@@ -551,7 +551,7 @@ module.exports = {
                 .setFooter(`Trove Ethics Alliance Registry | ${moment(Date.now()).utc().format('Do MMM YYYY @ hh:mm A z')}`, links.icon);
 
             // Send formatted message to the registry channel.
-            registryChannel.send({ content: `\`${varClubNameStr}\``, embeds: [embed_registry] })
+            entryChannel.send({ content: `\`${varClubNameStr}\``, embeds: [embed_registry] })
                 .then(registryMsg => {
                     message.reply({
                         content: `> ${author} ${getEmoji(client.config.TEAserver.id, 'TEA')} Club registry request successfully sent!`, allowedMentions: { parse: [] }, 'components': [
