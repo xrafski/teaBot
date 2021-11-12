@@ -25,48 +25,55 @@ module.exports = {
 		const { user, guild } = interaction;
 		logger.command(`${__filename.split('\\').slice(-4).join('/')} used by '${user?.tag}' in the '${guild?.name}' guild.`); // Log who used the command.
 
+		// Check if used in main TEA server.
+		if (guild.id === client.config.TEAserver.id) {
+			return interaction.reply({ content: `> ${getEmoji(client.config.TEAserver.id, 'TEA')} This is an official Trove Ethics Alliance Server!` })
+				.catch(err => logger.log('Command/Slash/Global/Certificate.js (1) Error to send interaction defer reply', err)); // Catch interaction reply error.
+		}
+
 		// Create defer reply, because reply might exceed 3 seconds limit of discord interaction.
 		await interaction
 			.deferReply({ ephemeral: false })
-			.catch(err => logger.log('Command/Slash/Global/Certificate.js (1) Error to send interaction defer reply', err));
+			.catch(err => logger.log('Command/Slash/Global/Certificate.js (2) Error to send interaction defer reply', err)); // Catch interaction defer error.
 
 		// Basic Information response handler.
 		if (args[0] === 'cert_info') {
-			apiCall('GET', `certificate/${guild.id}`) // Call API to get basic information about the certificate.
-				.then(response => {
-					if (!response) { // Check if club exists in DB.
 
-						// Send interaction reply back with information about club not being a member of TEA.
-						interaction.editReply({ content: `> ❌ This club is not certified member of ${getEmoji(client.config.TEAserver.id, 'TEA')} **Trove Ethics Alliance**!` })
-							.catch(err => logger.log('Command/Slash/Global/Certificate.js (2) Error to send interaction defer reply', err)); // Catch interaction response error.
-					}
-					else { // When club is certified.
+			// Call API to get basic information about the certificate.
+			apiCall('GET', `certificate/${guild.id}`)
+				.then(response => {
+
+					// Check if document with club certificate exists.
+					if (response) {
 
 						// Send interaction reply with basic certificate information.
 						interaction.editReply({ content: `${getEmoji(client.config.TEAserver.id, 'verified')} ${guild.name} is certified member of ${getEmoji(client.config.TEAserver.id, 'TEA')} **Trove Ethics Alliance**!` })
-							.catch(err => logger.log('Command/Slash/Global/Certificate.js (3) Error to send interaction defer reply', err)); // Catch interaction response error.
+							.catch(err => logger.log('Command/Slash/Global/Certificate.js (3) Error to send interaction defer reply', err)); // Catch interaction defer reply error.
+					} else {
+
+						// Send interaction reply back with information about club not being a member of TEA.
+						interaction.editReply({ content: `> ❌ This club is not certified member of ${getEmoji(client.config.TEAserver.id, 'TEA')} **Trove Ethics Alliance**!` })
+							.catch(err => logger.log('Command/Slash/Global/Certificate.js (4) Error to send interaction defer reply', err)); // Catch interaction defer reply error.
 					}
 				})
 				.catch(err => { // API call error handler.
-					logger.log('Command/Slash/Global/Certificate.js (4) Error to get API response', err); // Log API error.
+					logger.log('Command/Slash/Global/Certificate.js (5) Error to get API response', err); // Log API error.
 
 					// Send message to front end about the error.
 					interaction.editReply({ content: '❌ Failed to receive data from API.\n> Try again later ;(' })
-						.catch(err => logger.log('Command/Slash/Global/Certificate.js (5) Error to send interaction defer reply', err)); // Catch interaction response error.
+						.catch(err => logger.log('Command/Slash/Global/Certificate.js (6) Error to send interaction defer reply', err)); // Catch interaction defer reply error.
 				});
 		}
 
 		// Detailed certificate information about the club.
 		if (args[0] === 'cert_details') {
-			apiCall('GET', `certificate/${guild.id}`) // Call API to get required data from MongoDB.
-				.then(response => {
-					if (!response) { // Check if club exists in DB.
 
-						// Send interaction reply with information that club is not assigned with TEA.
-						interaction.editReply({ content: `> ❌ This club is not certified member of ${getEmoji(client.config.TEAserver.id, 'TEA')} **Trove Ethics Alliance**!` })
-							.catch(err => logger.log('Command/Slash/Global/Certificate.js (6) Error to send interaction defer reply', err)); // Catch interaction response error.
-					}
-					else { // When club is found in DB.
+			// Call API to get required data from MongoDB.
+			apiCall('GET', `certificate/${guild.id}`)
+				.then(response => {
+
+					// Check if document with club certificate exists.
+					if (response) {
 
 						// Send interaction reply with formatted embed message.
 						interaction.editReply({
@@ -85,15 +92,20 @@ module.exports = {
 									.setTimestamp()
 								]
 						})
-							.catch(err => logger.log('Command/Slash/Global/Certificate.js (7) Error to send interaction reply.', err)); // Catch interaction response error.
+							.catch(err => logger.log('Command/Slash/Global/Certificate.js (7) Error to send interaction reply.', err)); // Catch interaction defer reply error.
+					} else {
+
+						// Send interaction reply with information that club is not assigned with TEA.
+						interaction.editReply({ content: `> ❌ This club is not certified member of ${getEmoji(client.config.TEAserver.id, 'TEA')} **Trove Ethics Alliance**!` })
+							.catch(err => logger.log('Command/Slash/Global/Certificate.js (8) Error to send interaction defer reply', err)); // Catch interaction defer reply error.
 					}
 				})
 				.catch(err => { // API call error handler.
-					logger.log('Command/Slash/Global/Certificate.js (8) Error to get API response', err); // Log API error.
+					logger.log('Command/Slash/Global/Certificate.js (9) Error to get API response', err); // Log API error.
 
 					// Send interaction reply about API error.
 					interaction.editReply({ content: '❌ Failed to receive data from API.\n> Try again later ;(' })
-						.catch(err => logger.log('Command/Slash/Global/Certificate.js (9) Error to send interaction defer reply', err)); // Catch interaction reply error.
+						.catch(err => logger.log('Command/Slash/Global/Certificate.js (10) Error to send interaction defer reply', err)); // Catch interaction defer reply error.
 				});
 		}
 	}
