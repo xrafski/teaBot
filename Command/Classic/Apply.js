@@ -8,8 +8,6 @@ module.exports = {
     name: 'apply', // Command name.
     aliases: [], // Command aliases.
     description: 'Club registry to Trove Ethics Alliance', // Command description.
-    guild: [], // Specify guild to allow run this command.
-    permissions: [], // Specify permissions to allow run this command.
     enabled: true, // Whether to enable this command.
 
     run: async (client, message) => {
