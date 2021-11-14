@@ -22,7 +22,7 @@ function registerGuildCommands(guildObject, slashCommandsArray) {
 			.set(slashCommandsArray)
 			.then(output => resolve(`🆗 Registered '${output.size}' (${output.map(cmd => cmd.name).join(' • ')}) Slash Commands for '${guildObject.name}' successfully!`))
 			.catch(reject);
-		// if (guildObject.id === client.config.commandCenter.guildID) {
+		// if (guildObject.id === client.config.commandCenter.id) {
 		// 	guildObject.commands
 		// 		.set(slashCommandsArray)
 		// 		.then(async commands => {
