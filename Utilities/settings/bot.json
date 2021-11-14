@@ -25,6 +25,7 @@
 		]
 	},
 	"roles": {
-		"clearanceNotificationRoleID": "841016349315694593"
+		"clearanceNotificationRoleID": "841016349315694593",
+		"registryNotificationRoleID": "841016284053241926"
 	}
 }
