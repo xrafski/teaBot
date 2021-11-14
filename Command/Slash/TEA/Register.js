@@ -34,7 +34,7 @@ module.exports = {
                 .then(res => {
 
                     // Send interaction reply as a confirmation
-                    interaction.reply({ content: `> ${getEmote('accept')} Bot's global slash commands has been updated/registered (**${res.size}** slash in total).\n> ${res.map(ele => `/${ele.name}`).join(' • ')}\n\nNOTE: It might take an hour to see changes.` })
+                    interaction.reply({ content: `> ${getEmote('accept')} Bot's global slash commands has been updated/registered (**${res.size}** slash in total).\n> ${res.map(ele => `/${ele.name}`).join(' • ')}\n\n${getEmote('info')} It might take an hour to see changes.` })
                         .catch(err => logger.log('Command/Slash/TEA/Register.js (1) Error to send interaction reply', err)); // Catch interaction reply error.
                 })
                 .catch(err => {
