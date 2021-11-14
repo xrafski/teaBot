@@ -91,17 +91,18 @@ module.exports = {
                     // Send interaction reply as a confirmation.
                     interaction
                         .reply({
-                            content: `${user} ${getEmoji(client.config.TEAserver.id, 'TEA')} Successfully sent a message to the evidence channel.`, ephemeral: false,
-                            'components': [
+                            content: `${user} ${getEmoji(client.config.TEAserver.id, 'TEA')} Successfully sent a message to the evidence channel.`,
+                            ephemeral: false,
+                            components: [
                                 {
-                                    'type': 1,
-                                    'components': [
+                                    type: 1,
+                                    components: [
                                         {
-                                            'style': 5,
-                                            'label': 'Click here to view the message.',
-                                            'url': msg.url,
-                                            'disabled': false,
-                                            'type': 2
+                                            style: 5,
+                                            label: 'Click here to view the message.',
+                                            url: msg.url,
+                                            disabled: false,
+                                            type: 2
                                         }
                                     ]
                                 }
@@ -145,17 +146,18 @@ module.exports = {
                         .then(msg => {
                             // Send interaction reply back as a confirmation.
                             interaction.reply({
-                                content: `${user} ${getEmoji(client.config.TEAserver.id, 'TEA')} Successfully modified a message in the evidence channel.`, ephemeral: false,
-                                'components': [
+                                content: `${user} ${getEmoji(client.config.TEAserver.id, 'TEA')} Successfully modified a message in the evidence channel.`,
+                                ephemeral: false,
+                                components: [
                                     {
-                                        'type': 1,
-                                        'components': [
+                                        type: 1,
+                                        components: [
                                             {
-                                                'style': 5,
-                                                'label': 'Click here to view modified message.',
-                                                'url': msg.url,
-                                                'disabled': false,
-                                                'type': 2
+                                                style: 5,
+                                                label: 'Click here to view modified message.',
+                                                url: msg.url,
+                                                disabled: false,
+                                                type: 2
                                             }
                                         ]
                                     }

@@ -37,7 +37,9 @@ module.exports = {
 
             // Return a message saying that command is not available in main server.
             return message.reply({
-                content: `> ${author} You can't use this here.\n> Please, invite our ${getEmoji(client.config.TEAserver.id, 'TEA')} bot to your server and to use this command over there.`, allowedMentions: { parse: [] }, 'components': [
+                content: `> ${author} You can't use this here.\n> Please, invite our ${getEmoji(client.config.TEAserver.id, 'TEA')} bot to your server and to use this command over there.`,
+                allowedMentions: { parse: [] },
+                components: [
                     {
                         type: 1,
                         components: [
@@ -536,6 +538,7 @@ module.exports = {
             const embed_registry = new MessageEmbed()
                 .setColor('#0095ff')
                 .setAuthor(`Alliance registry: '${varClubNameStr}' ${varDiscordCountInt ? `(${varDiscordCountInt})` : ''}`, links.icon)
+                .setThumbnail(guild.iconURL({ dynamic: true, size: 4096, format: 'png' }))
                 .addFields(
                     { name: 'Club Name ▼', value: varClubNameStr, inline: false },
                     { name: 'Description ▼', value: varClubDescriptionStr, inline: false },
@@ -546,13 +549,15 @@ module.exports = {
                     { name: 'Discord Invite ▼', value: `<https://discord.gg/${varDiscordInviteStr}>`, inline: false },
                     { name: 'Requester ▼', value: `${fetchedUser} • ${fetchedUser?.user?.tag} • ${fetchedUser?.id}`, inline: false },
                 )
-                .setFooter(`Trove Ethics Alliance Registry | ${moment(Date.now()).utc().format('Do MMM YYYY @ hh:mm A z')}`, links.icon);
+                .setFooter(`• Trove Ethics Alliance Registry | ${moment(Date.now()).utc().format('Do MMM YYYY @ hh:mm A z')}`, links.icon);
 
             // Send formatted message to the registry channel.
             entryChannel.send({ content: `\`${varClubNameStr}\``, embeds: [embed_registry] })
                 .then(registryMsg => {
                     message.reply({
-                        content: `> ${author} ${getEmoji(client.config.TEAserver.id, 'TEA')} Club registry request successfully sent!`, allowedMentions: { parse: [] }, 'components': [
+                        content: `> ${author} ${getEmoji(client.config.TEAserver.id, 'TEA')} Club registry request successfully sent!`,
+                        allowedMentions: { parse: [] },
+                        components: [
                             {
                                 type: 1,
                                 components: [

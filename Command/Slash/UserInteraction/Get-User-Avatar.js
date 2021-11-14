@@ -21,14 +21,14 @@ module.exports = {
 				],
 			components: [
 				{
-					'type': 1,
-					'components': [
+					type: 1,
+					components: [
 						{
-							'style': 5,
-							'label': 'Click to view an image in full resolution.',
-							'url': target.displayAvatarURL({ dynamic: true, size: 4096, format: 'png' }),
-							'disabled': false,
-							'type': 2
+							style: 5,
+							label: 'Click to view an image in full resolution.',
+							url: target.displayAvatarURL({ dynamic: true, size: 4096, format: 'png' }),
+							disabled: false,
+							type: 2
 						}
 					]
 				}

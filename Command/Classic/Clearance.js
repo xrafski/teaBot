@@ -33,7 +33,8 @@ module.exports = {
 
             // Return a message saying that command is not available in main server.
             return message.reply({
-                content: `> ${author} You can't use this here.\n> Please, join our official ${getEmoji(client.config.TEAserver.id, 'TEA')} server and use this command over there.`, allowedMentions: { parse: [] },
+                content: `> ${author} You can't use this here.\n> Please, join our official ${getEmoji(client.config.TEAserver.id, 'TEA')} server and use this command over there.`,
+                allowedMentions: { parse: [] },
                 components: [
                     {
                         type: 1,
@@ -390,6 +391,7 @@ module.exports = {
             const embed_registry = new MessageEmbed()
                 .setColor('ORANGE')
                 .setAuthor(`Clearance request to '${varClubNameStr}' club.`, links.icon)
+                .setThumbnail(varRequestUserObj.displayAvatarURL({ dynamic: true, size: 4096, format: 'png' }))
                 .addFields(
                     { name: 'Username ▼', value: `\`${varNicknameStr}\``, inline: false },
                     { name: 'Club Name ▼', value: varClubNameStr, inline: true },
@@ -397,13 +399,14 @@ module.exports = {
                     { name: 'Reason ▼', value: varReasonStr, inline: false },
                     { name: 'Requester ▼', value: `${varRequestUserObj} • ${varRequestUserObj.tag} • ${varRequestUserObj.id}`, inline: false },
                 )
-                .setFooter(`Trove Ethics Alliance Clearance | ${moment(Date.now()).utc().format('Do MMM YYYY @ hh:mm A z')}`, links.icon);
+                .setFooter(`• Trove Ethics Alliance Clearance | ${moment(Date.now()).utc().format('Do MMM YYYY @ hh:mm A z')}`, links.icon);
 
             // Send formatted message to the registry channel.
             entryChannel.send({ content: `\`${varNicknameStr}\``, embeds: [embed_registry] })
                 .then(registryMsg => {
                     message.reply({
-                        content: `> ${author} ${getEmoji(client.config.TEAserver.id, 'TEA')} Club clearance request successfully sent!`, allowedMentions: { parse: [] },
+                        content: `> ${author} ${getEmoji(client.config.TEAserver.id, 'TEA')} Club clearance request successfully sent!`,
+                        allowedMentions: { parse: [] },
                         components: [
                             {
                                 type: 1,
