@@ -11,10 +11,11 @@
 	"TEAserver": {
 		"id": "551785335638589451",
 		"entryChannelID": "737592938388914186",
+		"notificationChannelID": "841029421028081664",
 		"evidenceChannelID": "901568257578893344"
 	},
 	"commandCenter": {
-		"guildID": "739519144344551497",
+		"id": "739519144344551497",
 		"payload": [
 			{
 				"id": "896879006845141072",
