@@ -1,5 +1,5 @@
 const { MessageEmbed } = require('discord.js');
-const { getEmoji, apiCall } = require('../../../Utilities/functions');
+const { apiCall, getEmote } = require('../../../Utilities/functions');
 const logger = require('../../../Utilities/logger');
 const links = require('../../../Utilities/settings/links.json');
 
@@ -39,7 +39,7 @@ module.exports = {
 
                 // Check if guild is certified.
                 if (!certResponse) {
-                    return interaction.editReply({ content: `> This command is only available for registered members of ${getEmoji(client.config.TEAserver.id, 'TEA')} Trove Ethics Alliance!` })
+                    return interaction.editReply({ content: `> ${getEmote('locked')} This command is only available for registered members of Trove Ethics Alliance!` })
                         .catch(err => logger.log('Command/Slash/Global/Check.js (3) Error to send interaction defer reply', err));
                 }
 
@@ -50,7 +50,7 @@ module.exports = {
                         logger.log('Command/Slash/Global/Check.js (4) Error to get API response', err); // Log that event in the console.
 
                         // Send interaction reply to front end about API error.
-                        interaction.editReply({ content: '❌ Failed to receive data from API.\n> Try again later ;(' })
+                        interaction.editReply({ content: `${getEmote('error')} Failed to receive data from API.\n> Try again later ;(` })
                             .catch(err => logger.log('Command/Slash/Global/Check.js (5) Error to send interaction defer reply', err)); // Catch interaction reply error.
                     });
             })
@@ -58,7 +58,7 @@ module.exports = {
                 logger.log('Command/Slash/Global/Check.js (6) Error to get API response', err); // Log that event in the console.
 
                 // Send interaction reply to front end about API error.
-                interaction.editReply({ content: '❌ Failed to receive data from API.\n> Try again later ;(' })
+                interaction.editReply({ content: `${getEmote('error')} Failed to receive data from API.\n> Try again later ;(` })
                     .catch(err => logger.log('Command/Slash/Global/Check.js (7) Error to send interaction defer reply', err)); // Catch interaction reply error.
             });
 
@@ -72,7 +72,7 @@ module.exports = {
             if (!document) {
                 // Create discord embed element.
                 const notFoundEmbed = new MessageEmbed()
-                    .setDescription('❌ This user is not detected as a threat in our database!')
+                    .setDescription(`${getEmote('info')} This user is not detected as a threat in our database!`)
                     .setAuthor('Trove Ethics Alliance - Results', links.icon)
                     .setColor('#0095ff');
 

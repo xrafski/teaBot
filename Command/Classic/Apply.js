@@ -1,5 +1,5 @@
 const { Permissions, MessageEmbed } = require('discord.js');
-const { apiCall, getEmoji } = require('../../Utilities/functions');
+const { apiCall, getEmote } = require('../../Utilities/functions');
 const moment = require('moment');
 const logger = require('../../Utilities/logger');
 const links = require('../../Utilities/settings/links.json');
@@ -37,7 +37,7 @@ module.exports = {
 
             // Return a message saying that command is not available in main server.
             return message.reply({
-                content: `> ${author} You can't use this here.\n> Please, invite our ${getEmoji(client.config.TEAserver.id, 'TEA')} bot to your server and to use this command over there.`,
+                content: `> ${getEmote('locked')} ${author}, you can't use this here.\n> Please, invite our ${getEmote('TEA')} bot to your server and to use this command over there.`,
                 allowedMentions: { parse: [] },
                 components: [
                     {
@@ -59,7 +59,7 @@ module.exports = {
 
         // Check if used is allowed to use this command (SERVER ADMIN).
         if (!member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)) {
-            return message.reply({ content: `> ${author} This command is only available for server admins!`, allowedMentions: { parse: [] } })
+            return message.reply({ content: `> ${getEmote('locked')} ${author}, this command is only available for server admins!`, allowedMentions: { parse: [] } })
                 .catch(err => logger.log('Command/Classic/Apply.js (2) Error to send message reply', err));
         }
 
@@ -67,7 +67,7 @@ module.exports = {
         if (guild.memberCount < 100) {
 
             // Send a reply message about the minimal member requirement.
-            return message.reply({ content: `> Unfortunately ${author}, This discord server doesn't meet our minimal requirements (${guild.memberCount}/**100** members), try again later.`, allowedMentions: { parse: [] } })
+            return message.reply({ content: `> ${getEmote('locked')} Unfortunately ${author}, this server doesn't meet our minimal requirements (${guild.memberCount}/**100** members), try again later.`, allowedMentions: { parse: [] } })
                 .catch(err => logger.log('Command/Classic/Apply.js (3) Error to send message reply', err)); // Catch message reply error.
         }
 
@@ -79,7 +79,7 @@ module.exports = {
                 if (guildCert) {
 
                     // Send a reply message about guild certificate.
-                    return message.reply({ content: `> ${author} **${guild.name}** is already **certified** as a member of **Trove Ethics Alliance**.\n> ${getEmoji(client.config.TEAserver.id, 'verified')} You can check certificate with \`/certificate\` command.`, allowedMentions: { parse: [] } })
+                    return message.reply({ content: `> ${author} **${guild.name}** is already **certified** as a member of **Trove Ethics Alliance**.\n> ${getEmote('verified')} You can check certificate with \`/certificate\` command.`, allowedMentions: { parse: [] } })
                         .catch(err => logger.log('Command/Classic/Apply.js (4) Error to send message reply', err)); // Catch message reply error.
                 }
                 // Else if guild is not certified.
@@ -94,7 +94,7 @@ module.exports = {
                 logger.log('Command/Classic/Apply.js (5) Error to get API response', err); // Log API error.
 
                 // Send message to front end about the error.
-                message.reply({ content: '❌ Failed to receive data from API.\n> Try again later ;(' })
+                message.reply({ content: `${getEmote('error')} Failed to receive data from API.\n> Try again later ;(` })
                     .catch(err => logger.log('Command/Classic/Apply.js (6) Error to send message reply', err)); // Catch message reply error.
             });
 
@@ -102,10 +102,10 @@ module.exports = {
         function clubNameQuestion(additionalText) {
 
             // Additional text to add for the question.
-            additionalText = (additionalText ? `**${additionalText}**\n` : '');
+            additionalText = (additionalText ? `${getEmote('warn')} **${additionalText}**\n` : '');
 
             // Send a message with the question.
-            message.reply({ content: `${additionalText}> ${author} ${getEmoji(client.config.TEAserver.id, 'TEA')} Type \`cancel\` to exit.\n\n**Club Information**\n\`\`\`Please enter club name.\`\`\``, allowedMentions: { parse: [] } })
+            message.reply({ content: `${additionalText}> ${author} you can type \`cancel\` to exit.\n\n**Club Information**\n\`\`\`Please enter club name.\`\`\``, allowedMentions: { parse: [] } })
                 .then(async qMsg => {
 
                     // Create await variable with awaitMessage collector for a single reply from command user author (filter) under a specified time (questionResponseTime).
@@ -133,12 +133,12 @@ module.exports = {
 
                     // Check if answer is at least 3 characters long.
                     if (userAnswer.length < 3) {
-                        return clubNameQuestion('❌ Club name is too short [3 characters].');
+                        return clubNameQuestion('Club name is too short [3 characters].');
                     }
 
                     // Check if answer is not longer than 20 characters.
                     if (userAnswer.length > 20) {
-                        return clubNameQuestion('❌ Club name is too long [20 characters].');
+                        return clubNameQuestion('Club name is too long [20 characters].');
                     }
 
                     // Assing variable to user answer and run another question if all statements passed.
@@ -151,10 +151,10 @@ module.exports = {
         function clubLevelQuestion(additionalText) {
 
             // Additional text to add for the question.
-            additionalText = (additionalText ? `**${additionalText}**\n` : '');
+            additionalText = (additionalText ? `${getEmote('warn')} **${additionalText}**\n` : '');
 
             // Send a message with the question.
-            message.reply({ content: `${additionalText}> ${author} ${getEmoji(client.config.TEAserver.id, 'TEA')} Type \`cancel\` to exit.\n\n**Club Information**\n\`\`\`Please enter club level.\`\`\``, allowedMentions: { parse: [] } })
+            message.reply({ content: `${additionalText}> ${author} you can type \`cancel\` to exit.\n\n**Club Information**\n\`\`\`Please enter club level.\`\`\``, allowedMentions: { parse: [] } })
                 .then(async qMsg => {
 
                     // Create await variable with awaitMessage collector for a single reply from command user author (filter) under a specified time (questionResponseTime).
@@ -182,17 +182,17 @@ module.exports = {
 
                     // Check if answer is a valid number.
                     if (isNaN(userAnswer)) {
-                        return clubLevelQuestion('❌ Invalid number, enter a number between 1 and 11');
+                        return clubLevelQuestion('Invalid number, enter a number between 1 and 11');
                     }
 
                     // Check if answer is below 1.
                     if (Number(userAnswer) < 1) {
-                        return clubLevelQuestion('❌ Club level is too low.');
+                        return clubLevelQuestion('Club level is too low.');
                     }
 
                     // Check if answer above 11.
                     if (Number(userAnswer) > 11) {
-                        return clubLevelQuestion('❌ Club level is too high.');
+                        return clubLevelQuestion('Club level is too high.');
                     }
 
                     // Assing variable to user answer and run another question if all statements passed.
@@ -205,10 +205,10 @@ module.exports = {
         function clubJoinworldCommand(additionalText) {
 
             // Additional text to add for the question.
-            additionalText = (additionalText ? `**${additionalText}**\n` : '');
+            additionalText = (additionalText ? `${getEmote('warn')} **${additionalText}**\n` : '');
 
             // Send a message with the question.
-            message.reply({ content: `${additionalText}> ${author} ${getEmoji(client.config.TEAserver.id, 'TEA')} Type \`cancel\` to exit.\n\n**Club Information**\n\`\`\`Please, type ${varClubNameStr} in-gane joinworld command.\`\`\``, allowedMentions: { parse: [] } })
+            message.reply({ content: `${additionalText}> ${author} you can type \`cancel\` to exit.\n\n**Club Information**\n\`\`\`Please, type ${varClubNameStr} in-gane joinworld command.\`\`\``, allowedMentions: { parse: [] } })
                 .then(async qMsg => {
 
                     // Create await variable with awaitMessage collector for a single reply from command user author (filter) under a specified time (questionResponseTime).
@@ -236,17 +236,17 @@ module.exports = {
 
                     // Check if answer starts with '/joinworld' word.
                     if (userAnswer.toLowerCase().startsWith('/joinworld')) {
-                        return clubJoinworldCommand('❌ Answer can\'t include \'/joinworld\' keyword.');
+                        return clubJoinworldCommand('Answer can\'t include \'/joinworld\' keyword.');
                     }
 
                     // Check if answer is at least 3 characters long.
                     if (userAnswer.length < 3) {
-                        return clubJoinworldCommand('❌ Answer is too short [3 characters].');
+                        return clubJoinworldCommand('Answer is too short [3 characters].');
                     }
 
                     // Check if answer is not longer than 40 characters.
                     if (userAnswer.length > 30) {
-                        return clubJoinworldCommand('❌ Answer is too long [30 characters].');
+                        return clubJoinworldCommand('Answer is too long [30 characters].');
                     }
 
                     // Assing variable to user answer and run another question if all statements passed.
@@ -259,10 +259,10 @@ module.exports = {
         function clubDescriptionQuestion(additionalText) {
 
             // Additional text to add for the question.
-            additionalText = (additionalText ? `**${additionalText}**\n` : '');
+            additionalText = (additionalText ? `${getEmote('warn')} **${additionalText}**\n` : '');
 
             // Send a message with the question.
-            message.reply({ content: `${additionalText}> ${author} ${getEmoji(client.config.TEAserver.id, 'TEA')} Type \`cancel\` to exit.\n\n**Club Information**\n\`\`\`Please, type ${varClubNameStr} description.\`\`\``, allowedMentions: { parse: [] } })
+            message.reply({ content: `${additionalText}> ${author} you can type \`cancel\` to exit.\n\n**Club Information**\n\`\`\`Please, type ${varClubNameStr} description.\`\`\``, allowedMentions: { parse: [] } })
                 .then(async qMsg => {
 
                     // Create await variable with awaitMessage collector for a single reply from command user author (filter) under a specified time (questionResponseTime).
@@ -290,12 +290,12 @@ module.exports = {
 
                     // Check if answer is at least 3 characters long.
                     if (userAnswer.length < 10) {
-                        return clubDescriptionQuestion('❌ Description is too short [10 characters].');
+                        return clubDescriptionQuestion('Description is too short [10 characters].');
                     }
 
                     // Check if answer is not longer than 1000 characters.
                     if (userAnswer.length > 1000) {
-                        return clubDescriptionQuestion('❌ Description is too long [1000 characters].');
+                        return clubDescriptionQuestion('Description is too long [1000 characters].');
                     }
 
                     // Assing variable to user answer and run another question if all statements passed.
@@ -308,10 +308,10 @@ module.exports = {
         function clubRequirementsQuestion(additionalText) {
 
             // Additional text to add for the question.
-            additionalText = (additionalText ? `**${additionalText}**\n` : '');
+            additionalText = (additionalText ? `${getEmote('warn')} **${additionalText}**\n` : '');
 
             // Send a message with the question.
-            message.reply({ content: `${additionalText}> ${author} ${getEmoji(client.config.TEAserver.id, 'TEA')} Type \`cancel\` to exit.\n\n**Club Information**\n\`\`\`Please, type ${varClubNameStr} requirements.\`\`\``, allowedMentions: { parse: [] } })
+            message.reply({ content: `${additionalText}> ${author} you can type \`cancel\` to exit.\n\n**Club Information**\n\`\`\`Please, type ${varClubNameStr} requirements.\`\`\``, allowedMentions: { parse: [] } })
                 .then(async qMsg => {
 
                     // Create await variable with awaitMessage collector for a single reply from command user author (filter) under a specified time (questionResponseTime).
@@ -339,12 +339,12 @@ module.exports = {
 
                     // Check if answer is at least 3 characters long.
                     if (userAnswer.length < 3) {
-                        return clubRequirementsQuestion('❌ Requirements are too short [3 characters].');
+                        return clubRequirementsQuestion('Requirements are too short [3 characters].');
                     }
 
                     // Check if answer is not longer than 50 characters.
                     if (userAnswer.length > 50) {
-                        return clubRequirementsQuestion('❌ Requirements are too long [50 characters].');
+                        return clubRequirementsQuestion('Requirements are too long [50 characters].');
                     }
 
                     // Assing variable to user answer and run another question if all statements passed.
@@ -357,10 +357,10 @@ module.exports = {
         function clubRepresentativeQuestion(additionalText) {
 
             // Additional text to add for the question.
-            additionalText = (additionalText ? `**${additionalText}**\n` : '');
+            additionalText = (additionalText ? `${getEmote('warn')} **${additionalText}**\n` : '');
 
             // Send a message with the question.
-            message.reply({ content: `${additionalText}> ${author} ${getEmoji(client.config.TEAserver.id, 'TEA')} Type \`cancel\` to exit.\n\n**Club Information**\n\`\`\`Please, type ${varClubNameStr} representative (discord#tag, Discord User ID, Trove Nickname etc.).\`\`\``, allowedMentions: { parse: [] } })
+            message.reply({ content: `${additionalText}> ${author} you can type \`cancel\` to exit.\n\n**Club Information**\n\`\`\`Please, type ${varClubNameStr} representative (discord#tag, Discord User ID, Trove Nickname etc.).\`\`\``, allowedMentions: { parse: [] } })
                 .then(async qMsg => {
 
                     // Create await variable with awaitMessage collector for a single reply from command user author (filter) under a specified time (questionResponseTime).
@@ -388,12 +388,12 @@ module.exports = {
 
                     // Check if answer is at least 3 characters long.
                     if (userAnswer.length < 3) {
-                        return clubRepresentativeQuestion('❌ Representative is too short [3 characters].');
+                        return clubRepresentativeQuestion('Representative is too short [3 characters].');
                     }
 
                     // Check if answer is not longer than 70 characters.
                     if (userAnswer.length > 70) {
-                        return clubRepresentativeQuestion('❌ Representative is too long [70 characters].');
+                        return clubRepresentativeQuestion('Representative is too long [70 characters].');
                     }
 
                     // Assing variable to user answer and run another question if all statements passed.
@@ -406,10 +406,10 @@ module.exports = {
         function clubDiscordQuestion(additionalText) {
 
             // Additional text to add for the question.
-            additionalText = (additionalText ? `**${additionalText}**\n` : '');
+            additionalText = (additionalText ? `${getEmote('warn')} **${additionalText}**\n` : '');
 
             // Send a message with the question.
-            message.reply({ content: `${additionalText}> ${author} ${getEmoji(client.config.TEAserver.id, 'TEA')} Type \`cancel\` to exit.\n\n**Club Information**\n\`\`\`Please, enter ${varClubNameStr} discord invite code without discord.gg link.\`\`\``, allowedMentions: { parse: [] } })
+            message.reply({ content: `${additionalText}> ${author} you can type \`cancel\` to exit.\n\n**Club Information**\n\`\`\`Please, enter ${varClubNameStr} discord invite code without discord.gg link.\`\`\``, allowedMentions: { parse: [] } })
                 .then(async qMsg => {
 
                     // Create await variable with awaitMessage collector for a single reply from command user author (filter) under a specified time (questionResponseTime).
@@ -437,17 +437,17 @@ module.exports = {
 
                     // Check if asnwer starts with URL
                     if (userAnswer.toLowerCase().startsWith('https://')) {
-                        return clubDiscordQuestion('❌ Type code without link.');
+                        return clubDiscordQuestion('Type code without link.');
                     }
 
                     // Check if answer is at least 3 characters long.
                     if (userAnswer.length < 3) {
-                        return clubDiscordQuestion('❌ Invite code is too short [3 characters].');
+                        return clubDiscordQuestion('Invite code is too short [3 characters].');
                     }
 
                     // Check if answer is not longer than 40 characters.
                     if (userAnswer.length > 40) {
-                        return clubDiscordQuestion('❌ Invite code is too long [40 characters].');
+                        return clubDiscordQuestion('Invite code is too long [40 characters].');
                     }
 
                     // Assing variable to user answer and run confirmation prompt if all statements passed.
@@ -479,7 +479,7 @@ module.exports = {
                 );
 
             // Send a message to confirm action.
-            return message.reply({ content: `> ${author} Are you **sure** to send this form?`, embeds: [prompt_embed] })
+            return message.reply({ content: `> ${getEmote('info')} ${author}, are you **sure** to send this form?`, embeds: [prompt_embed] })
                 .then(async promptQuestion => {
 
                     // Try to add reactions to the message.
@@ -526,7 +526,7 @@ module.exports = {
             // Check if channel exists.
             if (!entryChannel) {
                 logger.log('Command/Classic/Apply.js (32) Missing registry channel on TEA main server', '.');
-                return message.reply({ content: `> ${author} Error to send club registry request, try again later ;(`, allowedMentions: { parse: [] } })
+                return message.reply({ content: `> ${getEmote('error')} ${author}, error to send club registry request, try again later ;(`, allowedMentions: { parse: [] } })
                     .catch(err => logger.log('Command/Classic/Apply.js (33) Error to send message reply', err)); // Catch message reply error.
             }
 
@@ -555,7 +555,7 @@ module.exports = {
             entryChannel.send({ content: `\`${varClubNameStr}\``, embeds: [embed_registry] })
                 .then(registryMsg => {
                     message.reply({
-                        content: `> ${author} ${getEmoji(client.config.TEAserver.id, 'TEA')} Club registry request successfully sent!`,
+                        content: `> ${getEmote('accept')} ${author}, club registry request successfully sent!`,
                         allowedMentions: { parse: [] },
                         components: [
                             {

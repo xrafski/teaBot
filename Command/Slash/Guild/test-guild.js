@@ -1,5 +1,5 @@
 const { MessageEmbed } = require('discord.js');
-const { getEmoji } = require('../../../Utilities/functions');
+const { getEmote } = require('../../../Utilities/functions');
 const logger = require('../../../Utilities/logger');
 
 module.exports = {
@@ -35,7 +35,7 @@ module.exports = {
 
         // Send interaction reply with results
         interaction.reply({
-            content: `${getEmoji(client.config.TEAserver.id, 'TEA')} Response correctly handled!\nArguments: ${args.join(' | ')}\nAPI Latency is **${Math.round(client.ws.ping)}** ms.}`,
+            content: `${getEmote('TEA')} Response correctly handled!\nArguments: ${args.join(' | ')}\nAPI Latency is **${Math.round(client.ws.ping)}** ms.}`,
             embeds: [testEmbed]
         })
             .catch(err => logger.log('Command/Slash/Guild/test-guild.js (1) Error to send interaction reply', err)); // Catch interaction reply error.

@@ -1,4 +1,4 @@
-const { getEmoji, apiCall } = require('../../../Utilities/functions');
+const { getEmote, apiCall } = require('../../../Utilities/functions');
 const logger = require('../../../Utilities/logger');
 
 module.exports = {
@@ -37,14 +37,14 @@ module.exports = {
                     const timeDiff = process.hrtime(timer);
 
                     // Send interaction defer reply with results.
-                    interaction.editReply({ content: `${getEmoji(client.config.TEAserver.id, 'TEA')} ${response.message} (${timeDiff[0]}.${timeDiff[1].toString().slice(0, 3)}s)\nAffected documents: **${response.data.affectedDocs.deleted}** Deleted and **${response.data.affectedDocs.inserted}** Inserted.` })
+                    interaction.editReply({ content: `> ${getEmote('accept')} ${response.message} (${timeDiff[0]}.${timeDiff[1].toString().slice(0, 3)}s)\nAffected documents: **${response.data.affectedDocs.deleted}** Deleted and **${response.data.affectedDocs.inserted}** Inserted.` })
                         .catch(err => logger.log('Command/Slash/TEA/Import.js (2) Error to send interaction defer reply.', err)); // Catch interaction reply error.
                 })
                 .catch(err => { // API Error handler.
                     logger.log('Command/Slash/TEA/Import.js (3) API Response error', err); // Log API response error.
 
                     // Send interaction defer reply about the API error.
-                    interaction.editReply({ content: '❌ Failed to receive data from API.\n> Try again later ;(' })
+                    interaction.editReply({ content: `${getEmote('error')} Failed to receive data from API.\n> Try again later ;(` })
                         .catch(err => logger.log('Command/Slash/TEA/Import.js (4) Error to send interaction defer reply.', err)); // Catch interaction reply error.
                 });
         }
@@ -57,14 +57,14 @@ module.exports = {
                     const timeDiff = process.hrtime(timer);
 
                     // Send interaction defer reply with results.
-                    interaction.editReply({ content: `${getEmoji(client.config.TEAserver.id, 'TEA')} ${response.message} (${timeDiff[0]}.${timeDiff[1].toString().slice(0, 3)}s)\nAffected documents: **${response.data.affectedDocs.deleted}** Deleted and **${response.data.affectedDocs.inserted}** Inserted.` })
+                    interaction.editReply({ content: `> ${getEmote('accept')} ${response.message} (${timeDiff[0]}.${timeDiff[1].toString().slice(0, 3)}s)\nAffected documents: **${response.data.affectedDocs.deleted}** Deleted and **${response.data.affectedDocs.inserted}** Inserted.` })
                         .catch(err => logger.log('Command/Slash/TEA/Import.js (5) Error to send interaction defer reply.', err)); // Catch interaction reply error.
                 })
                 .catch(err => { // API Error handler.
                     logger.log('Command/Slash/TEA/Import.js (6) API Response error', err); // Log API response error.
 
                     // Send interaction defer reply about the API error.
-                    interaction.editReply({ content: '❌ Failed to receive data from API.\n> Try again later ;(' })
+                    interaction.editReply({ content: `${getEmote('error')} Failed to receive data from API.\n> Try again later ;(` })
                         .catch(err => logger.log('Command/Slash/TEA/Import.js (7) Error to send interaction defer reply.', err)); // Catch interaction reply error.
                 });
         }

@@ -142,15 +142,15 @@ module.exports = {
 	apiCall,
 
 	/**
-	 * Find and return emoji by its name
-	 * @param {number} serverID
-	 * @param {string} emojiName
-	 * @returns emoji object data
+	 * Find and return emoji by its name on the command center server.
+	 * @param {string} name - Emoji name to find.
+	 * @returns Guild emoji object or '🐛' emoji.
 	 */
-	getEmoji: function (serverID, emojiName) {
-		let getEmoji = client.guilds.cache.get(serverID)?.emojis.cache.find((emoji) => emoji.name === emojiName);
-		if (getEmoji) return getEmoji;
-		else return (getEmoji = '🐛');
-		// else return undefined;
+	getEmote: function (name) {
+		const guild = client.guilds.cache.get(client.config.commandCenter.id);
+		const emoji = guild?.emojis.cache.find(e => e.name === name);
+
+		if (emoji) return emoji;
+		else return '🐛';
 	},
 };
