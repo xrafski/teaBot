@@ -25,7 +25,7 @@ module.exports = {
 
 
         // Set guild slash commands
-        const commandCenter = client.guilds.cache.get(client.config.commandCenter.guildID); // Find TEA command center guild.
+        const commandCenter = client.guilds.cache.get(client.config.commandCenter.id); // Find TEA command center guild.
         // If TEA CC found
         if (commandCenter) {
             // Run a function to register admin guild slash commands.
@@ -37,7 +37,7 @@ module.exports = {
         }
 
         // client.guilds.cache.forEach(guild => {
-        //     if (guild.id === client.config.commandCenter.guildID) {
+        //     if (guild.id === client.config.commandCenter.id) {
         //         registerGuildCommands(guild, adminSlashCommandsArray)
         //             .then(msg => logger.startup(`Event/Client/ready.js (1) [TEA] ${msg}`))
         //             .catch(error => logger.info(`Event/Client/ready.js (2) [TEA] Error to set slash commands for ${guild.name}`, error));
