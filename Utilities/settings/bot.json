@@ -23,5 +23,8 @@
 				"permission": true
 			}
 		]
+	},
+	"roles": {
+		"clearanceNotificationRoleID": "841016349315694593"
 	}
 }
