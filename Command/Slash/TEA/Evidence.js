@@ -1,5 +1,5 @@
 const { MessageEmbed } = require('discord.js');
-const { getEmoji, interactionReply } = require('../../../Utilities/functions');
+const { getEmote } = require('../../../Utilities/functions');
 const logger = require('../../../Utilities/logger');
 const links = require('../../../Utilities/settings/links.json');
 const moment = require('moment');
@@ -73,7 +73,7 @@ module.exports = {
 
             // Check if guild object exists.
             if (!evidenceChannel) {
-                return interaction.reply({ content: `${getEmoji(client.config.TEAserver.id, 'TEA')} Evidence channel in TEA server is not found.` })
+                return interaction.reply({ content: `> ${getEmote('error')} Evidence channel in TEA server is not found.` })
                     .catch(err => logger.log('Command/Slash/TEA/Evidence.js (1) Error to send interaction reply', err));
             }
 
@@ -91,7 +91,7 @@ module.exports = {
                     // Send interaction reply as a confirmation.
                     interaction
                         .reply({
-                            content: `${user} ${getEmoji(client.config.TEAserver.id, 'TEA')} Successfully sent a message to the evidence channel.`,
+                            content: `> ${getEmote('accept')} ${user}, Successfully sent a message to the evidence channel.`,
                             ephemeral: false,
                             components: [
                                 {
@@ -113,7 +113,7 @@ module.exports = {
                 .catch(err => {
 
                     // Send interaction reply if there is an error to send the evidence message.
-                    interaction.reply({ content: `❌ Failed to send a message to the evidence channel.\n> ${err.message}` })
+                    interaction.reply({ content: `${getEmote('error')} Failed to send a message to the evidence channel.\n> ${err.message}` })
                         .catch(err => logger.log('Command/Slash/TEA/Evidence.js (3) Error to send interaction reply', err)); // Catch interaction reply error.
                 });
         }
@@ -126,7 +126,13 @@ module.exports = {
             const evidenceChannel = client.guilds.cache.get(client.config.TEAserver.id).channels.cache.get(client.config.TEAserver.evidenceChannelID);
 
             // Check if guild object exists.
-            if (!evidenceChannel) return interactionReply(interaction, `${getEmoji(client.config.TEAserver.id, 'TEA')} Evidence channel in TEA server is not found.`, false, 'Command/Slash/TEA/Evidence.js (4)');
+            if (!evidenceChannel) {
+                interaction.reply({
+                    content: `> ${getEmote('warn')} Evidence channel in TEA server is not found.`,
+                    ephemeral: false
+                })
+                    .catch(err => logger.log('Command/Slash/TEA/Evidence.js (4) Error to send interaction reply', err)); // Catch interaction reply error.
+            }
 
             const msgID = msgURL.split('/').pop(); // Get message ID from message URL.
 
@@ -146,7 +152,7 @@ module.exports = {
                         .then(msg => {
                             // Send interaction reply back as a confirmation.
                             interaction.reply({
-                                content: `${user} ${getEmoji(client.config.TEAserver.id, 'TEA')} Successfully modified a message in the evidence channel.`,
+                                content: `> ${getEmote('accept')} ${user}, Successfully modified a message in the evidence channel.`,
                                 ephemeral: false,
                                 components: [
                                     {
@@ -168,14 +174,14 @@ module.exports = {
                         .catch(err => {
 
                             // Send interaction reply if there is an error to modify the message.
-                            interaction.reply({ content: `${getEmoji(client.config.TEAserver.id, 'TEA')} Failed to edit the message.\n> ${err.message}` })
+                            interaction.reply({ content: `> ${getEmote('error')} Failed to edit the message.\n> ${err.message}` })
                                 .catch(err => logger.log('Command/Slash/TEA/Evidence.js (5) Error to send interaction reply', err)); // Catch interaction reply error.
                         });
                 })
                 .catch(err => {
 
                     // Send interaction reply if there is an error to fetch the message.
-                    interaction.reply({ content: `${getEmoji(client.config.TEAserver.id, 'TEA')} Failed to find the message.\n> ${err.message}` })
+                    interaction.reply({ content: `> ${getEmote('error')} Failed to find the message.\n> ${err.message}` })
                         .catch(err => logger.log('Command/Slash/TEA/Evidence.js (6) Error to send interaction reply', err)); // Catch interaction reply error.
                 });
         }

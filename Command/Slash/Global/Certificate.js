@@ -1,5 +1,5 @@
 const { MessageEmbed } = require('discord.js');
-const { getEmoji, apiCall } = require('../../../Utilities/functions');
+const { apiCall, getEmote } = require('../../../Utilities/functions');
 const logger = require('../../../Utilities/logger');
 const links = require('../../../Utilities/settings/links.json');
 
@@ -27,7 +27,7 @@ module.exports = {
 
 		// Check if used in main TEA server.
 		if (guild.id === client.config.TEAserver.id) {
-			return interaction.reply({ content: `> ${getEmoji(client.config.TEAserver.id, 'TEA')} This is an official Trove Ethics Alliance Server!` })
+			return interaction.reply({ content: `> ${getEmote('ok')} This is an official Trove Ethics Alliance Server!` })
 				.catch(err => logger.log('Command/Slash/Global/Certificate.js (1) Error to send interaction defer reply', err)); // Catch interaction reply error.
 		}
 
@@ -47,12 +47,12 @@ module.exports = {
 					if (response) {
 
 						// Send interaction reply with basic certificate information.
-						interaction.editReply({ content: `${getEmoji(client.config.TEAserver.id, 'verified')} ${guild.name} is certified member of ${getEmoji(client.config.TEAserver.id, 'TEA')} **Trove Ethics Alliance**!` })
+						interaction.editReply({ content: `${getEmote('verified')} ${guild.name} is certified member of **Trove Ethics Alliance**!` })
 							.catch(err => logger.log('Command/Slash/Global/Certificate.js (3) Error to send interaction defer reply', err)); // Catch interaction defer reply error.
 					} else {
 
 						// Send interaction reply back with information about club not being a member of TEA.
-						interaction.editReply({ content: `> ❌ This club is not certified member of ${getEmoji(client.config.TEAserver.id, 'TEA')} **Trove Ethics Alliance**!` })
+						interaction.editReply({ content: `> ${getEmote('warn')} This club is not certified member of **Trove Ethics Alliance**!` })
 							.catch(err => logger.log('Command/Slash/Global/Certificate.js (4) Error to send interaction defer reply', err)); // Catch interaction defer reply error.
 					}
 				})
@@ -60,7 +60,7 @@ module.exports = {
 					logger.log('Command/Slash/Global/Certificate.js (5) Error to get API response', err); // Log API error.
 
 					// Send message to front end about the error.
-					interaction.editReply({ content: '❌ Failed to receive data from API.\n> Try again later ;(' })
+					interaction.editReply({ content: `${getEmote('error')} Failed to receive data from API.\n> Try again later ;(` })
 						.catch(err => logger.log('Command/Slash/Global/Certificate.js (6) Error to send interaction defer reply', err)); // Catch interaction defer reply error.
 				});
 		}
@@ -81,7 +81,7 @@ module.exports = {
 								[new MessageEmbed()
 									.setColor('#0095ff')
 									.setAuthor('Cerfiticate Details', links.icon, 'https://kalinowski.app/tea')
-									.setTitle(`${guild.name} ${getEmoji(client.config.TEAserver.id, 'verified')}`)
+									.setTitle(`${guild.name} ${getEmote('verified')}`)
 									.setDescription(`**Club Name**: ${response.club ? response.club : 'Club name is not available'}\n**Representative**: ${response.representative ? response.representative : 'Representative is not available.'}\n**In-Game Club World**: ${response.world ? '/joinworld ' + response.world : 'Joinworld command is not available.'}\n\n**Discord Invite Link**: ${response.discord.invite ? response.discord.invite : 'Discord Invite link is not provided.'}\n**Discord Server ID**: ${response.discord.id ? response.discord.id : 'Discord Server ID is not provided.'}`)
 									.addFields(
 										{ name: 'Description', value: response.description ? response.description : 'Description is not provided.', inline: false },
@@ -96,7 +96,7 @@ module.exports = {
 					} else {
 
 						// Send interaction reply with information that club is not assigned with TEA.
-						interaction.editReply({ content: `> ❌ This club is not certified member of ${getEmoji(client.config.TEAserver.id, 'TEA')} **Trove Ethics Alliance**!` })
+						interaction.editReply({ content: `> ${getEmote('warn')} This club is not certified member of **Trove Ethics Alliance**!` })
 							.catch(err => logger.log('Command/Slash/Global/Certificate.js (8) Error to send interaction defer reply', err)); // Catch interaction defer reply error.
 					}
 				})
@@ -104,7 +104,7 @@ module.exports = {
 					logger.log('Command/Slash/Global/Certificate.js (9) Error to get API response', err); // Log API error.
 
 					// Send interaction reply about API error.
-					interaction.editReply({ content: '❌ Failed to receive data from API.\n> Try again later ;(' })
+					interaction.editReply({ content: `${getEmote('error')} Failed to receive data from API.\n> Try again later ;(` })
 						.catch(err => logger.log('Command/Slash/Global/Certificate.js (10) Error to send interaction defer reply', err)); // Catch interaction defer reply error.
 				});
 		}

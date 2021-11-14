@@ -1,4 +1,4 @@
-const { getEmoji } = require('../../Utilities/functions');
+const { getEmote } = require('../../Utilities/functions');
 const logger = require('../../Utilities/logger');
 
 // https://discord.js.org/#/docs/main/stable/class/Client?scrollTo=e-messageCreate
@@ -32,7 +32,7 @@ module.exports = {
 
                 // Send the clearance notification message to the notification channel.
                 return notificationChannel.send({
-                    content: `${getEmoji(client.config.TEAserver.id, 'notification')} ${clearanceNotifRole ? clearanceNotifRole : 'Clearance notification role is not found!'}\n> ${embedUserArr[0]} (${embedUserArr[1]}) has sent a __clearance__ request to the **${embeds[0].fields[1].value}** club!`,
+                    content: `${getEmote('notification')} ${clearanceNotifRole ? clearanceNotifRole : 'Clearance notification role is not found!'}\n> ${embedUserArr[0]} (${embedUserArr[1]}) has sent a __clearance__ request to the **${embeds[0].fields[1].value}** club!`,
                     allowedMentions: { parse: ['roles'] },
                     components: [
                         {
@@ -62,7 +62,7 @@ module.exports = {
 
                 // Send the club registry notification message to the notification channel.
                 return notificationChannel.send({
-                    content: `${getEmoji(client.config.TEAserver.id, 'notification')} ${registryNotifRole ? registryNotifRole : 'Registry notification role is not found!'}\n> ${embedUserArr[0]} (${embedUserArr[1]}) has sent a __club registry__ request for the **${embeds[0].fields[0].value}** club!`,
+                    content: `${getEmote('notification')} ${registryNotifRole ? registryNotifRole : 'Registry notification role is not found!'}\n> ${embedUserArr[0]} (${embedUserArr[1]}) has sent a __club registry__ request for the **${embeds[0].fields[0].value}** club!`,
                     allowedMentions: { parse: ['roles'] },
                     components: [
                         {

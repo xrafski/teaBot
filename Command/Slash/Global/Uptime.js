@@ -1,4 +1,4 @@
-const { getEmoji } = require('../../../Utilities/functions');
+const { getEmote } = require('../../../Utilities/functions');
 const logger = require('../../../Utilities/logger');
 const moment = require('moment');
 
@@ -26,7 +26,10 @@ module.exports = {
 		const format = 'dddd, Do MMMM YYYY @ hh:mm A z';
 
 		// Send interaction reply message.
-		interaction.reply({ ephemeral: true, content: `${getEmoji(client.config.TEAserver.id, 'TEA')} Last application downtime was **${moment(botStartDate).fromNow()}**.\n> ${moment(botStartDate).utc().format(format)}.` })
+		interaction.reply({
+			content: `${getEmote('onmyway')} Last application downtime was **${moment(botStartDate).fromNow()}**.\n> ${moment(botStartDate).utc().format(format)}.`,
+			ephemeral: true
+		})
 			.catch(err => logger.log('Command/Slash/Global/Uptime.js (1) Error to send interaction reply', err)); // Catch interaction reply error.
 	}
 };

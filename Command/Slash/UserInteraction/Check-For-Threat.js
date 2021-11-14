@@ -1,5 +1,5 @@
 const { MessageEmbed } = require('discord.js');
-const { apiCall } = require('../../../Utilities/functions');
+const { apiCall, getEmote } = require('../../../Utilities/functions');
 const logger = require('../../../Utilities/logger');
 const links = require('../../../Utilities/settings/links.json');
 
@@ -21,7 +21,7 @@ module.exports = {
 				logger.log('Command/Slash/UserInteraction/Check-For-Threat.js (1) Error to get API response', err); // Log that error to the console.
 
 				// Send interaction reply when there is an error with the API call.
-				interaction.reply({ content: '❌ Failed to receive data from API.\n> Try again later ;(' })
+				interaction.reply({ content: `${getEmote('error')} Failed to receive data from API.\n> Try again later ;(` })
 					.catch(err => logger.log('Command/Slash/UserInteraction/Check-For-Threat.js (2) Error to send interaction reply', err)); // Catch interaction reply error.
 			});
 
@@ -31,7 +31,7 @@ module.exports = {
 
 				// Create embed object.
 				const notFoundEmbed = new MessageEmbed()
-					.setDescription('❌ This user is not detected as a threat in our database!')
+					.setDescription(`${getEmote('info')} This user is not detected as a threat in our database!`)
 					.setAuthor('Trove Ethics Alliance - Results', links.icon)
 					.setColor('#0095ff');
 
