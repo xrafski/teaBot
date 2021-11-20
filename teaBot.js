@@ -8,7 +8,7 @@ const fs = require('fs');
 // Create a new client instance with partials and intents.
 const client = new Client({
 	partials: ['MESSAGE', 'CHANNEL', 'REACTION'],
-	intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MESSAGE_REACTIONS],
+	intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MEMBERS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MESSAGE_REACTIONS],
 });
 
 // Global Variables
