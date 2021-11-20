@@ -109,7 +109,7 @@ module.exports = {
                             if (detectedThreats.length > 0) {
 
                                 // Send interaction defer reply with results.
-                                return interaction.editReply({ content: `> ${user} ${getEmote('danger')} Detected ${detectedThreats.length} threat(s) in **${guild.name}**.`, embeds: [scan_embed] })
+                                return interaction.editReply({ content: `> ${user} ${getEmote('danger')} Detected **${detectedThreats.length}** threat(s) in **${guild.name}**.\n${getEmote('info')} You can use **/check** to see a specific threat details.`, embeds: [scan_embed] })
                                     .catch(err => logger.log('Command/Slash/Global/Scan.js (6) Error to send interaction defer reply', err)); // Catch interaction defer reply error.
                             } else {
 
