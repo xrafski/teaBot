@@ -1,7 +1,7 @@
 {
 	"debug": true,
 	"bot": {
-		"version": "v14",
+		"version": "v13.6_performance",
 		"prefix": "tea!",
 		"owner": {
 			"id": "121018858042556416",
