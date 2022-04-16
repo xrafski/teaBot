@@ -7,7 +7,7 @@ const apiAuth = require('../Utilities/settings/secret/api.json');
  * Function to set guild commands and its required permissions.
  * @param {Object} guildObject - Object with the guild information.
  * @param {Array} slashCommandsArray - Array with slash commands collector
- * @returns message on success, and error on failure.
+ * @returns message on success, or error on failure.
  */
 function registerGuildCommands(guildObject, slashCommandsArray) {
 	return new Promise((resolve, reject) => {
@@ -39,8 +39,6 @@ function registerGuildCommands(guildObject, slashCommandsArray) {
 		// 			resolve(`🆗 Registered with permissions '${commands.size}' (${commands.map(cmd => cmd.name).join(' • ')}) Slash Commands for '${guildObject.name}' successfully!`);
 		// 		})
 		// 		.catch(reject);
-
-
 		// }
 	});
 }
@@ -83,63 +81,68 @@ function ephemeralToggle(commandName) {
 }
 
 /**
- * Quick way to send an interaction reply.
- * @param {Object} interaction - Interaction object tho.
- * @param {String} content - Message content to reply.
- * @param {Boolean} ephemeral - If the reply have to be ephemer.
- * @param {String} log - Some unique text for logger.
- */
-function interactionReply(interaction, content, ephemeral, log) {
-	interaction
-		.reply({ content, ephemeral })
-		.catch(err => logger.log(`${log} Error to send interaction reply.`, err));
-}
-
-/**
  * Function to send API request to backend.
  * @param {String} method - POST, GET, PUT, PATCH, DELETE, etc.
  * @param {String} endpoint - URL to send API request to.
+ * @param {Object} data - JSON data to send (for POST and PATCH requests).
+ * @param {*} callback - (error, response).
  * @returns Either error or response.
  */
-async function apiCall(method, endpoint) {
-	return new Promise((resolve, reject) => {
-		const availableMethods = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'];
-		if (typeof method !== 'string') return reject(new Error('Used method is not a string.'));
-		if (typeof endpoint !== 'string') return reject(new Error('Used endpoint is not a string.'));
+function apiCall(method, endpoint, data, callback) {
+	const availableMethods = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'];
+	if (typeof method !== 'string') return callback(new Error('Used method is not a string.'));
+	if (typeof endpoint !== 'string') return callback(new Error('Used endpoint is not a string.'));
 
-		if (!availableMethods.includes(method.toUpperCase())) return reject(new Error(`Invalid method '${method.toUpperCase()}'.`));
-		if (!endpoint) return reject(new Error('Missing API endpoint.'));
+	if (!availableMethods.includes(method.toUpperCase())) return callback(new Error(`Invalid method '${method.toUpperCase()}' is provided.`));
+	if (!endpoint) return callback(new Error('Missing API endpoint.'));
 
-		if (method.toUpperCase() === 'POST' || method.toUpperCase() === 'PATCH') {
-			axios({
-				method,
-				url: apiAuth.url + endpoint,
-				data: { username: apiAuth.login, password: apiAuth.password }, // Body data with auth
-				timeout: 5000
-			})
-				.then(response => resolve(response.data))
-				.catch(error => reject(error));
-		}
+	// Methods with data payload.
+	if (method.toUpperCase() === 'POST' || method.toUpperCase() === 'PATCH') {
+		axios({
+			method,
+			url: apiAuth.url + endpoint,
+			auth: { username: apiAuth.login, password: apiAuth.password }, // Auth to API
+			data,
+			timeout: 10000
+		})
+			.then(response => callback(null, response.data))
+			.catch(error => callback(error));
+	}
 
-		if (method.toUpperCase() === 'GET' || method.toUpperCase() === 'PUT' || method.toUpperCase() === 'DELETE') {
-			axios({
-				method,
-				url: apiAuth.url + endpoint,
-				auth: { username: apiAuth.login, password: apiAuth.password }, // Header with auth
-				timeout: 5000
-			})
-				.then(response => resolve(response.data))
-				.catch(error => reject(error));
-		}
-	});
+	// Methods without data payload.
+	if (method.toUpperCase() === 'GET' || method.toUpperCase() === 'PUT' || method.toUpperCase() === 'DELETE') {
+		axios({
+			method,
+			url: apiAuth.url + endpoint,
+			auth: { username: apiAuth.login, password: apiAuth.password }, // Auth to API
+			timeout: 10000
+		})
+			.then(response => callback(null, response.data))
+			.catch(error => callback(error));
+	}
+}
+
+/**
+ * Function to manage API errors.
+ * @param {Object} error - Error object from API
+ * @returns String with error output for the end-user.
+ */
+function errorResponseHandlerAPI(error) {
+
+	// Switch with different error messages based on the error type.
+	switch (error?.code) {
+		case 'ECONNREFUSED': return '🥶 API is not responding!\n> Please try again later.';
+		case 'ECONNABORTED': return '🥶 API request took too long and has been aborted.\n> Please try again later.';
+		default: return `🥶 Something went wrong!\n\n> ${error?.response?.data?.message ? `${error.message} (${error.response.statusText})\n${error.response.data.message.substring(0, 1500)}` : error.message}`;
+	}
 }
 
 module.exports = {
 	registerGuildCommands,
 	ephemeralToggle,
 	convertMsToTime,
-	interactionReply,
 	apiCall,
+	errorResponseHandlerAPI,
 
 	/**
 	 * Find and return emoji by its name on the command center server.

@@ -12,11 +12,13 @@ module.exports = {
 
     async execute(client, interaction) {
         const { user, guild } = interaction;
-        logger.command(`${__filename.replace(/\\/g, '/').split('/').slice(-4).join('/')} used by '${user?.tag}' in the '${guild?.name}' guild.`); // Log who used this command.
+
+        // Log who used the command.
+        logger.command(`${__filename.replace(/\\/g, '/').split('/').slice(-4).join('/')} used by '${user?.tag}' on the ${guild?.name ? `'${guild.name}' guild.` : 'direct message.'}`); // Log who used the command.
 
         // Send interaction reply with basic information about this application.
         interaction.reply({
-            content: `Greetings, Trovians, and welcome to the **Trove Ethics Alliance** ${getEmote('TEA')}!\n\nThe goal of this alliance is to __fight a widespread negativity__ that has most unfortunately settled in Trove’s community.\nWe know the majority will always be in favor of good behavior, so we made a place where we can all look out for each other!\n\nThis application is just a tool to help us reach the goal and help communities tracking treats in their servers.\n__If you don's have access__ to TEA exclusive slash commands e.g. (**/scan**, **/check**) make sure your club is registered.\nYou check check your status with **/certification** command.`,
+            content: `Greetings Trovians, and welcome to the **Trove Ethics Alliance** ${getEmote('TEA')}!\n\nThe goal of this alliance is to __fight a widespread negativity__ that has most unfortunately settled in Trove’s community.\nWe know the majority will always be in favor of good behavior, so we made a place where we can all look out for each other!\n\nThis application is just a tool to help us reach the goal and help communities tracking treats in their servers.\n__If you don's have access__ to TEA exclusive slash commands e.g. (**/scan**, **/check**) make sure your club is registered.\nYou check check your status with **/certification** command.`,
             components: [
                 {
                     type: 1,

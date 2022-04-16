@@ -15,16 +15,17 @@ module.exports = {
 		logger.command(`${__filename.replace(/\\/g, '/').split('/').slice(-4).join('/')} used by '${user?.tag}' on '${target?.tag}' in the '${guild?.name}' guild.`); // Log who used the command.
 
 		// API call to get required data to run the command.
-		apiCall('GET', `threat/${target.id}`)
-			.then(threatResonse => formatDocument(threatResonse))
-			.catch(err => {
+		apiCall('GET', `threat/${target.id}`, null, (err, threatResponse) => {
+			if (err) {
 				logger.log('Command/Slash/UserInteraction/Check-For-Threat.js (1) Error to get API response', err); // Log that error to the console.
 
 				// Send interaction reply when there is an error with the API call.
-				interaction.reply({ content: `${getEmote('error')} Failed to receive data from API.\n> Try again later ;(` })
+				return interaction.reply({ content: `${getEmote('error')} Failed to receive data from API.\n> Try again later ;(` })
 					.catch(err => logger.log('Command/Slash/UserInteraction/Check-For-Threat.js (2) Error to send interaction reply', err)); // Catch interaction reply error.
-			});
-
+			}
+			// Run a function to format the response data.
+			else return formatDocument(threatResponse);
+		});
 
 		async function formatDocument(document) {
 			if (!document) {

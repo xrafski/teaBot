@@ -38,7 +38,6 @@ module.exports = {
             // Return a message saying that command is not available in main server.
             return message.reply({
                 content: `> ${getEmote('locked')} ${author}, you can't use this here.\n> Please, invite our ${getEmote('TEA')} bot to your server and to use this command over there.`,
-                allowedMentions: { parse: [] },
                 components: [
                     {
                         type: 1,
@@ -59,7 +58,7 @@ module.exports = {
 
         // Check if used is allowed to use this command (SERVER ADMIN).
         if (!member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)) {
-            return message.reply({ content: `> ${getEmote('locked')} ${author}, this command is only available for server admins!`, allowedMentions: { parse: [] } })
+            return message.reply({ content: `> ${getEmote('locked')} ${author}, this command is available only for server admins!` })
                 .catch(err => logger.log('Command/Classic/Apply.js (2) Error to send message reply', err));
         }
 
@@ -67,37 +66,35 @@ module.exports = {
         if (guild.memberCount < 100) {
 
             // Send a reply message about the minimal member requirement.
-            return message.reply({ content: `> ${getEmote('locked')} Unfortunately ${author}, this server doesn't meet our minimal requirements (${guild.memberCount}/**100** members), try again later.`, allowedMentions: { parse: [] } })
+            return message.reply({ content: `> ${getEmote('locked')} Unfortunately ${author}, this server doesn't meet our minimal requirements (${guild.memberCount}/**100** members), try again later.` })
                 .catch(err => logger.log('Command/Classic/Apply.js (3) Error to send message reply', err)); // Catch message reply error.
         }
 
         // Check if guild is already certified via API.
-        apiCall('GET', `certificate/${guild.id}`)
-            .then(guildCert => {
-
-                // Check if guildCert exists and return a message if it does.
-                if (guildCert) {
-
-                    // Send a reply message about guild certificate.
-                    return message.reply({ content: `> ${author} **${guild.name}** is already **certified** as a member of **Trove Ethics Alliance**.\n> ${getEmote('verified')} You can check certificate with \`/certificate\` command.`, allowedMentions: { parse: [] } })
-                        .catch(err => logger.log('Command/Classic/Apply.js (4) Error to send message reply', err)); // Catch message reply error.
-                }
-                // Else if guild is not certified.
-                else {
-                    // Assign amount of guild members, author to variable and run question chain.
-                    varDiscordCountInt = guild.memberCount;
-                    varRequestUserObj = author;
-                    return clubNameQuestion();
-                }
-            })
-            .catch(err => { // API call error handler.
-                logger.log('Command/Classic/Apply.js (5) Error to get API response', err); // Log API error.
+        apiCall('GET', `certificate/${guild.id}`, null, (err, guildCert) => {
+            if (err) {
+                logger.log('Command/Classic/Apply.js (4) Error to get API response', err); // Log API error.
 
                 // Send message to front end about the error.
-                message.reply({ content: `${getEmote('error')} Failed to receive data from API.\n> Try again later ;(` })
-                    .catch(err => logger.log('Command/Classic/Apply.js (6) Error to send message reply', err)); // Catch message reply error.
-            });
+                return message.reply({ content: `${getEmote('error')} Failed to receive data from API.\n> Try again later ;(` })
+                    .catch(err => logger.log('Command/Classic/Apply.js (5) Error to send message reply', err)); // Catch message reply error.
+            }
 
+            // Check if guildCert exists and return a message if it does.
+            if (guildCert) {
+
+                // Send a reply message about guild certificate.
+                return message.reply({ content: `> ${author} **${guild.name}** is already **certified** as a member of **Trove Ethics Alliance**.\n> ${getEmote('verified')} You can check certificate with \`/certificate\` command.` })
+                    .catch(err => logger.log('Command/Classic/Apply.js (6) Error to send message reply', err)); // Catch message reply error.
+            }
+            // Else if guild is not certified.
+            else {
+                // Assign amount of guild members, author to variable and run question chain.
+                varDiscordCountInt = guild.memberCount;
+                varRequestUserObj = author;
+                return clubNameQuestion();
+            }
+        });
 
         function clubNameQuestion(additionalText) {
 
@@ -105,7 +102,7 @@ module.exports = {
             additionalText = (additionalText ? `${getEmote('warn')} **${additionalText}**\n` : '');
 
             // Send a message with the question.
-            message.reply({ content: `${additionalText}> ${author} you can type \`cancel\` to exit.\n\n**Club Information**\n\`\`\`Please enter club name.\`\`\``, allowedMentions: { parse: [] } })
+            message.reply({ content: `${additionalText}> ${author} you can type \`cancel\` to exit.\n\n**Club Information**\n\`\`\`Please enter club name.\`\`\`` })
                 .then(async qMsg => {
 
                     // Create await variable with awaitMessage collector for a single reply from command user author (filter) under a specified time (questionResponseTime).
@@ -127,7 +124,7 @@ module.exports = {
 
                     // Check if user want to exit form.
                     if (userAnswer.toLowerCase() === 'exit' || userAnswer.toLowerCase() === 'cancel') {
-                        return message.reply({ content: `${author} ❌ Cancelled...`, allowedMentions: { parse: [] } })
+                        return message.reply({ content: `${author} ❌ Cancelled...` })
                             .catch(err => logger.log('Command/Classic/Apply.js (8) Error to send message reply', err));
                     }
 
@@ -154,7 +151,7 @@ module.exports = {
             additionalText = (additionalText ? `${getEmote('warn')} **${additionalText}**\n` : '');
 
             // Send a message with the question.
-            message.reply({ content: `${additionalText}> ${author} you can type \`cancel\` to exit.\n\n**Club Information**\n\`\`\`Please enter club level.\`\`\``, allowedMentions: { parse: [] } })
+            message.reply({ content: `${additionalText}> ${author} you can type \`cancel\` to exit.\n\n**Club Information**\n\`\`\`Please enter club level.\`\`\`` })
                 .then(async qMsg => {
 
                     // Create await variable with awaitMessage collector for a single reply from command user author (filter) under a specified time (questionResponseTime).
@@ -176,7 +173,7 @@ module.exports = {
 
                     // Check if user want to exit form.
                     if (userAnswer.toLowerCase() === 'exit' || userAnswer.toLowerCase() === 'cancel') {
-                        return message.reply({ content: `${author} ❌ Cancelled...`, allowedMentions: { parse: [] } })
+                        return message.reply({ content: `${author} ❌ Cancelled...` })
                             .catch(err => logger.log('Command/Classic/Apply.js (11) Error to send message reply', err));
                     }
 
@@ -208,7 +205,7 @@ module.exports = {
             additionalText = (additionalText ? `${getEmote('warn')} **${additionalText}**\n` : '');
 
             // Send a message with the question.
-            message.reply({ content: `${additionalText}> ${author} you can type \`cancel\` to exit.\n\n**Club Information**\n\`\`\`Please, type ${varClubNameStr} in-gane joinworld command.\`\`\``, allowedMentions: { parse: [] } })
+            message.reply({ content: `${additionalText}> ${author} you can type \`cancel\` to exit.\n\n**Club Information**\n\`\`\`Please, type ${varClubNameStr} in-gane joinworld command.\`\`\`` })
                 .then(async qMsg => {
 
                     // Create await variable with awaitMessage collector for a single reply from command user author (filter) under a specified time (questionResponseTime).
@@ -230,7 +227,7 @@ module.exports = {
 
                     // Check if user want to exit form.
                     if (userAnswer.toLowerCase() === 'exit' || userAnswer.toLowerCase() === 'cancel') {
-                        return message.reply({ content: `${author} ❌ Cancelled...`, allowedMentions: { parse: [] } })
+                        return message.reply({ content: `${author} ❌ Cancelled...` })
                             .catch(err => logger.log('Command/Classic/Apply.js (14) Error to send message reply', err));
                     }
 
@@ -262,7 +259,7 @@ module.exports = {
             additionalText = (additionalText ? `${getEmote('warn')} **${additionalText}**\n` : '');
 
             // Send a message with the question.
-            message.reply({ content: `${additionalText}> ${author} you can type \`cancel\` to exit.\n\n**Club Information**\n\`\`\`Please, type ${varClubNameStr} description.\`\`\``, allowedMentions: { parse: [] } })
+            message.reply({ content: `${additionalText}> ${author} you can type \`cancel\` to exit.\n\n**Club Information**\n\`\`\`Please, type ${varClubNameStr} description.\`\`\`` })
                 .then(async qMsg => {
 
                     // Create await variable with awaitMessage collector for a single reply from command user author (filter) under a specified time (questionResponseTime).
@@ -284,7 +281,7 @@ module.exports = {
 
                     // Check if user want to exit form.
                     if (userAnswer.toLowerCase() === 'exit' || userAnswer.toLowerCase() === 'cancel') {
-                        return message.reply({ content: `${author} ❌ Cancelled...`, allowedMentions: { parse: [] } })
+                        return message.reply({ content: `${author} ❌ Cancelled...` })
                             .catch(err => logger.log('Command/Classic/Apply.js (17) Error to send message reply', err));
                     }
 
@@ -311,7 +308,7 @@ module.exports = {
             additionalText = (additionalText ? `${getEmote('warn')} **${additionalText}**\n` : '');
 
             // Send a message with the question.
-            message.reply({ content: `${additionalText}> ${author} you can type \`cancel\` to exit.\n\n**Club Information**\n\`\`\`Please, type ${varClubNameStr} requirements.\`\`\``, allowedMentions: { parse: [] } })
+            message.reply({ content: `${additionalText}> ${author} you can type \`cancel\` to exit.\n\n**Club Information**\n\`\`\`Please, type ${varClubNameStr} requirements.\`\`\`` })
                 .then(async qMsg => {
 
                     // Create await variable with awaitMessage collector for a single reply from command user author (filter) under a specified time (questionResponseTime).
@@ -333,7 +330,7 @@ module.exports = {
 
                     // Check if user want to exit form.
                     if (userAnswer.toLowerCase() === 'exit' || userAnswer.toLowerCase() === 'cancel') {
-                        return message.reply({ content: `${author} ❌ Cancelled...`, allowedMentions: { parse: [] } })
+                        return message.reply({ content: `${author} ❌ Cancelled...` })
                             .catch(err => logger.log('Command/Classic/Apply.js (20) Error to send message reply', err));
                     }
 
@@ -360,7 +357,7 @@ module.exports = {
             additionalText = (additionalText ? `${getEmote('warn')} **${additionalText}**\n` : '');
 
             // Send a message with the question.
-            message.reply({ content: `${additionalText}> ${author} you can type \`cancel\` to exit.\n\n**Club Information**\n\`\`\`Please, type ${varClubNameStr} representative (discord#tag, Discord User ID, Trove Nickname etc.).\`\`\``, allowedMentions: { parse: [] } })
+            message.reply({ content: `${additionalText}> ${author} you can type \`cancel\` to exit.\n\n**Club Information**\n\`\`\`Please, type ${varClubNameStr} representative (discord#tag, Discord User ID, Trove Nickname etc.).\`\`\`` })
                 .then(async qMsg => {
 
                     // Create await variable with awaitMessage collector for a single reply from command user author (filter) under a specified time (questionResponseTime).
@@ -382,7 +379,7 @@ module.exports = {
 
                     // Check if user want to exit form.
                     if (userAnswer.toLowerCase() === 'exit' || userAnswer.toLowerCase() === 'cancel') {
-                        return message.reply({ content: `${author} ❌ Cancelled...`, allowedMentions: { parse: [] } })
+                        return message.reply({ content: `${author} ❌ Cancelled...` })
                             .catch(err => logger.log('Command/Classic/Apply.js (23) Error to send message reply', err));
                     }
 
@@ -409,7 +406,7 @@ module.exports = {
             additionalText = (additionalText ? `${getEmote('warn')} **${additionalText}**\n` : '');
 
             // Send a message with the question.
-            message.reply({ content: `${additionalText}> ${author} you can type \`cancel\` to exit.\n\n**Club Information**\n\`\`\`Please, enter ${varClubNameStr} discord invite code without discord.gg link.\`\`\``, allowedMentions: { parse: [] } })
+            message.reply({ content: `${additionalText}> ${author} you can type \`cancel\` to exit.\n\n**Club Information**\n\`\`\`Please, enter ${varClubNameStr} discord invite code without discord.gg link.\`\`\`` })
                 .then(async qMsg => {
 
                     // Create await variable with awaitMessage collector for a single reply from command user author (filter) under a specified time (questionResponseTime).
@@ -431,7 +428,7 @@ module.exports = {
 
                     // Check if user want to exit form.
                     if (userAnswer.toLowerCase() === 'exit' || userAnswer.toLowerCase() === 'cancel') {
-                        return message.reply({ content: `${author} ❌ Cancelled...`, allowedMentions: { parse: [] } })
+                        return message.reply({ content: `${author} ❌ Cancelled...` })
                             .catch(err => logger.log('Command/Classic/Apply.js (26) Error to send message reply', err));
                     }
 
@@ -511,7 +508,7 @@ module.exports = {
                     // Make a switch to handle different reactions.
                     switch (reaction.emoji.name) {
                         case '✅': return postRegistry();
-                        case '❌': return message.reply({ content: `> As you wish ${author}, cancelled!`, allowedMentions: { parse: [] } });
+                        case '❌': return message.reply({ content: `> As you wish ${author}, cancelled!` });
                         default: return;
                     }
                 })
@@ -526,7 +523,7 @@ module.exports = {
             // Check if channel exists.
             if (!entryChannel) {
                 logger.log('Command/Classic/Apply.js (32) Missing registry channel on TEA main server', '.');
-                return message.reply({ content: `> ${getEmote('error')} ${author}, error to send club registry request, try again later ;(`, allowedMentions: { parse: [] } })
+                return message.reply({ content: `> ${getEmote('error')} ${author}, error to send club registry request, try again later ;(` })
                     .catch(err => logger.log('Command/Classic/Apply.js (33) Error to send message reply', err)); // Catch message reply error.
             }
 
@@ -556,7 +553,6 @@ module.exports = {
                 .then(registryMsg => {
                     message.reply({
                         content: `> ${getEmote('accept')} ${author}, club registry request successfully sent!`,
-                        allowedMentions: { parse: [] },
                         components: [
                             {
                                 type: 1,

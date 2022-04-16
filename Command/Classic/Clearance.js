@@ -34,7 +34,6 @@ module.exports = {
             // Return a message saying that command is not available in main server.
             return message.reply({
                 content: `> ${getEmote('locked')} ${author}, you can't use this here.\n> Please, join our official server and use this command over there.`,
-                allowedMentions: { parse: [] },
                 components: [
                     {
                         type: 1,
@@ -63,7 +62,7 @@ module.exports = {
             additionalText = (additionalText ? `${getEmote('warn')} **${additionalText}**\n` : '');
 
             // Send a message with the question.
-            message.reply({ content: `${additionalText}> ${author} you can type \`cancel\` to exit.\n\n**Clearance Information**\n\`\`\`What's your Trove In-Game Username?\`\`\``, allowedMentions: { parse: [] } })
+            message.reply({ content: `${additionalText}> ${author} you can type \`cancel\` to exit.\n\n**Clearance Information**\n\`\`\`What's your Trove In-Game Username?\`\`\`` })
                 .then(async qMsg => {
 
                     // Create await variable with awaitMessage collector for a single reply from command user author (filter) under a specified time (questionResponseTime).
@@ -90,7 +89,7 @@ module.exports = {
 
                     // Check if user want to exit form.
                     if (userAnswer.toLowerCase() === 'exit' || userAnswer.toLowerCase() === 'cancel') {
-                        return message.reply({ content: `${author} ❌ Cancelled...`, allowedMentions: { parse: [] } })
+                        return message.reply({ content: `${author} ❌ Cancelled...` })
                             .catch(err => logger.log('Command/Classic/Clearance.js (3) Error to send message reply', err));
                     }
 
@@ -117,7 +116,7 @@ module.exports = {
             additionalText = (additionalText ? `${getEmote('warn')} **${additionalText}**\n` : '');
 
             // Send a message with the question.
-            message.reply({ content: `${additionalText}> ${author} you can type \`cancel\` to exit.\n\n**Clearance Information**\n\`\`\`Please enter club name.\`\`\``, allowedMentions: { parse: [] } })
+            message.reply({ content: `${additionalText}> ${author} you can type \`cancel\` to exit.\n\n**Clearance Information**\n\`\`\`Please enter club name.\`\`\`` })
                 .then(async qMsg => {
 
                     // Create await variable with awaitMessage collector for a single reply from command user author (filter) under a specified time (questionResponseTime).
@@ -144,7 +143,7 @@ module.exports = {
 
                     // Check if user want to exit form.
                     if (userAnswer.toLowerCase() === 'exit' || userAnswer.toLowerCase() === 'cancel') {
-                        return message.reply({ content: `${author} ❌ Cancelled...`, allowedMentions: { parse: [] } })
+                        return message.reply({ content: `${author} ❌ Cancelled...` })
                             .catch(err => logger.log('Command/Classic/Clearance.js (6) Error to send message reply', err));
                     }
 
@@ -171,31 +170,31 @@ module.exports = {
         function checkClub(guildName) {
 
             // Check if guild is certified via API.
-            apiCall('GET', `certificate/${guildName}`)
-                .then(guildCert => {
-
-                    // Check if guildCert exists and return a message if it does.
-                    if (guildCert) {
-
-                        // Assing variable to existing club name and run another question.
-                        varClubNameStr = guildCert.club;
-                        return userClubRoleQuestion();
-                    }
-                    // Else if guild is not certified.
-                    else {
-
-                        // Send a reply message about missing guild certificate.
-                        return message.reply({ content: `> ${getEmote('decline')} ${author} **${guildName}** is not part of **Trove Ethics Alliance** and you can't request access to this club.`, allowedMentions: { parse: [] } })
-                            .catch(err => logger.log('Command/Classic/Clearance.js (8) Error to send message reply', err)); // Catch message reply error.
-                    }
-                })
-                .catch(err => { // API call error handler.
-                    logger.log('Command/Classic/Clearance.js (9) Error to get API response', err); // Log API error.
+            apiCall('GET', `certificate/${guildName}`, null, (err, guildCert) => {
+                if (err) {
+                    logger.log('Command/Classic/Clearance.js (8) Error to get API response', err); // Log API error.
 
                     // Send message to front end about the error.
-                    message.reply({ content: `${getEmote('error')} Failed to receive data from API.\n> Try again later ;(` })
+                    return message.reply({ content: `${getEmote('error')} Failed to receive data from API.\n> Try again later ;(` })
+                        .catch(err => logger.log('Command/Classic/Clearance.js (9) Error to send message reply', err)); // Catch message reply error.
+                }
+
+                // Check if guildCert exists and return a message if it does.
+                if (guildCert) {
+
+                    // Assing variable to existing club name and run another question.
+                    varClubNameStr = guildCert.club;
+                    return userClubRoleQuestion();
+                }
+                // Else if guild is not certified.
+                else {
+
+                    // Send a reply message about missing guild certificate.
+                    return message.reply({ content: `> ${getEmote('decline')} ${author} **${guildName}** is not part of **Trove Ethics Alliance** and you can't request access to this club.` })
                         .catch(err => logger.log('Command/Classic/Clearance.js (10) Error to send message reply', err)); // Catch message reply error.
-                });
+                }
+
+            });
         }
 
         function userClubRoleQuestion(additionalText) {
@@ -204,7 +203,7 @@ module.exports = {
             additionalText = (additionalText ? `${getEmote('warn')} **${additionalText}**\n` : '');
 
             // Send a message with the question.
-            message.reply({ content: `${additionalText}> ${author} you can type \`cancel\` to exit.\n\n**Clearance Information**\n\`\`\`What's your role in ${varClubNameStr}?\`\`\``, allowedMentions: { parse: [] } })
+            message.reply({ content: `${additionalText}> ${author} you can type \`cancel\` to exit.\n\n**Clearance Information**\n\`\`\`What's your role in ${varClubNameStr}?\`\`\`` })
                 .then(async qMsg => {
 
                     // Create await variable with awaitMessage collector for a single reply from command user author (filter) under a specified time (questionResponseTime).
@@ -231,7 +230,7 @@ module.exports = {
 
                     // Check if user want to exit form.
                     if (userAnswer.toLowerCase() === 'exit' || userAnswer.toLowerCase() === 'cancel') {
-                        return message.reply({ content: `${author} ❌ Cancelled...`, allowedMentions: { parse: [] } })
+                        return message.reply({ content: `${author} ❌ Cancelled...` })
                             .catch(err => logger.log('Command/Classic/Clearance.js (12) Error to send message reply', err));
                     }
 
@@ -258,7 +257,7 @@ module.exports = {
             additionalText = (additionalText ? `${getEmote('warn')} **${additionalText}**\n` : '');
 
             // Send a message with the question.
-            message.reply({ content: `${additionalText}> ${author} you can type \`cancel\` to exit.\n\n**Clearance Information**\n\`\`\`Reason for joining?\`\`\``, allowedMentions: { parse: [] } })
+            message.reply({ content: `${additionalText}> ${author} you can type \`cancel\` to exit.\n\n**Clearance Information**\n\`\`\`Reason for joining?\`\`\`` })
                 .then(async qMsg => {
 
                     // Create await variable with awaitMessage collector for a single reply from command user author (filter) under a specified time (questionResponseTime).
@@ -280,7 +279,7 @@ module.exports = {
 
                     // Check if user want to exit form.
                     if (userAnswer.toLowerCase() === 'exit' || userAnswer.toLowerCase() === 'cancel') {
-                        return message.reply({ content: `${author} ❌ Cancelled...`, allowedMentions: { parse: [] } })
+                        return message.reply({ content: `${author} ❌ Cancelled...` })
                             .catch(err => logger.log('Command/Classic/Clearance.js (15) Error to send message reply', err));
                     }
 
@@ -312,7 +311,7 @@ module.exports = {
                 .catch(err => logger.log('Command/Classic/Clearance.js (17) Error to fetch a user', err)); // Catch fetch member error.
 
             if (!fetchedUser) {
-                return message.reply({ content: `${author} ❌ Error to fetch a user. Please try again later ;(`, allowedMentions: { parse: [] } })
+                return message.reply({ content: `${author} ❌ Error to fetch a user. Please try again later ;(` })
                     .catch(err => logger.log('Command/Classic/Clearance.js (18) Error to send message reply', err)); // Catch message reply error.
             }
 
@@ -364,7 +363,7 @@ module.exports = {
                     // Make a switch to handle different reactions.
                     switch (reaction.emoji.name) {
                         case '✅': return postClearance();
-                        case '❌': return message.reply({ content: `> As you wish ${author}, cancelled!`, allowedMentions: { parse: [] } });
+                        case '❌': return message.reply({ content: `> As you wish ${author}, cancelled!` });
                         default: return;
                     }
                 })
@@ -383,7 +382,7 @@ module.exports = {
             // Check if channel exists.
             if (!entryChannel) {
                 logger.log('Command/Classic/Clearance.js (22) Missing registry channel on TEA main server', '.');
-                return message.reply({ content: `> ${getEmote('error')} ${author}, error to send club registry request, try again later ;(`, allowedMentions: { parse: [] } })
+                return message.reply({ content: `> ${getEmote('error')} ${author}, error to send club registry request, try again later ;(` })
                     .catch(err => logger.log('Command/Classic/Clearance.js (23) Error to send message reply', err)); // Catch message reply error.
             }
 
@@ -406,7 +405,6 @@ module.exports = {
                 .then(registryMsg => {
                     message.reply({
                         content: `> ${getEmote('accept')} ${author}, club clearance request successfully sent!`,
-                        allowedMentions: { parse: [] },
                         components: [
                             {
                                 type: 1,

@@ -50,7 +50,7 @@ module.exports = async (client) => {
 	});
 
 	// Slash Commands Handler
-	(await PG(`${process.cwd()}/Command/Slash/*/*.js`)).map(async (file) => {
+	(await PG(`${process.cwd()}/Command/Slash/**/*.js`)).map(async (file) => {
 
 		// Assign variable to a command file.
 		const slashCommand = require(file);
@@ -78,6 +78,7 @@ module.exports = async (client) => {
 	});
 
 	// Print in the console table results.
+	// eslint-disable-next-line no-console
 	console.log(table.toString());
 };
 

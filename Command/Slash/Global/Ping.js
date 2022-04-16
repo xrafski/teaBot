@@ -10,12 +10,22 @@ module.exports = {
 
 	async execute(client, interaction) {
 		const { user, guild } = interaction;
-		logger.command(`${__filename.replace(/\\/g, '/').split('/').slice(-4).join('/')} used by '${user?.tag}' in the '${guild?.name}' guild.`); // Log who used the command.
+
+		// Log who used the command.
+		logger.command(`${__filename.replace(/\\/g, '/').split('/').slice(-4).join('/')} used by '${user?.tag}' on the ${guild?.name ? `'${guild.name}' guild.` : 'direct message.'}`); // Log who used the command.
+
+		// Check if command used on direct message.
+		if (!interaction.inGuild()) {
+			return interaction.reply({
+				content: '> 🔒 This command is not available on direct message!',
+				ephemeral: false,
+			}).catch(err => logger.log('Command/Slash/Global/Ping.js (1) Error to send reply', err));
+		}
 
 		// Create defer reply, because reply might exceed 3 seconds limit of discord interaction.
 		await interaction
 			.deferReply({ ephemeral: true })
-			.catch(err => logger.log('Command/Slash/Global/Ping.js (1) Error to create interaction defer', err)); // Catch interaction reply error.
+			.catch(err => logger.log('Command/Slash/Global/Ping.js (2) Error to create interaction defer', err)); // Catch interaction reply error.
 
 		// Fake 2s delay to think the bot is doing something 😂
 		await new Promise((resolve) => setTimeout(resolve, 2000));
@@ -49,7 +59,7 @@ module.exports = {
 		async function interactionResponse(emoji) {
 			return await interaction
 				.editReply({ content: `${getEmote(emoji)} Websocket latency is **${Math.round(client.ws.ping)}** ms.`, })
-				.catch(err => logger.log('Command/Slash/Global/Ping.js (2) Error to send interaction defer reply', err)); // Catch interaction reply error.
+				.catch(err => logger.log('Command/Slash/Global/Ping.js (3) Error to send interaction defer reply', err)); // Catch interaction reply error.
 		}
 	}
 };

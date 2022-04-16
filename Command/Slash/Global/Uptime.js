@@ -11,7 +11,9 @@ module.exports = {
 
 	async execute(client, interaction) {
 		const { user, guild } = interaction;
-		logger.command(`${__filename.replace(/\\/g, '/').split('/').slice(-4).join('/')} used by '${user?.tag}' in the '${guild?.name}' guild.`); // Log who used the command.
+
+		// Log who used the command.
+		logger.command(`${__filename.replace(/\\/g, '/').split('/').slice(-4).join('/')} used by '${user?.tag}' on the ${guild?.name ? `'${guild.name}' guild.` : 'direct message.'}`); // Log who used the command.
 
 		// Get current time in milliseconds.
 		const currMS = moment().format('x');
@@ -23,7 +25,7 @@ module.exports = {
 		const botStartDate = new Date(timeDiffinMS);
 
 		// Moment format string
-		const format = 'dddd, Do MMMM YYYY @ hh:mm A z';
+		const format = 'dddd, Do MMMM YYYY [at] h:m A z';
 
 		// Send interaction reply message.
 		interaction.reply({

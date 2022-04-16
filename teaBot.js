@@ -9,12 +9,13 @@ const fs = require('fs');
 const client = new Client({
 	partials: ['MESSAGE', 'CHANNEL', 'REACTION'],
 	intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MEMBERS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MESSAGE_REACTIONS],
+	allowedMentions: { parse: ['roles'], repliedUser: false }
 });
 
 // Global Variables
-client.classicCommands = new Collection(); // Regular commands collector
-client.slashCommands = new Collection(); // Slash commands collector
-client.config = require('./Utilities/settings/bot.json');
+client.classicCommands = new Collection(); // Regular commands collector.
+client.slashCommands = new Collection(); // Slash commands collector.
+client.config = require('./Utilities/settings/bot.json'); // Bot's configuration file.
 
 // Initializing the project
 // ['Command', 'Error', 'Event'].forEach(handler => {

@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 const config = require('./settings/bot.json');
 const moment = require('moment');
 const format = 'DD/MM/YYYY - hh:mm:ss A z';
@@ -10,7 +11,7 @@ const logger = {
 	 * @returns formatted console.debug()
 	 */
 	debug: (text, errObj) => {
-		if (config.bot.debug === false) return;
+		if (config.debug === false) return;
 		console.debug(`[${moment(Date.now()).utc().format(format)}] [DEBUG] 🟣 ${text}${errObj ? ` | ${errObj}` : ''}`);
 	},
 

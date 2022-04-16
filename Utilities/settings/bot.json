@@ -1,7 +1,7 @@
 {
 	"debug": true,
 	"bot": {
-		"version": "v13.1",
+		"version": "v14",
 		"prefix": "tea!",
 		"owner": {
 			"id": "121018858042556416",
@@ -27,5 +27,8 @@
 	"roles": {
 		"clearanceNotificationRoleID": "841016349315694593",
 		"registryNotificationRoleID": "841016284053241926"
+	},
+	"event": {
+		"limit": 25
 	}
 }
