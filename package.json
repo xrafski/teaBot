@@ -12,6 +12,7 @@
     "dependencies": {
         "ascii-table": "^0.0.9",
         "axios": "^0.24.0",
+        "deepl-node": "^1.2.1",
         "discord.js": "^13.6.0",
         "glob": "^8.0.1",
         "googleapis": "^88.2.0",
