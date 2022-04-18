@@ -16,7 +16,7 @@ module.exports = {
         if (channel.id === client.config.TEAserver.entryChannelID && embeds[0]?.footer?.text.startsWith('• Trove Ethics Alliance')) {
 
             // Assing notification channel object as a variable.
-            const notificationChannel = client.guilds.cache.get(client.config.TEAserver.id)?.channels.cache.get(client.config.roles.clearanceNotificationRoleID);
+            const notificationChannel = client.guilds.cache.get(client.config.TEAserver.id)?.channels.cache.get(client.config.TEAserver.notificationChannelID);
 
             // Check if notification channel exists.
             if (!notificationChannel) return logger.log('Event/Client/messageCreate.js (1) Error to find entry notification channel', 'Notification Handler');
