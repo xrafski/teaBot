@@ -28,7 +28,7 @@ module.exports = {
 
         // Create embed object.
         const testEmbed = new MessageEmbed()
-            .setAuthor('RNG')
+            .setAuthor({ name: 'RNG' })
             .setDescription('Some description for this embed')
             .setColor('YELLOW')
             .setTitle('Embed title');

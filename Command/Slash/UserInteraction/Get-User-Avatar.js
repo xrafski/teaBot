@@ -15,7 +15,7 @@ module.exports = {
 			ephemeral: true,
 			embeds:
 				[new MessageEmbed()
-					.setAuthor(`${target.username}'s Avatar`, target.displayAvatarURL({ dynamic: true, size: 32, format: 'png' }))
+					.setAuthor({ name: `${target.username}'s Avatar`, iconURL: target.displayAvatarURL({ dynamic: true, size: 32, format: 'png' }) })
 					.setImage(target.displayAvatarURL({ dynamic: true, size: 256, format: 'png' }))
 					.setColor('#0095ff')
 				],

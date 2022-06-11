@@ -101,7 +101,7 @@ module.exports = {
 						embeds:
 							[new MessageEmbed()
 								.setColor('#0095ff')
-								.setAuthor('Cerfiticate Details', links.icon, 'https://kalinowski.app/tea')
+								.setAuthor({ name: 'Cerfiticate Details', iconURL: links.icon, link: 'https://kalinowski.app/tea' })
 								.setTitle(`${guild.name} ${getEmote('verified')}`)
 								.setDescription(`**Club Name**: ${response.club ? response.club : 'Club name is not available'}\n**Representative**: ${response.representative ? response.representative : 'Representative is not available.'}\n**In-Game Club World**: ${response.world ? '/joinworld ' + response.world : 'Joinworld command is not available.'}\n\n**Discord Invite Link**: ${response.discord.invite ? response.discord.invite : 'Discord Invite link is not provided.'}\n**Discord Server ID**: ${response.discord.id ? response.discord.id : 'Discord Server ID is not provided.'}`)
 								.addFields(
@@ -109,7 +109,7 @@ module.exports = {
 									{ name: 'Requirements', value: response.requirements ? response.requirements : 'Requirements are not provided.', inline: false },
 								)
 								.setThumbnail(guild.iconURL())
-								.setFooter('Please, contact TEA Database Manager if the data is outdated.')
+								.setFooter({ text: 'Please, contact TEA Database Manager if the data is outdated.' })
 								.setTimestamp()
 							]
 					})

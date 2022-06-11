@@ -33,7 +33,7 @@ module.exports = {
 				// Create embed object.
 				const notFoundEmbed = new MessageEmbed()
 					.setDescription(`${getEmote('info')} This user is not detected as a threat in our database!`)
-					.setAuthor('Trove Ethics Alliance - Results', links.icon)
+					.setAuthor({ name: 'Trove Ethics Alliance - Results', iconURL: links.icon })
 					.setColor('#0095ff');
 
 				// Return a interaction reply message with formatted data.
@@ -60,7 +60,7 @@ module.exports = {
 			const checkedIDs = await lookForThreat(document.discord);
 			const resultEmbed = new MessageEmbed()
 				.setColor(setThreatColor(document.warning))
-				.setAuthor('Trove Ethics Alliance', links.icon)
+				.setAuthor({ name: 'Trove Ethics Alliance', iconURL: links.icon })
 				.setTitle(`Nickname: \`${document.name}\``)
 				.setDescription(`**Reason:** ${document.reason}\n‏‏‎ ‎‎`)
 				.addFields(
@@ -72,7 +72,7 @@ module.exports = {
 				)
 				.setThumbnail(links.logo)
 				.setTimestamp()
-				.setFooter('Trove Ethics Alliance', links.icon);
+				.setFooter({ text: 'Trove Ethics Alliance', iconURL: links.icon });
 
 			// Send interaction reply message with formatted mesage.
 			interaction.reply({

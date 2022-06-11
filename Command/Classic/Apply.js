@@ -463,7 +463,7 @@ module.exports = {
             // Create embed message.
             const prompt_embed = new MessageEmbed()
                 .setColor('#0095ff')
-                .setFooter('Click ✅ to confirm and send the form.')
+                .setFooter({ text: 'Click ✅ to confirm and send the form.' })
                 .addFields(
                     { name: 'Club Name ▼', value: varClubNameStr, inline: false },
                     { name: 'Club Description ▼', value: varClubDescriptionStr, inline: false },
@@ -534,7 +534,7 @@ module.exports = {
             // Define the embed to be sent to the registry channel.
             const embed_registry = new MessageEmbed()
                 .setColor('#0095ff')
-                .setAuthor(`Alliance registry: '${varClubNameStr}' ${varDiscordCountInt ? `(${varDiscordCountInt})` : ''}`, links.icon)
+                .setAuthor({ name: `Alliance registry: '${varClubNameStr}' ${varDiscordCountInt ? `(${varDiscordCountInt})` : ''}`, iconURL: links.icon })
                 .setThumbnail(guild.iconURL({ dynamic: true, size: 4096, format: 'png' }))
                 .addFields(
                     { name: 'Club Name ▼', value: varClubNameStr, inline: false },
@@ -546,7 +546,7 @@ module.exports = {
                     { name: 'Discord Invite ▼', value: `<https://discord.gg/${varDiscordInviteStr}>`, inline: false },
                     { name: 'Requester ▼', value: `${fetchedUser} • ${fetchedUser?.user?.tag} • ${fetchedUser?.id}`, inline: false },
                 )
-                .setFooter(`• Trove Ethics Alliance Registry | ${moment(Date.now()).utc().format('Do MMM YYYY @ hh:mm A z')}`, links.icon);
+                .setFooter({ text: `• Trove Ethics Alliance Registry | ${moment(Date.now()).utc().format('Do MMM YYYY @ hh:mm A z')}`, iconURL: links.icon });
 
             // Send formatted message to the registry channel.
             entryChannel.send({ content: `\`${varClubNameStr}\``, embeds: [embed_registry] })

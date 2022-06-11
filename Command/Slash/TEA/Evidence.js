@@ -80,9 +80,9 @@ module.exports = {
             // Create embed object
             const evidenceEmbed = new MessageEmbed()
                 .setColor('#0095ff')
-                .setAuthor(`Threat Evidence: ${nickname}`, links.logo)
+                .setAuthor({ name: `Threat Evidence: ${nickname}`, iconURL: links.logo })
                 .setDescription(`> ${evidence.split(/[ ]/g).join('\n> ')}`)
-                .setFooter(`Trove Ethics Alliance | ${moment(Date.now()).utc().format('Do MMM YYYY @ hh:mm A z')}`);
+                .setFooter({ text: `Trove Ethics Alliance | ${moment(Date.now()).utc().format('Do MMM YYYY @ hh:mm A z')}` });
 
             // Send a message to the evidence channel.
             evidenceChannel.send({ content: `> Nickname: \`${nickname}\``, embeds: [evidenceEmbed] })
@@ -143,9 +143,9 @@ module.exports = {
                     // Create embed object
                     const newEvidenceEmbed = new MessageEmbed()
                         .setColor('#0095ff')
-                        .setAuthor(`Threat Evidence: ${nickname}`, links.logo)
+                        .setAuthor({ name: `Threat Evidence: ${nickname}`, iconURL: links.logo })
                         .setDescription(`> ${evidence.split(/[ ]/g).join('\n> ')}`)
-                        .setFooter(`Trove Ethics Alliance | ${moment(Date.now()).utc().format('Do MMM YYYY @ hh:mm A z')}`);
+                        .setFooter({ text: `Trove Ethics Alliance | ${moment(Date.now()).utc().format('Do MMM YYYY @ hh:mm A z')}` });
 
                     // Modify the target message.
                     message.edit({ content: `> Nickname: \`${nickname}\``, embeds: [newEvidenceEmbed] })

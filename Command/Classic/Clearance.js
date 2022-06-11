@@ -321,7 +321,7 @@ module.exports = {
             // Create embed message.
             const prompt_embed = new MessageEmbed()
                 .setColor('#0095ff')
-                .setFooter('Click ✅ to confirm and send the form.')
+                .setFooter({ text: 'Click ✅ to confirm and send the form.' })
                 .addFields(
                     { name: 'Username ▼', value: `\`${varNicknameStr}\``, inline: false },
                     { name: 'Club Name ▼', value: varClubNameStr, inline: true },
@@ -389,7 +389,7 @@ module.exports = {
             // Define the embed to be sent to the registry channel.
             const embed_registry = new MessageEmbed()
                 .setColor('ORANGE')
-                .setAuthor(`Clearance request to '${varClubNameStr}' club.`, links.icon)
+                .setAuthor({ name: `Clearance request to '${varClubNameStr}' club.`, iconURL: links.icon })
                 .setThumbnail(varRequestUserObj.displayAvatarURL({ dynamic: true, size: 4096, format: 'png' }))
                 .addFields(
                     { name: 'Username ▼', value: `\`${varNicknameStr}\``, inline: false },
@@ -398,7 +398,7 @@ module.exports = {
                     { name: 'Reason ▼', value: varReasonStr, inline: false },
                     { name: 'Requester ▼', value: `${varRequestUserObj} • ${varRequestUserObj.tag} • ${varRequestUserObj.id}`, inline: false },
                 )
-                .setFooter(`• Trove Ethics Alliance Clearance | ${moment(Date.now()).utc().format('Do MMM YYYY @ hh:mm A z')}`, links.icon);
+                .setFooter({ text: `• Trove Ethics Alliance Clearance | ${moment(Date.now()).utc().format('Do MMM YYYY @ hh:mm A z')}`, iconURL: links.icon });
 
             // Send formatted message to the registry channel.
             entryChannel.send({ content: `\`${varNicknameStr}\``, embeds: [embed_registry] })

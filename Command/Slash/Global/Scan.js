@@ -121,9 +121,9 @@ module.exports = {
                         // Create embed message.
                         const scan_embed = new MessageEmbed()
                             .setColor('#0095ff')
-                            .setAuthor('Trove Ethics Alliance Scan', links.icon)
+                            .setAuthor({ name: 'Trove Ethics Alliance Scan', iconURL: links.icon })
                             .setDescription(`${formatThreats(detectedThreats)}`)
-                            .setFooter(`Trove Ethics Alliance | ${moment(Date.now()).utc().format('Do MMM YYYY @ hh:mm A z')}`, links.icon)
+                            .setFooter({ text: `Trove Ethics Alliance | ${moment(Date.now()).utc().format('Do MMM YYYY @ hh:mm A z')}`, iconURL: links.icon })
                             .setThumbnail(links.logo);
 
                         // Send a interaction defer reply according to the results.
