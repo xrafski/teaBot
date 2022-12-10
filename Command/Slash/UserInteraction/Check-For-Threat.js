@@ -24,7 +24,7 @@ module.exports = {
 					.catch(err => logger.log('Command/Slash/UserInteraction/Check-For-Threat.js (2) Error to send interaction reply', err)); // Catch interaction reply error.
 			}
 			// Run a function to format the response data.
-			else return formatDocument(threatResponse);
+			else { return formatDocument(threatResponse); }
 		});
 
 		async function formatDocument(document) {
