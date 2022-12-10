@@ -63,10 +63,10 @@ module.exports = {
         }
 
         // Check if guild has meet minimal member count requirements to join TEA.
-        if (guild.memberCount < 100) {
+        if (guild.memberCount < 5) {
 
             // Send a reply message about the minimal member requirement.
-            return message.reply({ content: `> ${getEmote('locked')} Unfortunately ${author}, this server doesn't meet our minimal requirements (${guild.memberCount}/**100** members), try again later.` })
+            return message.reply({ content: `> ${getEmote('locked')} Unfortunately ${author}, this server doesn't meet our minimal requirements (${guild.memberCount}/**5** members), try again later.` })
                 .catch(err => logger.log('Command/Classic/Apply.js (3) Error to send message reply', err)); // Catch message reply error.
         }
 
